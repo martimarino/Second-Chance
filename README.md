@@ -19,3 +19,6 @@ Spotify
 		
 		○ Playlist
 		
+Sources:
+		
+https://raw.githubusercontent.com/mahkaila/songnames/master/SongCSV.csv
