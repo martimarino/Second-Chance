@@ -12,33 +12,41 @@ Music can be viewed by artist, album, label, genre or playlist as well as throug
 
 - Register/Login/Logout
 
-- Aggiunge/eliminare playlist 
+- Add/delete playlist 
 
-- Eliminare artista
+- Delete artist
 
-- Eliminare album
+- Delete album
 
-- Eliminare utente
+- Delete user
 
 
 ### Utente 
 
 - Register/Login/Logout
 
-- Cercare e visualizzare album
+- Follow/Unfollow user 
 
-- Cercare artista e vedere artista
+- Find and show album
 
-- Cercare playlist e 
+- Follow/Unfollow playlist
+
+- Find and show artist
+
+- Follow/Unfollow artist
+
+- Create/Find playlist
+
+- Like songs
 
 
 ### Artist
 
 - Register/Login/Logout
 
-- Aggiunge un album
+- Add new album
 
-- Seguire altri artisti
+- Follow artists (He cannot follow normal user)
  
 
 
