@@ -7,6 +7,42 @@ SpotifyUnipi is a music service that offers on-demand streaming of a selection o
 Music can be viewed by artist, album, label, genre or playlist as well as through direct searches. 
 
 ## Features
+
+### Admin
+
+- Register/Login/Logout
+
+- Aggiunge/eliminare playlist 
+
+- Eliminare artista
+
+- Eliminare album
+
+- Eliminare utente
+
+
+### Utente 
+
+- Register/Login/Logout
+
+- Cercare e visualizzare album
+
+- Cercare artista e vedere artista
+
+- Cercare playlist e 
+
+
+### Artist
+
+- Register/Login/Logout
+
+- Aggiunge un album
+
+- Seguire altri artisti
+ 
+
+
+
 - Possibilità di creare, eliminare e seguire playlist
 
 - Riprodurre brani e visualizzare statistiche sul numero di ascolti
