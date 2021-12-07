@@ -21,7 +21,7 @@ Music can be viewed by artist, album, label, genre or playlist as well as throug
 - Delete user
 
 
-### Utente 
+### User
 
 - Register/Login/Logout
 
@@ -47,9 +47,13 @@ Music can be viewed by artist, album, label, genre or playlist as well as throug
 - Add new album
 
 - Follow artists (He cannot follow normal user)
+
+### Analyst
+
+- Stats
  
 
-
+ ### General Features
 
 - Possibilità di creare, eliminare e seguire playlist
 
