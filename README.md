@@ -58,6 +58,7 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 There is not a cart but the user can buy one item at a time clicking on the "shop" button.
 The part regarding users correlation is managed with Neo4j.
+A review is done referred to the user with a rating (1-5 stars) and a comment regarding the product.
 
 
 ## Link
