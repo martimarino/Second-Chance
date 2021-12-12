@@ -1,7 +1,7 @@
 # Large Scale Project
 ## _VintedUnipi_
 
-![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) ![KeyValue]()
+![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white)
 
 VintedUnipi is an e-commerce that offers the possibility of selling and buying vinted clothes.
 Every user can add his or her products on the profile or buy some clothes that are selled by people in the nearby or through direct searches. 
@@ -12,11 +12,9 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 - Register/Login/Logout
 
-- Add/delete items 
+- Delete item
 
-- Delete items
-
-- Delete posts
+- Delete post
 
 - Delete review
 
@@ -25,7 +23,6 @@ Every user can add his or her products on the profile or buy some clothes that a
 - Stats
 
 - Generate codes for account balances
-
 
 ### User
 
@@ -42,25 +39,31 @@ Every user can add his or her products on the profile or buy some clothes that a
 - Create/Find post
 
 - Change post details
- 
 
  ### Queries
 
-- Possibilità di creare, eliminare e seguire playlist
+- View most liked items
 
-- Riprodurre brani e visualizzare statistiche sul numero di ascolti
+- A user can make a filtered search by location or category
 
-- Visualizzare informazioni su un artista, i suoi album e il numero di ascolti mensili totali
+- View user rating
 
-- Possibilità di cercare, seguire altri utenti. Vedere cosa ascoltano gli altri utenti
+- View local users with rating
 
-- Like a brani e playlist. Possibilità dei scegliere brani preferiti.
+- View most rated users
 
-- Bacheca personale con playlist selezionate appositamente in base ai gusti dell'utente
+- View most followed users
+
+### Details
+
+There is not a cart but the user can buy one item at a time clicking on the "shop" button.
+The part regarding users correlation is managed with Neo4j.
+
 
 ## Link
 
 [Dataset1] containing clothes.
+
 [Dataset2] containing reviews.
 
 ## Actors
