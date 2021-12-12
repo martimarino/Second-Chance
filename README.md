@@ -42,23 +42,25 @@ Every user can add his or her products on the profile or buy some clothes that a
 
  ### Queries
 
-- View most liked items
+- View most liked items (MongoDB)
 
-- A user can make a filtered search by location or category
+- A user can make a filtered search by location or category (MongoDB)
 
-- View user rating
+- View user rating (MongoDB)
 
-- View local users with rating
+- View local users with rating (Neo4j)
 
-- View most rated users
+- View most rated users (Neo4j)
 
-- View most followed users
+- View most followed users (Neo4j)
 
 ### Details
 
-There is not a cart but the user can buy one item at a time clicking on the "shop" button.
+There is not a cart: a user can buy one item at a time clicking on the "shop" button.
 The part regarding users correlation is managed with Neo4j.
-A review is done referred to the user with a rating (1-5 stars) and a comment regarding the product.
+A review is done a rating (1-5 stars) and a comment regarding the product and is associated to the user.
+Every user has a personal wallet that can recharge inserting a code in a specific field.
+When a purchase is copmuted the amount is decreased.
 
 
 ## Link
