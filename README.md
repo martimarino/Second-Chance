@@ -1,7 +1,7 @@
 # Large Scale Project
 ## _VintedUnipi_
 
-![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) ![KeyValue](https://www.google.com/url?sa=i&url=https%3A%2F%2Fgithub.com%2Fzeke%2Flearning-leveldb-with-juliangruber&psig=AOvVaw0Es_p1P3JKUhBJLHT-vdj-&ust=1639389489248000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCICD8PX_3fQCFQAAAAAdAAAAABAD)
+![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) ![KeyValue](https://img.shields.io/badge/LevelDB-008CC1?style=for-the-badge&logo=levelDB&logoColor=white)
 
 VintedUnipi is an e-commerce that offers the possibility of selling and buying vinted clothes.
 Every user can add his or her products on the profile or buy some clothes that are selled by people in the nearby or through direct searches. 
