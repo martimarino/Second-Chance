@@ -12,8 +12,6 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 - Register/Login/Logout
 
-- Delete item
-
 - Delete post
 
 - Delete review
@@ -29,8 +27,6 @@ Every user can add his or her products on the profile or buy some clothes that a
 - Register/Login/Logout
 
 - Follow/Unfollow post with a like
-
-- Find and show item
 
 - Create/Find post
 
