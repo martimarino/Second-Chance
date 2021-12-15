@@ -107,7 +107,8 @@ Suggestions are based on different infomations like similar purchases, location,
 Actors  | Role
 ------------- | -------------
 Normal User  | Can buy or sell
-Admin | Can delete items, posts and every inappropriate content. \ Can suspend a user, generate statistics and codes.
+Admin | Can delete items, posts and every inappropriate content. 
+\ Can suspend a user, generate statistics and codes.
 
 ## License
 
