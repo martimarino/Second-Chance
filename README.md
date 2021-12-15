@@ -98,9 +98,9 @@ Suggestions are based on different infomations like similar purchases, location,
 
 ## Link
 
-[Dataset1] [Dataset3] containing items.
+[Dataset1] [Dataset2] containing items.
 
-[Dataset2] containing reviews.
+[Dataset3] containing reviews.
 
 ## Actors
 
@@ -118,9 +118,10 @@ MIT
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [Dataset1]: <https://www.kaggle.com/agrigorev/clothing-dataset-full>
+      
+   [Dataset2]: <https://data.world/jfreex/products-catalog-from-newchiccom>
    
-   [Dataset2]: <https://www.kaggle.com/asmaoueslati/womensclothingecommerce>
-   
-   [Dataset3]: <https://data.world/jfreex/products-catalog-from-newchiccom>
+   [Dataset3]: <https://www.kaggle.com/asmaoueslati/womensclothingecommerce>
+
    
  
