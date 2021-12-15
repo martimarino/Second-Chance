@@ -121,4 +121,6 @@ MIT
    
    [Dataset2]: <https://www.kaggle.com/asmaoueslati/womensclothingecommerce>
    
+   [Dataset3] <https://data.world/jfreex/products-catalog-from-newchiccom>
+   
  
