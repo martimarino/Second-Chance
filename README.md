@@ -25,48 +25,80 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 - Delete review
 
-- Delete user
+- Suspend user
 
-- Stats
+- Generate stats
 
 - Generate codes for account balances
 
 ### User
 
-- Register/Login/Logout
+- Register, login and logout
 
-- Follow/Unfollow post with a like
+- Browse the feed
 
-- Create/Find post
+- Create, update or delete a post to sell a post
 
-- Change post details
+- Find posts by filters
+
+- Find local sellers
+
+- Buy an item
+
+- Write a review after a purchase
+
+- Like/unlike a post
+
+- Follow/unfollow a user
 
  ### Queries
+ 
+ #### MongoDB
+ 
+- View local posts
 
-- View most liked items (MongoDB)
+- Search by location
 
-- A user can make a filtered search by location or category (MongoDB)
+- Search by category
 
-- View user rating (MongoDB)
+- Search by brand
 
-- View local users with rating (Neo4j)
+- Search by most viewed posts
 
-- View most rated users (Neo4j)
+- View top 50 liked local posts 
 
-- View most followed users (Neo4j)
+- View top 50 viewed local posts
+
+- View top 50 rated user for current user country
+
+- View top 50 liked posts for the selected category
+
+- View the best/worst rated reviews of a user
+ 
+ #### Neo4J
+ 
+- Suggest new sellers based on purchases, location, similar search parameters, likes
+
+- Suggest new posts based on purchases, location, similar search parameters, likes
+
+- Suggest cheaper items
 
 ### Details
 
 There is not a cart: a user can buy one item at a time clicking on the "shop" button.
 The part regarding users correlation is managed with Neo4j.
+
 A review is done a rating (1-5 stars) and a comment regarding the product and is associated to the user.
 Every user has a personal wallet that can recharge inserting a code in a specific field.
 When a purchase is copmuted the amount is decreased.
 
+Every post has a "sold" field and an ID: when a user purchases an item the ID relative to the post is memorized in an array of the user collection.
+
+Suggestions are based on different infomations like similar purchases, location, search parameters, likes and feed.
 
 ## Link
 
-[Dataset1] containing clothes.
+[Dataset1] [Dataset3] containing items.
 
 [Dataset2] containing reviews.
 
