@@ -31,7 +31,7 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 - Like/unlike an insertion
 
-- Find users
+- Find users/insertions/brands
 
 - Follow/unfollow a user
 
@@ -97,6 +97,11 @@ Actors  | Role
 ------------- | -------------
 Normal User  | Can buy or sell
 Admin | Can delete items, posts and every inappropriate content. \Can suspend a user, generate statistics and codes.
+
+
+## Datasets fields selection
+category,name,price,currency,likes_count,status,brand,codCountry,variation_0_color(color),image_url,id,SIZE,SELLER,VIEW,GENDER,
+
 
 ## License
 
