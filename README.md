@@ -13,9 +13,7 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 - Register/Login/Logout
 
-- Delete post
-
-- Delete review
+- Delete insertions or reviews
 
 - Suspend user
 
@@ -29,51 +27,50 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 - Browse the feed
 
-- Create, update or delete a post to sell a post
+- Create, update or delete an insertion
 
-- Find posts by filters
+- Like/unlike an insertion
 
-- Find local sellers
+- Find users
 
-- Buy an item
+- Follow/unfollow a user
+
+- View suggested sellers and insertions
+
+- Buy an item (order)
 
 - Write a review after a purchase
 
-- Like/unlike a post
-
-- Follow/unfollow a user
 
  ### Queries
  
  #### MongoDB
  
-- View local posts
+- Search by category/brand
 
-- Search by location
+- View most active users (n° insertions)
 
-- Search by category
+- View most active sellers (n° sold items)
 
-- Search by brand
+- View top k rated user for current user country
 
-- Search by most viewed posts
+- View top k most interesting insertions per category
 
-- View top 50 liked local posts 
-
-- View top 50 viewed local posts
-
-- View top 50 rated user for current user country
-
-- View top 50 liked posts for the selected category
+- View top k most viewed insertions per category
 
 - View the best/worst rated reviews of a user
+
+ - View most ordered items per category
  
  #### Neo4J
  
-- Suggest new sellers based on purchases, location, similar search parameters, likes
+- Suggest new sellers based on similar interested insertions, location and category
 
-- Suggest new posts based on purchases, location, similar search parameters, likes
+- Suggest new insertions based on similar interested insertions and category
 
-- Suggest cheaper items
+- View most followed users
+
+- View who is interested in an insertion 
 
 ### Details
 
