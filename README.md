@@ -98,10 +98,37 @@ Actors  | Role
 Normal User  | Can buy or sell
 Admin | Can delete items, posts and every inappropriate content. \Can suspend a user, generate statistics and codes.
 
+## Considerations
 
-## Datasets fields selection
+### Datasets fields selection
 category,name,price,currency,likes_count,status,brand,codCountry,variation_0_color(color),image_url,id,SIZE,SELLER,VIEW,GENDER,
 
+### Nations considered
+Italy, Canada, Spain, Austria, Germany, France,Brazil, Netherlands,Poland,Ireland,United Kingdom
+
+## MongoDB
+
+### Collections
+
+Collection  | 
+------------- | -------------
+User  | personal information, orders, reviews, suspended (bool)
+Admin | codes
+Insertion | title, details, #interested, #views
+
+## Neo4j
+
+### Vertices
+
+- User
+
+- Insertion
+
+### Edges
+
+- User - User: follow
+
+- User - Insertion: view, intereste, published
 
 ## License
 
