@@ -110,9 +110,9 @@ Italy, Canada, Spain, Austria, Germany, France,Brazil, Netherlands,Poland,Irelan
 
 ### Collections
 
-Collection  | 
+Collection  |  What inside
 ------------- | -------------
-User  | personal information, orders, reviews, suspended (bool)
+User | personal information, orders, reviews, suspended (bool)
 Admin | codes
 Insertion | title, details, #interested, #views
 
