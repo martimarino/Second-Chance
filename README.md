@@ -117,7 +117,7 @@ User | personal information, orders, reviews, suspended (bool)
 Admin | codes
 Insertion | title, details, #interested, #views
 
-#### INSERTION COLLECTION
+#### INSERTION
 
 Field | Values | Type
 ------------- | ------------- | -------------
@@ -138,7 +138,7 @@ IMAGE_URL | http://www.something.com | String
 TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
 SELLER | username | String
 
-####  REVIEW COLLECTION
+####  REVIEW
 
 Field | Values | Type
 ------------- | ------------- | -------------
@@ -150,7 +150,7 @@ SELLLER | username | String
 REVIEWER | username | String
 RATING | 3,5 | Float
 
-####  ORDER COLLECTION
+####  ORDER
 
 Field | Values | Type
 ------------- | ------------- | -------------
