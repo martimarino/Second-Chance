@@ -42,6 +42,7 @@ Every user can add his or her products on the profile or buy some clothes that a
 - Write a review after a purchase
 
 
+
  ### Queries
  
  #### MongoDB
@@ -98,10 +99,82 @@ Actors  | Role
 Normal User  | Can buy or sell
 Admin | Can delete items, posts and every inappropriate content. \Can suspend a user, generate statistics and codes.
 
+## Considerations
 
-## Datasets fields selection
+### Datasets fields selection
 category,name,price,currency,likes_count,status,brand,codCountry,variation_0_color(color),image_url,id,SIZE,SELLER,VIEW,GENDER,
 
+### Nations considered
+Italy, Canada, Spain, Austria, Germany, France,Brazil, Netherlands,Poland,Ireland,United Kingdom
+
+## MongoDB
+
+### Collections
+
+Collection  |  What inside
+------------- | -------------
+User | personal information, orders, reviews, suspended (bool)
+Admin | codes
+Insertion | title, details, #interested, #views
+
+#### INSERTION
+
+Field | Values | Type
+------------- | ------------- | -------------
+ID | 8552148 | Varchar
+CATEGORY | {clothing,accessories, bags, beauty, house, jewelry, kids, shoes} | String
+DESCRIPTION | text | String
+GENDER | {M, F, U} | String
+PRICE | 10,56 | Double
+CURRENCY | {EUR, USD} | String
+INTERESTED| 10 | Integer
+VIEWS | 10 | Integer
+STATUS | {new, excellent, good, used, very used} | String
+COLOR | {red, orange, yellow} | String
+SIZE | {XS, S, M, L, XL} | String
+BRAND | {Micheal Kors} | String
+COUNTRY | {Italy, Canada, Spain, Austria, Germany, France, Brazil, Netherlands, Poland, Ireland, United Kingdom (Great Britain)} | String
+IMAGE_URL | http://www.something.com | String
+TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
+SELLER | username | String
+
+####  REVIEW
+
+Field | Values | Type
+------------- | ------------- | -------------
+ID | 8552148 | Varchar
+TEXT | text | String
+TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
+TITLE | Fantastic! | String
+SELLLER | username | String
+REVIEWER | username | String
+RATING | 3,5 | Float
+
+####  ORDER
+
+Field | Values | Type
+------------- | ------------- | -------------
+ID | 8552148 | Varchar
+TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
+IMAGE | url image | String
+BUYER | username | String
+SELLER | username | String
+PRICE| 10,56 | Float
+
+
+## Neo4j
+
+### Vertices
+
+- User
+
+- Insertion
+
+### Edges
+
+- User - User: follow
+
+- User - Insertion: view, intereste, published
 
 ## License
 
