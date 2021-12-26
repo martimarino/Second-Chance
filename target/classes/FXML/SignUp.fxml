@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="775.0" prefWidth="1057.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fill="#2582bf" layoutX="415.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Signup to join SecondChance!">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <TextField layoutX="340.0" layoutY="264.0" style="-fx-background-radius: 5;" />
+      <Label layoutX="378.0" layoutY="238.0" text="Username:">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="380.0" layoutY="321.0" text="Password:">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField layoutX="340.0" layoutY="340.0" style="-fx-background-radius: 5;" />
+      <Label layoutX="399.0" layoutY="395.0" text="Email">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField layoutX="340.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <TextField layoutX="341.0" layoutY="492.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <Label layoutX="371.0" layoutY="473.0" text="Phone Number">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField layoutX="644.0" layoutY="264.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <Label layoutX="695.0" layoutY="238.0" text="Country">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="707.0" layoutY="320.0" text="City">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField layoutX="644.0" layoutY="340.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <TextField layoutX="644.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <Label layoutX="695.0" layoutY="395.0" text="Address">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Button layoutX="523.0" layoutY="574.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Signup" />
+   </children>
+</AnchorPane>
