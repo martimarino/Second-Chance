@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -15,12 +16,12 @@
       <Text layoutX="300.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
       <TextField fx:id="us" layoutX="239.0" layoutY="147.0" style="-fx-background-radius: 5;" />
       <TextField fx:id="pw" layoutX="239.0" layoutY="209.0" style="-fx-background-radius: 5;" />
-      <Button layoutX="300.0" layoutY="259.0" mnemonicParsing="false" style="-fx-background-radius: 5;" text="Sign in" textFill="#2582bf" onAction="#login"/>
-      <Text fx:id="SignUp" fill="#2582bf" layoutX="180.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are not already registered?">
+      <Button fx:id="SignIn" layoutX="300.0" layoutY="259.0" mnemonicParsing="false" onAction="#login" style="-fx-background-radius: 5;" text="Sign in" textFill="#2582bf" />
+      <Text  fill="#2582bf" layoutX="180.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are not already registered?">
          <font>
             <Font size="13.0" />
          </font>
       </Text>
-      <Button fx:id="signUpShower" layoutX="363.0" layoutY="300.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
+      <Button fx:id="SignUp" layoutX="363.0" layoutY="305.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
    </children>
 </AnchorPane>
