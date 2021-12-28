@@ -3,6 +3,7 @@ package main.java.controller;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
@@ -19,9 +20,9 @@ import java.net.URL;
 
 public class SignInController {
 
-    public static Text Home;
     public AnchorPane anchorRoot;
-    public Text SignUp;
+    public Button SignUp;
+    public Button SignIn;
     @FXML private TextField us;
     @FXML private TextField pw;
 
@@ -41,12 +42,12 @@ public class SignInController {
 
     }
 
-    public static void ShowHome() throws IOException {
+    public void ShowHome() throws IOException {
 
         URL url = new File("src/main/resources/FXML/Home.fxml").toURI().toURL();
         Parent root = FXMLLoader.load(url);
 
-        Stage stage = (Stage) Home.getScene().getWindow();
+        Stage stage = (Stage) SignIn.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();

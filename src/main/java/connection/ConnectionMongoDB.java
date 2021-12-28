@@ -17,7 +17,7 @@ public class ConnectionMongoDB{
     public void openConnection(){
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
-        db = mongoClient.getDatabase("local");
+        db = mongoClient.getDatabase("project");
     }
 
     public void closeConnection() {
