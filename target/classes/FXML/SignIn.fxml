@@ -2,7 +2,6 @@
 
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SignInController">
@@ -12,16 +11,16 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Text layoutX="287.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-      <Text layoutX="289.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-      <TextField layoutX="239.0" layoutY="147.0" style="-fx-background-radius: 5;" />
-      <TextField layoutX="239.0" layoutY="209.0" style="-fx-background-radius: 5;" />
-      <Button layoutX="336.0" layoutY="259.0" mnemonicParsing="false" style="-fx-background-radius: 5;" text="Sign in" textFill="#2582bf" />
+      <Text layoutX="300.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+      <Text layoutX="300.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <TextField fx:id="us" layoutX="239.0" layoutY="147.0" style="-fx-background-radius: 5;" />
+      <TextField fx:id="pw" layoutX="239.0" layoutY="209.0" style="-fx-background-radius: 5;" />
+      <Button layoutX="300.0" layoutY="259.0" mnemonicParsing="false" style="-fx-background-radius: 5;" text="Sign in" textFill="#2582bf" onAction="#login"/>
       <Text fx:id="SignUp" fill="#2582bf" layoutX="180.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are not already registered?">
          <font>
             <Font size="13.0" />
          </font>
       </Text>
-      <Button fx:id="signUpShower" layoutX="363.0" layoutY="304.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
+      <Button fx:id="signUpShower" layoutX="363.0" layoutY="300.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
    </children>
 </AnchorPane>
