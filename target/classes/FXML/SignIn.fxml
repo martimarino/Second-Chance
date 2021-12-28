@@ -12,16 +12,16 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Text layoutX="300.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-      <Text layoutX="300.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <Text layoutX="287.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+      <Text layoutX="289.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
       <TextField fx:id="us" layoutX="239.0" layoutY="147.0" style="-fx-background-radius: 5;" />
       <TextField fx:id="pw" layoutX="239.0" layoutY="209.0" style="-fx-background-radius: 5;" />
-      <Button fx:id="SignIn" layoutX="300.0" layoutY="259.0" mnemonicParsing="false" onAction="#login" style="-fx-background-radius: 5;" text="Sign in" textFill="#2582bf" />
-      <Text  fill="#2582bf" layoutX="180.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are not already registered?">
+      <Button fx:id="SignIn" layoutX="280.0" layoutY="254.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="68.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign in" />
+      <Text fill="#2582bf" layoutX="180.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are not already registered?">
          <font>
             <Font size="13.0" />
          </font>
       </Text>
-      <Button fx:id="SignUp" layoutX="363.0" layoutY="305.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
+      <Button fx:id="SignUp" layoutX="365.0" layoutY="303.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
    </children>
 </AnchorPane>

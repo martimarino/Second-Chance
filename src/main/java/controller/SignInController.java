@@ -1,18 +1,17 @@
 package main.java.controller;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 import main.java.connection.ConnectionMongoDB;
+import main.java.utils.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +41,18 @@ public class SignInController {
 
     }
 
+    public void ShowAdminPanel() throws IOException {
+
+        URL url = new File("src/main/resources/FXML/AdminPanel.fxml").toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+
+        Stage stage = (Stage) SignIn.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.show();
+
+    }
+
     public void ShowHome() throws IOException {
 
         URL url = new File("src/main/resources/FXML/Home.fxml").toURI().toURL();
@@ -56,15 +67,27 @@ public class SignInController {
 
     public void login(ActionEvent actionEvent) throws IOException {
 
+        String username = us.getText();
+        String password = pw.getText();
+        Session session;
+
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
             System.out.println("Value: " + us.getText());
             System.out.println(("Value: " + pw.getText()));
 
             ConnectionMongoDB conn = new ConnectionMongoDB();
-            boolean logged = conn.logInUser(us.getText(), pw.getText());
-            if(logged)
-                ShowHome();
+            session = Session.getInstance();
 
+            if(us.getText().equals("admin") && pw.getText().equals("admin")) {
+                session.setLogUser(username);
+                ShowAdminPanel();
+            } else {
+                boolean logged = conn.logInUser(us.getText(), pw.getText());
+                if (logged) {
+                    session.setLogUser(username);
+                    ShowHome();
+                    }
+                }
             //clear TextField
             us.setText("");
             pw.setText("");
