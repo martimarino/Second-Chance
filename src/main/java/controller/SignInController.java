@@ -10,8 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import main.java.connection.ConnectionMongoDB;
-import main.java.utils.Session;
+import main.java.connection.*;
+import main.java.utils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,12 +87,15 @@ public class SignInController {
                     session = Session.getInstance();
                     session.setLogUser(username);
                     ShowHome();
-                    }
                 }
+            }
             //clear TextField
             us.setText("");
             pw.setText("");
+        } else {
+            Utility.infoBox("Please, insert username and password.", "Error", "Empty fields!");
         }
 
     }
+
 }
