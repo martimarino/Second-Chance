@@ -1,6 +1,7 @@
 package main.java.entity;
 
 import main.java.connection.ConnectionMongoDB;
+import main.java.utils.Utility;
 
 public class User implements GeneralUser {
 
@@ -11,9 +12,9 @@ public class User implements GeneralUser {
     String country;
     String city;
     String address;
-    char suspended;
+    String suspended;
 
-    public User(String email, String username, String password, String name, String country, String city, String address, char suspended) {
+    public User(String email, String username, String password, String name, String country, String city, String address, String suspended) {
 
         this.email = email;
         this.username = username;
@@ -39,12 +40,17 @@ public class User implements GeneralUser {
     {
         ConnectionMongoDB conn = new ConnectionMongoDB();
         User user = conn.findUserDetails(username);
-        this.username = user.getUsername();
-        this.email = user.getEmail();
-        this.country = user.getCountry();
-        this.address = user.getAddress();
-        this.city = user.getCity();
-        this.name = user.getName();
+        if(user.getSuspended().equals("Y"))
+            Utility.infoBox("You can't login beacause your account has been suspended.", "Error", "Account suspended!");
+        else {
+            this.username = user.getUsername();
+            this.email = user.getEmail();
+            this.country = user.getCountry();
+            this.address = user.getAddress();
+            this.city = user.getCity();
+            this.name = user.getName();
+            this.suspended = user.getSuspended();
+        }
     }
 
     public void setEmail(String email) {
@@ -75,7 +81,7 @@ public class User implements GeneralUser {
         this.address = address;
     }
 
-    public void setSuspended(char suspended) { this.suspended = suspended; }
+    public void setSuspended(String suspended) { this.suspended = suspended; }
 
     public String getEmail() {
         return email;
@@ -105,7 +111,7 @@ public class User implements GeneralUser {
         return address;
     }
 
-    public char getSuspended() { return suspended; }
+    public String getSuspended() { return suspended; }
 
     @Override
     public String toString() {

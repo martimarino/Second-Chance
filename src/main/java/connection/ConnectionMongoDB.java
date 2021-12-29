@@ -83,6 +83,7 @@ public class ConnectionMongoDB{
         logUser.setAddress(user.getString("address"));
         logUser.setCity(user.getString("city"));
         logUser.setCountry(user.getString("country"));
+        logUser.setSuspended(user.getString("suspended"));
         this.closeConnection();
         return logUser;
     }
