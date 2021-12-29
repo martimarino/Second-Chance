@@ -4,7 +4,7 @@ import main.java.entity.User;
 
 public class Session{
 
-    private User logUser = null;
+    private User logUser;
     private static Session session = null;
 
     public Session(){}
@@ -21,7 +21,7 @@ public class Session{
         if(session == null)
             throw new RuntimeException("Session not already active");
         else
-            logUser.setUsername(username);
+            session.logUser = new User(username);
 
     }
 

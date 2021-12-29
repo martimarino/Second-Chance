@@ -2,6 +2,7 @@ package main.java.connection;
 
 import com.mongodb.client.*;
 import main.java.controller.SignInController;
+import main.java.entity.User;
 import org.bson.Document;
 import static com.mongodb.client.model.Filters.*;
 
@@ -41,4 +42,18 @@ public class ConnectionMongoDB{
         return true;
     }
 
+    public User findUserDetails(String username)
+    {
+        this.openConnection();
+        User logUser = new User();
+        MongoCollection<Document> myColl = db.getCollection("user");
+        Document user = myColl.find(eq("username", username)).first();
+        logUser.setUsername(user.getString("username"));
+        logUser.setEmail(user.getString("email"));
+        logUser.setAddress(user.getString("address"));
+        logUser.setCity(user.getString("city"));
+        logUser.setCountry(user.getString("country"));
+        this.closeConnection();
+        return logUser;
+    }
 }

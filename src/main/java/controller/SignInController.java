@@ -76,14 +76,15 @@ public class SignInController {
             System.out.println(("Value: " + pw.getText()));
 
             ConnectionMongoDB conn = new ConnectionMongoDB();
-            session = Session.getInstance();
 
             if(us.getText().equals("admin") && pw.getText().equals("admin")) {
+                session = Session.getInstance();
                 session.setLogUser(username);
                 ShowAdminPanel();
             } else {
                 boolean logged = conn.logInUser(us.getText(), pw.getText());
                 if (logged) {
+                    session = Session.getInstance();
                     session.setLogUser(username);
                     ShowHome();
                     }
