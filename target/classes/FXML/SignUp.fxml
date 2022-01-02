@@ -16,49 +16,49 @@
             <Font size="25.0" />
          </font>
       </Text>
-      <TextField layoutX="269.0" layoutY="264.0" style="-fx-background-radius: 5;" />
       <Label layoutX="307.0" layoutY="238.0" text="Username:">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
+      <TextField fx:id="us" layoutX="269.0" layoutY="264.0" style="-fx-background-radius: 5;" />
       <Label layoutX="309.0" layoutY="321.0" text="Password:">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField layoutX="269.0" layoutY="340.0" style="-fx-background-radius: 5;" />
+      <TextField fx:id="pw" layoutX="269.0" layoutY="340.0" style="-fx-background-radius: 5;" />
       <Label layoutX="328.0" layoutY="473.0" text="Email:">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField layoutX="269.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
-      <TextField layoutX="270.0" layoutY="492.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
-      <Label layoutX="326.0" layoutY="395.0" text="Name:">
+      <TextField fx:id="em" layoutX="269.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <Label layoutX="326.0" layoutY="395.0" text="Name and Surname:">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField layoutX="573.0" layoutY="264.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <TextField fx:id="nm" layoutX="270.0" layoutY="492.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
       <Label layoutX="624.0" layoutY="238.0" text="Country:">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
+      <TextField fx:id="co" layoutX="573.0" layoutY="264.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
       <Label layoutX="636.0" layoutY="320.0" text="City:">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <TextField layoutX="573.0" layoutY="340.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
-      <TextField layoutX="573.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <TextField fx:id="ci" layoutX="573.0" layoutY="340.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
       <Label layoutX="624.0" layoutY="395.0" text="Address:">
          <font>
             <Font size="13.0" />
          </font>
       </Label>
-      <Button layoutX="410.0" layoutY="574.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign up" />
+      <TextField fx:id="ad" layoutX="573.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+      <Button layoutX="410.0" layoutY="574.0" onAction="#registration" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign up" />
       <Text fx:id="SignIn" fill="#2582bf" layoutX="364.0" layoutY="649.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are already registered?">
          <font>
             <Font size="13.0" />

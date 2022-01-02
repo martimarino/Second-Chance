@@ -22,8 +22,6 @@ public class Session{
             throw new RuntimeException("Session not already active");
         else
             session.logUser = new User(username);
-
     }
-
 
 }
