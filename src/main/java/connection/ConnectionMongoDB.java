@@ -88,6 +88,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("user");
         Document user = myColl.find(eq("username", username)).first();
         logUser.setUsername(user.getString("username"));
+        logUser.setName(user.getString("name"));
         logUser.setEmail(user.getString("email"));
         logUser.setAddress(user.getString("address"));
         logUser.setCity(user.getString("city"));

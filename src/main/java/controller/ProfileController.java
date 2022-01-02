@@ -4,8 +4,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import main.java.entity.User;
+import main.java.utils.Session;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +20,28 @@ public class ProfileController {
     public Button followersButton;
     public Button followingButton;
     public Button interestedInsertionsButton;
+    public GridPane userInfo;
+
+    public void initialize(){
+
+        Session session = Session.getInstance();
+        User user  = session.getLogUser();
+
+        Label username = new Label(user.getUsername());
+        Label name = new Label(user.getName());
+        Label email = new Label(user.getEmail());
+        Label country = new Label(user.getCountry());
+        Label city = new Label(user.getCity());
+        Label address = new Label(user.getAddress());
+        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+        userInfo.add(username, 1,0);
+        userInfo.add(name, 1, 1);
+        userInfo.add(email, 1, 2);
+        userInfo.add(country, 1, 3);
+        userInfo.add(city, 1, 4);
+        userInfo.add(address, 1, 5);
+
+    }
 
     public void showHome(MouseEvent mouseEvent) throws IOException {
         URL url = new File("src/main/resources/FXML/Home.fxml").toURI().toURL();

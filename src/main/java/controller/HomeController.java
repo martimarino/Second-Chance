@@ -58,7 +58,7 @@ public class HomeController {
         viral.add(title, i, 2);
         viral.add(price, i, 3);
         viral.add(interested, i, 4);
-
+        System.out.println("index:" + index);
         GridPane.setHalignment(user, HPos.CENTER);
         GridPane.setHalignment(title, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
@@ -112,6 +112,10 @@ public class HomeController {
 
         viral.getChildren().clear();
         int row = 0;
+        if(scrollPage2 == 0)
+            scrollPage2 = insertions.size()-3;
+        else
+            scrollPage2-=3;
 
         for(int i = scrollPage2; row<3; i++)
         {
@@ -119,10 +123,7 @@ public class HomeController {
             row++;
         }
         viralInsertions.setCenter(viral);
-        if(scrollPage2 == 0)
-            scrollPage2 = insertions.size()-3;
-        else
-            scrollPage2-=3;
+
 
     }
 
