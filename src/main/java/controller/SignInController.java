@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -23,7 +24,7 @@ public class SignInController {
     public Button SignUp;
     public Button SignIn;
     @FXML private TextField us;
-    @FXML private TextField pw;
+    @FXML private PasswordField pw;
 
     public void ShowSignUp(MouseEvent mouseEvent) throws IOException {
 

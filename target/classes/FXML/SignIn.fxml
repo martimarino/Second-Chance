@@ -15,7 +15,7 @@
       <Text layoutX="287.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
       <Text layoutX="289.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
       <TextField fx:id="us" layoutX="239.0" layoutY="147.0" style="-fx-background-radius: 5;" />
-      <TextField fx:id="pw" layoutX="239.0" layoutY="209.0" style="-fx-background-radius: 5;" />
+      <PasswordField fx:id="pw" layoutX="239.0" layoutY="209.0" style="-fx-background-radius: 5;" />
       <Button fx:id="SignIn" layoutX="280.0" layoutY="254.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="68.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign in" />
       <Text fill="#2582bf" layoutX="180.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are not already registered?">
          <font>
