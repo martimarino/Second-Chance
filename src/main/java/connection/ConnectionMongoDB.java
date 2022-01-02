@@ -4,11 +4,20 @@ import com.mongodb.client.*;
 import main.java.entity.*;
 import main.java.utils.*;
 import org.bson.Document;
+
+import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.*;
+import static com.mongodb.client.model.Projections.include;
+import static com.mongodb.client.model.Sorts.descending;
 
 import com.mongodb.ConnectionString;
+import org.bson.conversions.Bson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 public class ConnectionMongoDB{
 
@@ -86,5 +95,30 @@ public class ConnectionMongoDB{
         logUser.setSuspended(user.getString("suspended"));
         this.closeConnection();
         return logUser;
+    }
+
+    public void followedUserinsertions() {
+    }
+
+    private static Consumer<Document> printDocuments() {
+        return doc -> System.out.println(doc.toJson());
+    }
+
+    public ArrayList<Document> findViralInsertions(int k) {
+
+        this.openConnection();
+        ArrayList<Document> array = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+        Bson sort = sort(descending("interested"));
+        Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("title"), include("interested"), include("price")));
+        Bson limit = limit(k);
+        myColl.aggregate(Arrays.asList(sort,project ,limit)).forEach(printDocuments());
+        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(sort,project ,limit));
+
+        for (Document document : r) {
+            array.add(document);
+        }
+        this.closeConnection();
+        return array;
     }
 }
