@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class ProfileController {
+public class ProfileController{
     public Button feed;
     public Button followersButton;
     public Button followingButton;

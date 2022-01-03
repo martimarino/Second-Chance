@@ -1,4 +1,4 @@
 package main.java.controller;
 
-public class MyProfileController {
+public class MyProfileController extends MainController{
 }

@@ -1,4 +1,10 @@
 package main.java.controller;
 
-public class SearchUserController {
+public class SearchUserController extends MainController{
+
+
+
+
+
+
 }

@@ -1,6 +1,6 @@
 package main.java.controller;
 
-public class SearchInsertionController {
+public class SearchInsertionController extends MainController{
 
 
 
