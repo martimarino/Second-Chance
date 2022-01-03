@@ -18,10 +18,10 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions" BorderPane.alignment="CENTER" />
          </top>
          <left>
-            <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#PrevViralInsertion" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="CENTER" style="-fx-background-image:url('../img/prev.png'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;" />
+            <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#PrevViralInsertion" prefHeight="60.0" prefWidth="60.0" BorderPane.alignment="CENTER" text="prev" style="-fx-background-image:url('../img/prev.png'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;" />
          </left>
          <right>
-            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertion" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="CENTER" style="-fx-background-image:url('../img/next.png');" />
+            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertion" prefHeight="60.0" prefWidth="60.0" BorderPane.alignment="CENTER" text="next" style="-fx-background-image:url('../img/next.png');" />
          </right>
       </BorderPane>
    </children>
