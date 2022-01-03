@@ -23,7 +23,7 @@
                         <Button fx:id="followersButton" layoutX="343.0" layoutY="118.0" mnemonicParsing="false" onMouseClicked="#showUserFollowers" prefHeight="25.0" prefWidth="245.0" text="Followers" />
                         <Button fx:id="followingButton" layoutX="343.0" layoutY="159.0" mnemonicParsing="false" onMouseClicked="#showUserFollowing" prefHeight="25.0" prefWidth="245.0" text="Following" />
                         <Button fx:id="interestedInsertionsButton" layoutX="343.0" layoutY="198.0" mnemonicParsing="false" onMouseClicked="#showInterestedInsertions" prefHeight="25.0" prefWidth="245.0" text="View insertion you are interested in" />
-                        <GridPane layoutX="47.0" layoutY="94.0">
+                        <GridPane fx:id="userInfo" layoutX="47.0" layoutY="94.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
