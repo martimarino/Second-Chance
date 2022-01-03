@@ -1,7 +1,7 @@
 package main.java.entity;
 
-import main.java.connection.ConnectionMongoDB;
-import main.java.utils.Utility;
+import main.java.connection.*;
+import main.java.utils.*;
 
 public class User implements GeneralUser {
 
@@ -41,7 +41,7 @@ public class User implements GeneralUser {
         ConnectionMongoDB conn = new ConnectionMongoDB();
         User user = conn.findUserDetails(username);
         if(user.getSuspended().equals("Y"))
-            Utility.infoBox("You can't login beacause your account has been suspended.", "Error", "Account suspended!");
+            Utility.infoBox("You can't login because your account has been suspended.", "Error", "Account suspended!");
         else {
             this.username = user.getUsername();
             this.email = user.getEmail();

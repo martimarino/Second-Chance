@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
    <children>
       <Text layoutX="332.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Feed">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Button fx:id="profileButton" alignment="CENTER" contentDisplay="CENTER" layoutX="591.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#ShowProfile" style="-fx-border-radius: 5; -fx-border-color: black; -fx-background-color: none;" text="Profile" />
-      <Button fx:id="findUsers" layoutX="10.0" layoutY="118.0" mnemonicParsing="false" onMouseClicked="#findUsers" prefHeight="25.0" prefWidth="660.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search users" />
-      <Button fx:id="searchArticlesOrBrands" layoutX="10.0" layoutY="467.0" mnemonicParsing="false" onMouseClicked="#SearchByArticleOrBrand" prefHeight="25.0" prefWidth="660.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search articles or brands" />
-      <BorderPane fx:id="insertionsFollowedUsers" layoutX="13.0" layoutY="161.0" prefHeight="286.0" prefWidth="660.0">
-         <top>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View insertions of followed users" wrappingWidth="173.431640625" BorderPane.alignment="CENTER" />
-         </top>
-      </BorderPane>
-      <BorderPane fx:id="viralInsertions" layoutX="10.0" layoutY="522.0" prefHeight="286.0" prefWidth="660.0">
+      <BorderPane fx:id="viralInsertions" layoutX="10.0" layoutY="122.0" prefHeight="286.0" prefWidth="660.0">
          <top>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions" BorderPane.alignment="CENTER" />
          </top>
          <left>
-            <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#PrevViralInsertion" prefHeight="25.0" prefWidth="43.0" text="Prev" BorderPane.alignment="CENTER" />
+            <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#PrevViralInsertion" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="CENTER" style="-fx-background-image:url('../img/prev.png'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;" />
          </left>
          <right>
-            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertion" prefHeight="25.0" prefWidth="43.0" text="Next" BorderPane.alignment="CENTER" />
+            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertion" prefHeight="40.0" prefWidth="40.0" BorderPane.alignment="CENTER" style="-fx-background-image:url('../img/next.png');" />
          </right>
       </BorderPane>
    </children>

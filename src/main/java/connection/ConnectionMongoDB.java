@@ -71,6 +71,20 @@ public class ConnectionMongoDB{
         return true;
     }
 
+    public boolean findUserByUsername(String username) {
+
+        this.openConnection();
+        MongoCollection<Document> myColl = db.getCollection("user");
+        MongoCursor<Document> cursor  = myColl.find(eq("username", username)).iterator();
+        if(!cursor.hasNext()) {
+            this.closeConnection();
+            Utility.infoBox("There is no user with this username.", "Error", "Username not found!");
+            return false;
+        }
+        this.closeConnection();
+        return true;
+    }
+
     private boolean userAlreadyPresent(String username, String password) {
 
         MongoCollection<Document> myColl = db.getCollection("user");
@@ -111,7 +125,7 @@ public class ConnectionMongoDB{
         ArrayList<Document> array = new ArrayList<>();
         MongoCollection<Document> myColl = db.getCollection("insertion");
         Bson sort = sort(descending("interested"));
-        Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("title"), include("interested"), include("price")));
+        Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("currency")));
         Bson limit = limit(k);
         myColl.aggregate(Arrays.asList(sort,project ,limit)).forEach(printDocuments());
         AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(sort,project ,limit));

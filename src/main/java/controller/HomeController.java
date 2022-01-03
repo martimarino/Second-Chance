@@ -1,11 +1,13 @@
 package main.java.controller;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -29,6 +31,7 @@ public class HomeController {
     public BorderPane viralInsertions;
     public Button nextButton;
     public Button prevButton;
+    @FXML private TextField us;
     GridPane viral;
     ArrayList<Document> insertions;
     int scrollPage2;
@@ -50,17 +53,22 @@ public class HomeController {
         image.setFitHeight(150);
         image.setFitWidth(150);
 
-        Label title = new Label("Title: " + insertions.get(index).getString("title"));
-        Label price = new Label("Price: " + insertions.get(index).getString("price"));
+        String cur;
+        if(insertions.get(index).getString("currency").equals("EUR"))
+            cur = "€";
+        else
+            cur = "$";
+        Label price = new Label(insertions.get(index).getString("price") + " " + cur);
+        Label status = new Label("Status: " + insertions.get(index).getString("status"));
         Label interested= new Label("Interested: "+ insertions.get(index).getString("interested"));
         viral.add(user, i, 0);
         viral.add(image, i, 1);
-        viral.add(title, i, 2);
+        viral.add(status, i, 2);
         viral.add(price, i, 3);
         viral.add(interested, i, 4);
         System.out.println("index:" + index);
         GridPane.setHalignment(user, HPos.CENTER);
-        GridPane.setHalignment(title, HPos.CENTER);
+        GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
         GridPane.setHalignment(interested, HPos.CENTER);
 
@@ -91,7 +99,7 @@ public class HomeController {
 
     public void ShowProfile(MouseEvent mouseEvent) throws IOException {
 
-        URL url = new File("src/main/resources/FXML/Profile.fxml").toURI().toURL();
+        URL url = new File("src/main/resources/FXML/MyProfile.fxml").toURI().toURL();
         Parent root = FXMLLoader.load(url);
 
         Stage stage = (Stage) profileButton.getScene().getWindow();
@@ -101,10 +109,15 @@ public class HomeController {
 
     }
 
-    public void findUsers(MouseEvent mouseEvent) {
+    public void findUsers(MouseEvent mouseEvent) throws IOException {
+
+        ConnectionMongoDB conn = new ConnectionMongoDB();
+
+
     }
 
     public void SearchByArticleOrBrand(MouseEvent mouseEvent) {
+
     }
 
 

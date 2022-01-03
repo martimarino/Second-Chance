@@ -1,6 +1,6 @@
 package main.java.utils;
 
-import main.java.entity.User;
+import main.java.entity.*;
 
 public class Session{
 

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
+    <children>
+        <Text layoutX="332.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Feed">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+        <ComboBox value="size" layoutX="20.0" layoutY="70.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                    <String fx:value="XS" />
+                    <String fx:value="S" />
+                    <String fx:value="M" />
+                    <String fx:value="L" />
+                    <String fx:value="XL" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox value="price" layoutX="107.0" layoutY="70.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                    <String fx:value="0-50" />
+                    <String fx:value="50-100" />
+                    <String fx:value="100-150" />
+                    <String fx:value="150-200" />
+                    <String fx:value="200-" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox value="gender" layoutX="220.0" layoutY="70.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                    <String fx:value="F" />
+                    <String fx:value="M" />
+                    <String fx:value="U" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox value="status" layoutX="327.0" layoutY="70.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                    <String fx:value="excellent" />
+                    <String fx:value="new" />
+                    <String fx:value="good" />
+                    <String fx:value="used" />
+                    <String fx:value="very used" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox value="category" layoutX="447.0" layoutY="70.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList" >
+                    <String fx:value="kids" />
+                    <String fx:value="man" />
+                    <String fx:value="woman" />
+                    <String fx:value="home" />
+                    <String fx:value="shoes" />
+                    <String fx:value="accessories" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <TextField prefWidth="560" layoutX="10.0" layoutY="467.0" promptText="Search articles or brands"/>
+        <Button fx:id="searchArticlesOrBrands" alignment="CENTER" contentDisplay="RIGHT" layoutX="591.0" layoutY="466.0" mnemonicParsing="false" onMouseClicked="#SearchByArticleOrBrand" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
+        <BorderPane fx:id="insertionsFollowedUsers" layoutX="13.0" layoutY="161.0" prefHeight="286.0" prefWidth="660.0">
+            <top>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View insertions of followed users" wrappingWidth="173.431640625" BorderPane.alignment="CENTER" />
+            </top>
+        </BorderPane>
+        <BorderPane fx:id="viralInsertions" layoutX="10.0" layoutY="522.0" prefHeight="286.0" prefWidth="660.0">
+            <top>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions" BorderPane.alignment="CENTER" />
+            </top>
+            <left>
+                <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#PrevViralInsertion" prefHeight="25.0" prefWidth="43.0" text="Prev" BorderPane.alignment="CENTER" />
+            </left>
+            <right>
+                <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertion" prefHeight="25.0" prefWidth="43.0" text="Next" BorderPane.alignment="CENTER" />
+            </right>
+        </BorderPane>
+    </children>
+</AnchorPane>

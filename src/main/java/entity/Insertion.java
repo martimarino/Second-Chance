@@ -5,7 +5,7 @@ public class Insertion {
     String id;
     String category;
     String description;
-    char gender;
+    String gender;
     double price;
     String currency;
     int interested;
@@ -31,7 +31,7 @@ public class Insertion {
         this.description = description;
     }
 
-    public void setGender(char gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -87,7 +87,7 @@ public class Insertion {
         return country;
     }
 
-    public char getGender() {
+    public String getGender() {
         return gender;
     }
 
