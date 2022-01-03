@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.MainController">
+   <children>
+      <TabPane prefHeight="800.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Feed">
+                <content>
+                  <fx:include fx:id="home" source="Home.fxml"/>
+                </content>
+            </Tab>
+            <Tab text="MyProfile">
+            </Tab>
+            <Tab text="SearchUser">
+            </Tab>
+            <Tab text="SearchInsertion">
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
