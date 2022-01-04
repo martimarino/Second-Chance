@@ -56,7 +56,7 @@ public class SignInController {
 
     public void ShowHome() throws IOException {
 
-        URL url = new File("src/main/resources/FXML/HomeNew.fxml").toURI().toURL();
+        URL url = new File("src/main/resources/FXML/MainPage.fxml").toURI().toURL();
         Parent root = FXMLLoader.load(url);
 
         Stage stage = (Stage) SignIn.getScene().getWindow();

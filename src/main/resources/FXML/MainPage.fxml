@@ -6,18 +6,27 @@
 
 <AnchorPane fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.MainController">
    <children>
-      <TabPane prefHeight="800.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id ="tabpane" prefHeight="800.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab text="Feed">
                 <content>
-                  <fx:include fx:id="home" source="Home.fxml"/>
+                  <fx:include fx:id="home" source="Home.fxml" />
                 </content>
             </Tab>
             <Tab text="MyProfile">
+                <content>
+                    <fx:include fx:id="MyProfile" source="MyProfile.fxml" />
+                </content>
             </Tab>
             <Tab text="SearchUser">
+                <content>
+                    <fx:include fx:id="SearchUser" source="SearchUser.fxml" />
+                </content>
             </Tab>
             <Tab text="SearchInsertion">
+                <content>
+                    <fx:include fx:id="SearchInsertion" source="SearchInsertion.fxml" />
+                </content>
             </Tab>
         </tabs>
       </TabPane>
