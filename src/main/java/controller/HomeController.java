@@ -25,9 +25,6 @@ public class HomeController {
 
     public Button profileButton;
     public AnchorPane anchorRoot;
-    public Button searchArticlesOrBrands;
-    public Button findUsers;
-    public BorderPane insertionsFollowedUsers;
     public BorderPane viralInsertions;
     public Button nextButton;
     public Button prevButton;
@@ -97,29 +94,12 @@ public class HomeController {
         scrollPage2+=3;
     }
 
-    public void ShowProfile(MouseEvent mouseEvent) throws IOException {
-
-        URL url = new File("src/main/resources/FXML/MyProfile.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
-        Stage stage = (Stage) profileButton.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
-
-    }
-
     public void findUsers(MouseEvent mouseEvent) throws IOException {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
 
     }
-
-    public void SearchByArticleOrBrand(MouseEvent mouseEvent) {
-
-    }
-
 
     public void PrevViralInsertion(MouseEvent mouseEvent) {
 

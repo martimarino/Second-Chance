@@ -71,18 +71,29 @@ public class ConnectionMongoDB{
         return true;
     }
 
-    public boolean findUserByUsername(String username) {
+    private static Consumer<Document> printDocuments() {
+        return doc -> System.out.println(doc.toJson());
+    }
+
+    public Document findUserByUsername(String username) {
 
         this.openConnection();
+        ArrayList<Document> users = new ArrayList<>();
         MongoCollection<Document> myColl = db.getCollection("user");
         MongoCursor<Document> cursor  = myColl.find(eq("username", username)).iterator();
         if(!cursor.hasNext()) {
             this.closeConnection();
             Utility.infoBox("There is no user with this username.", "Error", "Username not found!");
-            return false;
+            return null;
         }
-        this.closeConnection();
-        return true;
+
+        while (cursor.hasNext())
+        {
+            this.closeConnection();
+            return cursor.next();
+        }
+
+        return null;
     }
 
     private boolean userAlreadyPresent(String username, String password) {
@@ -115,25 +126,51 @@ public class ConnectionMongoDB{
     public void followedUserinsertions() {
     }
 
-    private static Consumer<Document> printDocuments() {
-        return doc -> System.out.println(doc.toJson());
-    }
-
     public ArrayList<Document> findViralInsertions(int k) {
 
         this.openConnection();
-        ArrayList<Document> array = new ArrayList<>();
+        ArrayList<Document> insertions = new ArrayList<>();
         MongoCollection<Document> myColl = db.getCollection("insertion");
         Bson sort = sort(descending("interested"));
         Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("currency")));
         Bson limit = limit(k);
-        myColl.aggregate(Arrays.asList(sort,project ,limit)).forEach(printDocuments());
+        myColl.aggregate(Arrays.asList(sort,project ,limit));
         AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(sort,project ,limit));
 
         for (Document document : r) {
-            array.add(document);
+            insertions.add(document);
         }
         this.closeConnection();
-        return array;
+        return insertions;
+    }
+
+    public ArrayList<Document> findUserByFilters(String country,String rating) {
+
+        this.openConnection();
+        MongoCollection<Document> myColl = db.getCollection("user");
+        MongoCursor<Document> cursor;
+        ArrayList<Document> users = new ArrayList<>();
+
+        if(country.equals("country") && !rating.equals("rating"))
+        {
+             cursor  = myColl.find(and(eq("rating", rating))).iterator();
+        }
+        else if(!country.equals("country") && rating.equals("rating"))
+        {
+             cursor  = myColl.find(and(eq("country", country))).iterator();
+        }
+        else{
+             cursor  = myColl.find(and(eq("country", country),
+                    eq("rating", rating))).iterator();
+        }
+
+        while(cursor.hasNext())
+        {
+            users.add(cursor.next());
+        }
+
+        this.closeConnection();
+        return users;
+
     }
 }
