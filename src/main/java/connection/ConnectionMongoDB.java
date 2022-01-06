@@ -131,11 +131,12 @@ public class ConnectionMongoDB{
         this.openConnection();
         ArrayList<Document> insertions = new ArrayList<>();
         MongoCollection<Document> myColl = db.getCollection("insertion");
+        Bson match = match(eq("sold", "N"));
         Bson sort = sort(descending("interested"));
         Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("currency")));
         Bson limit = limit(k);
         myColl.aggregate(Arrays.asList(sort,project ,limit));
-        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(sort,project ,limit));
+        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(match, sort,project ,limit));
 
         for (Document document : r) {
             insertions.add(document);

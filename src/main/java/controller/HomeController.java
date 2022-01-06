@@ -22,8 +22,6 @@ import java.util.ArrayList;
 
 public class HomeController {
 
-
-    public Button profileButton;
     public AnchorPane anchorRoot;
     public BorderPane viralInsertions;
     public Button nextButton;
@@ -32,7 +30,7 @@ public class HomeController {
     GridPane viral;
     ArrayList<Document> insertions;
     int scrollPage2;
-    int k = 12;
+    int k = 15;
 
     public void initialize(){
 
@@ -40,6 +38,11 @@ public class HomeController {
         conn.followedUserinsertions(); // need to do!!
         insertions = conn.findViralInsertions(k);
         showViralInsertions();
+
+        prevButton.setDisable(true);
+        //nextButton.setDisable(true);
+        prevButton.setVisible(false);
+        //nextButton.setVisible(false);
 
     }
 
@@ -55,6 +58,7 @@ public class HomeController {
             cur = "€";
         else
             cur = "$";
+
         Label price = new Label(insertions.get(index).getString("price") + " " + cur);
         Label status = new Label("Status: " + insertions.get(index).getString("status"));
         Label interested= new Label("Interested: "+ insertions.get(index).getString("interested"));
@@ -64,6 +68,7 @@ public class HomeController {
         viral.add(price, i, 3);
         viral.add(interested, i, 4);
         System.out.println("index:" + index);
+        System.out.println("image: " + insertions.get(index).getString("image_url"));
         GridPane.setHalignment(user, HPos.CENTER);
         GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
@@ -73,9 +78,6 @@ public class HomeController {
                 "    -fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
-
-
-        //viral.setGridLinesVisible(true);
 
     }
 
@@ -98,17 +100,23 @@ public class HomeController {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
-
     }
 
     public void PrevViralInsertion(MouseEvent mouseEvent) {
 
         viral.getChildren().clear();
         int row = 0;
+
+        scrollPage2-=6;
+
+        nextButton.setDisable(false);
+        nextButton.setVisible(true);
+
         if(scrollPage2 == 0)
-            scrollPage2 = insertions.size()-3;
-        else
-            scrollPage2-=3;
+        {
+            prevButton.setDisable(true);
+            prevButton.setVisible(false);
+        }
 
         for(int i = scrollPage2; row<3; i++)
         {
@@ -116,7 +124,7 @@ public class HomeController {
             row++;
         }
         viralInsertions.setCenter(viral);
-
+        scrollPage2+=3;
 
     }
 
@@ -125,17 +133,30 @@ public class HomeController {
         viral.getChildren().clear();
         int row = 0;
 
+        prevButton.setDisable(false);
+        prevButton.setVisible(true);
+
+
         for(int i = scrollPage2; i < scrollPage2+3 && row<3; i++)
         {
-            if(i == insertions.size()) {
-                    i = 0;
-                    scrollPage2 = 0;
+            if(i == insertions.size())
+            {
+                nextButton.setDisable(true);
+                nextButton.setVisible(false);
+                return;
             }
             addInsertionsViral(i, row);
             row++;
+            viralInsertions.setCenter(viral);
         }
+
         scrollPage2+= 3;
-        viralInsertions.setCenter(viral);
+
+        if(scrollPage2 >= insertions.size()-1)
+        {
+            nextButton.setDisable(true);
+            nextButton.setVisible(false);
+        }
 
     }
 }

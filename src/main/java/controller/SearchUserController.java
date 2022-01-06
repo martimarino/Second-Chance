@@ -63,6 +63,8 @@ public class SearchUserController extends MainController{
             if(userFilter.isEmpty())
             {
                 Utility.infoBox("There is not a user with this characteristic!", "Advise", "User Advise");
+                country.setValue("country");
+                rating.setValue("rating");
                 return;
             }
             if(userFilter.size() > 1)
@@ -85,6 +87,11 @@ public class SearchUserController extends MainController{
             showSearchedUser(users);
             userFind.setCenter(usersList);
             us.setText("");
+
+            prevButton.setDisable(true);
+            nextButton.setDisable(true);
+            prevButton.setVisible(false);
+            nextButton.setVisible(false);
         }
 
     }
