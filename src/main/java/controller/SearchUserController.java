@@ -45,7 +45,6 @@ public class SearchUserController extends MainController{
         prevButton.setVisible(false);
         nextButton.setVisible(false);
 
-
     }
 
     public void findUsers(MouseEvent mouseEvent) {
@@ -62,7 +61,7 @@ public class SearchUserController extends MainController{
             userFilter = conn.findUserByFilters(country.getValue(), rating.getValue());
             if(userFilter.isEmpty())
             {
-                Utility.infoBox("There is not a user with this characteristic!", "Advise", "User Advise");
+                Utility.infoBox("There is not a user with this characteristics!", "Advise", "User Advise");
                 country.setValue("country");
                 rating.setValue("rating");
                 return;

@@ -1,27 +1,20 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import main.java.connection.ConnectionMongoDB;
 
 import org.bson.Document;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class HomeController {
 
+    public Button profileButton;
     public AnchorPane anchorRoot;
     public BorderPane viralInsertions;
     public Button nextButton;
@@ -30,7 +23,7 @@ public class HomeController {
     GridPane viral;
     ArrayList<Document> insertions;
     int scrollPage2;
-    int k = 15;
+    int k = 12;
 
     public void initialize(){
 
@@ -65,6 +58,7 @@ public class HomeController {
         viral.add(status, i, 2);
         viral.add(price, i, 3);
         viral.add(interested, i, 4);
+        System.out.println("index:" + index);
         GridPane.setHalignment(user, HPos.CENTER);
         GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
@@ -81,7 +75,6 @@ public class HomeController {
 
         viral = new GridPane();
         scrollPage2 = 0;
-
 
         for (int i = scrollPage2; i < scrollPage2+3; i++) {
 

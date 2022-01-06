@@ -23,6 +23,7 @@ public class ConnectionMongoDB{
 
     private MongoClient mongoClient;
     private MongoDatabase db;
+    MongoCursor<Document> cursor;
 
     public void openConnection(){
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
@@ -80,7 +81,7 @@ public class ConnectionMongoDB{
         this.openConnection();
         ArrayList<Document> users = new ArrayList<>();
         MongoCollection<Document> myColl = db.getCollection("user");
-        MongoCursor<Document> cursor  = myColl.find(eq("username", username)).iterator();
+        cursor  = myColl.find(eq("username", username)).iterator();
         if(!cursor.hasNext()) {
             this.closeConnection();
             Utility.infoBox("There is no user with this username.", "Error", "Username not found!");
@@ -99,7 +100,7 @@ public class ConnectionMongoDB{
     private boolean userAlreadyPresent(String username, String password) {
 
         MongoCollection<Document> myColl = db.getCollection("user");
-        MongoCursor<Document> cursor  = myColl.find(and(eq("username", username),
+        cursor = myColl.find(and(eq("username", username),
                 eq("password", password))).iterator();
         if(!cursor.hasNext())
             return false;
@@ -124,6 +125,8 @@ public class ConnectionMongoDB{
     }
 
     public void followedUserinsertions() {
+
+
     }
 
     public ArrayList<Document> findViralInsertions(int k) {
@@ -149,7 +152,6 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         MongoCollection<Document> myColl = db.getCollection("user");
-        MongoCursor<Document> cursor;
         ArrayList<Document> users = new ArrayList<>();
 
         if(country.equals("country") && !rating.equals("rating"))
@@ -173,5 +175,92 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return users;
 
+    }
+
+    private ArrayList<Document> partialSearch(int index, MongoCollection<Document> myColl, ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
+
+        switch (index) {
+            case 0:
+                cursor  = myColl.find(eq("size", size)).iterator();
+                break;
+            case 1:
+                cursor  = myColl.find(eq("price", price)).iterator();
+                break;
+            case 2:
+                cursor  = myColl.find(eq("gender", gender)).iterator();
+                break;
+            case 3:
+                cursor  = myColl.find(eq("status", status)).iterator();
+                break;
+            case 4:
+                cursor  = myColl.find(eq("category", category)).iterator();
+                break;
+            case 5:
+                cursor  = myColl.find(eq("color", color)).iterator();
+                break;
+            default:
+                break;
+        }
+        while(cursor.hasNext())
+            insertions.add(cursor.next());
+
+        return insertions;
+    }
+
+    public ArrayList<Document> findInsertionByFilters(String size, String price, String gender, String status, String category, String color) {
+
+        this.openConnection();
+        ArrayList<Document> insertions = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        //the following variables are 1 if the relative filter is applied
+        int sizeFilterOn, priceFilterOn, genderFilterOn, statusFilterOn, categoryFilterOn, colorFilterOn;
+        sizeFilterOn = (size.equals("size")) ? 0 : 1;
+        priceFilterOn = (price.equals("price")) ? 0 : 1;
+        genderFilterOn = (gender.equals("gender")) ? 0 : 1;
+        statusFilterOn = (status.equals("status")) ? 0 : 1;
+        categoryFilterOn = (category.equals("category")) ? 0 : 1;
+        colorFilterOn = (color.equals("color")) ? 0 : 1;
+
+        int[] filter = {sizeFilterOn, priceFilterOn, genderFilterOn,
+                statusFilterOn,categoryFilterOn, colorFilterOn};
+
+        for(int i = 0; i < 6; i++) {
+            if(filter[i] == 1)
+            partialSearch(i, myColl, insertions, size, price, gender, status, category, color);
+        }
+
+        this.closeConnection();
+        return insertions;
+    }
+
+
+    public ArrayList<Document> findInsertionBySeller(String seller) {
+
+        this.openConnection();
+        ArrayList<Document> insertions = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        cursor = myColl.find(eq("seller", seller)).iterator();
+        while (cursor.hasNext())
+            insertions.add(cursor.next());
+
+        this.closeConnection();
+        return insertions;
+
+    }
+
+    public ArrayList<Document> findInsertionByBrand(String brand) {
+
+        this.openConnection();
+        ArrayList<Document> insertions = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        cursor = myColl.find(eq("brand", brand)).iterator();
+        while (cursor.hasNext())
+            insertions.add(cursor.next());
+
+        this.closeConnection();
+        return insertions;
     }
 }
