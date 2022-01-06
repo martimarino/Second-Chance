@@ -40,9 +40,7 @@ public class HomeController {
         showViralInsertions();
 
         prevButton.setDisable(true);
-        //nextButton.setDisable(true);
         prevButton.setVisible(false);
-        //nextButton.setVisible(false);
 
     }
 
@@ -67,8 +65,6 @@ public class HomeController {
         viral.add(status, i, 2);
         viral.add(price, i, 3);
         viral.add(interested, i, 4);
-        System.out.println("index:" + index);
-        System.out.println("image: " + insertions.get(index).getString("image_url"));
         GridPane.setHalignment(user, HPos.CENTER);
         GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
