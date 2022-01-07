@@ -85,7 +85,7 @@ public class SearchInsertionController extends MainController{
 
             showFilteredInsertions();
             insertionFind.setCenter(insertionList);
-
+            ins.setText("");
         }
 
         size.setValue("size");
@@ -125,7 +125,7 @@ public class SearchInsertionController extends MainController{
         image.setFitHeight(150);
         image.setFitWidth(150);
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
-        Label price = new Label(insertionFilter.get(index).getString("price") + " " + cur);
+        Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + cur);
         Label brand = new Label("Brand: " + insertionFilter.get(index).getString("brand"));
 
         insertionList.add(seller, i, j);

@@ -50,7 +50,7 @@ public class HomeController {
         else
             cur = "$";
 
-        Label price = new Label(insertions.get(index).getString("price") + " " + cur);
+        Label price = new Label(insertions.get(index).getDouble("price") + " " + cur);
         Label status = new Label("Status: " + insertions.get(index).getString("status"));
         Label interested= new Label("Interested: "+ insertions.get(index).getString("interested"));
         viral.add(user, i, 0);

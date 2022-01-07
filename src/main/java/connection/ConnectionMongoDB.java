@@ -156,11 +156,11 @@ public class ConnectionMongoDB{
 
         if(country.equals("country") && !rating.equals("rating"))
         {
-             cursor  = myColl.find(and(eq("rating", rating))).iterator();
+             cursor  = myColl.find(eq("rating", rating)).iterator();
         }
         else if(!country.equals("country") && rating.equals("rating"))
         {
-             cursor  = myColl.find(and(eq("country", country))).iterator();
+             cursor  = myColl.find(eq("country", country)).iterator();
         }
         else{
              cursor  = myColl.find(and(eq("country", country),
@@ -184,7 +184,15 @@ public class ConnectionMongoDB{
                 cursor  = myColl.find(eq("size", size)).iterator();
                 break;
             case 1:
-                cursor  = myColl.find(eq("price", price)).iterator();
+                String[] split = price.split("-");
+                System.out.println("FASCIA: " + split[0]);
+                if(split.length == 1) {
+                    cursor  = myColl.find(gte("price", Double.parseDouble(split[0]))).iterator();
+                } else {
+                    System.out.println("FASCIA: " + split[1]);
+                    cursor  = myColl.find(and(gte("price", Double.parseDouble(split[0])),
+                            lte("price", Double.parseDouble(split[1])))).iterator();
+                }
                 break;
             case 2:
                 cursor  = myColl.find(eq("gender", gender)).iterator();

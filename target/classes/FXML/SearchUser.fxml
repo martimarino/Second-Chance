@@ -13,7 +13,7 @@
                 <Font size="24.0" />
             </font>
         </Text>
-        <ComboBox fx:id="country" layoutX="23.0" layoutY="398.0" prefHeight="25.0" prefWidth="90.0" value="country">
+        <ComboBox fx:id="country" layoutX="35.0" layoutY="130.0" prefHeight="25.0" prefWidth="105.0" value="country">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Italy" />
@@ -29,7 +29,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox fx:id="rating" layoutX="110.0" layoutY="398.0" prefWidth="90.0" value="rating">
+        <ComboBox fx:id="rating" layoutX="140.0" layoutY="130.0" prefWidth="100.0" value="rating">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="1" />
@@ -40,19 +40,15 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <TextField fx:id="us" layoutX="17.0" layoutY="439.0" prefWidth="560" promptText="Search users" />
-        <Button fx:id="findUsers" alignment="CENTER" contentDisplay="RIGHT" layoutX="584.0" layoutY="438.0" mnemonicParsing="false" onMouseClicked="#findUsers" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
-      <BorderPane fx:id="insertionsFollowedUsers" layoutX="17.0" layoutY="82.0" prefHeight="286.0" prefWidth="660.0">
-         <top>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View insertions of followed users" wrappingWidth="173.431640625" BorderPane.alignment="CENTER" />
-         </top>
-      </BorderPane>
-      <BorderPane fx:id="userFind" layoutX="249.0" layoutY="486.0" prefHeight="307.0" prefWidth="205.0">
-         <left>
-            <Button fx:id="prevButton" layoutX="-20.0" layoutY="-20.0" mnemonicParsing="false" onMouseClicked="#showPrevUser" text="Prev" />
-         </left>
-         <right>
-            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#showNextUser" text="Next" BorderPane.alignment="TOP_RIGHT" />
-         </right></BorderPane>
+        <TextField fx:id="us" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search users" />
+        <Button fx:id="findUsers" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findUsers" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
+        <BorderPane fx:id="userFind" layoutX="249.0" layoutY="486.0" prefHeight="307.0" prefWidth="205.0">
+            <left>
+                <Button fx:id="prevButton" layoutX="-20.0" layoutY="-20.0" mnemonicParsing="false" onMouseClicked="#showPrevUser" text="Prev" />
+            </left>
+            <right>
+                <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#showNextUser" text="Next" BorderPane.alignment="TOP_RIGHT" />
+            </right>
+        </BorderPane>
     </children>
 </AnchorPane>
