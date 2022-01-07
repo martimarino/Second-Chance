@@ -42,7 +42,7 @@
         </ComboBox>
         <TextField fx:id="us" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search users" />
         <Button fx:id="findUsers" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findUsers" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
-        <BorderPane fx:id="userFind" layoutX="249.0" layoutY="486.0" prefHeight="307.0" prefWidth="205.0">
+        <BorderPane fx:id="userFind" layoutX="150.0" layoutY="300.0" prefHeight="307.0" prefWidth="400.0">
             <left>
                 <Button fx:id="prevButton" layoutX="-20.0" layoutY="-20.0" mnemonicParsing="false" onMouseClicked="#showPrevUser" text="Prev" />
             </left>
@@ -50,5 +50,19 @@
                 <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#showNextUser" text="Next" BorderPane.alignment="TOP_RIGHT" />
             </right>
         </BorderPane>
+        <Text layoutX="260.0" layoutY="470.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Suggested sellers">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+        <BorderPane fx:id="userSugg" layoutX="20.0" layoutY="580.0" prefHeight="307.0" prefWidth="660.0">
+            <left>
+                <Button fx:id="prevSugg" layoutX="-20.0" layoutY="380.0" mnemonicParsing="false" onMouseClicked="#prevSuggestedUsers" text="Prev" />
+            </left>
+            <right>
+                <Button fx:id="nextSugg" layoutX="-20.0" layoutY="380.0" mnemonicParsing="false" onMouseClicked="#nextSuggestedUsers" text="Next" BorderPane.alignment="TOP_RIGHT" />
+            </right>
+        </BorderPane>
+
     </children>
 </AnchorPane>

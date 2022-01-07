@@ -1,36 +1,34 @@
 package main.java.controller;
 
-import javafx.collections.FXCollections;
-import javafx.geometry.HPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import main.java.connection.ConnectionMongoDB;
-import main.java.utils.Utility;
-import org.bson.Document;
-import javax.swing.JComboBox;
+import javafx.geometry.*;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
+import main.java.connection.*;
+import main.java.utils.*;
+import org.bson.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class SearchUserController extends MainController{
-
 
     public Button findUsers;
     public TextField us;
     public BorderPane userFind;
     public ComboBox<String> country;
     public ComboBox<String> rating;
-    public FXCollections countryCollection;
-    public FXCollections ratingCollection;
-    public Button prevButton;
-    public Button nextButton;
+    public Button prevButton, nextButton;
     public GridPane usersList;
     public ArrayList<Document> userFilter;
+
     public int item;
+
+    public Button prevSugg, nextSugg;
+    public BorderPane userSugg;
+    public ArrayList<Document> sugg;
+    public GridPane suggList;
+    int scrollPage;
 
     public void initialize(){
 
@@ -45,9 +43,18 @@ public class SearchUserController extends MainController{
         prevButton.setVisible(false);
         nextButton.setVisible(false);
 
+        suggList = new GridPane();
+        prevSugg.setDisable(true);
+        nextSugg.setDisable(true);
+        prevSugg.setVisible(false);
+        nextSugg.setVisible(false);
+
+        //connessione a Neo4j
+        //showSuggestedUsers();
+
     }
 
-    public void findUsers(MouseEvent mouseEvent) {
+    public void findUsers() {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
@@ -97,24 +104,7 @@ public class SearchUserController extends MainController{
 
     private void showFilteredUsers() {
 
-        usersList.getChildren().clear();
-
-        Label username = new Label(userFilter.get(item).getString("username"));
-        Label country = new Label(userFilter.get(item).getString("country"));
-        Label city = new Label(userFilter.get(item).getString("city"));
-
-        usersList.add(username, 0, 0);
-        usersList.add(country, 0, 1);
-        usersList.add(city, 0, 2);
-
-        GridPane.setHalignment(username, HPos.CENTER);
-        GridPane.setHalignment(country, HPos.CENTER);
-        GridPane.setHalignment(city, HPos.CENTER);
-
-        usersList.setStyle(
-                "    -fx-padding: 20;\n" +
-                        "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;");
+        Utility.showUsers(usersList, userFilter, item);
 
     }
 
@@ -140,8 +130,7 @@ public class SearchUserController extends MainController{
                         "    -fx-vgap: 10;");
     }
 
-
-    public void showPrevUser(MouseEvent mouseEvent) {
+    public void showPrevUser() {
 
         item-=2;
 
@@ -161,7 +150,7 @@ public class SearchUserController extends MainController{
         }
     }
 
-    public void showNextUser(MouseEvent mouseEvent) {
+    public void showNextUser() {
 
         if(item == userFilter.size()-1) {
             nextButton.setDisable(true);
@@ -180,4 +169,85 @@ public class SearchUserController extends MainController{
         showFilteredUsers();
         item++;
     }
+
+    /*---------------------------------------------------------------*/
+
+    public void addSuggestedUsers(int index, int i){
+
+        Utility.showUsers(usersList, userFilter, item);
+
+    }
+
+    private void showSuggestedUsers() {
+
+        suggList = new GridPane();
+        scrollPage = 0;
+
+        for (int i = scrollPage; i < scrollPage+3; i++) {
+
+            addSuggestedUsers(i, i);
+            userSugg.setCenter(suggList);
+
+        }
+        scrollPage+=3;
+    }
+
+    public void prevSuggestedUsers(MouseEvent mouseEvent) {
+
+        suggList.getChildren().clear();
+        int row = 0;
+
+        scrollPage-=6;
+
+        nextSugg.setDisable(false);
+        nextSugg.setVisible(true);
+
+        if(scrollPage == 0)
+        {
+            prevSugg.setDisable(true);
+            prevSugg.setVisible(false);
+        }
+
+        for(int i = scrollPage; row<3; i++)
+        {
+            addSuggestedUsers(i, row);
+            row++;
+        }
+        userSugg.setCenter(suggList);
+        scrollPage+=3;
+
+    }
+
+    public void nextSuggestedUsers(MouseEvent mouseEvent) {
+
+        suggList.getChildren().clear();
+        int row = 0;
+
+        prevSugg.setDisable(false);
+        prevSugg.setVisible(true);
+
+        for(int i = scrollPage; i < scrollPage+3 && row<3; i++)
+        {
+            if(i == sugg.size())
+            {
+                nextButton.setDisable(true);
+                nextButton.setVisible(false);
+                return;
+            }
+            addSuggestedUsers(i, row);
+            row++;
+            userSugg.setCenter(suggList);
+        }
+
+        scrollPage+= 3;
+
+        if(scrollPage >= sugg.size()-1)
+        {
+            nextSugg.setDisable(true);
+            nextSugg.setVisible(false);
+        }
+
+    }
+
+
 }

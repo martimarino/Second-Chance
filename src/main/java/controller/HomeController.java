@@ -1,15 +1,15 @@
 package main.java.controller;
 
-import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import main.java.connection.ConnectionMongoDB;
-
 import org.bson.Document;
-import java.io.IOException;
+
 import java.util.ArrayList;
 
 public class HomeController {
@@ -19,7 +19,6 @@ public class HomeController {
     public BorderPane viralInsertions;
     public Button nextButton;
     public Button prevButton;
-    @FXML private TextField us;
     GridPane viral;
     ArrayList<Document> insertions;
     int scrollPage2;
@@ -85,13 +84,7 @@ public class HomeController {
         scrollPage2+=3;
     }
 
-    public void findUsers(MouseEvent mouseEvent) throws IOException {
-
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-
-    }
-
-    public void PrevViralInsertion(MouseEvent mouseEvent) {
+    public void PrevViralInsertion() {
 
         viral.getChildren().clear();
         int row = 0;
@@ -117,7 +110,7 @@ public class HomeController {
 
     }
 
-    public void nextViralInsertion(MouseEvent mouseEvent) {
+    public void nextViralInsertion() {
 
         viral.getChildren().clear();
         int row = 0;
