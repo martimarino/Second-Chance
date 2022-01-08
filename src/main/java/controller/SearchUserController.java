@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import main.java.connection.*;
 import main.java.utils.*;
 import org.bson.*;
+import main.java.utils.Session;
 
 import java.util.*;
 
@@ -27,8 +28,10 @@ public class SearchUserController extends MainController{
     public Button prevSugg, nextSugg;
     public BorderPane userSugg;
     public ArrayList<Document> sugg;
+    public ArrayList<String> suggFromNeo;
     public GridPane suggList;
     int scrollPage;
+    int k = 15;
 
     public void initialize(){
 
@@ -44,13 +47,26 @@ public class SearchUserController extends MainController{
         nextButton.setVisible(false);
 
         suggList = new GridPane();
+        sugg = new ArrayList<>();
+        suggFromNeo = new ArrayList<>();
         prevSugg.setDisable(true);
-        nextSugg.setDisable(true);
         prevSugg.setVisible(false);
-        nextSugg.setVisible(false);
 
-        //connessione a Neo4j
-        //showSuggestedUsers();
+        //connection to Neo4j
+        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
+        suggFromNeo = conn.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
+
+        Document d;
+        ConnectionMongoDB conn2 = new ConnectionMongoDB();
+        for(int i = 0; i < suggFromNeo.size(); i++) {
+            d = conn2.findUserByUsername(suggFromNeo.get(i));
+            sugg.add(d);
+        }
+
+System.out.println("***********************************");
+System.out.println("SUGG SIZE: " + sugg.size());
+
+        showSuggestedUsers();
 
     }
 
@@ -174,7 +190,24 @@ public class SearchUserController extends MainController{
 
     public void addSuggestedUsers(int index, int i){
 
-        Utility.showUsers(usersList, userFilter, item);
+        ImageView image = new ImageView("file: /../../resources/img/user.png");
+        Label username = new Label(sugg.get(index).getString("username"));
+        Label country = new Label(sugg.get(index).getString("country"));
+        Label city = new Label(sugg.get(index).getString("city"));
+
+        suggList.add(image, i, 0);
+        suggList.add(username, i, 1);
+        suggList.add(country, i, 2);
+        suggList.add(city, i, 3);
+
+        GridPane.setHalignment(username, HPos.CENTER);
+        GridPane.setHalignment(country, HPos.CENTER);
+        GridPane.setHalignment(city, HPos.CENTER);
+
+        suggList.setStyle(
+                "    -fx-padding: 20;\n" +
+                        "    -fx-hgap: 10;\n" +
+                        "    -fx-vgap: 10;");
 
     }
 
