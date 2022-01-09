@@ -53,13 +53,13 @@ public class SearchUserController extends MainController{
         prevSugg.setVisible(false);
 
         //connection to Neo4j
-        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
-        suggFromNeo = conn.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
+        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
+        suggFromNeo = connNeo.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
 
         Document d;
-        ConnectionMongoDB conn2 = new ConnectionMongoDB();
+        ConnectionMongoDB connMongo = new ConnectionMongoDB();
         for(int i = 0; i < suggFromNeo.size(); i++) {
-            d = conn2.findUserByUsername(suggFromNeo.get(i));
+            d = connMongo.findUserByUsername(suggFromNeo.get(i));
             sugg.add(d);
         }
 
@@ -281,6 +281,5 @@ System.out.println("SUGG SIZE: " + sugg.size());
         }
 
     }
-
 
 }

@@ -114,18 +114,12 @@ public class SearchInsertionController extends MainController{
 
     private void addFilteredInsertions(int index, int i, int j) {
 
-        String cur;
-        if(insertionFilter.get(index).getString("currency").equals("EUR"))
-            cur = "€";
-        else
-            cur = "$";
-
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
         ImageView image = new ImageView(insertionFilter.get(index).getString("image_url"));
         image.setFitHeight(150);
         image.setFitWidth(150);
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
-        Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + cur);
+        Label price = new Label(insertionFilter.get(index).getDouble("price") + "€");
         Label brand = new Label("Brand: " + insertionFilter.get(index).getString("brand"));
 
         insertionList.add(seller, i, j);

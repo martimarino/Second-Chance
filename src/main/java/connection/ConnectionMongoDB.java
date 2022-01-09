@@ -88,7 +88,7 @@ public class ConnectionMongoDB{
             return null;
         }
 
-        while (cursor.hasNext())
+        if (cursor.hasNext())
         {
             this.closeConnection();
             return cursor.next();
@@ -124,9 +124,19 @@ public class ConnectionMongoDB{
         return logUser;
     }
 
-    public void followedUserinsertions() {
+    public ArrayList<Document> followedUserInsertions(ArrayList<String> usList, int k) {
 
+        this.openConnection();
+        ArrayList<Document> insertions = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
 
+        for(int i = 0; i < usList.size(); i++) {
+            Document d = myColl.find(eq("uniq_id", usList.get(i))).first();
+            insertions.add(d);
+        }
+
+        this.closeConnection();
+        return insertions;
     }
 
     public ArrayList<Document> findViralInsertions(int k) {

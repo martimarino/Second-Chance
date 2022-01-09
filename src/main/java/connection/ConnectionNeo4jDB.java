@@ -76,28 +76,30 @@ public class ConnectionNeo4jDB implements AutoCloseable
         ArrayList<String> suggestions = new ArrayList<>();
         try ( Session session = driver.session() )
         {
-/*
+
    String u = "72q0jrBM81n7vySAL";
    String c = "Austria";
 
             List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) " +
-                                "WHERE u.username = $username AND u.country = $country " +
+                                "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
+                                "AND NOT (u)-[:FOLLOWS]->(others) " +
                                 "RETURN others.username as SuggUsers " +
                                 "LIMIT $k",
                         parameters( "username", u,
                                     "country", c,
-                                    "k", k));       */
-
+                                    "k", k));
+/*
                 List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
                     Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) " +
-                                    "WHERE u.username = $username AND u.country = $country " +
-                                    "RETURN others.username as SuggUsers " +
-                                    "LIMIT $k",
+                                "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
+                                "AND NOT (u)-[:FOLLOWS]->(others) " +
+                                "RETURN others.username as SuggUsers " +
+                                "LIMIT $k",
                             parameters( "username", username,
                                     "country", country,
                                     "k", k));
-                //ArrayList<String> suggestions = new ArrayList<>();
+*/
                 while(result.hasNext())
                 {
                     Record r = result.next();
@@ -116,4 +118,39 @@ System.out.println("*************************************");
     }
 
 
+    public ArrayList<String> getFollowedInsertions(String username, int k) {
+
+        this.open();
+        ArrayList<String> followed = new ArrayList<>();
+        try ( Session session = driver.session() )
+        {
+
+            String u = "72q0jrBM81n7vySAL";
+            String c = "Austria";
+
+            List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]-(i:Insertion) " +
+                                "WHERE u.username = $username " +
+                                "RETURN i.uniq_id as SuggIns " +
+                                "LIMIT $k",
+                        parameters( "username", u,
+                                "k", k));
+
+                while(result.hasNext())
+                {
+                    Record r = result.next();
+                    followed.add(r.get("SuggIns").asString());
+                }
+                return followed;
+            });
+            System.out.println("*************** NEO4j ***************");
+            System.out.println(insertions);
+            System.out.println("*************************************");
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return followed;
+
+    }
 }

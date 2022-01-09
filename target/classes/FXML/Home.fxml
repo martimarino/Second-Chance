@@ -8,20 +8,31 @@
 
 <AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
    <children>
-      <Text layoutX="332.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home">
+      <Text layoutX="250.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <BorderPane fx:id="viralInsertions" layoutX="10.0" layoutY="122.0" prefHeight="286.0" prefWidth="660.0">
-         <top>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions" BorderPane.alignment="CENTER" />
-         </top>
+      <BorderPane fx:id="viralInsertions" layoutX="25.0" layoutY="70.0" prefHeight="286.0" prefWidth="650.0">
          <left>
-            <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#PrevViralInsertion" prefHeight="45.0" prefWidth="45.0" style="-fx-background-image:url('../img/prev.png'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;" text="prev" BorderPane.alignment="CENTER" />
+            <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#prevViralInsertions" prefHeight="45.0" prefWidth="45.0" style="-fx-background-image:url('../img/prev.png'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;" text="prev" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertion" prefHeight="45.0" prefWidth="45.0" text="next" BorderPane.alignment="CENTER" />
+            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertions" prefHeight="45.0" prefWidth="45.0" text="next" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+
+      <Text text="Feed" layoutX="320.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <BorderPane fx:id="feed" layoutX="25.0" layoutY="440.0" prefHeight="286.0" prefWidth="650.0">
+         <left>
+            <Button fx:id="prevFeedButton" mnemonicParsing="false" onMouseClicked="#prevFeedInsertions" prefHeight="45.0" prefWidth="45.0" text="prev" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <Button fx:id="nextFeedButton" mnemonicParsing="false" onMouseClicked="#nextFeedInsertions" prefHeight="45.0" prefWidth="45.0" text="next" BorderPane.alignment="CENTER" />
          </right>
       </BorderPane>
    </children>
