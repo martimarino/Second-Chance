@@ -13,8 +13,9 @@ public class User implements GeneralUser {
     String city;
     String address;
     String suspended;
+    String rating;
 
-    public User(String email, String username, String password, String name, String country, String city, String address, String suspended) {
+    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, String rating) {
 
         this.email = email;
         this.username = username;
@@ -24,6 +25,7 @@ public class User implements GeneralUser {
         this.city = city;
         this.address = address;
         this.suspended = suspended;
+        this.rating = rating;
     }
 
     public User()
@@ -50,6 +52,7 @@ public class User implements GeneralUser {
             this.city = user.getCity();
             this.name = user.getName();
             this.suspended = user.getSuspended();
+            this.rating = user.getRating();
         }
     }
 
@@ -83,6 +86,8 @@ public class User implements GeneralUser {
 
     public void setSuspended(String suspended) { this.suspended = suspended; }
 
+    public void setRating(String rating) { this.rating = rating; }
+
     public String getEmail() {
         return email;
     }
@@ -113,6 +118,8 @@ public class User implements GeneralUser {
 
     public String getSuspended() { return suspended; }
 
+    public String getRating() { return rating; }
+
     @Override
     public String toString() {
         return "User{" +
@@ -126,5 +133,6 @@ public class User implements GeneralUser {
                         ", suspended'" + suspended + '\'' +
                 '}';
     }
+
 
 }

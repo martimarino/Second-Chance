@@ -27,13 +27,15 @@ public class MyProfileController extends MainController{
         Label country = new Label(user.getCountry());
         Label city = new Label(user.getCity());
         Label address = new Label(user.getAddress());
-            System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
-            userInfo.add(username, 1,0);
-            userInfo.add(name, 1, 1);
-            userInfo.add(email, 1, 2);
-            userInfo.add(country, 1, 3);
-            userInfo.add(city, 1, 4);
-            userInfo.add(address, 1, 5);
+        Label rating = new Label(user.getRating());
+        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+        userInfo.add(username, 1,0);
+        userInfo.add(name, 1, 1);
+        userInfo.add(email, 1, 2);
+        userInfo.add(country, 1, 3);
+        userInfo.add(city, 1, 4);
+        userInfo.add(address, 1, 5);
+        userInfo.add(rating, 1, 6);
 
 }
     /*

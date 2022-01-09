@@ -1,16 +1,20 @@
 package main.java.controller;
-
-import javafx.geometry.*;
-import javafx.scene.control.*;
 import javafx.scene.image.*;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
 import main.java.connection.*;
-import main.java.utils.*;
-import org.bson.*;
 import main.java.utils.Session;
-
-import java.util.*;
+import javafx.geometry.HPos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import main.java.connection.ConnectionMongoDB;
+import main.java.utils.Utility;
+import org.bson.Document;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class SearchUserController extends MainController{
 
@@ -70,7 +74,7 @@ System.out.println("SUGG SIZE: " + sugg.size());
 
     }
 
-    public void findUsers() {
+    public void findUsers() throws IOException {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
@@ -118,7 +122,7 @@ System.out.println("SUGG SIZE: " + sugg.size());
 
     }
 
-    private void showFilteredUsers() {
+    private void showFilteredUsers() throws IOException {
 
         Utility.showUsers(usersList, userFilter, item);
 
@@ -146,7 +150,7 @@ System.out.println("SUGG SIZE: " + sugg.size());
                         "    -fx-vgap: 10;");
     }
 
-    public void showPrevUser() {
+    public void showPrevUser() throws IOException {
 
         item-=2;
 
@@ -166,7 +170,7 @@ System.out.println("SUGG SIZE: " + sugg.size());
         }
     }
 
-    public void showNextUser() {
+    public void showNextUser() throws IOException {
 
         if(item == userFilter.size()-1) {
             nextButton.setDisable(true);

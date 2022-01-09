@@ -66,7 +66,8 @@ public class ConnectionMongoDB{
                 .append("name", u.getName())
                 .append("password", u.getPassword())
                 .append("username", u.getUsername())
-                .append("suspended", u.getSuspended());
+                .append("suspended", u.getSuspended())
+                .append("rating", u.getRating());
         myColl.insertOne(user);
         this.closeConnection();
         return true;
@@ -129,7 +130,7 @@ public class ConnectionMongoDB{
         this.openConnection();
         ArrayList<Document> insertions = new ArrayList<>();
         MongoCollection<Document> myColl = db.getCollection("insertion");
-
+        System.out.println("insertion id: " + usList);
         for(int i = 0; i < usList.size(); i++) {
             Document d = myColl.find(eq("uniq_id", usList.get(i))).first();
             insertions.add(d);
@@ -146,7 +147,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("insertion");
         Bson match = match(eq("sold", "N"));
         Bson sort = sort(descending("interested"));
-        Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("currency")));
+        Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("uniq_id")));
         Bson limit = limit(k);
         myColl.aggregate(Arrays.asList(sort,project ,limit));
         AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(match, sort,project ,limit));
@@ -280,5 +281,33 @@ public class ConnectionMongoDB{
 
         this.closeConnection();
         return insertions;
+    }
+
+    public Insertion findInsertion(String insertion_id) {
+
+        this.openConnection();
+
+        Insertion insertion = new Insertion();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+        Document insertion_found = myColl.find(eq("uniq_id", insertion_id)).first();
+
+        insertion.setBrand(insertion_found.getString("brand"));
+        insertion.setCountry(insertion_found.getString("country"));
+        insertion.setCategory(insertion_found.getString("category"));
+        insertion.setColor(insertion_found.getString("color"));
+        insertion.setDescription(insertion_found.getString("description"));
+        insertion.setGender(insertion_found.getString("gender"));
+        insertion.setImage_url(insertion_found.getString("image_url"));
+        insertion.setInterested(insertion_found.getInteger("interested"));
+        insertion.setPrice(insertion_found.getDouble("price"));
+        insertion.setViews(insertion_found.getInteger("views"));
+        insertion.setSeller(insertion_found.getString("seller"));
+        insertion.setSize(insertion_found.getString("size"));
+        insertion.setStatus(insertion_found.getString("status"));
+        insertion.setTimestamp(insertion_found.getString("timestamp"));
+
+        this.closeConnection();
+        return insertion;
+
     }
 }

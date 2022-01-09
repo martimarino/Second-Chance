@@ -7,6 +7,7 @@ public class Insertion {
     String description;
     String gender;
     double price;
+    String currency;
     int interested;
     int views;
     String status;
@@ -38,11 +39,15 @@ public class Insertion {
         this.price = price;
     }
 
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public void setInterested(int interested) {
         this.interested = interested;
     }
 
-    public void setViews(int views) {
+    public void setViews(Integer views) {
         this.views = views;
     }
 
@@ -86,15 +91,15 @@ public class Insertion {
         return gender;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public int getInterested() {
+    public Integer getInterested() {
         return interested;
     }
 
-    public int getViews() {
+    public Integer getViews() {
         return views;
     }
 
@@ -109,6 +114,8 @@ public class Insertion {
     public String getColor() {
         return color;
     }
+
+
 
     public String getDescription() {
         return description;

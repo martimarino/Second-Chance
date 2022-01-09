@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchorRoot" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.ProfileController">
+   <children>
+      <AnchorPane layoutX="-2.0" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Label fx:id="username" layoutX="286.0" layoutY="45.0" text="Profile of " />
+         </children></AnchorPane>
+   </children>
+</AnchorPane>

@@ -126,12 +126,12 @@ System.out.println("*************************************");
         {
 
             String u = "72q0jrBM81n7vySAL";
-            String c = "Austria";
+            //String c = "Austria";
 
             List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]-(i:Insertion) " +
                                 "WHERE u.username = $username " +
-                                "RETURN i.uniq_id as SuggIns " +
+                                "RETURN i.id as SuggIns " +
                                 "LIMIT $k",
                         parameters( "username", u,
                                 "k", k));

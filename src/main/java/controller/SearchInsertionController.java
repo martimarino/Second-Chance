@@ -2,6 +2,9 @@ package main.java.controller;
 
 import javafx.geometry.HPos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -9,7 +12,20 @@ import main.java.connection.*;
 import main.java.utils.*;
 import org.bson.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javafx.embed.swing.SwingFXUtils;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 
 public class SearchInsertionController extends MainController{
 
@@ -35,6 +51,22 @@ public class SearchInsertionController extends MainController{
         nextSearch.setDisable(true);
         prevSearch.setVisible(false);
         nextSearch.setVisible(false);
+
+    }
+
+    public void showInsertionPage(String uniq_id) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
+        Stage stage = new Stage(StageStyle.DECORATED);
+        stage.setScene(
+                new Scene(loader.load())
+        );
+
+        InsertionController controller = loader.getController();
+        controller.initialize(uniq_id);
+
+        stage.show();
 
     }
 
@@ -114,12 +146,37 @@ public class SearchInsertionController extends MainController{
 
     private void addFilteredInsertions(int index, int i, int j) {
 
+        ImageView image = null;
+
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
-        ImageView image = new ImageView(insertionFilter.get(index).getString("image_url"));
-        image.setFitHeight(150);
-        image.setFitWidth(150);
+
+        try {
+
+            URL url = new URL(insertionFilter.get(index).getString("image_url") );
+            URLConnection uc = url.openConnection();
+            uc.setRequestProperty("Cookie", "foo=bar");
+            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+            //uc.setReadTimeout(5000);
+            //uc.setConnectTimeout(5000);
+            uc.getInputStream();
+            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            //connection.setRequestMethod("POST");
+            BufferedImage img = ImageIO.read(url);
+            Image images = SwingFXUtils.toFXImage(img, null);
+            image = new ImageView();
+            image.setFitHeight(100);
+            image.setFitWidth(100);
+            image.setImage(images);
+        } catch (IOException e) { //case image not valid any more (link with 404 page)
+            //e.printStackTrace();
+            Image img = new Image("./img/empty.jpg");
+            image = new ImageView(img);
+            image.setFitHeight(100);
+            image.setFitWidth(100);
+            image.setPreserveRatio(true);
+        }
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
-        Label price = new Label(insertionFilter.get(index).getDouble("price") + "€");
+        Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + "€");
         Label brand = new Label("Brand: " + insertionFilter.get(index).getString("brand"));
 
         insertionList.add(seller, i, j);
@@ -127,6 +184,25 @@ public class SearchInsertionController extends MainController{
         insertionList.add(status, i, j+2);
         insertionList.add(price, i, j+3);
         insertionList.add(brand, i, j+4);
+
+        seller.setOnMouseClicked(event->{
+                    try {
+                        showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+
+        image.setOnMouseClicked(event->{
+                    try {
+                        showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+
 
         GridPane.setHalignment(seller, HPos.CENTER);
         GridPane.setHalignment(image, HPos.CENTER);
@@ -140,6 +216,7 @@ public class SearchInsertionController extends MainController{
                         "    -fx-vgap: 10;");
 
     }
+
 
     public void PrevFilteredInsertion(MouseEvent mouseEvent) {
 

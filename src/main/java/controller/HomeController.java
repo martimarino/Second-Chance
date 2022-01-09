@@ -1,13 +1,23 @@
 package main.java.controller;
 
+import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import main.java.connection.*;
 import main.java.utils.*;
 import org.bson.Document;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class HomeController {
@@ -52,16 +62,55 @@ public class HomeController {
 
     }
 
+    public void showInsertionPage(String uniq_id) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
+        Stage stage = new Stage(StageStyle.DECORATED);
+        stage.setScene(
+                new Scene(loader.load())
+        );
+
+        InsertionController controller = loader.getController();
+        controller.initialize(uniq_id);
+
+        stage.show();
+
+    }
+
     private void addInsertionsViral(int index, int i) {
 
+        ImageView image = null;
+
         Label user = new Label("User: " + insertions.get(index).getString("seller"));
-        ImageView image = new ImageView(insertions.get(index).getString("image_url"));
+        try
+        {
+            URL url = new URL(insertions.get(index).getString("image_url") );
+            URLConnection uc = url.openConnection();
+            uc.setRequestProperty("Cookie", "foo=bar");
+            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+            //uc.setReadTimeout(5000);
+            //uc.setConnectTimeout(5000);
+            uc.getInputStream();
+            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            //connection.setRequestMethod("POST");
+            BufferedImage img = ImageIO.read(url);
+            Image images = SwingFXUtils.toFXImage(img, null);
+            image = new ImageView();
+            image.setImage(images);
+        } catch (IOException e) { //case image not valid any more (link with 404 page)
+            //e.printStackTrace();
+            Image img = new Image("./img/empty.jpg");
+            image = new ImageView(img);
+            image.setPreserveRatio(true);
+        }
+        //ImageView image = new ImageView(insertions.get(index).getString("image_url"));
         image.setFitHeight(150);
         image.setFitWidth(150);
 
         Label price = new Label(insertions.get(index).getDouble("price") + "€");
         Label status = new Label("Status: " + insertions.get(index).getString("status"));
-        Label interested = new Label("Interested: " + insertions.get(index).getString("interested"));
+        Label interested = new Label("Interested: " + insertions.get(index).getInteger("interested"));
         viral.add(user, i, 0);
         viral.add(image, i, 1);
         viral.add(status, i, 2);
@@ -72,6 +121,25 @@ public class HomeController {
         GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
         GridPane.setHalignment(interested, HPos.CENTER);
+
+
+        user.setOnMouseClicked(event->{
+                    try {
+                        showInsertionPage(insertions.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+
+        image.setOnMouseClicked(event->{
+                    try {
+                       showInsertionPage(insertions.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
 
         viral.setStyle(
                 "    -fx-padding: 20;\n" +
@@ -219,14 +287,37 @@ public class HomeController {
 
     private void addFeedInsertions(int index, int i) {
 
+        ImageView image = null;
+
         Label user = new Label("User: " + ins.get(index).getString("seller"));
-        ImageView image = new ImageView(ins.get(index).getString("image_url"));
+        try
+        {
+        URL url = new URL(ins.get(index).getString("image_url") );
+        URLConnection uc = url.openConnection();
+        uc.setRequestProperty("Cookie", "foo=bar");
+        uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+        //uc.setReadTimeout(5000);
+        //uc.setConnectTimeout(5000);
+        uc.getInputStream();
+        //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        //connection.setRequestMethod("POST");
+        BufferedImage img = ImageIO.read(url);
+        Image images = SwingFXUtils.toFXImage(img, null);
+        image = new ImageView();
+        image.setImage(images);
+        } catch (IOException e) { //case image not valid any more (link with 404 page)
+        //e.printStackTrace();
+        Image img = new Image("./img/empty.jpg");
+        image = new ImageView(img);
+        image.setPreserveRatio(true);
+        }
+        //ImageView image = new ImageView(ins.get(index).getString("image_url"));
         image.setFitHeight(150);
         image.setFitWidth(150);
 
         Label price = new Label(ins.get(index).getDouble("price") + "€");
         Label status = new Label("Status: " + ins.get(index).getString("status"));
-        Label interested = new Label("Interested: " + ins.get(index).getString("interested"));
+        Label interested = new Label("Interested: " + String.valueOf(ins.get(index).getInteger("interested")));
         feedGrid.add(user, i, 0);
         feedGrid.add(image, i, 1);
         feedGrid.add(status, i, 2);
@@ -237,6 +328,25 @@ public class HomeController {
         GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
         GridPane.setHalignment(interested, HPos.CENTER);
+
+
+        user.setOnMouseClicked(event->{
+                    try {
+                      showInsertionPage(insertions.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+
+        image.setOnMouseClicked(event->{
+                    try {
+                       showInsertionPage(insertions.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
 
         feedGrid.setStyle(
                 "    -fx-padding: 20;\n" +
