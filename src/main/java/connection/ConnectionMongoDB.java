@@ -465,4 +465,15 @@ public class ConnectionMongoDB{
 
     }
 
+    public void updateNumInterested(String insertion_id) {
+
+        this.openConnection();
+
+        Bson filter = eq("uniq_id", insertion_id);
+        Bson update = inc("interested", 1);
+
+        db.getCollection("insertion").findOneAndUpdate(filter, update);
+
+        this.closeConnection();
+    }
 }

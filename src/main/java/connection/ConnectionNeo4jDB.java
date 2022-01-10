@@ -67,10 +67,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     }
 
-    public void dislikeInsertion(User u, Insertion i) {
-
-    }
-
     public ArrayList<String> getSuggestedUsers(String username, String country, int k) {
         this.open();
         ArrayList<String> suggestions = new ArrayList<>();
@@ -151,6 +147,48 @@ System.out.println("*************************************");
             e.printStackTrace();
         }
         return followed;
+
+    }
+
+    public void setFavouriteInsertion(String username, String insertion_id) {
+
+        this.open();
+
+        try(Session session = driver.session()) {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run(
+            "MATCH (u:User {username: $username}) WHERE u NOT (u)-[:INTERESTED]->()" +
+                    "CREATE (u)-[rel:INTERESTED]->(i: Insertion {id: $id})",parameters( "username", username,
+                                "id", insertion_id));
+                return null;
+            });
+
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void dislikeInsertion(String username, String insertion_id) {
+
+        this.open();
+
+        try(Session session = driver.session()) {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run(
+                        "MATCH (u:User { username: $username})-[r:INTERESTED]->(i :Insertion { id: $id\n" +
+                                "DELETE r",parameters( "username", username,
+                                "id", insertion_id));
+                return null;
+            });
+
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 }
