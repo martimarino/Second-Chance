@@ -1,6 +1,8 @@
 package main.java.connection;
 
+import com.mongodb.MongoException;
 import com.mongodb.client.*;
+import com.mongodb.client.result.InsertOneResult;
 import main.java.entity.*;
 import main.java.utils.*;
 import org.bson.Document;
@@ -10,13 +12,18 @@ import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Projections.include;
 import static com.mongodb.client.model.Sorts.descending;
+import static com.mongodb.client.model.Updates.inc;
+import static com.mongodb.client.model.Updates.set;
 
 import com.mongodb.ConnectionString;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.function.Consumer;
 
 public class ConnectionMongoDB{
@@ -67,7 +74,8 @@ public class ConnectionMongoDB{
                 .append("password", u.getPassword())
                 .append("username", u.getUsername())
                 .append("suspended", u.getSuspended())
-                .append("rating", u.getRating());
+                .append("rating", u.getRating())
+                .append("balance", u.getBalance());
         myColl.insertOne(user);
         this.closeConnection();
         return true;
@@ -310,4 +318,151 @@ public class ConnectionMongoDB{
         return insertion;
 
     }
+
+    public boolean buyCurrentInsertion(String insertion_id, String username, Double price, String seller, String image){
+
+        this.openConnection();
+
+        ClientSession clientSession = mongoClient.startSession();
+
+        TransactionBody<String> txnFunc = () -> {
+
+            boolean sold  = soldInsertion(insertion_id, username, price, seller);
+
+            if(!sold)
+            {
+                return "Error solding item";
+            }
+
+           boolean order =  createOrder(username, price, seller, image);
+
+            if(!order)
+            {
+                return "Error creating order";
+            }
+
+            return "OK";
+        };
+        this.closeConnection();
+        return executeTransaction(clientSession, txnFunc);
+        }
+
+    private boolean createOrder(String username, Double price, String seller, String image) {
+
+        this.openConnection();
+        MongoCollection<Document> myColl = db.getCollection("order");
+
+        SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        String timeStamp = date.format(new Date());
+
+        ClientSession clientSession = mongoClient.startSession();
+
+        TransactionBody<String> txnFunc = () -> {
+
+            int id = findNewId();
+
+            try {
+                myColl.insertOne(new Document()
+                        .append("_id", new ObjectId())
+                        .append("order_id", id)
+                        .append("timestamp", timeStamp)
+                        .append("image", image)
+                        .append("buyer", username)
+                        .append("seller", seller)
+                        .append("price", price));
+
+            } catch (MongoException me) {
+                System.err.println("Unable to insert due to an error: " + me);
+            }
+            this.closeConnection();
+            return "OK";
+        };
+        return executeTransaction(clientSession, txnFunc);
+    }
+
+    private int findNewId() {
+
+        this.openConnection();
+        MongoCollection<Document> myColl = db.getCollection("order");
+
+        Bson sort = sort(descending("order_id"));
+        Bson project = project(fields(excludeId(), include("order_id")));
+        Bson limit = limit(1);
+
+        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(sort,project ,limit));
+
+        for (Document document : r) {
+            System.out.println("order_id: " + document.getInteger("order_id")+1);
+            this.closeConnection();
+            return document.getInteger("order_id")+1;
+        }
+        this.closeConnection();
+        return 0;
+    }
+
+
+    public boolean soldInsertion(String insertion_id, String username, Double price, String seller) {
+
+        this.openConnection();
+        ClientSession clientSession = mongoClient.startSession();
+
+        MongoCollection<Document> myColl = db.getCollection("user");
+        //get new balance buyer
+        Document balance = myColl.find(eq("username", username)).first();
+        double balanceBuyer = balance.getDouble("balance") - price;
+
+        Bson filter = and(eq("username", username), gte("balance", price));
+        Bson update = set("balance", balanceBuyer);
+
+        TransactionBody<String> txnFunc = () -> {
+
+            Document ret = db.getCollection("user").findOneAndUpdate(filter, update);
+
+            if (ret == null)
+            {
+                this.closeConnection();
+                return "There is no such buyer";
+            }
+            Bson filter1 = and(eq("uniq_id", insertion_id), eq("sold", "N"));
+            Bson update1 = set("sold", "Y");
+
+            Document ret1 = db.getCollection("insertion").findOneAndUpdate(filter1, update1);
+
+            if(ret1 == null)
+            {
+                this.closeConnection();
+                return "There is no such insertion";
+            }
+
+            //update seller balance
+            Bson filter2 = eq("username", seller);
+            Bson update2 = inc("balance", price);
+
+            Document ret3 = db.getCollection("user").findOneAndUpdate(filter2, update2);
+
+            if(ret3 == null)
+            {
+                this.closeConnection();
+                return "There is no such seller";
+            }
+            this.closeConnection();
+            return "OK";
+        };
+
+        return executeTransaction(clientSession, txnFunc);
+
+    }
+
+    private boolean executeTransaction(ClientSession clientSession, TransactionBody<String> txnFunc) {
+
+        String message = "";
+
+        message = clientSession.withTransaction(txnFunc);
+
+        System.out.println(message);
+
+        return message.equals("OK");
+
+    }
+
 }

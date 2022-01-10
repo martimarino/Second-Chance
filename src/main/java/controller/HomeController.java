@@ -125,6 +125,7 @@ public class HomeController {
 
         user.setOnMouseClicked(event->{
                     try {
+                        System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
                         showInsertionPage(insertions.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -134,7 +135,8 @@ public class HomeController {
 
         image.setOnMouseClicked(event->{
                     try {
-                       showInsertionPage(insertions.get(index).getString("uniq_id"));
+                        System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
+                        showInsertionPage(insertions.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -332,7 +334,7 @@ public class HomeController {
 
         user.setOnMouseClicked(event->{
                     try {
-                      showInsertionPage(insertions.get(index).getString("uniq_id"));
+                      showInsertionPage(ins.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -341,7 +343,7 @@ public class HomeController {
 
         image.setOnMouseClicked(event->{
                     try {
-                       showInsertionPage(insertions.get(index).getString("uniq_id"));
+                       showInsertionPage(ins.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

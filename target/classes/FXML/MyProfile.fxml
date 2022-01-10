@@ -35,6 +35,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Text fx:id="username" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
@@ -63,6 +64,11 @@
                                  </font>
                               </Text>
                               <Text fx:id="address" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="address1" layoutX="10.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating" GridPane.rowIndex="6">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

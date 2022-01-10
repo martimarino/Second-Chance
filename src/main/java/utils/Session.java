@@ -31,4 +31,11 @@ public class Session{
         else
             return session.logUser;
     }
+
+    public User getLoggedUser() {
+        if(session == null)
+            throw new RuntimeException("Session is not active.");
+        else
+            return session.logUser;
+    }
 }

@@ -42,7 +42,7 @@ public class SignUpController {
                 && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getText().isEmpty()
                 && !ad.getText().isEmpty()) {
 
-            User u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), "N", "");
+            User u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), "N", "",  0);
             System.out.println(u.toString());
 
             ConnectionMongoDB conn = new ConnectionMongoDB();
