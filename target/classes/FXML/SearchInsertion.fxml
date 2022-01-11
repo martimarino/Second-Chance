@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchInsertionController">
+    <children>
+        <Text layoutX="253.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Insertions">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+        <ComboBox fx:id="size" layoutX="35.0" layoutY="130.0" value="size">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="XS" />
+                    <String fx:value="S" />
+                    <String fx:value="M" />
+                    <String fx:value="L" />
+                    <String fx:value="XL" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox fx:id="price" layoutX="115.0" layoutY="130.0" value="price">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="0-50" />
+                    <String fx:value="50-100" />
+                    <String fx:value="100-150" />
+                    <String fx:value="150-200" />
+                    <String fx:value="200-" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox fx:id="gender" layoutX="222.0" layoutY="130.0" value="gender">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="F" />
+                    <String fx:value="M" />
+                    <String fx:value="U" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox fx:id="status" layoutX="324.0" layoutY="130.0" value="status">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="excellent" />
+                    <String fx:value="new" />
+                    <String fx:value="good" />
+                    <String fx:value="used" />
+                    <String fx:value="very used" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox fx:id="category" layoutX="440.0" layoutY="130.0" value="category">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="kids" />
+                    <String fx:value="clothing" />
+                    <String fx:value="home" />
+                    <String fx:value="shoes" />
+                    <String fx:value="accessories" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox fx:id="color" layoutX="565.0" layoutY="130.0" value="color">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Yellow" />
+                    <String fx:value="White" />
+                    <String fx:value="Black" />
+                    <String fx:value="Red" />
+                    <String fx:value="Violet" />
+                    <String fx:value="Pink" />
+                    <String fx:value="Beige" />
+                    <String fx:value="Orange" />
+                    <String fx:value="Grey" />
+                    <String fx:value="Brown" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <TextField fx:id="ins" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search by sellers or brands" />
+        <Button fx:id="searchArticlesOrBrands" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findInsertion" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
+
+        <BorderPane fx:id="insertionFind" layoutX="10.0" layoutY="150.0" prefHeight="286.0" prefWidth="660.0">
+            <left>
+                <Button fx:id="prevSearch" mnemonicParsing="false" onMouseClicked="#PrevFilteredInsertion" prefHeight="60.0" prefWidth="60.0" BorderPane.alignment="CENTER" text="prev" />
+            </left>
+            <right>
+                <Button fx:id="nextSearch" mnemonicParsing="false" onMouseClicked="#NextFilteredInsertion" prefHeight="60.0" prefWidth="60.0" BorderPane.alignment="CENTER" text="next" />
+            </right>
+        </BorderPane>
+
+    </children>
+</AnchorPane>
