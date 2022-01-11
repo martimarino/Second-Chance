@@ -37,6 +37,8 @@ public class SearchUserAdminController {
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
         Document found;
+
+        username = usernameField.getText();
         String name = nameField.getText();
 
         if(name != null && !name.trim().isEmpty()) {
