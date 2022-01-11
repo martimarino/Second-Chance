@@ -14,6 +14,7 @@ import java.util.Objects;
 public class SearchUserAdminController {
 
     @FXML private TextField nameField;
+    @FXML private TextField usernameField;
     @FXML private Text email;
     @FXML private Text country;
     @FXML private Text city;
