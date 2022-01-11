@@ -117,6 +117,21 @@ User | personal information, orders, reviews, suspended (bool)
 Admin | codes
 Insertion | title, details, #interested, #views
 
+#### USER
+
+Field | Type
+------------- | -------------
+ADDRESS | String
+BALANCE | Double
+CITY | String
+COUNTRY | String
+EMAIL | String
+NAME | String
+PASSWORD | String
+RATING | Double
+SUSPENDED | String
+USERNAME | String
+
 #### INSERTION
 
 Field | Values | Type
