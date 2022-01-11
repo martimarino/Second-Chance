@@ -108,9 +108,9 @@ public class HomeController {
         image.setFitHeight(150);
         image.setFitWidth(150);
 
-        Label price = new Label(insertions.get(index).getDouble("price") + "€");
+        Label price = new Label(insertions.get(index).getString("price") + "€");
         Label status = new Label("Status: " + insertions.get(index).getString("status"));
-        Label interested = new Label("Interested: " + insertions.get(index).getInteger("interested"));
+        Label interested = new Label("Interested: " + insertions.get(index).getString("interested"));
         viral.add(user, i, 0);
         viral.add(image, i, 1);
         viral.add(status, i, 2);
