@@ -18,6 +18,7 @@ public class Insertion {
     String image_url;
     String timestamp;
     String seller;
+    String sold;
 
     public void setId(String id) {
         this.id = id;
@@ -115,7 +116,13 @@ public class Insertion {
         return color;
     }
 
+    public void setSold(String sold) {
+        this.sold = sold;
+    }
 
+    public String getSold() {
+        return this.sold;
+    }
 
     public String getDescription() {
         return description;
@@ -163,6 +170,7 @@ public class Insertion {
                 ", image_url='" + image_url + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 ", seller='" + seller + '\'' +
+                ", sold='" + sold + '\'' +
                 '}';
     }
 }

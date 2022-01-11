@@ -2,7 +2,9 @@ package main.java.connection;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import main.java.entity.*;
 import main.java.utils.*;
 import org.bson.Document;
@@ -24,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ConnectionMongoDB{
@@ -475,5 +478,215 @@ public class ConnectionMongoDB{
         db.getCollection("insertion").findOneAndUpdate(filter, update);
 
         this.closeConnection();
+    }
+
+
+    /*++++++++++++++++++++++++++ Admin functions ++++++++++++++++++++++++*/
+
+
+    public Document verifyUserInDB(String username, boolean choice) {
+
+        Document user;
+
+        this.openConnection();
+        MongoCollection<Document> myColl = db.getCollection("user");
+
+        if (choice) {
+            user = myColl.find(eq("username", username)).first();
+        } else {
+            user = myColl.find(eq("name", username)).first();
+        }
+        this.closeConnection();
+
+        return user;
+    }
+
+    public Document verifyInsertionInDB(String id, boolean choice) {
+
+        Document insertion;
+
+        this.openConnection();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        if (choice) {
+            insertion = myColl.find(eq("_id", id)).first();
+        } else {
+            insertion = myColl.find(eq("seller", id)).first();
+        }
+
+        this.closeConnection();
+
+        return insertion;
+    }
+
+    public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
+        // true = select the top k most active users
+        // false = select the top k most active sellers
+
+        this.openConnection();
+        ArrayList<Document> array = new ArrayList<>();
+        MongoCollection<Document> myColl;
+        MongoCollection<Document> myCollUsr;
+
+        if (choice)
+            myColl = db.getCollection("insertion");
+        else
+            myColl = db.getCollection("orders");
+
+        myCollUsr = db.getCollection("user");
+        Bson limit = limit(k);
+        AggregateIterable<Document> aggr  = myColl.aggregate(
+                Arrays.asList(
+                        Aggregates.group("$seller", Accumulators.sum("count", 1)),
+                        Aggregates.sort(descending("count")),
+                        limit
+                )
+        );
+
+        for (Document document : aggr) {
+
+            Document user = myCollUsr.find(eq("username", document.getString("_id"))).first();
+            document.append("name", user.getString("name"));
+            array.add(document);
+        }
+
+        this.closeConnection();
+
+        return array;
+    }
+
+    public ArrayList<Document> findTopKRatedUser(int k, String country) {
+
+        this.openConnection();
+        ArrayList<Document> array = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("user");
+
+        Bson limit = limit(k);
+        AggregateIterable<Document> aggr  = myColl.aggregate(
+                Arrays.asList(
+                        Aggregates.match(Filters.eq("country", country)),
+                        Aggregates.sort(descending("rating")),
+                        limit
+                )
+        );
+
+        for (Document document : aggr) {
+
+            document.append("name", document.getString("name"));
+            document.append("rating", document.getString("rating"));
+            array.add(document);
+        }
+
+        this.closeConnection();
+
+        return array;
+
+    }
+
+    public ArrayList<Document> findTopKInterestingInsertion(int k, String category) {
+
+        this.openConnection();
+        ArrayList<Document> array = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        Bson limit = limit(k);
+        AggregateIterable<Document> aggr  = myColl.aggregate(
+                Arrays.asList(
+                        Aggregates.match(Filters.eq("category", category)),
+                        Aggregates.sort(descending("interested")),
+                        limit
+                )
+        );
+
+        for (Document document : aggr)
+            array.add(document);
+
+        this.closeConnection();
+        return array;
+    }
+
+    public ArrayList<Document> findTopKViewedInsertion(int k, String category) {
+
+        this.openConnection();
+        ArrayList<Document> array = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        Bson limit = limit(k);
+        AggregateIterable<Document> aggr  = myColl.aggregate(
+                Arrays.asList(
+                        Aggregates.match(Filters.eq("category", category)),
+                        Aggregates.sort(descending("viewed")),
+                        limit
+                )
+        );
+
+        for (Document document : aggr)
+            array.add(document);
+
+        this.closeConnection();
+        return array;
+    }
+
+    public void suspendUser(String username) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myColl = db.getCollection("user");
+
+        Document query = new Document().append("username",  username);
+        Bson updates = Updates.combine(
+                Updates.set("suspended", "Y"));
+        UpdateOptions options = new UpdateOptions().upsert(true);
+        try {
+            UpdateResult result = myColl.updateOne(query, updates, options);
+            System.out.println("Modified document count: " + result.getModifiedCount());
+            System.out.println("Upserted id: " + result.getUpsertedId()); // only contains a value when an upsert is performed
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+        }
+
+
+
+    }
+
+    public void unsuspendUser(String username) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myColl = db.getCollection("user");
+
+        Document query = new Document().append("username",  username);
+        Bson updates = Updates.combine(
+                Updates.set("suspended", "N"));
+        UpdateOptions options = new UpdateOptions().upsert(true);
+        try {
+            UpdateResult result = myColl.updateOne(query, updates, options);
+            System.out.println("Modified document count: " + result.getModifiedCount());
+            System.out.println("Upserted id: " + result.getUpsertedId()); // only contains a value when an upsert is performed
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+        }
+
+
+
+    }
+
+    public Insertion findInsertionDetails(String id) {
+
+        this.openConnection();
+        Insertion ins = new Insertion();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+        Document insertion = myColl.find(eq("_id", id)).first();
+        ins.setCategory(insertion.getString("category"));
+        ins.setPrice(Double.parseDouble(insertion.getString("price")));
+        ins.setViews(Integer.parseInt(insertion.getString("views")));
+
+        if (Objects.equals(insertion.getString("sold"), "N"))
+            ins.setSold("Not sold");
+        else
+            ins.setSold("Sold");
+
+        this.closeConnection();
+        return ins;
     }
 }

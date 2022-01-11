@@ -188,7 +188,16 @@ System.out.println("*************************************");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
+
+   /* public boolean showIfInterested(String username, String insertion_id){
+
+        this.open();
+
+        try(Session session = driver.session()) {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (u:User { username: $username})-[r:INTERESTED]->(i :Insertion { id: $id}"));
+
+    }*/
+
 }

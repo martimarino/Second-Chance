@@ -57,6 +57,6 @@ public class MyProfileController extends MainController{
     public void showInterestedInsertions(MouseEvent mouseEvent) {
     }
 
-    public void showHome(MouseEvent mouseEvent) {
+    public void showInsertions(MouseEvent mouseEvent) {
     }
 }

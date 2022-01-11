@@ -23,7 +23,25 @@ public class ProfileController{
     public GridPane userInfo;
     private String user;
 
-    public void initialize(){}
+    public void initialize(){
+
+        Session session = Session.getInstance();
+        User user  = session.getLogUser();
+
+        Label username = new Label(user.getUsername());
+        Label name = new Label(user.getName());
+        Label email = new Label(user.getEmail());
+        Label country = new Label(user.getCountry());
+        Label city = new Label(user.getCity());
+        Label address = new Label(user.getAddress());
+        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+        userInfo.add(username, 1,0);
+        userInfo.add(name, 1, 1);
+        userInfo.add(email, 1, 2);
+        userInfo.add(country, 1, 3);
+        userInfo.add(city, 1, 4);
+        userInfo.add(address, 1, 5);
+    }
 
     public void showUserFollowers(MouseEvent mouseEvent) {
     }
