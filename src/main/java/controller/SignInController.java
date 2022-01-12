@@ -21,10 +21,16 @@ import java.net.URL;
 public class SignInController {
 
     public AnchorPane anchorRoot;
+
     public Button SignUp;
     public Button SignIn;
+
     @FXML private TextField us;
     @FXML private PasswordField pw;
+
+    private void initialize() {
+
+    }
 
     public void ShowSignUp(MouseEvent mouseEvent) throws IOException {
 
@@ -35,11 +41,6 @@ public class SignInController {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();
-
-    }
-
-    private void initialize() {
-
     }
 
     public void ShowAdminPanel() throws IOException {
@@ -63,13 +64,11 @@ public class SignInController {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();
-
     }
 
-    public void login(ActionEvent actionEvent) throws IOException {
+    public void login() throws IOException {
 
         String username = us.getText();
-        String password = pw.getText();
         Session session;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
@@ -78,11 +77,12 @@ public class SignInController {
 
             ConnectionMongoDB conn = new ConnectionMongoDB();
 
-            if(us.getText().equals("admin") && pw.getText().equals("admin")) {
+            if (us.getText().equals("admin") && pw.getText().equals("admin")) {
                 session = Session.getInstance();
                 session.setLogUser(username);
                 ShowAdminPanel();
-            } else {
+            }else {
+
                 boolean logged = conn.logInUser(us.getText(), pw.getText());
                 if (logged) {
                     session = Session.getInstance();
@@ -93,10 +93,9 @@ public class SignInController {
             //clear TextField
             us.setText("");
             pw.setText("");
-        } else {
+
+        }else {
             Utility.infoBox("Please, insert username and password.", "Error", "Empty fields!");
         }
-
     }
-
 }

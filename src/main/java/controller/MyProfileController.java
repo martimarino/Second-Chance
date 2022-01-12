@@ -14,10 +14,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class MyProfileController extends MainController{
+public class MyProfileController extends MainController {
+
     public GridPane userInfo;
 
     public void initialize(){
+
         Session session = Session.getInstance();
         User user  = session.getLogUser();
 
@@ -28,7 +30,9 @@ public class MyProfileController extends MainController{
         Label city = new Label(user.getCity());
         Label address = new Label(user.getAddress());
         Label rating = new Label(user.getRating());
-        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
+        //System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
         userInfo.add(username, 1,0);
         userInfo.add(name, 1, 1);
         userInfo.add(email, 1, 2);

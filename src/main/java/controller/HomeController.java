@@ -23,27 +23,31 @@ import java.util.ArrayList;
 public class HomeController {
 
     public AnchorPane anchorRoot;
+
     public BorderPane viralInsertions;
+    public BorderPane feed;
+
     public Button nextButton;
     public Button prevButton;
-    GridPane viral;
-    ArrayList<Document> insertions;
-    int scrollPage2;
-
-    int k = 12;
-
-    public ArrayList<String> followedFromNeo;
-    int scrollPage;
     public Button prevFeedButton;
     public Button nextFeedButton;
+
+    GridPane viral;
     GridPane feedGrid;
-    public BorderPane feed;
+
+    ArrayList<Document> insertions;
     ArrayList<Document> ins;
+    public ArrayList<String> followedFromNeo;
+
+    int scrollPage2;
+    int k = 12;
+    int scrollPage;
 
     public void initialize() {
 
         ConnectionMongoDB connMongo = new ConnectionMongoDB();
         ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
+
         followedFromNeo = new ArrayList<>();
 
         insertions = connMongo.findViralInsertions(k);
@@ -54,7 +58,7 @@ public class HomeController {
         followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
         ins = connMongo.followedUserInsertions(followedFromNeo, k);
 
-        System.out.println("SIZE OF INS: " + ins.size());
+        //System.out.println("SIZE OF INS: " + ins.size());
 
         showFeed();
         prevFeedButton.setDisable(true);
@@ -62,20 +66,20 @@ public class HomeController {
 
     }
 
+    /* ********* INSERTION SECTION ********* */
+
     public void showInsertionPage(String uniq_id) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
-        stage.setScene(
-                new Scene(loader.load())
-        );
+
+        stage.setScene(new Scene(loader.load()));
 
         InsertionController controller = loader.getController();
         controller.initialize(uniq_id);
 
         stage.show();
-
     }
 
     private void addInsertionsViral(int index, int i) {
@@ -83,8 +87,7 @@ public class HomeController {
         ImageView image = null;
 
         Label user = new Label("User: " + insertions.get(index).getString("seller"));
-        try
-        {
+        try {
             URL url = new URL(insertions.get(index).getString("image_url") );
             URLConnection uc = url.openConnection();
             uc.setRequestProperty("Cookie", "foo=bar");
@@ -98,6 +101,7 @@ public class HomeController {
             Image images = SwingFXUtils.toFXImage(img, null);
             image = new ImageView();
             image.setImage(images);
+
         } catch (IOException e) { //case image not valid any more (link with 404 page)
             //e.printStackTrace();
             Image img = new Image("./img/empty.jpg");
@@ -122,12 +126,11 @@ public class HomeController {
         GridPane.setHalignment(price, HPos.CENTER);
         GridPane.setHalignment(interested, HPos.CENTER);
 
-
         user.setOnMouseClicked(event->{
                     try {
                         System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
                         showInsertionPage(insertions.get(index).getString("uniq_id"));
-                    } catch (Exception e) {
+                    }catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -137,17 +140,17 @@ public class HomeController {
                     try {
                         System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
                         showInsertionPage(insertions.get(index).getString("uniq_id"));
-                    } catch (Exception e) {
+                    }catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
         );
 
         viral.setStyle(
-                "    -fx-padding: 20;\n" +
+                        "-fx-padding: 20;\n"  +
                         "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;");
-
+                        "    -fx-vgap: 10;"
+        );
     }
 
     private void showViralInsertions() {
@@ -159,7 +162,6 @@ public class HomeController {
 
             addInsertionsViral(i, i);
             viralInsertions.setCenter(viral);
-
         }
         scrollPage2 += 3;
     }
@@ -217,7 +219,7 @@ public class HomeController {
 
     }
 
-    /* ************************************************************** */
+    /* ********* FEED SECTION ********* */
 
     public void showFeed() {
 
@@ -228,10 +230,8 @@ public class HomeController {
 
             addFeedInsertions(i, i);
             feed.setCenter(feedGrid);
-
         }
         scrollPage += 3;
-
     }
 
     public void prevFeedInsertions() {
@@ -255,7 +255,6 @@ public class HomeController {
         }
         feed.setCenter(feedGrid);
         scrollPage += 3;
-
     }
 
     public void nextFeedInsertions() {
@@ -267,6 +266,7 @@ public class HomeController {
         prevFeedButton.setVisible(true);
 
         for (int i = scrollPage; i < scrollPage + 3 && row < 3; i++) {
+
             if (i == ins.size()) {
                 nextFeedButton.setDisable(true);
                 nextFeedButton.setVisible(false);
@@ -280,39 +280,40 @@ public class HomeController {
         scrollPage += 3;
 
         if (scrollPage >= ins.size() - 1) {
+
             nextFeedButton.setDisable(true);
             nextFeedButton.setVisible(false);
-
         }
-
     }
 
     private void addFeedInsertions(int index, int i) {
 
         ImageView image = null;
-
         Label user = new Label("User: " + ins.get(index).getString("seller"));
-        try
-        {
-        URL url = new URL(ins.get(index).getString("image_url") );
-        URLConnection uc = url.openConnection();
-        uc.setRequestProperty("Cookie", "foo=bar");
-        uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-        //uc.setReadTimeout(5000);
-        //uc.setConnectTimeout(5000);
-        uc.getInputStream();
-        //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-        //connection.setRequestMethod("POST");
-        BufferedImage img = ImageIO.read(url);
-        Image images = SwingFXUtils.toFXImage(img, null);
-        image = new ImageView();
-        image.setImage(images);
-        } catch (IOException e) { //case image not valid any more (link with 404 page)
-        //e.printStackTrace();
-        Image img = new Image("./img/empty.jpg");
-        image = new ImageView(img);
-        image.setPreserveRatio(true);
+
+        try {
+
+            URL url = new URL(ins.get(index).getString("image_url") );
+            URLConnection uc = url.openConnection();
+            uc.setRequestProperty("Cookie", "foo=bar");
+            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+            //uc.setReadTimeout(5000);
+            //uc.setConnectTimeout(5000);
+            uc.getInputStream();
+            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            //connection.setRequestMethod("POST");
+            BufferedImage img = ImageIO.read(url);
+            Image images = SwingFXUtils.toFXImage(img, null);
+            image = new ImageView();
+            image.setImage(images);
+
+        }catch (IOException e) { //case image not valid any more (link with 404 page)
+            //e.printStackTrace();
+            Image img = new Image("./img/empty.jpg");
+            image = new ImageView(img);
+            image.setPreserveRatio(true);
         }
+
         //ImageView image = new ImageView(ins.get(index).getString("image_url"));
         image.setFitHeight(150);
         image.setFitWidth(150);
@@ -320,12 +321,15 @@ public class HomeController {
         Label price = new Label(ins.get(index).getDouble("price") + "€");
         Label status = new Label("Status: " + ins.get(index).getString("status"));
         Label interested = new Label("Interested: " + String.valueOf(ins.get(index).getInteger("interested")));
+
         feedGrid.add(user, i, 0);
         feedGrid.add(image, i, 1);
         feedGrid.add(status, i, 2);
         feedGrid.add(price, i, 3);
         feedGrid.add(interested, i, 4);
-        System.out.println("FOLLOWED index:" + index);
+
+        //System.out.println("FOLLOWED index:" + index);
+
         GridPane.setHalignment(user, HPos.CENTER);
         GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
@@ -351,12 +355,11 @@ public class HomeController {
         );
 
         feedGrid.setStyle(
-                "    -fx-padding: 20;\n" +
+                        "-fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
 
     }
-
 }
 
 
