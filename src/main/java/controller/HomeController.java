@@ -51,9 +51,14 @@ public class HomeController {
         prevButton.setDisable(true);
         prevButton.setVisible(false);
 
-        followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
-        ins = connMongo.followedUserInsertions(followedFromNeo, k);
-
+        // new user
+        if(connNeo.checkNewUser(Session.getLogUser().getUsername())) {
+            ins = connMongo.findTopKViewedInsertion(k, "clothing");
+System.out.println("CASO NEW USER");
+        } else {
+            followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
+            ins = connMongo.followedUserInsertions(followedFromNeo, k);
+        }
         System.out.println("SIZE OF INS: " + ins.size());
 
         showFeed();
@@ -108,9 +113,9 @@ public class HomeController {
         image.setFitHeight(150);
         image.setFitWidth(150);
 
-        Label price = new Label(insertions.get(index).getString("price") + "€");
+        Label price = new Label(insertions.get(index).getDouble("price") + "€");
         Label status = new Label("Status: " + insertions.get(index).getString("status"));
-        Label interested = new Label("Interested: " + insertions.get(index).getString("interested"));
+        Label interested = new Label("Interested: " + insertions.get(index).getInteger("interested"));
         viral.add(user, i, 0);
         viral.add(image, i, 1);
         viral.add(status, i, 2);
@@ -121,7 +126,6 @@ public class HomeController {
         GridPane.setHalignment(status, HPos.CENTER);
         GridPane.setHalignment(price, HPos.CENTER);
         GridPane.setHalignment(interested, HPos.CENTER);
-
 
         user.setOnMouseClicked(event->{
                     try {

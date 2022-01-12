@@ -27,7 +27,7 @@ public class MyProfileController extends MainController{
         Label country = new Label(user.getCountry());
         Label city = new Label(user.getCity());
         Label address = new Label(user.getAddress());
-        Label rating = new Label(user.getRating());
+        Label rating = new Label(Double.toString(user.getRating()));
         System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
         userInfo.add(username, 1,0);
         userInfo.add(name, 1, 1);
@@ -48,6 +48,7 @@ public class MyProfileController extends MainController{
         stage.setResizable(false);
         stage.show();
     }*/
+
     public void showUserFollowers(MouseEvent mouseEvent) {
     }
 
@@ -58,5 +59,11 @@ public class MyProfileController extends MainController{
     }
 
     public void showInsertions(MouseEvent mouseEvent) {
+    }
+
+    public void logOut(MouseEvent mouseEvent) {
+    }
+
+    public void addFunds(MouseEvent mouseEvent) {
     }
 }

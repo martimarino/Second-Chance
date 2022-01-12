@@ -42,7 +42,13 @@ public class SignUpController {
                 && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getText().isEmpty()
                 && !ad.getText().isEmpty()) {
 
-            User u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), "N", "",  0);
+            if(us.getText().equals("admin")) {
+                Utility.infoBox("You can not register as admin", "Error", "Please, insert a different username-");
+                us.setText("");
+                return;
+            }
+
+            User u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), "N", 0.0,  0);
             System.out.println(u.toString());
 
             ConnectionMongoDB conn = new ConnectionMongoDB();
@@ -57,6 +63,8 @@ public class SignUpController {
                 co.setText("");
                 ad.setText("");
 
+                ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
+                connNeo.addUser(u);
                 ShowSignIn();
                 Utility.infoBox("Now you can login!", "Confirmed", "Registration completed with success!");
             }

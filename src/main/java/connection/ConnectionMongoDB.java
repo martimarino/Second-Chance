@@ -49,7 +49,7 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         if(!userAlreadyPresent(username, password)) {
-            System.out.println("Username or Password wrong, try again");
+            Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
             this.closeConnection();
             return false;
         } else{
@@ -93,20 +93,16 @@ public class ConnectionMongoDB{
         this.openConnection();
         ArrayList<Document> users = new ArrayList<>();
         MongoCollection<Document> myColl = db.getCollection("user");
-        cursor  = myColl.find(eq("username", username)).iterator();
-        if(!cursor.hasNext()) {
-            this.closeConnection();
-            Utility.infoBox("There is no user with this username.", "Error", "Username not found!");
-            return null;
-        }
+        cursor = myColl.find(eq("username", username)).iterator();
+
+        this.closeConnection();
 
         if (cursor.hasNext())
-        {
-            this.closeConnection();
             return cursor.next();
-        }
 
+        Utility.infoBox("There is no user with this username.", "Error", "Username not found!");
         return null;
+
     }
 
     private boolean userAlreadyPresent(String username, String password) {
@@ -170,7 +166,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
-    public ArrayList<Document> findUserByFilters(String country,String rating) {
+    public ArrayList<Document> findUserByFilters(String country, String rating) {
 
         this.openConnection();
         MongoCollection<Document> myColl = db.getCollection("user");
@@ -178,7 +174,7 @@ public class ConnectionMongoDB{
 
         if(country.equals("country") && !rating.equals("rating"))
         {
-             cursor  = myColl.find(eq("rating", rating)).iterator();
+             cursor  = myColl.find(eq("rating", Double.parseDouble(rating))).iterator();
         }
         else if(!country.equals("country") && rating.equals("rating"))
         {
@@ -186,7 +182,7 @@ public class ConnectionMongoDB{
         }
         else{
              cursor  = myColl.find(and(eq("country", country),
-                    eq("rating", rating))).iterator();
+                    eq("rating", Double.parseDouble(rating)))).iterator();
         }
 
         while(cursor.hasNext())
@@ -573,7 +569,7 @@ public class ConnectionMongoDB{
         for (Document document : aggr) {
 
             document.append("name", document.getString("name"));
-            document.append("rating", document.getString("rating"));
+            document.append("rating", document.getDouble("rating"));
             array.add(document);
         }
 
@@ -667,8 +663,6 @@ public class ConnectionMongoDB{
             System.err.println("Unable to update due to an error: " + me);
         }
 
-
-
     }
 
     public Insertion findInsertionDetails(String id) {
@@ -689,4 +683,5 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return ins;
     }
+
 }
