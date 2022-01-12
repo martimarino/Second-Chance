@@ -146,7 +146,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run(
-                        "MATCH (u:User {username: $username}) WHERE u NOT (u)-[:INTERESTED]->()" +
+                        "MATCH (u:User {username: $username})" +
                                 "CREATE (u)-[rel:INTERESTED]->(i: Insertion {uniq_id: $id})", parameters("username", username,
                                 "id", insertion_id));
                 return null;
@@ -166,7 +166,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run(
-                        "MATCH (u:User { username: $username})-[r:INTERESTED]->(i :Insertion { uniq_id: $id}\n" +
+                        "MATCH (u:User { username: $username})-[r:INTERESTED]->(i :Insertion { uniq_id: $id})\n" +
                                 "DELETE r", parameters("username", username,
                                 "id", insertion_id));
                 return null;
@@ -175,6 +175,24 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean showIfInterested(String username, String insertion_id) {
+
+        this.open();
+
+        try (Session session = driver.session()) {
+            Boolean relation = session.readTransaction((TransactionWork<Boolean>) tx -> {
+                Result result = tx.run("MATCH (u:User { username: $username})-[r:INTERESTED]->(i :Insertion { uniq_id: $id})\n" +
+                        "RETURN r", parameters("username", username,
+                        "id", insertion_id));
+
+                return result.hasNext();
+            });
+            System.out.println(relation);
+
+            return relation;
         }
     }
 }
