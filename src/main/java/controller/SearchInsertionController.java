@@ -188,6 +188,7 @@ public class SearchInsertionController extends MainController{
         seller.setOnMouseClicked(event->{
                     try {
                         showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
+                        updateInsertionview(insertionFilter.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -197,6 +198,7 @@ public class SearchInsertionController extends MainController{
         image.setOnMouseClicked(event->{
                     try {
                         showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
+                        updateInsertionview(insertionFilter.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -214,6 +216,14 @@ public class SearchInsertionController extends MainController{
                         "-fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
+    }
+
+
+    private void updateInsertionview(String uniq_id) {
+
+        ConnectionMongoDB conn = new ConnectionMongoDB();
+        conn.updateNumView(uniq_id);
+
     }
 
     public void PrevFilteredInsertion(MouseEvent mouseEvent) {

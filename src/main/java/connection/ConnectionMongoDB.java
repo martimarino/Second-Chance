@@ -1,5 +1,6 @@
 package main.java.connection;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
@@ -13,20 +14,16 @@ import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Projections.include;
+import static com.mongodb.client.model.Sorts.ascending;
 import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Updates.inc;
 import static com.mongodb.client.model.Updates.set;
 
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.bson.Document;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ConnectionMongoDB{
@@ -142,7 +139,8 @@ public class ConnectionMongoDB{
         logUser.setCity(user.getString("city"));
         logUser.setCountry(user.getString("country"));
         logUser.setSuspended(user.getString("suspended"));
-
+        logUser.setBalance(user.getDouble("balance"));
+        logUser.setOrders((ArrayList<Order>) user.get("orders"));
 
         this.closeConnection();
         return logUser;
@@ -178,7 +176,7 @@ public class ConnectionMongoDB{
         Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("uniq_id")));
         Bson limit = limit(k);
 
-        myColl.aggregate(Arrays.asList(sort,project ,limit));
+        //myColl.aggregate(Arrays.asList(sort,project ,limit));
         AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(match, sort,project ,limit));
 
         for (Document document : r) {
@@ -351,107 +349,33 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
+        System.out.println("Username: " + username);
         ClientSession clientSession = mongoClient.startSession();
 
-        TransactionBody<String> txnFunc = () -> {
-
-            boolean sold = soldInsertion(insertion_id, username, price, seller);
-
-            if(!sold)
-                return "Error solding item";
-
-            boolean order = createOrder(username, price, seller, image);
-
-            if(!order)
-                return "Error creating order";
-
-            return "OK";
-        };
-
-        this.closeConnection();
-        return executeTransaction(clientSession, txnFunc);
-    }
-
-    /* ********* ORDER SECTION ********* */
-
-    private boolean createOrder(String username, Double price, String seller, String image) {
-
-        this.openConnection();
-        MongoCollection<Document> myColl = db.getCollection("order");
+        MongoCollection<Document> userColl = db.getCollection("user");
+        MongoCollection<Document> orderColl = db.getCollection("order");
 
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-        String timeStamp = date.format(new Date());
-
-        ClientSession clientSession = mongoClient.startSession();
+        String timestamp = date.format(new Date());
 
         TransactionBody<String> txnFunc = () -> {
 
-            int id = findNewId();
+            Document balance = db.getCollection("user").find(eq("username", username)).first();
+            double balanceBuyer = balance.getDouble("balance") - price;
 
-            try {
-                myColl.insertOne(new Document()
-                        .append("_id", new ObjectId())
-                        .append("order_id", id)
-                        .append("timestamp", timeStamp)
-                        .append("image", image)
-                        .append("buyer", username)
-                        .append("seller", seller)
-                        .append("price", price));
+            Bson filter = and(eq("username", username), gte("balance", price));
+            Bson update = set("balance", balanceBuyer);
 
-            } catch (MongoException me) {
-                System.err.println("Unable to insert due to an error: " + me);
-            }
-
-            this.closeConnection();
-            return "OK";
-        };
-
-        return executeTransaction(clientSession, txnFunc);
-    }
-
-    private int findNewId() {
-
-        this.openConnection();
-        MongoCollection<Document> myColl = db.getCollection("order");
-
-        Bson sort = sort(descending("order_id"));
-        Bson project = project(fields(excludeId(), include("order_id")));
-        Bson limit = limit(1);
-
-        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(sort,project ,limit));
-
-        for (Document document : r) {
-            System.out.println("order_id: " + document.getInteger("order_id")+1);
-            this.closeConnection();
-            return document.getInteger("order_id")+1;
-        }
-
-        this.closeConnection();
-        return 0;
-    }
-
-    public boolean soldInsertion(String insertion_id, String username, Double price, String seller) {
-
-        this.openConnection();
-        ClientSession clientSession = mongoClient.startSession();
-
-        MongoCollection<Document> myColl = db.getCollection("user");
-        //get new balance buyer
-        Document balance = myColl.find(eq("username", username)).first();
-        double balanceBuyer = balance.getDouble("balance") - price;
-
-        Bson filter = and(eq("username", username), gte("balance", price));
-        Bson update = set("balance", balanceBuyer);
-
-        TransactionBody<String> txnFunc = () -> {
-
+            //update buyer balance
             Document ret = db.getCollection("user").findOneAndUpdate(filter, update);
 
             if (ret == null) {
                 this.closeConnection();
-                return "There is no such buyer";
+                Utility.infoBox("Cannot purchase, not enough balance", "Error", "Error purchase");
+                return "Buyer has not enough balance";
             }
-
+          
+            //set insertion sold
             Bson filter1 = and(eq("uniq_id", insertion_id), eq("sold", "N"));
             Bson update1 = set("sold", "Y");
 
@@ -459,7 +383,8 @@ public class ConnectionMongoDB{
 
             if (ret1 == null) {
                 this.closeConnection();
-                return "There is no such insertion";
+                Utility.infoBox("Cannot purchase, insertion already sold", "Error", "Error purchase");
+                return "Insertion already sold";
             }
 
             //update seller balance
@@ -470,13 +395,44 @@ public class ConnectionMongoDB{
 
             if (ret3 == null) {
                 this.closeConnection();
-                return "There is no such seller";
+                Utility.infoBox("Cannot buy product", "Error", "Error purchase");
+                return "Cannot increment seller balance";
             }
+            //find new order_id
+
+            Document order = new Document()
+                    .append("_id", new ObjectId())
+                    .append("timestamp", timestamp)
+                    .append("image", image)
+                    .append("buyer", username)
+                    .append("seller", seller)
+                    .append("price", price);
+            //insert new document into order collection
+            try {
+                orderColl.insertOne(order);
+
+            } catch (MongoException me) {
+                System.err.println("Unable to insert due to an error: " + me);
+            }
+            BasicDBObject query = new BasicDBObject();
+            query.put("username",username);
+
+            //if more than 4, find older
+            if( (Document) userColl.find(and(exists("orders.4"),query)).first() != null) {
+                //insert order into user document
+
+                BasicDBObject pull_data = new BasicDBObject("$pull", "orders.1");
+                userColl.findOneAndUpdate(query, Updates.popFirst("orders"));
+            }
+            Document ord = new Document().append("seller", seller).append("image", image).append("price",price).append("timestamp", timestamp);
+
+            BasicDBObject push_data = new BasicDBObject("$push", new BasicDBObject("orders", ord));
+
+            userColl.findOneAndUpdate(query, push_data);
 
             this.closeConnection();
             return "OK";
         };
-
         return executeTransaction(clientSession, txnFunc);
     }
 
@@ -491,12 +447,24 @@ public class ConnectionMongoDB{
         return message.equals("OK");
     }
 
-    public void updateNumInterested(String insertion_id) {
+    public void updateNumInterested(String insertion_id, int i) {
 
         this.openConnection();
 
         Bson filter = eq("uniq_id", insertion_id);
-        Bson update = inc("interested", 1);
+        Bson update = inc("interested", i);
+
+        db.getCollection("insertion").findOneAndUpdate(filter, update);
+
+        this.closeConnection();
+    }
+
+    public void updateNumView(String uniq_id) {
+
+        this.openConnection();
+
+        Bson filter = eq("uniq_id", uniq_id);
+        Bson update = inc("views", 1);
 
         db.getCollection("insertion").findOneAndUpdate(filter, update);
 
@@ -706,5 +674,4 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return ins;
     }
-
 }
