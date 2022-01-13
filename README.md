@@ -141,7 +141,6 @@ CATEGORY | {clothing,accessories, bags, beauty, house, jewelry, kids, shoes} | S
 DESCRIPTION | text | String
 GENDER | {M, F, U} | String
 PRICE | 10,56 | Double
-CURRENCY | {EUR, USD} | String
 INTERESTED| 10 | Integer
 VIEWS | 10 | Integer
 STATUS | {new, excellent, good, used, very used} | String
@@ -169,8 +168,7 @@ RATING | 3,5 | Float
 
 Field | Values | Type
 ------------- | ------------- | -------------
-ID | 8552148 | Varchar
-TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
+TIMESTAMP (key) | 2020-02-07 05:11:36 +0000 | String
 IMAGE | url image | String
 BUYER | username | String
 SELLER | username | String
