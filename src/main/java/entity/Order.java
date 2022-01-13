@@ -2,7 +2,6 @@ package main.java.entity;
 
 public class Order {
 
-    String order_id;
     String seller;
     String buyer;
     String image;
@@ -10,23 +9,14 @@ public class Order {
     String timestamp;
 
 
-    public Order(String order_id, String seller, String buyer, String image, double price, String timestamp){
+    public Order(String seller, String buyer, String image, double price, String timestamp){
 
-        this.order_id = order_id;
         this.seller = seller;
         this.buyer = buyer;
         this.image = image;
         this.price = price;
         this.timestamp = timestamp;
 
-    }
-
-    public String getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(String order_id) {
-        this.order_id = order_id;
     }
 
     public String getSeller() {
@@ -72,8 +62,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "order_id='" + order_id + '\'' +
-                ", seller='" + seller + '\'' +
+                " seller='" + seller + '\'' +
                 ", buyer='" + buyer + '\'' +
                 ", image='" + image + '\'' +
                 ", price=" + price +
