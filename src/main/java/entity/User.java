@@ -1,7 +1,6 @@
-package main.java.entity;
-
-import main.java.connection.*;
 import main.java.utils.*;
+
+import java.util.ArrayList;
 
 public class User implements GeneralUser {
 
@@ -15,8 +14,10 @@ public class User implements GeneralUser {
     String suspended;
     double rating;
     double balance;
+    ArrayList<Order> orders;
 
-    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, double rating, double balance) {
+
+    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, Double rating, double balance, ArrayList<Order>orders) {
 
         this.email = email;
         this.username = username;
@@ -28,6 +29,7 @@ public class User implements GeneralUser {
         this.suspended = suspended;
         this.rating = rating;
         this.balance = balance;
+        this.orders = orders;
     }
 
     public User()
@@ -40,7 +42,7 @@ public class User implements GeneralUser {
         this.address = null;
         this.email = null;
     }
-    public User(String username)
+     public User(String username)
     {
         ConnectionMongoDB conn = new ConnectionMongoDB();
         User user = conn.findUserDetails(username);
@@ -56,6 +58,7 @@ public class User implements GeneralUser {
             this.suspended = user.getSuspended();
             this.rating = user.getRating();
             this.balance = user.getBalance();
+            this.orders = user.getOrders();
         }
     }
 
@@ -89,9 +92,19 @@ public class User implements GeneralUser {
 
     public void setSuspended(String suspended) { this.suspended = suspended; }
 
-    public void setRating(double rating) { this.rating = rating; }
+
+    public void setRating(Double rating) { this.rating = rating; }
+
 
     public void setBalance(Double balance){ this.balance = balance;}
+
+    public void setOrders(ArrayList<Order> orders) {
+        this.orders = orders;
+    }
+
+    public ArrayList<Order> getOrders() {
+        return orders;
+    }
 
     public String getEmail() {
         return email;
@@ -123,7 +136,9 @@ public class User implements GeneralUser {
 
     public String getSuspended() { return suspended; }
 
-    public double getRating() { return rating; }
+
+    public Double getRating() { return rating; }
+
 
     public Double getBalance() {  return this.balance;
     }

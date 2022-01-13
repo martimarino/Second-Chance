@@ -135,7 +135,8 @@ System.out.println("CASO NEW USER");
                     try {
                         System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
                         showInsertionPage(insertions.get(index).getString("uniq_id"));
-                    }catch (Exception e) {
+                        updateInsertionview(insertions.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -145,7 +146,8 @@ System.out.println("CASO NEW USER");
                     try {
                         System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
                         showInsertionPage(insertions.get(index).getString("uniq_id"));
-                    }catch (Exception e) {
+                        updateInsertionview(insertions.get(index).getString("uniq_id"));
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -156,6 +158,13 @@ System.out.println("CASO NEW USER");
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;"
         );
+    }
+
+    private void updateInsertionview(String uniq_id) {
+
+        ConnectionMongoDB conn = new ConnectionMongoDB();
+        conn.updateNumView(uniq_id);
+
     }
 
     private void showViralInsertions() {
@@ -344,6 +353,7 @@ System.out.println("CASO NEW USER");
         user.setOnMouseClicked(event->{
                     try {
                       showInsertionPage(ins.get(index).getString("uniq_id"));
+                        updateInsertionview(insertions.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -353,6 +363,7 @@ System.out.println("CASO NEW USER");
         image.setOnMouseClicked(event->{
                     try {
                        showInsertionPage(ins.get(index).getString("uniq_id"));
+                        updateInsertionview(insertions.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
