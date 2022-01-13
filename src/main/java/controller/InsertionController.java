@@ -26,17 +26,21 @@ import java.net.URL;
 public class InsertionController {
 
     public Label insertionTitle;
+    public Label descriptionContainer;
+
     public Button buy;
     public Button favourite;
+
     public Pane infoContainer;
-    public GridPane infoTable;
-    public Label descriptionContainer;
     public Pane imgContainer;
-    String insertion_id;
+
+    public GridPane infoTable;
+
     Double price;
+
+    String insertion_id;
     String seller;
     String image_url;
-
 
     public void initialize(String uniq_id) {
 
@@ -49,11 +53,10 @@ public class InsertionController {
 
         try {
             fillInsertionInfo(insertion);
-        } catch (FileNotFoundException e) {
+        }catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
-
 
     private void fillInsertionInfo(Insertion insertion) throws FileNotFoundException {
 
@@ -68,6 +71,7 @@ public class InsertionController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         price = insertion.getPrice();
         seller = insertion.getSeller();
         image_url = insertion.getImage_url();
@@ -123,8 +127,6 @@ public class InsertionController {
         infoTable.add(view, 1, 10);
         infoTable.add(interested_text, 0, 11);
         infoTable.add(interested, 1, 11);
-
-        
     }
 
     public void buyInsertion(MouseEvent mouseEvent) {
@@ -132,7 +134,8 @@ public class InsertionController {
         ConnectionMongoDB conn = new ConnectionMongoDB();
         Session session = Session.getInstance();
         User user = session.getLoggedUser();
-        if(!conn.buyCurrentInsertion(insertion_id, user.getUsername(), price, seller, image_url))
+
+        if (!conn.buyCurrentInsertion(insertion_id, user.getUsername(), price, seller, image_url))
             Utility.infoBox("Cannot conclude the purchase, something wrong! /n Please retry later","Error", "Error buying product" );
         else
             Utility.infoBox("Product buyed correctly!" , "User Advise", "Purchase done" );
@@ -148,8 +151,5 @@ public class InsertionController {
 
         connNeo.setFavouriteInsertion(user.getUsername(), insertion_id);
         connMongo.updateNumInterested(insertion_id);
-
     }
-
-
 }

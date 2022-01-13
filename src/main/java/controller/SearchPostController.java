@@ -4,13 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
+
 import main.java.entity.Insertion;
-import main.java.entity.User;
 import main.java.connection.ConnectionMongoDB;
 import main.java.utils.Utility;
+
 import org.bson.Document;
 
-import java.util.Objects;
 
 public class SearchPostController {
 
@@ -40,11 +40,10 @@ public class SearchPostController {
         String idPost = postIdField.getText();
         String sellerIdPost = sellerIdField.getText();
 
-        if (idPost != null && !idPost.trim().isEmpty()) {
+        if (idPost != null && !idPost.trim().isEmpty())
             found = conn.verifyInsertionInDB(idPost, true);
-        }else {
+        else
             found = conn.verifyInsertionInDB(sellerIdPost, false);
-        }
 
         if (found == null || ((idPost == null && idPost.trim().isEmpty()) && (id != null && id.trim().isEmpty()))) {
             Utility.infoBox("The user is not present in the system. Please try again.",
