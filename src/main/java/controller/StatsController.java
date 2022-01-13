@@ -205,7 +205,7 @@ public class StatsController {
             x.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(x);
 
-            Label y = new Label(array.get(i).getString("rating"));
+            Label y = new Label(Double.toString(array.get(i).getDouble("rating")));
             y.setTranslateX(100);
             y.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(y);

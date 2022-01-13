@@ -13,10 +13,10 @@ public class User implements GeneralUser {
     String city;
     String address;
     String suspended;
-    String rating;
+    double rating;
     double balance;
 
-    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, String rating, double balance) {
+    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, double rating, double balance) {
 
         this.email = email;
         this.username = username;
@@ -89,7 +89,7 @@ public class User implements GeneralUser {
 
     public void setSuspended(String suspended) { this.suspended = suspended; }
 
-    public void setRating(String rating) { this.rating = rating; }
+    public void setRating(double rating) { this.rating = rating; }
 
     public void setBalance(Double balance){ this.balance = balance;}
 
@@ -123,7 +123,7 @@ public class User implements GeneralUser {
 
     public String getSuspended() { return suspended; }
 
-    public String getRating() { return rating; }
+    public double getRating() { return rating; }
 
     public Double getBalance() {  return this.balance;
     }

@@ -31,6 +31,11 @@ public class SearchUserController extends MainController{
     public ComboBox<String> country;
     public ComboBox<String> rating;
 
+    public Button prevButton, nextButton;
+    Button followSuggested, followSearched;
+    public GridPane usersList;
+    public ArrayList<Document> userFilter;
+
     public GridPane usersList;
     public GridPane suggList;
 
@@ -133,6 +138,25 @@ public class SearchUserController extends MainController{
         Utility.showUsers(usersList, userFilter, item);
     }
 
+    private void setFollowUnfollowButton(Button follow, String user) {
+
+        follow.setStyle("-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;");
+        follow.setPrefWidth(70.0);
+        follow.setPrefHeight(20.0);
+        follow.setDisable(false);
+        follow.setVisible(true);
+        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
+        if(connNeo.checkIfFollows(Session.getLogUser().getUsername(), user)) {
+            follow.setText("Unfollow");
+        } else {
+            follow.setText("Follow");
+        }
+        follow.setOnMouseClicked(event -> {
+            connNeo.followUnfollowButton(follow.getText(), Session.getLogUser().getUsername(), user);
+        });
+
+    }
+
     private void showSearchedUser(Document user) {
 
         usersList.getChildren().clear();
@@ -140,14 +164,18 @@ public class SearchUserController extends MainController{
         Label username = new Label(user.getString("username"));
         Label country = new Label(user.getString("country"));
         Label city = new Label(user.getString("city"));
+        followSearched = new Button();
+        //setFollowUnfollowButton(followSearched, user.getString("username"));
 
         usersList.add(username, 0, 0);
         usersList.add(country, 0, 1);
         usersList.add(city, 0, 2);
+        usersList.add(followSearched, 0, 3);
 
         GridPane.setHalignment(username, HPos.CENTER);
         GridPane.setHalignment(country, HPos.CENTER);
         GridPane.setHalignment(city, HPos.CENTER);
+        GridPane.setHalignment(followSearched, HPos.CENTER);
 
         usersList.setStyle(
                         "-fx-padding: 20;\n" +
@@ -200,15 +228,20 @@ public class SearchUserController extends MainController{
         Label username = new Label(sugg.get(index).getString("username"));
         Label country = new Label(sugg.get(index).getString("country"));
         Label city = new Label(sugg.get(index).getString("city"));
+        followSuggested = new Button();
+        //setFollowUnfollowButton(followSuggested, sugg.get(index).getString("username"));
+
 
         suggList.add(image, i, 0);
         suggList.add(username, i, 1);
         suggList.add(country, i, 2);
         suggList.add(city, i, 3);
+        suggList.add(followSuggested, i, 4);
 
         GridPane.setHalignment(username, HPos.CENTER);
         GridPane.setHalignment(country, HPos.CENTER);
         GridPane.setHalignment(city, HPos.CENTER);
+        GridPane.setHalignment(followSuggested, HPos.CENTER);
 
         suggList.setStyle(
                         "-fx-padding: 20;\n" +

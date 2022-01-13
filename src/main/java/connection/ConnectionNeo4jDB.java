@@ -1,6 +1,7 @@
 package main.java.connection;
 
 import main.java.entity.*;
+import main.java.utils.Utility;
 import org.neo4j.driver.*;
 import org.neo4j.driver.types.Node;
 import org.neo4j.driver.types.Path;
@@ -23,13 +24,14 @@ public class ConnectionNeo4jDB implements AutoCloseable
     }
 
     @Override
-    public void close() throws Exception
+    public void close()
     {
         driver.close();
     }
 
     public void addUser(final User u)
     {
+        this.open();
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
@@ -38,11 +40,15 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "country", u.getCountry()));
                 return null;
             });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void addInsertion(final Insertion i)
     {
+        this.open();
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {
@@ -52,15 +58,44 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "gender", i.getGender()));
                 return null;
             });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void followUser(User follower, User followed) {
-
+    public void followUser(String follower, String followed) {
+        try ( Session session = driver.session() )
+        {
+            this.open();
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MATCH (u:User),(v) " +
+                                "WHERE u.username = $username1 AND v.username = $username2 " +
+                                "CREATE (u)-[:FOLLOWS]->(v)",
+                        parameters( "username1", follower, "username2", followed));
+                return null;
+            });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void unfollowUser(User unfollower, User unfollowed) {
-
+    public void unfollowUser(String unfollower, String unfollowed) {
+        try ( Session session = driver.session() )
+        {
+            this.open();
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MATCH (u:User)-[rel:FOLLOWS]->(v)  " +
+                                "WHERE u.username = $username1 AND v.username = $username2 " +
+                                "DELETE rel",
+                        parameters( "username1", unfollower, "username2", unfollowed));
+                return null;
+            });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void likeAnInsertion(User u, Insertion i) {
@@ -77,7 +112,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
    String c = "Austria";
 
             List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) " +
+                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:FOLLOWS]->(others) " +
                                 "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
                                 "AND NOT (u)-[:FOLLOWS]->(others) " +
                                 "RETURN others.username as SuggUsers " +
@@ -125,7 +160,7 @@ System.out.println("*************************************");
             //String c = "Austria";
 
             List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]-(i:Insertion) " +
+                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]->(i:Insertion) " +
                                 "WHERE u.username = $username " +
                                 "RETURN i.id as SuggIns " +
                                 "LIMIT $k",
@@ -188,6 +223,73 @@ System.out.println("*************************************");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkNewUser(String username) {
+        this.open();
+        boolean check = false;
+
+        try(Session session = driver.session()) {
+            check = session.writeTransaction((TransactionWork<Boolean>) tx -> {
+                Result result = tx.run(
+                        "MATCH (u:User)-[r:FOLLOWS]->(v) " +
+                                "WHERE u.username = $username " +
+                                "RETURN COUNT(r) AS NewUser;",
+                        parameters( "username", username));
+
+                Record r = result.next();
+                if((r.get("NewUser").asInt()) == 0)
+                    return true;
+                return false;
+            });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    public boolean checkIfFollows(String us1, String us2) {
+
+        this.open();
+        boolean check = false;
+
+        try(Session session = driver.session()) {
+            check = session.writeTransaction((TransactionWork<Boolean>) tx -> {
+                Result result = tx.run(
+                        "MATCH  (p:User {username: '$username1'}), (b:User {username: '$username2'}) " +
+                        "RETURN exists( (p)-[:FOLLOWS]-(b) ) AS Follows",
+                        parameters( "username1", us1,
+                                "username2", us2));
+
+                Record r = result.next();
+                if((r.get("Follows").asBoolean()))
+                    return true;
+                return false;
+            });
+
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    public void followUnfollowButton(String text, String us1, String us2) {
+
+        switch (text) {
+            case "Follows":
+                followUser(us1, us2);
+                break;
+
+            case "Unfollows":
+                unfollowUser(us1, us2);
+                break;
+
+            default:
+                break;
+        }
+
     }
 
    /* public boolean showIfInterested(String username, String insertion_id){
