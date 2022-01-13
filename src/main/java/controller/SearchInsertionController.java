@@ -218,13 +218,13 @@ public class SearchInsertionController extends MainController{
                         "    -fx-vgap: 10;");
     }
 
-
     private void updateInsertionview(String uniq_id) {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
         conn.updateNumView(uniq_id);
 
     }
+
 
     public void PrevFilteredInsertion(MouseEvent mouseEvent) {
 

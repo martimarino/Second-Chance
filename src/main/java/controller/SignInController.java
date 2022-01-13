@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.java.connection.*;
+import main.java.entity.User;
 import main.java.utils.*;
 
 import java.io.File;

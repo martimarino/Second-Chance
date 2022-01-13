@@ -18,8 +18,6 @@ import java.util.*;
 public class SearchUserController extends MainController{
 
     public Button findUsers;
-    public Button prevButton;
-    public Button nextButton;
     public Button prevSugg;
     public Button nextSugg;
 
@@ -33,8 +31,6 @@ public class SearchUserController extends MainController{
 
     public Button prevButton, nextButton;
     Button followSuggested, followSearched;
-    public GridPane usersList;
-    public ArrayList<Document> userFilter;
 
     public GridPane usersList;
     public GridPane suggList;
@@ -165,7 +161,7 @@ public class SearchUserController extends MainController{
         Label country = new Label(user.getString("country"));
         Label city = new Label(user.getString("city"));
         followSearched = new Button();
-        //setFollowUnfollowButton(followSearched, user.getString("username"));
+        setFollowUnfollowButton(followSearched, user.getString("username"));
 
         usersList.add(username, 0, 0);
         usersList.add(country, 0, 1);
@@ -229,7 +225,7 @@ public class SearchUserController extends MainController{
         Label country = new Label(sugg.get(index).getString("country"));
         Label city = new Label(sugg.get(index).getString("city"));
         followSuggested = new Button();
-        //setFollowUnfollowButton(followSuggested, sugg.get(index).getString("username"));
+        setFollowUnfollowButton(followSuggested, sugg.get(index).getString("username"));
 
 
         suggList.add(image, i, 0);

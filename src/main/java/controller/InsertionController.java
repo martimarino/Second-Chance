@@ -14,6 +14,7 @@ import main.java.entity.Insertion;
 
 import javax.imageio.ImageIO;
 import javafx.scene.image.Image;
+
 import main.java.entity.User;
 import main.java.utils.Session;
 import main.java.utils.Utility;
@@ -114,13 +115,19 @@ public class InsertionController {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
         Session session = Session.getInstance();
+        User user = session.getLoggedUser();
 
         String[] s = price.getText().split(" ");
         Double insPrice = Double.valueOf(s[0]);
-        if(!conn.buyCurrentInsertion(insertion_id, user.getUsername(),insPrice , seller.getText(), image_url))
-            Utility.infoBox("Cannot conclude the purchase, something wrong! /n Please retry later","Error", "Error buying product" );
-        else
-            Utility.infoBox("Product buyed correctly!" , "User Advise", "Purchase done" );
+
+        if (!conn.buyCurrentInsertion(insertion_id, user.getUsername(), insPrice, seller.getText(), image_url))
+            Utility.infoBox("Cannot conclude the purchase, something wrong! /n Please retry later", "Error", "Error buying product");
+        else {
+            Utility.infoBox("Product buyed correctly! ", "User Advise", "Purchase done");
+
+            buy.setText("Already purchased!");
+            buy.setDisable(true);
+        }
     }
 
     public void addToFavorite(MouseEvent mouseEvent) {
@@ -146,5 +153,6 @@ public class InsertionController {
 
         connNeo.showIfInterested(user.getUsername(), insertion_id);
 
+        connNeo.showIfInterested(user.getUsername(), insertion_id);
     }
 }

@@ -1,3 +1,7 @@
+package main.java.entity;
+
+import main.java.connection.ConnectionMongoDB;
+import main.java.entity.Order;
 import main.java.utils.*;
 
 import java.util.ArrayList;

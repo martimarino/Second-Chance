@@ -237,4 +237,73 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             return relation;
         }
     }
+
+    public boolean checkNewUser(String username) {
+        this.open();
+        boolean check = false;
+
+        try(Session session = driver.session()) {
+            check = session.writeTransaction((TransactionWork<Boolean>) tx -> {
+                Result result = tx.run(
+                        "MATCH (u:User)-[r:FOLLOWS]->(v) " +
+                                "WHERE u.username = $username " +
+                                "RETURN COUNT(r) AS NewUser;",
+                        parameters( "username", username));
+
+                Record r = result.next();
+                if((r.get("NewUser").asInt()) == 0)
+                    return true;
+                return false;
+            });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    public boolean checkIfFollows(String us1, String us2) {
+
+        this.open();
+        boolean check = false;
+
+        try(Session session = driver.session()) {
+            check = session.readTransaction((TransactionWork<Boolean>) tx -> {
+                Result result = tx.run(
+                        "MATCH  (p:User {username: '$username1'}), (b:User {username: '$username2'}) " +
+                                "RETURN exists( (p)-[:FOLLOWS]-(b) ) AS Follows",
+                        parameters( "username1", us1,
+                                "username2", us2));
+
+                /*Record r = result.next();
+                if((r.get(0).asBoolean()))
+                    return true;
+                return false;*/
+                return result.hasNext();
+            });
+
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return check;
+    }
+
+    public void followUnfollowButton(String text, String us1, String us2) {
+
+        switch (text) {
+            case "Follows":
+                followUser(us1, us2);
+                break;
+
+            case "Unfollows":
+                unfollowUser(us1, us2);
+                break;
+
+            default:
+                break;
+        }
+
+    }
+
 }

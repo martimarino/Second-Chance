@@ -13,6 +13,7 @@ import main.java.utils.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class SignUpController {
 
@@ -41,7 +42,7 @@ public class SignUpController {
                 && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getText().isEmpty()
                 && !ad.getText().isEmpty()) {
 
-            u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), "N", 0.0,  0, new ArrayList<Order>());
+            User u = new User(em.getText(), us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), "N", 0.0, 0, new ArrayList<Order>());
 
             if(us.getText().equals("admin")) {
                 Utility.infoBox("You can not register as admin", "Error", "Please, insert a different username-");

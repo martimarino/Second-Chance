@@ -19,6 +19,7 @@ import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Updates.inc;
 import static com.mongodb.client.model.Updates.set;
 
+import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import java.io.IOException;
@@ -173,13 +174,14 @@ public class ConnectionMongoDB{
 
         Bson match = match(eq("sold", "N"));
         Bson sort = sort(descending("interested"));
-        Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("uniq_id")));
+        //Bson project = project(fields(excludeId(), include("seller"), include("image_url"), include("status"), include("interested"), include("price"), include("uniq_id")));
         Bson limit = limit(k);
 
         //myColl.aggregate(Arrays.asList(sort,project ,limit));
-        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(match, sort,project ,limit));
+        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(match, sort ,limit));
 
         for (Document document : r) {
+            System.out.println("Find: " + document.getString("uniq_id"));
             insertions.add(document);
         }
 
