@@ -135,7 +135,7 @@ public class StatsController {
     public void redirectToStatFunction() {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
-        int k = 0;
+        int k;
         // Section Most
 
         if (rBSellers.isSelected())
@@ -166,10 +166,10 @@ public class StatsController {
     public void showMostActiveUsersSellers(ConnectionMongoDB conn, boolean choice){
 
         ArrayList<Document> array = conn.findMostActiveUsersSellers(10, choice);
-
         StackPane secondaryLayout = new StackPane();
 
-        for (int i=0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
+
             Label x = new Label(array.get(i).getString("name"));
             x.setTranslateX(10);
             x.setTranslateY(-100 + i*50);
@@ -189,7 +189,6 @@ public class StatsController {
     public void showTopKRatedUser(ConnectionMongoDB conn, int k) {
 
         ArrayList<Document> array = new ArrayList<Document>();
-
         String country = txtFieldCountry.getText();
 
         if(!Arrays.asList(countries).contains(country))
@@ -199,13 +198,14 @@ public class StatsController {
 
         StackPane secondaryLayout = new StackPane();
 
-        for (int i=0; i < k; i++) {
+        for (int i = 0; i < k; i++) {
+
             Label x = new Label(array.get(i).getString("name"));
             x.setTranslateX(10);
             x.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(x);
 
-            Label y = new Label(array.get(i).getString("rating"));
+            Label y = new Label(Double.toString(array.get(i).getDouble("rating")));
             y.setTranslateX(100);
             y.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(y);
@@ -223,15 +223,13 @@ public class StatsController {
 
     public void showTopKInterestingInsertion(ConnectionMongoDB conn, int k) {
 
-        ArrayList<Document> array = new ArrayList<Document>();
-
+        ArrayList<Document> array;
         String category = txtFieldCategory.getText();
 
         if(!Arrays.asList(categories).contains(category))
             Utility.infoBox("Please insert a valid category", "Error", "Category not found!");
 
         array = conn.findTopKInterestingInsertion(k, category);
-
 
         StackPane secondaryLayout = new StackPane();
 
@@ -259,7 +257,7 @@ public class StatsController {
 
     public void showTopKViewedInsertion(ConnectionMongoDB conn, int k) {
 
-        ArrayList<Document> array = new ArrayList<Document>();
+        ArrayList<Document> array;
 
         String category = txtFieldCategory.getText();
 

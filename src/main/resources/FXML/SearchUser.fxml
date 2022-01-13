@@ -42,7 +42,7 @@
         </ComboBox>
         <TextField fx:id="us" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search users" />
         <Button fx:id="findUsers" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findUsers" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
-        <BorderPane fx:id="userFind" layoutX="150.0" layoutY="300.0" prefHeight="307.0" prefWidth="400.0">
+        <BorderPane fx:id="userFind" layoutX="200.0" layoutY="200.0" prefHeight="307.0" prefWidth="350.0">
             <left>
                 <Button fx:id="prevButton" layoutX="-20.0" layoutY="-20.0" mnemonicParsing="false" onMouseClicked="#showPrevUser" text="Prev" />
             </left>

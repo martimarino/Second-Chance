@@ -16,11 +16,14 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ProfileController{
+
     public Button feed;
     public Button followersButton;
     public Button followingButton;
     public Button interestedInsertionsButton;
+
     public GridPane userInfo;
+
     private String user;
 
     public void initialize(){
@@ -34,7 +37,9 @@ public class ProfileController{
         Label country = new Label(user.getCountry());
         Label city = new Label(user.getCity());
         Label address = new Label(user.getAddress());
-        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
+        //System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
         userInfo.add(username, 1,0);
         userInfo.add(name, 1, 1);
         userInfo.add(email, 1, 2);

@@ -2,36 +2,47 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.CodesController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.CodesController">
    <children>
-      <Label layoutX="236.0" layoutY="14.0" text="Codes Section">
+      <Label layoutX="360.0" layoutY="20.0" text="Codes Section">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Button layoutX="238.0" layoutY="125.0" mnemonicParsing="false" text="Generate New Code!" />
-      <ProgressBar layoutX="203.0" layoutY="84.0" prefWidth="200.0" progress="0.0" />
-      <Separator layoutX="205.0" layoutY="226.0" prefWidth="200.0" />
-      <Label layoutX="238.0" layoutY="256.0" text="See who own a code!">
+      <Separator layoutX="327.0" layoutY="227.0" prefWidth="200.0" />
+      <Label layoutX="361.0" layoutY="257.0" text="See who own a code!">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField layoutX="43.0" layoutY="326.0" />
-      <TextField layoutX="404.0" layoutY="326.0" />
-      <Label layoutX="51.0" layoutY="303.0" text="Insert the username of a profile:">
-         <font>
-            <Font size="11.0" />
-         </font>
-      </Label>
-      <Label layoutX="466.0" layoutY="302.0" text="Codes" />
-      <TextField layoutX="225.0" layoutY="174.0" />
+      <Label layoutX="508.0" layoutY="314.0" text="Code here!" />
+      <Pane layoutX="326.0" layoutY="53.0" prefHeight="155.0" prefWidth="200.0">
+         <children>
+            <Button layoutX="34.0" layoutY="33.0" mnemonicParsing="false" text="Generate New Code!" />
+            <Text layoutX="28.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Code generated here!">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Pane layoutX="-1.0" layoutY="275.0" prefHeight="99.0" prefWidth="376.0">
+         <children>
+            <TextField layoutX="183.0" layoutY="33.0" prefHeight="26.0" prefWidth="141.0" />
+            <Label layoutX="22.0" layoutY="41.0" text="Insert the username of a profile:">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Button layoutX="712.0" layoutY="22.0" mnemonicParsing="false" text="Logout" />
    </children>
 </AnchorPane>

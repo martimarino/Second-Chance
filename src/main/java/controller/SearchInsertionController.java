@@ -35,12 +35,18 @@ public class SearchInsertionController extends MainController{
     public ComboBox<String> status;
     public ComboBox<String> category;
     public ComboBox<String> color;
+
     public TextField ins;
+
     public GridPane insertionList;
+
     public BorderPane insertionFind;
+
     public ArrayList<Document> insertionFilter;
-    public int item, scrollPage;
+
     public Button prevSearch, nextSearch;
+
+    public int item, scrollPage;
 
     public void initialize(){
 
@@ -51,23 +57,18 @@ public class SearchInsertionController extends MainController{
         nextSearch.setDisable(true);
         prevSearch.setVisible(false);
         nextSearch.setVisible(false);
-
     }
 
     public void showInsertionPage(String uniq_id) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
-        Stage stage = new Stage(StageStyle.DECORATED);
-        stage.setScene(
-                new Scene(loader.load())
-        );
 
+        Stage stage = new Stage(StageStyle.DECORATED);
+        stage.setScene(new Scene(loader.load()));
         InsertionController controller = loader.getController();
         controller.initialize(uniq_id);
-
         stage.show();
-
     }
 
     public void findInsertion(MouseEvent mouseEvent) {
@@ -75,42 +76,40 @@ public class SearchInsertionController extends MainController{
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
         item = 0;
-        if(ins.getText().equals("")) {  //filters case
 
-            if(!(size.getValue().equals("size") && price.getValue().equals("price")
-                && gender.getValue().equals("gender") && status.getValue().equals("status")
-                && category.getValue().equals("category") && color.getValue().equals("color"))) {
+        if (ins.getText().equals("")) {  //filters case
 
-                //take combobox value and search
-                insertionFilter = conn.findInsertionByFilters(size.getValue(), price.getValue(), gender.getValue(), status.getValue(), category.getValue(), color.getValue());
-                if(insertionFilter.isEmpty())
-                {
-                    Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
-                    return;
-                }
+            if (!(size.getValue().equals("size") && price.getValue().equals("price")
+                    && gender.getValue().equals("gender") && status.getValue().equals("status")
+                    && category.getValue().equals("category") && color.getValue().equals("color"))) {
 
-                if(insertionFilter.size() > 1)
-                {
-                    nextSearch.setDisable(false);
-                    nextSearch.setVisible(true);
-                }
-                showFilteredInsertions();
-                item++;
-                insertionFind.setCenter(insertionList);
-                
+                    //take combobox value and search
+                    insertionFilter = conn.findInsertionByFilters(size.getValue(), price.getValue(), gender.getValue(), status.getValue(), category.getValue(), color.getValue());
+                    if (insertionFilter.isEmpty()) {
+                        Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
+                        return;
+                    }
+
+                    if (insertionFilter.size() > 1) {
+                        nextSearch.setDisable(false);
+                        nextSearch.setVisible(true);
+                    }
+
+                    showFilteredInsertions();
+                    item++;
+                    insertionFind.setCenter(insertionList);
             }
-        } else {        //search case
+        }else {
+            //search case
 
             //search insertion by seller
             insertionFilter = conn.findInsertionBySeller(ins.getText());
 
-            if(insertionFilter.isEmpty()){   //if no article is found try to search for brands
+            if (insertionFilter.isEmpty())  //if no article is found try to search for brands
                 //search by brand
                 insertionFilter = conn.findInsertionByBrand(ins.getText());
-            }
 
-            if(insertionFilter.isEmpty())
-            {
+            if(insertionFilter.isEmpty()) {
                 Utility.infoBox("No results", "Advise", "User Advise");
                 return;
             }
@@ -126,7 +125,6 @@ public class SearchInsertionController extends MainController{
         status.setValue("status");
         category.setValue("category");
         color.setValue("color");
-
     }
 
     private void showFilteredInsertions() {
@@ -167,6 +165,7 @@ public class SearchInsertionController extends MainController{
             image.setFitHeight(100);
             image.setFitWidth(100);
             image.setImage(images);
+
         } catch (IOException e) { //case image not valid any more (link with 404 page)
             //e.printStackTrace();
             Image img = new Image("./img/empty.jpg");
@@ -175,6 +174,7 @@ public class SearchInsertionController extends MainController{
             image.setFitWidth(100);
             image.setPreserveRatio(true);
         }
+
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
         Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + "€");
         Label brand = new Label("Brand: " + insertionFilter.get(index).getString("brand"));
@@ -213,11 +213,11 @@ public class SearchInsertionController extends MainController{
         GridPane.setHalignment(brand, HPos.CENTER);
 
         insertionList.setStyle(
-                "    -fx-padding: 20;\n" +
+                        "-fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
-
     }
+
 
     private void updateInsertionview(String uniq_id) {
 
@@ -226,34 +226,37 @@ public class SearchInsertionController extends MainController{
 
     }
 
-
     public void PrevFilteredInsertion(MouseEvent mouseEvent) {
 
         insertionList.getChildren().clear();
         int row = 0;
-        if(scrollPage == 6) {
+
+        if (scrollPage == 6) {
             prevSearch.setDisable(true);
             prevSearch.setVisible(false);
         }
-        if(scrollPage == 0) {
+
+        if(scrollPage == 0)
             scrollPage = insertionFilter.size() - 6;
-        }
         else
             scrollPage-=6;
 
-        for(int i = scrollPage; row<3; i++)
-        {
+
+        for (int i = scrollPage; row < 3; i++) {
+
             addFilteredInsertions(i, row, 0);
             row++;
         }
+
         row = 0;
-        for(int i = scrollPage; row<3; i++)
-        {
+
+        for (int i = scrollPage; row<3; i++) {
+
             addFilteredInsertions(i+3, row, 5);
             row++;
         }
-        insertionFind.setCenter(insertionList);
 
+        insertionFind.setCenter(insertionList);
     }
 
     public void NextFilteredInsertion(MouseEvent mouseEvent) {
@@ -261,18 +264,20 @@ public class SearchInsertionController extends MainController{
         insertionList.getChildren().clear();
         int row = 0;
 
-        for(int i = scrollPage; i < scrollPage+3 && row<3; i++)
-        {
-            if(i == insertionFilter.size()) {
+        for (int i = scrollPage; i < scrollPage+3 && row<3; i++) {
+
+            if (i == insertionFilter.size()) {
                 i = 0;
                 scrollPage = 0;
             }
             addFilteredInsertions(i, row,0);
             row++;
         }
+
         row = 0;
-        for(int i = scrollPage; i < scrollPage+3 && row<6; i++)
-        {
+
+        for (int i = scrollPage; i < scrollPage + 3 && row < 6; i++) {
+
             if(i == insertionFilter.size()) {
                 i = 0;
                 scrollPage = 0;
@@ -280,8 +285,10 @@ public class SearchInsertionController extends MainController{
             addFilteredInsertions(i+3, row,5);
             row++;
         }
+
         scrollPage+=6;
         insertionFind.setCenter(insertionList);
+
         prevSearch.setDisable(false);
         prevSearch.setVisible(true);
     }

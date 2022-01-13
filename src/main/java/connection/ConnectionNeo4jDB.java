@@ -1,6 +1,7 @@
 package main.java.connection;
 
 import main.java.entity.*;
+import main.java.utils.Utility;
 import org.neo4j.driver.*;
 import org.neo4j.driver.types.Node;
 import org.neo4j.driver.types.Path;
@@ -21,6 +22,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
     }
 
     @Override
+
     public void close() throws Exception {
         driver.close();
     }
@@ -33,11 +35,17 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                                 "country", u.getCountry()));
                 return null;
             });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void addInsertion(final Insertion i) {
         try (Session session = driver.session()) {
+
+        this.open();
+
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run("MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
                                 "gender: $gender})",
@@ -45,15 +53,44 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                                 "gender", i.getGender()));
                 return null;
             });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void followUser(User follower, User followed) {
-
+    public void followUser(String follower, String followed) {
+        try ( Session session = driver.session() )
+        {
+            this.open();
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MATCH (u:User),(v) " +
+                                "WHERE u.username = $username1 AND v.username = $username2 " +
+                                "CREATE (u)-[:FOLLOWS]->(v)",
+                        parameters( "username1", follower, "username2", followed));
+                return null;
+            });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void unfollowUser(User unfollower, User unfollowed) {
-
+    public void unfollowUser(String unfollower, String unfollowed) {
+        try ( Session session = driver.session() )
+        {
+            this.open();
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run( "MATCH (u:User)-[rel:FOLLOWS]->(v)  " +
+                                "WHERE u.username = $username1 AND v.username = $username2 " +
+                                "DELETE rel",
+                        parameters( "username1", unfollower, "username2", unfollowed));
+                return null;
+            });
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void likeAnInsertion(User u, Insertion i) {
@@ -69,7 +106,9 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             String c = "Austria";
 
             List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run("MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) " +
+
+                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:FOLLOWS]->(others) " +
+
                                 "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
                                 "AND NOT (u)-[:FOLLOWS]->(others) " +
                                 "RETURN others.username as SuggUsers " +
@@ -79,7 +118,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                                 "k", k));
 /*
                 List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                    Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) " +
+                    Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:FOLLOWS]->(others) " +
                                 "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
                                 "AND NOT (u)-[:FOLLOWS]->(others) " +
                                 "RETURN others.username as SuggUsers " +
@@ -115,7 +154,8 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             //String c = "Austria";
 
             List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run("MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]-(i:Insertion) " +
+
+                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]->(i:Insertion) " +
                                 "WHERE u.username = $username " +
                                 "RETURN i.uniq_id as SuggIns " +
                                 "LIMIT $k",
@@ -178,7 +218,9 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         }
     }
 
+
     public boolean showIfInterested(String username, String insertion_id) {
+
 
         this.open();
 

@@ -26,11 +26,12 @@ import java.net.URL;
 public class InsertionController {
 
     public Label insertionTitle;
+    public Label descriptionContainer;
+
     public Button buy;
     public Button favourite;
+
     public Pane infoContainer;
-    public GridPane infoTable;
-    public Label descriptionContainer;
     public Pane imgContainer;
     public Text view;
     public Text interested;
@@ -47,7 +48,6 @@ public class InsertionController {
     String insertion_id;
     String image_url;
 
-
     public void initialize(String uniq_id) {
 
         this.insertion_id = uniq_id;
@@ -62,7 +62,7 @@ public class InsertionController {
 
         try {
             fillInsertionInfo(insertion);
-        } catch (FileNotFoundException e) {
+        }catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -77,7 +77,6 @@ public class InsertionController {
 
         favourite.setText(favouriteText);
     }
-
 
     private void fillInsertionInfo(Insertion insertion) throws FileNotFoundException {
 
@@ -115,7 +114,7 @@ public class InsertionController {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
         Session session = Session.getInstance();
-        User user = session.getLoggedUser();
+
         String[] s = price.getText().split(" ");
         Double insPrice = Double.valueOf(s[0]);
         if(!conn.buyCurrentInsertion(insertion_id, user.getUsername(),insPrice , seller.getText(), image_url))
@@ -146,7 +145,6 @@ public class InsertionController {
         }
 
         connNeo.showIfInterested(user.getUsername(), insertion_id);
+
     }
-
-
 }

@@ -16,6 +16,7 @@ public class User implements GeneralUser {
     double balance;
     ArrayList<Order> orders;
 
+
     public User(String email, String username, String password, String name, String country, String city, String address, String suspended, Double rating, double balance, ArrayList<Order>orders) {
 
         this.email = email;
@@ -91,7 +92,9 @@ public class User implements GeneralUser {
 
     public void setSuspended(String suspended) { this.suspended = suspended; }
 
+
     public void setRating(Double rating) { this.rating = rating; }
+
 
     public void setBalance(Double balance){ this.balance = balance;}
 
@@ -133,7 +136,9 @@ public class User implements GeneralUser {
 
     public String getSuspended() { return suspended; }
 
+
     public Double getRating() { return rating; }
+
 
     public Double getBalance() {  return this.balance;
     }

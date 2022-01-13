@@ -1,7 +1,7 @@
 # Large Scale Project
 ## _SecondChance_
 
-![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) ![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)![LaTeX](https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white)
+![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) ![LaTeX](https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white)
 
 
 VintedUnipi is an e-commerce that offers the possibility of selling and buying vinted clothes.
@@ -117,6 +117,21 @@ User | personal information, orders, reviews, suspended (bool)
 Admin | codes
 Insertion | title, details, #interested, #views
 
+#### USER
+
+Field | Type
+------------- | -------------
+ADDRESS | String
+BALANCE | Double
+CITY | String
+COUNTRY | String
+EMAIL | String
+NAME | String
+PASSWORD | String
+RATING | Double
+SUSPENDED | String
+USERNAME | String
+
 #### INSERTION
 
 Field | Values | Type
@@ -126,7 +141,6 @@ CATEGORY | {clothing,accessories, bags, beauty, house, jewelry, kids, shoes} | S
 DESCRIPTION | text | String
 GENDER | {M, F, U} | String
 PRICE | 10,56 | Double
-CURRENCY | {EUR, USD} | String
 INTERESTED| 10 | Integer
 VIEWS | 10 | Integer
 STATUS | {new, excellent, good, used, very used} | String
@@ -154,8 +168,7 @@ RATING | 3,5 | Float
 
 Field | Values | Type
 ------------- | ------------- | -------------
-ID | 8552148 | Varchar
-TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
+TIMESTAMP (key) | 2020-02-07 05:11:36 +0000 | String
 IMAGE | url image | String
 BUYER | username | String
 SELLER | username | String
