@@ -70,6 +70,7 @@ public class SignInController {
     public void login() throws IOException {
 
         String username = us.getText();
+        String password = pw.getText();
         Session session;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
