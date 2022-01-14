@@ -5,13 +5,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
-
 import main.java.connection.*;
 import main.java.utils.*;
 import main.java.utils.Session;
-
 import org.bson.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -43,7 +43,7 @@ public class SearchUserController extends MainController{
     int scrollPage;
     int k = 15;
 
-    public void initialize(){
+    public void initialize() throws IOException {
 
         usersList = new GridPane();
         item = 0;
@@ -74,8 +74,7 @@ public class SearchUserController extends MainController{
             sugg.add(d);
         }
 
-        //System.out.println("***********************************");
-        //System.out.println("SUGG SIZE: " + sugg.size());
+        //Utility.printTerminal("SUGG SIZE: " + sugg.size());
 
         showSuggestedUsers();
     }
@@ -87,7 +86,7 @@ public class SearchUserController extends MainController{
         if (us.getText().equals("")) {
 
             if (country.getValue().equals("country") && rating.getValue().equals("rating"))
-                //System.out.println("country: " + country + "rating: " + rating);
+                //Utility.printTerminal("country: " + country + "rating: " + rating);
                 return;
 
             item = 0;
@@ -131,13 +130,39 @@ public class SearchUserController extends MainController{
     }
 
     private void showFilteredUsers() throws IOException {
-        Utility.showUsers(usersList, userFilter, item);
+
+        usersList.getChildren().clear();
+
+        try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
+            Image image = new Image(imageStream);
+
+            Label username = new Label(userFilter.get(item).getString("username"));
+            Label country = new Label(userFilter.get(item).getString("country"));
+            Label city = new Label(userFilter.get(item).getString("city"));
+            followSearched = new Button();
+            setFollowUnfollowButton(followSearched, userFilter.get(item).getString("username"));
+
+            usersList.add(new ImageView(image), 0, 0);
+            usersList.add(username, 0, 1);
+            usersList.add(country, 0, 2);
+            usersList.add(city, 0, 3);
+            usersList.add(followSearched, 0, 4);
+
+            GridPane.setHalignment(username, HPos.CENTER);
+            GridPane.setHalignment(country, HPos.CENTER);
+            GridPane.setHalignment(city, HPos.CENTER);
+            GridPane.setHalignment(followSearched, HPos.CENTER);
+        }
+        usersList.setStyle(
+                "    -fx-padding: 20;\n" +
+                        "    -fx-hgap: 10;\n" +
+                        "    -fx-vgap: 10;");
     }
 
     private void setFollowUnfollowButton(Button follow, String user) {
 
         follow.setStyle("-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;");
-        follow.setPrefWidth(70.0);
+        follow.setPrefWidth(90.0);
         follow.setPrefHeight(20.0);
         follow.setDisable(false);
         follow.setVisible(true);
@@ -159,25 +184,29 @@ public class SearchUserController extends MainController{
 
     }
 
-    private void showSearchedUser(Document user) {
+    private void showSearchedUser(Document user) throws IOException {
 
         usersList.getChildren().clear();
 
-        Label username = new Label(user.getString("username"));
-        Label country = new Label(user.getString("country"));
-        Label city = new Label(user.getString("city"));
-        followSearched = new Button();
-        setFollowUnfollowButton(followSearched, user.getString("username"));
+        try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
+            Image image = new Image(imageStream);
+            Label username = new Label(user.getString("username"));
+            Label country = new Label(user.getString("country"));
+            Label city = new Label(user.getString("city"));
+            followSearched = new Button();
+            setFollowUnfollowButton(followSearched, user.getString("username"));
 
-        usersList.add(username, 0, 0);
-        usersList.add(country, 0, 1);
-        usersList.add(city, 0, 2);
-        usersList.add(followSearched, 0, 3);
+            usersList.add(new ImageView(image), 0, 0);
+            usersList.add(username, 0, 1);
+            usersList.add(country, 0, 2);
+            usersList.add(city, 0, 3);
+            usersList.add(followSearched, 0, 4);
 
-        GridPane.setHalignment(username, HPos.CENTER);
-        GridPane.setHalignment(country, HPos.CENTER);
-        GridPane.setHalignment(city, HPos.CENTER);
-        GridPane.setHalignment(followSearched, HPos.CENTER);
+            GridPane.setHalignment(username, HPos.CENTER);
+            GridPane.setHalignment(country, HPos.CENTER);
+            GridPane.setHalignment(city, HPos.CENTER);
+            GridPane.setHalignment(followSearched, HPos.CENTER);
+        }
 
         usersList.setStyle(
                         "-fx-padding: 20;\n" +
@@ -224,26 +253,29 @@ public class SearchUserController extends MainController{
 
     /*---------------------------------------------------------------*/
 
-    public void addSuggestedUsers(int index, int i){
+    public void addSuggestedUsers(int index, int i) throws IOException {
 
-        ImageView image = new ImageView("file: /../../resources/img/user.png");
-        Label username = new Label(sugg.get(index).getString("username"));
-        Label country = new Label(sugg.get(index).getString("country"));
-        Label city = new Label(sugg.get(index).getString("city"));
-        followSuggested = new Button();
-        setFollowUnfollowButton(followSuggested, sugg.get(index).getString("username"));
+        try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
+
+            Image image = new Image(imageStream);
+            Label username = new Label(sugg.get(index).getString("username"));
+            Label country = new Label(sugg.get(index).getString("country"));
+            Label city = new Label(sugg.get(index).getString("city"));
+            followSuggested = new Button();
+            setFollowUnfollowButton(followSuggested, sugg.get(index).getString("username"));
 
 
-        suggList.add(image, i, 0);
-        suggList.add(username, i, 1);
-        suggList.add(country, i, 2);
-        suggList.add(city, i, 3);
-        suggList.add(followSuggested, i, 4);
+            suggList.add(new ImageView(image), i, 0);
+            suggList.add(username, i, 1);
+            suggList.add(country, i, 2);
+            suggList.add(city, i, 3);
+            suggList.add(followSuggested, i, 4);
 
-        GridPane.setHalignment(username, HPos.CENTER);
-        GridPane.setHalignment(country, HPos.CENTER);
-        GridPane.setHalignment(city, HPos.CENTER);
-        GridPane.setHalignment(followSuggested, HPos.CENTER);
+            GridPane.setHalignment(username, HPos.CENTER);
+            GridPane.setHalignment(country, HPos.CENTER);
+            GridPane.setHalignment(city, HPos.CENTER);
+            GridPane.setHalignment(followSuggested, HPos.CENTER);
+        }
 
         suggList.setStyle(
                         "-fx-padding: 20;\n" +
@@ -252,7 +284,7 @@ public class SearchUserController extends MainController{
 
     }
 
-    private void showSuggestedUsers() {
+    private void showSuggestedUsers() throws IOException {
 
         suggList = new GridPane();
         scrollPage = 0;
@@ -266,7 +298,7 @@ public class SearchUserController extends MainController{
         scrollPage+=3;
     }
 
-    public void prevSuggestedUsers(MouseEvent mouseEvent) {
+    public void prevSuggestedUsers(MouseEvent mouseEvent) throws IOException {
 
         suggList.getChildren().clear();
         int row = 0;
@@ -291,7 +323,7 @@ public class SearchUserController extends MainController{
         scrollPage+=3;
     }
 
-    public void nextSuggestedUsers(MouseEvent mouseEvent) {
+    public void nextSuggestedUsers(MouseEvent mouseEvent) throws IOException {
 
         suggList.getChildren().clear();
         int row = 0;

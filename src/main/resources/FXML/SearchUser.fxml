@@ -59,7 +59,7 @@
                 <Font size="24.0" />
             </font>
         </Text>
-        <BorderPane fx:id="userSugg" layoutX="50.0" layoutY="580.0" prefHeight="307.0" prefWidth="600.0">
+        <BorderPane fx:id="userSugg" layoutX="50.0" layoutY="500.0" prefHeight="307.0" prefWidth="600.0">
             <left>
                 <Button fx:id="prevSugg" layoutX="-20.0" layoutY="380.0" mnemonicParsing="false" onMouseClicked="#prevSuggestedUsers" text="Prev" />
             </left>
