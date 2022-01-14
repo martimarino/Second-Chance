@@ -67,7 +67,7 @@
                               </Text>
                            </children>
                         </GridPane>
-                        <Button fx:id="btnLogOut" layoutX="515.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#logOut" text="Logout" />
+                        <Button fx:id="btnLogout" layoutX="515.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" />
                         <Button fx:id="btnAddFunds" layoutX="427.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#addFunds" text="Add Funds" />
                          <Text fill="#2582bf" layoutX="245.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Orders">
                              <font>
