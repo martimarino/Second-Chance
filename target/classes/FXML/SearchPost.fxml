@@ -49,30 +49,30 @@
                                 <RowConstraints minHeight="15.5" prefHeight="30.0" />
                             </rowConstraints>
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Category:" translateX="15.0" underline="true">
+                                <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Category:" translateX="15.0" underline="true">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Price:" translateX="15.0" underline="true" GridPane.rowIndex="1">
+                                <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Price:" translateX="15.0" underline="true" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Views:" translateX="15.0" underline="true" GridPane.rowIndex="2">
+                                <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Views:" translateX="15.0" underline="true" GridPane.rowIndex="2">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sold:" translateX="15.0" underline="true" GridPane.rowIndex="3">
+                                <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Sold:" translateX="15.0" underline="true" GridPane.rowIndex="3">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Text>
-                                <Text fx:id="category" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" />
-                                <Text fx:id="price" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="1" />
-                                <Text fx:id="views" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="2" />
-                                <Text fx:id="sold" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="3" />
+                                <Text fill="#2582bf" fx:id="category" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" />
+                                <Text fill="#2582bf" fx:id="price" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="1" />
+                                <Text fill="#2582bf" fx:id="views" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="2" />
+                                <Text fill="#2582bf" fx:id="sold" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="3" />
                             </children>
                         </GridPane>
                         <Text fx:id="alertText" fill="#f50606" layoutX="137.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0">

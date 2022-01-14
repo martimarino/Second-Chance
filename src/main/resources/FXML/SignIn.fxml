@@ -12,8 +12,8 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Text layoutX="343.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-      <Text layoutX="345.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <Text fill="#2582bf" layoutX="343.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+      <Text fill="#2582bf" layoutX="345.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
       <TextField fx:id="us" layoutX="295.0" layoutY="318.0" style="-fx-background-radius: 5;" />
       <PasswordField fx:id="pw" layoutX="295.0" layoutY="421.0" style="-fx-background-radius: 5;" />
       <Button fx:id="SignIn" layoutX="335.0" layoutY="482.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="68.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign in" />

@@ -6,9 +6,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchUserController">
+<AnchorPane fx:id="anchorRoot"
+            prefHeight="820.0" prefWidth="680.0"
+            xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.java.controller.SearchUserController">
     <children>
-        <Text layoutX="297.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Users">
+        <Text fill="#2582bf" layoutX="297.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Users">
             <font>
                 <Font size="24.0" />
             </font>
@@ -50,7 +54,7 @@
                 <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#showNextUser" text="Next" BorderPane.alignment="TOP_RIGHT" />
             </right>
         </BorderPane>
-        <Text layoutX="260.0" layoutY="470.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Suggested sellers">
+        <Text fill="#2582bf" layoutX="260.0" layoutY="470.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Suggested sellers">
             <font>
                 <Font size="24.0" />
             </font>

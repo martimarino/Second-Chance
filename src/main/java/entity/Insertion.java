@@ -19,6 +19,32 @@ public class Insertion {
     String seller;
     String sold;
 
+    public Insertion(){}
+
+    public Insertion(String id, String category, String description,
+                     String gender, double price, int interested,
+                     int views, String status, String color, String size,
+                     String brand, String country, String image_url,
+                     String timestamp, String seller, String sold){
+        this.id = id;
+        this.category = category;
+        this.description = description;
+        this.gender = gender;
+        this.price = price;
+        this.interested = interested;
+        this.views = views;
+        this.status = status;
+        this.color = color;
+        this.size = size;
+        this.brand = brand;
+        this.country = country;
+        this.image_url = image_url;
+        this.timestamp = timestamp;
+        this.seller = seller;
+        this.sold = sold;
+
+    }
+
     public void setId(String id) {
         this.id = id;
     }

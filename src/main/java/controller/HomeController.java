@@ -58,12 +58,12 @@ public class HomeController {
         // new user
         if(connNeo.checkNewUser(Session.getLogUser().getUsername())) {
             ins = connMongo.findTopKViewedInsertion(k, "clothing");
-System.out.println("CASO NEW USER");
+            Utility.printTerminal("New user case");
         } else {
             followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
-            ins = connMongo.followedUserInsertions(followedFromNeo, k);
+            ins = connMongo.followedUserInsertions(followedFromNeo);
         }
-        System.out.println("SIZE OF INS: " + ins.size());
+        Utility.printTerminal("Size of ins: " + ins.size());
 
         showFeed();
         prevFeedButton.setDisable(true);
@@ -89,7 +89,7 @@ System.out.println("CASO NEW USER");
 
     private void addInsertionsViral(int index, int i) {
 
-        ImageView image = null;
+        ImageView image;
 
         Label user = new Label("User: " + insertions.get(index).getString("seller"));
         try {
@@ -303,7 +303,7 @@ System.out.println("CASO NEW USER");
 
     private void addFeedInsertions(int index, int i) {
 
-        ImageView image = null;
+        ImageView image;
         Label user = new Label("User: " + ins.get(index).getString("seller"));
 
         try {
@@ -335,7 +335,7 @@ System.out.println("CASO NEW USER");
 
         Label price = new Label(ins.get(index).getDouble("price") + "€");
         Label status = new Label("Status: " + ins.get(index).getString("status"));
-        Label interested = new Label("Interested: " + String.valueOf(ins.get(index).getInteger("interested")));
+        Label interested = new Label("Interested: " + ins.get(index).getInteger("interested"));
 
         feedGrid.add(user, i, 0);
         feedGrid.add(image, i, 1);

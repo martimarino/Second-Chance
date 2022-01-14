@@ -11,24 +11,29 @@ import java.util.List;
 
 import static org.neo4j.driver.Values.parameters;
 
-public class ConnectionNeo4jDB implements AutoCloseable {
+public class ConnectionNeo4jDB implements AutoCloseable
+{
     private Driver driver;
     String uri = "neo4j://127.0.0.1:7687";
     String user = "neo4j";
     String password = "2nd-chance";
 
-    public void open() {
-        driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
+    public void open()
+    {
+        driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
     }
 
     @Override
-
-    public void close() throws Exception {
+    public void close()
+    {
         driver.close();
     }
 
-    public void addUser(final User u) {
-        try (Session session = driver.session()) {
+    public void addUser(final User u)
+    {
+        this.open();
+        try ( Session session = driver.session() )
+        {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run("MERGE (u:User {username: $username, country: $country})",
                         parameters("username", u.getUsername(),
@@ -41,22 +46,25 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         }
     }
 
-    public void addInsertion(final Insertion i) {
-        try (Session session = driver.session()) {
-
+    public boolean addInsertion(final Insertion i)
+    {
         this.open();
-
+        try ( Session session = driver.session() )
+        {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run("MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
+                tx.run( "MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
                                 "gender: $gender})",
-                        parameters("uniq_id", i.getId(), "category", i.getCategory(),
+                        parameters( "uniq_id", i.getId(), "category", i.getCategory(),
                                 "gender", i.getGender()));
                 return null;
             });
             this.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Utility.printTerminal("Cannot create new insertion node");
+        return false;
     }
 
     public void followUser(String follower, String followed) {
@@ -133,9 +141,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return suggestions;
             });
-            System.out.println("*************** NEO4j ***************");
-            System.out.println(similar);
-            System.out.println("*************************************");
+            Utility.printTerminal("NEO4j\n" + similar);
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,9 +174,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return followed;
             });
-            System.out.println("*************** NEO4j ***************");
-            System.out.println(insertions);
-            System.out.println("*************************************");
+            Utility.printTerminal("NEO4j\n" + insertions);
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,4 +310,26 @@ public class ConnectionNeo4jDB implements AutoCloseable {
 
     }
 
+    public boolean createPostedRelationship(String node1, String node2) {
+
+        this.open();
+        try(Session session = driver.session()) {
+                session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run(
+                        "MATCH (u:User),(i:Insertion) " +
+                                "WHERE u.username = $username AND i.uniq_id = $id " +
+                                "CREATE (u)-[:POSTED]->(i)",
+                        parameters( "username", node1,
+                                "id", node2));
+                return null;
+            });
+            this.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Utility.printTerminal("Cannot create POSTED relationship");
+        return false;
+
+    }
 }

@@ -123,7 +123,7 @@ public class StatsController {
         });
 
         txtFieldCountry.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("text changed from " + oldValue + " to " + newValue);
+            Utility.printTerminal("text changed from " + oldValue + " to " + newValue);
 
             if (Objects.equals(newValue, ""))
                 elaboraButton.setDisable(true);

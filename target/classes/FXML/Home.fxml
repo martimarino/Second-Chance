@@ -6,9 +6,9 @@
 <?import javafx.scene.text.*?>
 
 
-<AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
+<AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
    <children>
-      <Text layoutX="250.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions">
+      <Text fill="#2582bf" layoutX="250.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions">
          <font>
             <Font size="24.0" />
          </font>
@@ -22,7 +22,7 @@
          </right>
       </BorderPane>
 
-      <Text text="Feed" layoutX="320.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fill="#2582bf" text="Feed" layoutX="320.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0">
          <font>
             <Font size="24.0" />
          </font>

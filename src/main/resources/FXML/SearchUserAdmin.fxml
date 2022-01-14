@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchUserAdminController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchUserAdminController">
    <children>
       <Label layoutX="321.0" layoutY="16.0" text="Search User Section ">
          <font>
@@ -50,30 +50,30 @@
                         <RowConstraints minHeight="15.5" prefHeight="30.0" />
                     </rowConstraints>
                       <children>
-                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" translateX="15.0" underline="true">
+                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" translateX="15.0" underline="true">
                               <font>
                                   <Font size="14.0" />
                               </font>
                           </Text>
-                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Country:" translateX="15.0" underline="true" GridPane.rowIndex="1">
+                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Country:" translateX="15.0" underline="true" GridPane.rowIndex="1">
                               <font>
                                   <Font size="14.0" />
                               </font>
                           </Text>
-                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="City:" translateX="15.0" underline="true" GridPane.rowIndex="2">
+                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="City:" translateX="15.0" underline="true" GridPane.rowIndex="2">
                               <font>
                                   <Font size="14.0" />
                               </font>
                           </Text>
-                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" translateX="15.0" underline="true" GridPane.rowIndex="3">
+                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" translateX="15.0" underline="true" GridPane.rowIndex="3">
                               <font>
                                   <Font size="14.0" />
                               </font>
                           </Text>
-                        <Text fx:id="email" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" />
-                        <Text fx:id="country" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="1" />
-                        <Text fx:id="city" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="2" />
-                        <Text fx:id="address" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="3" />
+                        <Text fill="#2582bf" fx:id="email" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" />
+                        <Text fill="#2582bf" fx:id="country" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="1" />
+                        <Text fill="#2582bf" fx:id="city" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="2" />
+                        <Text fill="#2582bf" fx:id="address" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="3" />
                       </children>
                   </GridPane>
                   <Text fx:id="alertText" fill="#f50606" layoutX="137.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0">

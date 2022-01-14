@@ -73,8 +73,7 @@ public class SignInController {
         Session session;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
-            System.out.println("Value: " + us.getText());
-            System.out.println(("Value: " + pw.getText()));
+            Utility.printTerminal("Value: " + us.getText() + "\nValue: " + pw.getText());
 
             ConnectionMongoDB conn = new ConnectionMongoDB();
 
@@ -84,7 +83,7 @@ public class SignInController {
                 ShowAdminPanel();
             }else {
 
-                boolean logged = conn.logInUser(us.getText(), pw.getText());
+                boolean logged = conn.logInUser(username, password);
                 if (logged) {
                     session = Session.getInstance();
                     session.setLogUser(username);
