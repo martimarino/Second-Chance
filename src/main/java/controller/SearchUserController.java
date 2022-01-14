@@ -147,8 +147,14 @@ public class SearchUserController extends MainController{
         } else {
             follow.setText("Follow");
         }
+
         follow.setOnMouseClicked(event -> {
-            connNeo.followUnfollowButton(follow.getText(), Session.getLogUser().getUsername(), user);
+            String action = follow.getText();
+            connNeo.followUnfollowButton(action, Session.getLogUser().getUsername(), user);
+            if(action.equals("Follow"))
+                follow.setText("Unfollow");
+            if(action.equals("Unfollow"))
+                follow.setText("Follow");
         });
 
     }

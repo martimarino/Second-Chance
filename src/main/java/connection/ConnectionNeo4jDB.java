@@ -68,9 +68,9 @@ public class ConnectionNeo4jDB implements AutoCloseable
     }
 
     public void followUser(String follower, String followed) {
+        this.open();
         try ( Session session = driver.session() )
         {
-            this.open();
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run( "MATCH (u:User),(v) " +
                                 "WHERE u.username = $username1 AND v.username = $username2 " +
@@ -85,9 +85,9 @@ public class ConnectionNeo4jDB implements AutoCloseable
     }
 
     public void unfollowUser(String unfollower, String unfollowed) {
+        this.open();
         try ( Session session = driver.session() )
         {
-            this.open();
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run( "MATCH (u:User)-[rel:FOLLOWS]->(v)  " +
                                 "WHERE u.username = $username1 AND v.username = $username2 " +
@@ -225,7 +225,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     public boolean showIfInterested(String username, String insertion_id) {
 
-
         this.open();
 
         try (Session session = driver.session()) {
@@ -244,7 +243,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     public boolean checkNewUser(String username) {
         this.open();
-        boolean check = false;
+        Boolean check = false;
 
         try(Session session = driver.session()) {
             check = session.writeTransaction((TransactionWork<Boolean>) tx -> {
@@ -274,18 +273,15 @@ public class ConnectionNeo4jDB implements AutoCloseable
         try(Session session = driver.session()) {
             check = session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
-                        "MATCH  (p:User {username: '$username1'}), (b:User {username: '$username2'}) " +
+                        "MATCH  (p:User), (b:User) " +
+                                "WHERE p.username = $username1 AND b.username = $username2 " +
                                 "RETURN exists( (p)-[:FOLLOWS]-(b) ) AS Follows",
                         parameters( "username1", us1,
                                 "username2", us2));
 
-                /*Record r = result.next();
-                if((r.get(0).asBoolean()))
-                    return true;
-                return false;*/
-                return result.hasNext();
+                Record r = result.next();
+                return r.get(0).asBoolean();
             });
-
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -296,11 +292,11 @@ public class ConnectionNeo4jDB implements AutoCloseable
     public void followUnfollowButton(String text, String us1, String us2) {
 
         switch (text) {
-            case "Follows":
+            case "Follow":
                 followUser(us1, us2);
                 break;
 
-            case "Unfollows":
+            case "Unfollow":
                 unfollowUser(us1, us2);
                 break;
 
