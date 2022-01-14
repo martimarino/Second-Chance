@@ -354,7 +354,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 return followers;
             });
             System.out.println("*************** NEO4j ***************");
-            System.out.println(follow.get(0));
+            if(!follow.isEmpty())
+                System.out.println(follow.get(0));
             System.out.println("*************************************");
             this.close();
         } catch (Exception e) {
@@ -386,7 +387,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 return following;
             });
             System.out.println("*************** NEO4j ***************");
-            System.out.println(follow.get(0));
+            if(!follow.isEmpty())
+                System.out.println(follow.get(0));
             System.out.println("*************************************");
             this.close();
         } catch (Exception e) {

@@ -139,19 +139,23 @@ public class SearchUserController extends MainController{
             Label username = new Label(userFilter.get(item).getString("username"));
             Label country = new Label(userFilter.get(item).getString("country"));
             Label city = new Label(userFilter.get(item).getString("city"));
-            followSearched = new Button();
-            setFollowUnfollowButton(followSearched, userFilter.get(item).getString("username"));
 
             usersList.add(new ImageView(image), 0, 0);
             usersList.add(username, 0, 1);
             usersList.add(country, 0, 2);
             usersList.add(city, 0, 3);
-            usersList.add(followSearched, 0, 4);
 
             GridPane.setHalignment(username, HPos.CENTER);
             GridPane.setHalignment(country, HPos.CENTER);
             GridPane.setHalignment(city, HPos.CENTER);
-            GridPane.setHalignment(followSearched, HPos.CENTER);
+
+            //a user can not follow itself
+            if(!(Session.getLogUser().getUsername().equals(userFilter.get(item).getString("username")))) {
+                followSearched = new Button();
+                setFollowUnfollowButton(followSearched, userFilter.get(item).getString("username"));
+                usersList.add(followSearched, 0, 4);
+                GridPane.setHalignment(followSearched, HPos.CENTER);
+            }
         }
         usersList.setStyle(
                 "    -fx-padding: 20;\n" +
@@ -193,19 +197,24 @@ public class SearchUserController extends MainController{
             Label username = new Label(user.getString("username"));
             Label country = new Label(user.getString("country"));
             Label city = new Label(user.getString("city"));
-            followSearched = new Button();
-            setFollowUnfollowButton(followSearched, user.getString("username"));
 
             usersList.add(new ImageView(image), 0, 0);
             usersList.add(username, 0, 1);
             usersList.add(country, 0, 2);
             usersList.add(city, 0, 3);
-            usersList.add(followSearched, 0, 4);
 
             GridPane.setHalignment(username, HPos.CENTER);
             GridPane.setHalignment(country, HPos.CENTER);
             GridPane.setHalignment(city, HPos.CENTER);
-            GridPane.setHalignment(followSearched, HPos.CENTER);
+
+            //a user can not follow itself
+            if(!(Session.getLogUser().getUsername().equals(user.getString("username")))) {
+                followSearched = new Button();
+                setFollowUnfollowButton(followSearched, user.getString("username"));
+                usersList.add(followSearched, 0, 4);
+                GridPane.setHalignment(followSearched, HPos.CENTER);
+            }
+
         }
 
         usersList.setStyle(
