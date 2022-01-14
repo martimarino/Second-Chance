@@ -328,4 +328,70 @@ public class ConnectionNeo4jDB implements AutoCloseable
         return false;
 
     }
+
+    /* ********** USER SOCIAL FUNCTIONALITIES ********** */
+
+    public ArrayList<String> retrieveFollowersByUser(String user, int k) {
+
+        this.open();
+        ArrayList<String> followers = new ArrayList<>();
+
+        try (Session session = driver.session()) {
+
+            List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u:User) <- [r:FOLLOWS] - (u1:User) " +
+                                "WHERE u.username = $username " +
+                                "RETURN u1.name as name " +
+                                "LIMIT $k",
+                        parameters( "username", user,
+                                "k", k));
+
+                while(result.hasNext())
+                {
+                    Record r = result.next();
+                    followers.add(r.get("name").asString());
+                }
+                return followers;
+            });
+            System.out.println("*************** NEO4j ***************");
+            System.out.println(follow.get(0));
+            System.out.println("*************************************");
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return followers;
+    }
+
+    public ArrayList<String> retrieveFollowingByUser(String user, int k) {
+
+        this.open();
+        ArrayList<String> following = new ArrayList<>();
+
+        try (Session session = driver.session()) {
+
+            List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u:User) - [r:FOLLOWS] -> (u1:User) " +
+                                "WHERE u.username = $username " +
+                                "RETURN u1.name as name " +
+                                "LIMIT $k",
+                        parameters( "username", user,
+                                "k", k));
+
+                while(result.hasNext())
+                {
+                    Record r = result.next();
+                    following.add(r.get("name").asString());
+                }
+                return following;
+            });
+            System.out.println("*************** NEO4j ***************");
+            System.out.println(follow.get(0));
+            System.out.println("*************************************");
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return following;
+    }
 }

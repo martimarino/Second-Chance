@@ -1,27 +1,36 @@
 package main.java.controller;
 
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
 import main.java.utils.Session;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MyProfileController extends MainController {
 
     public GridPane userInfo;
+    public Button btnLogout;
+
+    private User user;
+    private Session session;
 
     public void initialize(){
 
         Session session = Session.getInstance();
-        User user  = session.getLogUser();
+        user  = session.getLogUser();
 
         Label username = new Label(user.getUsername());
         Label name = new Label(user.getName());
@@ -53,10 +62,51 @@ public class MyProfileController extends MainController {
         stage.show();
     }*/
 
-    public void showUserFollowers(MouseEvent mouseEvent) {
+    public void showUserFollowers() {
+
+        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
+        ArrayList<String> follower = conn.retrieveFollowersByUser(user.getUsername(), 10);
+        StackPane secondaryLayout = new StackPane();
+
+        for (int i = 0; i < 10; i++) {
+
+            Label x = new Label(follower.get(i));
+            x.setTranslateX(10);
+            x.setTranslateY(-100 + i*50);
+            secondaryLayout.getChildren().add(x);
+        }
+
+        Scene secondScene = new Scene(secondaryLayout, 920, 400);
+
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Followers");
+        newWindow.setScene(secondScene);
+        newWindow.show();
     }
 
-    public void showUserFollowing(MouseEvent mouseEvent) {
+    public void showUserFollowing() {
+
+        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
+        ArrayList<String> following = conn.retrieveFollowingByUser(user.getUsername(), 10);
+
+        StackPane secondaryLayout = new StackPane();
+
+        for (int i = 0; i < 10; i++) {
+
+            Label x = new Label(following.get(i));
+            x.setTranslateX(10);
+            x.setTranslateY(-100 + i*50);
+            secondaryLayout.getChildren().add(x);
+        }
+
+        Scene secondScene = new Scene(secondaryLayout, 920, 400);
+
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Following");
+        newWindow.setScene(secondScene);
+        newWindow.show();
     }
 
     public void showInterestedInsertions(MouseEvent mouseEvent) {
@@ -69,5 +119,26 @@ public class MyProfileController extends MainController {
     }
 
     public void addFunds(MouseEvent mouseEvent) {
+    }
+
+    public void logout() throws IOException {
+
+        session = Session.getInstance();
+        session.getLogoutUser();
+
+        // Closing current window
+        Stage stage = (Stage) btnLogout.getScene().getWindow();
+        stage.close();
+
+        // Open sign-in window
+        Stage primaryStage = new Stage();
+
+        URL url = new File("src/main/resources/FXML/SignIn.fxml").toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+
+        primaryStage.setTitle("SecondChance");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 }
