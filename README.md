@@ -113,9 +113,10 @@ Italy, Canada, Spain, Austria, Germany, France,Brazil, Netherlands,Poland,Irelan
 
 Collection  |  What inside
 ------------- | -------------
-User | personal information, orders, reviews, suspended (bool)
-Admin | codes
-Insertion | title, details, #interested, #views
+User | personal information, [reviews embedded], suspended (bool)
+Admin | codes, credit
+Insertion | details, #interested, #views
+Order | timestamp, [insertion embedded]
 
 #### USER
 
