@@ -65,7 +65,7 @@ public class MyProfileController extends MainController {
     public void showUserFollowers() {
 
         ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
-        ArrayList<String> follower = conn.retrieveFollowersByUser(user.getUsername(), 10);
+        ArrayList<String> follower = conn.retrieveFollowersByUser(user.getUsername());
         StackPane secondaryLayout = new StackPane();
 
         for (int i = 0; i < 10; i++) {
@@ -88,7 +88,7 @@ public class MyProfileController extends MainController {
     public void showUserFollowing() {
 
         ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
-        ArrayList<String> following = conn.retrieveFollowingByUser(user.getUsername(), 10);
+        ArrayList<String> following = conn.retrieveFollowingByUser(user.getUsername());
 
         StackPane secondaryLayout = new StackPane();
 

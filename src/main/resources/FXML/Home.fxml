@@ -6,6 +6,8 @@
 <?import javafx.scene.text.*?>
 
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
    <children>
       <Text fill="#2582bf" layoutX="250.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions">
@@ -15,10 +17,22 @@
       </Text>
       <BorderPane fx:id="viralInsertions" layoutX="25.0" layoutY="70.0" prefHeight="286.0" prefWidth="650.0">
          <left>
-            <Button fx:id="prevButton" mnemonicParsing="false" onMouseClicked="#prevViralInsertions" prefHeight="45.0" prefWidth="45.0" style="-fx-background-image:url('../img/prev.png'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;" text="prev" BorderPane.alignment="CENTER" />
+            <Pane fx:id="prevButton" onMouseClicked="#prevViralInsertions" translateY="100.0">
+               <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                  <image>
+                     <Image url="@../img/prev.png"/>
+                  </image>
+               </ImageView>
+            </Pane>
          </left>
          <right>
-            <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#nextViralInsertions" prefHeight="45.0" prefWidth="45.0" text="next" BorderPane.alignment="CENTER" />
+            <Pane fx:id="nextButton" onMouseClicked="#nextViralInsertions" translateY="100.0">
+               <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                  <image>
+                     <Image url="@../img/next.png"/>
+                  </image>
+               </ImageView>
+            </Pane>
          </right>
       </BorderPane>
 
@@ -29,10 +43,22 @@
       </Text>
       <BorderPane fx:id="feed" layoutX="25.0" layoutY="440.0" prefHeight="286.0" prefWidth="650.0">
          <left>
-            <Button fx:id="prevFeedButton" mnemonicParsing="false" onMouseClicked="#prevFeedInsertions" prefHeight="45.0" prefWidth="45.0" text="prev" BorderPane.alignment="CENTER" />
+            <Pane fx:id="prevFeedButton" onMouseClicked="#prevFeedInsertions" translateY="100.0">
+               <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                  <image>
+                     <Image url="@../img/prev.png"/>
+                  </image>
+               </ImageView>
+            </Pane>
          </left>
          <right>
-            <Button fx:id="nextFeedButton" mnemonicParsing="false" onMouseClicked="#nextFeedInsertions" prefHeight="45.0" prefWidth="45.0" text="next" BorderPane.alignment="CENTER" />
+            <Pane fx:id="nextFeedButton" onMouseClicked="#nextFeedInsertions" translateY="100.0">
+               <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                  <image>
+                     <Image url="@../img/next.png"/>
+                  </image>
+               </ImageView>
+            </Pane>
          </right>
       </BorderPane>
    </children>

@@ -6,17 +6,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="anchorRoot"
             prefHeight="820.0" prefWidth="680.0"
             xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="main.java.controller.SearchUserController">
     <children>
+                                            <!-- Search users -->
         <Text fill="#2582bf" layoutX="297.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Users">
             <font>
                 <Font size="24.0" />
             </font>
         </Text>
+        <!-- Search bar and button -->
+        <TextField fx:id="us" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search users" />
+        <Button fx:id="findUsers" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findUsers" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
+        <!-- Filters options -->
         <ComboBox fx:id="country" layoutX="35.0" layoutY="130.0" prefHeight="25.0" prefWidth="105.0" value="country">
             <items>
                 <FXCollections fx:factory="observableArrayList">
@@ -44,14 +51,25 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <TextField fx:id="us" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search users" />
-        <Button fx:id="findUsers" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findUsers" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
-        <BorderPane fx:id="userFind" layoutX="200.0" layoutY="200.0" prefHeight="307.0" prefWidth="350.0">
+        <!-- Searched and filtered users results -->
+        <BorderPane fx:id="userFind" layoutX="200.0" layoutY="200.0" prefHeight="307.0" prefWidth="290.0">
             <left>
-                <Button fx:id="prevButton" layoutX="-20.0" layoutY="-20.0" mnemonicParsing="false" onMouseClicked="#showPrevUser" text="Prev" />
+                <Pane fx:id="prevButton" onMouseClicked="#showPrevUser" translateY="100.0">
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                        <image>
+                            <Image url="@../img/prev.png"/>
+                        </image>
+                    </ImageView>
+                </Pane>
             </left>
             <right>
-                <Button fx:id="nextButton" mnemonicParsing="false" onMouseClicked="#showNextUser" text="Next" BorderPane.alignment="TOP_RIGHT" />
+                <Pane fx:id="nextButton" onMouseClicked="#showNextUser" translateY="100.0">
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                        <image>
+                            <Image url="@../img/next.png"/>
+                        </image>
+                    </ImageView>
+                </Pane>
             </right>
         </BorderPane>
         <Text fill="#2582bf" layoutX="260.0" layoutY="470.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Suggested sellers">
@@ -61,10 +79,22 @@
         </Text>
         <BorderPane fx:id="userSugg" layoutX="50.0" layoutY="500.0" prefHeight="307.0" prefWidth="600.0">
             <left>
-                <Button fx:id="prevSugg" layoutX="-20.0" layoutY="380.0" mnemonicParsing="false" onMouseClicked="#prevSuggestedUsers" text="Prev" />
+                <Pane fx:id="prevSugg" onMouseClicked="#prevSuggestedUsers" translateY="100.0">
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                        <image>
+                            <Image url="@../img/prev.png"/>
+                        </image>
+                    </ImageView>
+                </Pane>
             </left>
             <right>
-                <Button fx:id="nextSugg" layoutX="-20.0" layoutY="380.0" mnemonicParsing="false" onMouseClicked="#nextSuggestedUsers" text="Next" BorderPane.alignment="TOP_RIGHT" />
+                <Pane fx:id="nextSugg" onMouseClicked="#nextSuggestedUsers" translateY="100.0">
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                        <image>
+                            <Image url="@../img/next.png"/>
+                        </image>
+                    </ImageView>
+                </Pane>
             </right>
         </BorderPane>
     </children>

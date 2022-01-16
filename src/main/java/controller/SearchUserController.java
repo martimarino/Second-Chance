@@ -9,17 +9,14 @@ import main.java.connection.*;
 import main.java.utils.*;
 import main.java.utils.Session;
 import org.bson.*;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
 public class SearchUserController extends MainController{
 
     public Button findUsers;
-    public Button prevSugg;
-    public Button nextSugg;
+    public Pane prevSugg, nextSugg;
 
     public TextField us;
 
@@ -29,7 +26,7 @@ public class SearchUserController extends MainController{
     public ComboBox<String> country;
     public ComboBox<String> rating;
 
-    public Button prevButton, nextButton;
+    public Pane prevButton, nextButton;
     Button followSuggested, followSearched;
 
     public GridPane usersList;
@@ -135,16 +132,17 @@ public class SearchUserController extends MainController{
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             Image image = new Image(imageStream);
-
+            ImageView im = new ImageView(image);
             Label username = new Label(userFilter.get(item).getString("username"));
             Label country = new Label(userFilter.get(item).getString("country"));
             Label city = new Label(userFilter.get(item).getString("city"));
 
-            usersList.add(new ImageView(image), 0, 0);
+            usersList.add(im, 0, 0);
             usersList.add(username, 0, 1);
             usersList.add(country, 0, 2);
             usersList.add(city, 0, 3);
 
+            GridPane.setHalignment(im, HPos.CENTER);
             GridPane.setHalignment(username, HPos.CENTER);
             GridPane.setHalignment(country, HPos.CENTER);
             GridPane.setHalignment(city, HPos.CENTER);
@@ -194,15 +192,17 @@ public class SearchUserController extends MainController{
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             Image image = new Image(imageStream);
+            ImageView im = new ImageView(image);
             Label username = new Label(user.getString("username"));
             Label country = new Label(user.getString("country"));
             Label city = new Label(user.getString("city"));
 
-            usersList.add(new ImageView(image), 0, 0);
+            usersList.add(im, 0, 0);
             usersList.add(username, 0, 1);
             usersList.add(country, 0, 2);
             usersList.add(city, 0, 3);
 
+            GridPane.setHalignment(im, HPos.CENTER);
             GridPane.setHalignment(username, HPos.CENTER);
             GridPane.setHalignment(country, HPos.CENTER);
             GridPane.setHalignment(city, HPos.CENTER);
@@ -214,7 +214,6 @@ public class SearchUserController extends MainController{
                 usersList.add(followSearched, 0, 4);
                 GridPane.setHalignment(followSearched, HPos.CENTER);
             }
-
         }
 
         usersList.setStyle(
@@ -267,19 +266,20 @@ public class SearchUserController extends MainController{
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
 
             Image image = new Image(imageStream);
+            ImageView im = new ImageView(image);
             Label username = new Label(sugg.get(index).getString("username"));
             Label country = new Label(sugg.get(index).getString("country"));
             Label city = new Label(sugg.get(index).getString("city"));
             followSuggested = new Button();
             setFollowUnfollowButton(followSuggested, sugg.get(index).getString("username"));
 
-
-            suggList.add(new ImageView(image), i, 0);
+            suggList.add(im, i, 0);
             suggList.add(username, i, 1);
             suggList.add(country, i, 2);
             suggList.add(city, i, 3);
             suggList.add(followSuggested, i, 4);
 
+            GridPane.setHalignment(im, HPos.CENTER);
             GridPane.setHalignment(username, HPos.CENTER);
             GridPane.setHalignment(country, HPos.CENTER);
             GridPane.setHalignment(city, HPos.CENTER);

@@ -26,9 +26,11 @@
         <ComboBox fx:id="categ" layoutX="150.0" layoutY="100.0" value="-" prefWidth="300.0">
             <items>
                 <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="beauty" />
                     <String fx:value="clothing" />
+                    <String fx:value="house" />
                     <String fx:value="kids" />
-                    <String fx:value="home" />
+                    <String fx:value="bags" />
                     <String fx:value="shoes" />
                     <String fx:value="accessories" />
                 </FXCollections>

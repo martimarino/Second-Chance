@@ -6,6 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchInsertionController">
     <children>
         <Text fill="#2582bf" layoutX="253.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Insertions">
@@ -60,7 +62,9 @@
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="kids" />
                     <String fx:value="clothing" />
-                    <String fx:value="home" />
+                    <String fx:value="house" />
+                    <String fx:value="beauty" />
+                    <String fx:value="bags" />
                     <String fx:value="shoes" />
                     <String fx:value="accessories" />
                 </FXCollections>
@@ -86,12 +90,24 @@
         <TextField fx:id="ins" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search by sellers or brands" />
         <Button fx:id="searchArticlesOrBrands" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findInsertion" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
 
-        <BorderPane fx:id="insertionFind" layoutX="10.0" layoutY="150.0" prefHeight="286.0" prefWidth="660.0">
+        <BorderPane fx:id="insertionFind" layoutX="10.0" layoutY="200.0" prefHeight="286.0" prefWidth="660.0">
             <left>
-                <Button fx:id="prevSearch" mnemonicParsing="false" onMouseClicked="#PrevFilteredInsertion" prefHeight="60.0" prefWidth="60.0" BorderPane.alignment="CENTER" text="prev" />
+                <Pane fx:id="prevSearch" onMouseClicked="#PrevFilteredInsertion" translateY="250.0">
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                        <image>
+                            <Image url="@../img/prev.png"/>
+                        </image>
+                    </ImageView>
+                </Pane>
             </left>
             <right>
-                <Button fx:id="nextSearch" mnemonicParsing="false" onMouseClicked="#NextFilteredInsertion" prefHeight="60.0" prefWidth="60.0" BorderPane.alignment="CENTER" text="next" />
+                <Pane fx:id="nextSearch" onMouseClicked="#NextFilteredInsertion" translateY="250.0">
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                        <image>
+                            <Image url="@../img/next.png"/>
+                        </image>
+                    </ImageView>
+                </Pane>
             </right>
         </BorderPane>
 

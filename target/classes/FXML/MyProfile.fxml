@@ -67,18 +67,18 @@
                               </Text>
                            </children>
                         </GridPane>
-                        <Button fx:id="btnLogout" layoutX="515.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" />
-                        <Button fx:id="btnAddFunds" layoutX="427.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#addFunds" text="Add Funds" />
+                        <Button fx:id="btnLogout" layoutX="515.0" layoutY="60.0" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" />
+                        <Button fx:id="btnAddFunds" layoutX="427.0" layoutY="60.0" mnemonicParsing="false" onMouseClicked="#addFunds" text="Add Funds" />
                          <Text fill="#2582bf" layoutX="245.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Orders">
                              <font>
                                  <Font size="24.0" />
                              </font>
                          </Text>
                         <Separator layoutX="198.0" layoutY="327.0" prefWidth="200.0" />
-                        <Pane layoutY="19.0" prefHeight="44.0" prefWidth="200.0">
+                        <Pane layoutY="40.0" prefHeight="44.0" prefWidth="200.0">
                            <children>
                               <Text fill="#2582bf" fx:id="balanceValue" layoutX="100.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
-                              <Label layoutX="35.0" layoutY="14.0" text="Balance: ">
+                              <Label layoutX="35.0" layoutY="50.0" text="Balance: ">
                                  <font>
                                     <Font size="15.0" />
                                  </font>

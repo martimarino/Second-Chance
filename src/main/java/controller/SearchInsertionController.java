@@ -44,19 +44,21 @@ public class SearchInsertionController extends MainController{
 
     public ArrayList<Document> insertionFilter;
 
-    public Button prevSearch, nextSearch;
+    public Pane prevSearch, nextSearch;
 
-    public int item, scrollPage;
+    public int scrollPage;
+
+    ConnectionMongoDB conn = new ConnectionMongoDB();
 
     public void initialize(){
 
         insertionList = new GridPane();
-        item = 0;
-
+        //set buttons
         prevSearch.setDisable(true);
         nextSearch.setDisable(true);
         prevSearch.setVisible(false);
         nextSearch.setVisible(false);
+
     }
 
     public void showInsertionPage(String uniq_id) throws IOException {
@@ -71,11 +73,7 @@ public class SearchInsertionController extends MainController{
         stage.show();
     }
 
-    public void findInsertion(MouseEvent mouseEvent) {
-
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-
-        item = 0;
+    public void findInsertion() {
 
         if (ins.getText().equals("")) {  //filters case
 
@@ -89,34 +87,28 @@ public class SearchInsertionController extends MainController{
                         Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
                         return;
                     }
-
-                    if (insertionFilter.size() > 1) {
-                        nextSearch.setDisable(false);
-                        nextSearch.setVisible(true);
-                    }
-
-                    showFilteredInsertions();
-                    item++;
-                    insertionFind.setCenter(insertionList);
             }
-        }else {
-            //search case
+        } else {    //search case
 
             //search insertion by seller
             insertionFilter = conn.findInsertionBySeller(ins.getText());
 
             if (insertionFilter.isEmpty())  //if no article is found try to search for brands
-                //search by brand
                 insertionFilter = conn.findInsertionByBrand(ins.getText());
 
             if(insertionFilter.isEmpty()) {
                 Utility.infoBox("No results", "Advise", "User Advise");
                 return;
             }
-
-            showFilteredInsertions();
-            insertionFind.setCenter(insertionList);
             ins.setText("");
+        }
+
+        showFilteredInsertions();
+        insertionFind.setCenter(insertionList);
+
+        if (insertionFilter.size() > 5) {
+            nextSearch.setDisable(false);
+            nextSearch.setVisible(true);
         }
 
         size.setValue("size");
@@ -129,13 +121,16 @@ public class SearchInsertionController extends MainController{
 
     private void showFilteredInsertions() {
 
-        insertionList = new GridPane();
+        prevSearch.setDisable(true);
+        prevSearch.setVisible(false);
+
+        insertionList.getChildren().clear();
         scrollPage = 0;
 
-        for (int i = scrollPage; i < scrollPage+3; i++)
+        for (int i = scrollPage; i < scrollPage+3; i++)     //first row results
             addFilteredInsertions(i, i, 0);
 
-        for (int i = scrollPage; i < scrollPage+3; i++)
+        for (int i = scrollPage; i < scrollPage+3; i++)     //second row reults
             addFilteredInsertions(i+3, i, 5);
 
         insertionFind.setCenter(insertionList);
@@ -149,7 +144,6 @@ public class SearchInsertionController extends MainController{
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
 
         try {
-
             URL url = new URL(insertionFilter.get(index).getString("image_url") );
             URLConnection uc = url.openConnection();
             uc.setRequestProperty("Cookie", "foo=bar");
@@ -204,7 +198,6 @@ public class SearchInsertionController extends MainController{
                     }
                 }
         );
-
 
         GridPane.setHalignment(seller, HPos.CENTER);
         GridPane.setHalignment(image, HPos.CENTER);

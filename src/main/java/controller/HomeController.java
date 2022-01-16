@@ -27,10 +27,8 @@ public class HomeController {
     public BorderPane viralInsertions;
     public BorderPane feed;
 
-    public Button nextButton;
-    public Button prevButton;
-    public Button prevFeedButton;
-    public Button nextFeedButton;
+    public Pane nextButton, prevButton;
+    public Pane prevFeedButton, nextFeedButton;
 
     GridPane viral;
     GridPane feedGrid;
