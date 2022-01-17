@@ -1,11 +1,10 @@
 package main.java.connection;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoException;
+import com.mongodb.*;
 import com.mongodb.client.*;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.UpdateResult;
-import com.mongodb.ConnectionString;
 
 import main.java.entity.*;
 import main.java.utils.*;
@@ -662,5 +661,80 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return true;
 
+    }
+
+    /* ********** BALANCE SECTION ********** */
+
+    public void addFundsToWallet(String username, double credit, String id_code) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myCollUser = db.getCollection("user");
+        MongoCollection<Document> myCollCodes = db.getCollection("admin");
+        Document code;
+
+        if (credit != 0) {
+            BasicDBObject andQuery = new BasicDBObject();
+            List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
+            obj.add(new BasicDBObject("credit", credit));
+            obj.add(new BasicDBObject("assigned", "F"));
+            andQuery.put("$and", obj);
+
+            System.out.println(andQuery.toString());
+
+            code = myCollCodes.find(andQuery).first();
+
+        }else {
+            code = myCollCodes.find(eq("code", id_code)).first();
+            credit = code.getDouble("credit");
+        }
+
+        if (code == null)
+            return;
+
+        Document queryUser = new Document().append("username",  username);
+        Document queryAdmin = new Document().append("code",  code);
+
+        Document user = myCollUser.find(eq("username", username)).first();
+        double new_balance = user.getDouble("balance") + credit;
+
+        //System.out.println("Code document: " + code);
+        //System.out.println("New balance: " + new_balance);
+
+        Bson updatesAdmin = Updates.combine(
+                Updates.set("assigned", "T")
+        );
+
+        Bson updatesUser = Updates.combine(
+                Updates.set("balance", new_balance)
+        );
+
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        try {
+            UpdateResult resultAdmin = myCollCodes.updateOne(queryAdmin, updatesAdmin, options);
+            UpdateResult resultUser = myCollUser.updateOne(queryUser, updatesUser, options);
+            System.out.println("Modified document count: " + resultUser.getModifiedCount());
+            System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
+            System.out.println("Modified document count: " + resultAdmin.getModifiedCount());
+            System.out.println("Upserted id: " + resultAdmin.getUpsertedId()); // only contains a value when an upsert is performed
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+            return;
+        }
+    }
+
+    public double updateBalance(String username) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myCollUser = db.getCollection("user");
+        Document user = myCollUser.find(eq("username", username)).first();
+
+        double balance = user.getDouble("balance");
+
+        System.out.println("NEW BALANCE: " + balance);
+
+        return balance;
     }
 }

@@ -1,33 +1,42 @@
 package main.java.controller;
 
-
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+
 import javafx.stage.Stage;
+
+import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
 import main.java.utils.Session;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 
 public class MyProfileController extends MainController {
 
     public GridPane userInfo;
-    public Button btnLogout;
+
+    @FXML public Button btnLogout;
+    @FXML public Button btnAddFunds;
+    @FXML private Text balanceValue;
 
     private User user;
     private Session session;
 
-    public void initialize(){
+    public void initialize() {
 
         Session session = Session.getInstance();
         user  = session.getLogUser();
@@ -50,17 +59,10 @@ public class MyProfileController extends MainController {
         userInfo.add(address, 1, 5);
         userInfo.add(rating, 1, 6);
 
-}
-    /*
-    public void showHome(MouseEvent mouseEvent) throws IOException {
-        URL url = new File("src/main/resources/FXML/Home.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
+        updateUserBalance();
+    }
 
-        Stage stage = (Stage) feed.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
-    }*/
+    /* ********** FOLLOWERS/ING STATS SECTION ********** */
 
     public void showUserFollowers() {
 
@@ -109,16 +111,51 @@ public class MyProfileController extends MainController {
         newWindow.show();
     }
 
-    public void showInterestedInsertions(MouseEvent mouseEvent) {
+    public void showInterestedInsertions() {
+
+        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
+        ArrayList<String> followed_post = conn.retrieveFollowersByUser(user.getUsername());
+        StackPane secondaryLayout = new StackPane();
+
+        for (int i = 0; i < 10; i++) {
+
+            Label x = new Label(followed_post.get(i));
+            x.setTranslateX(10);
+            x.setTranslateY(-100 + i*50);
+            secondaryLayout.getChildren().add(x);
+        }
+
+        Scene secondScene = new Scene(secondaryLayout, 920, 400);
+
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Followed post");
+        newWindow.setScene(secondScene);
+        newWindow.show();
     }
 
-    public void showInsertions(MouseEvent mouseEvent) {
+    public void showInsertions() {}
+
+    /* ********** BALANCE SECTION ********** */
+
+    public void updateUserBalance() {
+
+        ConnectionMongoDB conn = new ConnectionMongoDB();
+
+        double new_balance = conn.updateBalance(user.getUsername());
+        System.out.println("NEW BALANCE HERE: " + new_balance);
+        balanceValue.setText(new_balance + "€");
     }
 
-    public void logOut(MouseEvent mouseEvent) {
-    }
+    public void addFundsShow() throws IOException {
 
-    public void addFunds(MouseEvent mouseEvent) {
+        URL url = new File("src/main/resources/FXML/AddFunds.fxml").toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.show();
     }
 
     public void logout() throws IOException {
