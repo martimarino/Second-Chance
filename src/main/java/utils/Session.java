@@ -1,6 +1,7 @@
 package main.java.utils;
 
 import main.java.entity.*;
+import org.bson.Document;
 
 public class Session{
 
@@ -16,12 +17,12 @@ public class Session{
         return session;
     }
 
-    public void setLogUser(String username){
+    public void setLogUser(Document user){
 
         if(session == null)
             throw new RuntimeException("Session not already active");
         else {
-            session.logUser = new User(username);
+            session.logUser = User.fromDocument(user);
         }
     }
 

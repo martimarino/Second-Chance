@@ -131,7 +131,6 @@ public class ConnectionMongoDB{
         logUser.setCountry(user.getString("country"));
         logUser.setSuspended(user.getString("suspended"));
         logUser.setBalance(user.getDouble("balance"));
-        logUser.setOrders((ArrayList<Order>) user.get("orders"));
 
         this.closeConnection();
         return logUser;

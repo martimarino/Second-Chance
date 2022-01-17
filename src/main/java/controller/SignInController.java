@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import main.java.connection.*;
 import main.java.entity.User;
 import main.java.utils.*;
+import org.bson.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -89,14 +90,16 @@ public class SignInController {
 
             if (us.getText().equals("admin") && pw.getText().equals("admin")) {
                 session = Session.getInstance();
-                session.setLogUser(username);
+                Document user  = conn.findUserByUsername(us.getText());
+                session.setLogUser(user);
                 ShowAdminPanel();
             }else {
 
                 boolean logged = conn.logInUser(username, password);
                 if (logged) {
                     session = Session.getInstance();
-                    session.setLogUser(username);
+                    Document user  = conn.findUserByUsername(us.getText());
+                    session.setLogUser(user);
                     ShowHome();
                 }
             }

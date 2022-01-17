@@ -3,6 +3,7 @@ package main.java.entity;
 import main.java.connection.ConnectionMongoDB;
 import main.java.entity.Order;
 import main.java.utils.*;
+import org.bson.Document;
 
 import java.util.ArrayList;
 
@@ -18,10 +19,8 @@ public class User implements GeneralUser {
     String suspended;
     double rating;
     double balance;
-    ArrayList<Order> orders;
 
-
-    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, Double rating, double balance, ArrayList<Order>orders) {
+    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, Double rating, double balance) {
 
         this.email = email;
         this.username = username;
@@ -33,7 +32,7 @@ public class User implements GeneralUser {
         this.suspended = suspended;
         this.rating = rating;
         this.balance = balance;
-        this.orders = orders;
+
     }
 
     public User()
@@ -62,8 +61,17 @@ public class User implements GeneralUser {
             this.suspended = user.getSuspended();
             this.rating = user.getRating();
             this.balance = user.getBalance();
-            this.orders = user.getOrders();
         }
+    }
+
+    public static User fromDocument(Document user) {
+
+        User us = new User(user.getString("email"), user.getString("username"), null,
+                user.getString("name"), user.getString("country"), user.getString("city"), user.getString("address"),
+                user.getString("suspended"), user.getDouble("rating"), user.getDouble("balance"));
+
+        return us;
+
     }
 
     public void setEmail(String email) {
@@ -96,19 +104,9 @@ public class User implements GeneralUser {
 
     public void setSuspended(String suspended) { this.suspended = suspended; }
 
-
     public void setRating(Double rating) { this.rating = rating; }
 
-
     public void setBalance(Double balance){ this.balance = balance;}
-
-    public void setOrders(ArrayList<Order> orders) {
-        this.orders = orders;
-    }
-
-    public ArrayList<Order> getOrders() {
-        return orders;
-    }
 
     public String getEmail() {
         return email;

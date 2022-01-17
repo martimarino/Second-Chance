@@ -6,6 +6,7 @@ import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import main.java.connection.*;
+import main.java.entity.User;
 import main.java.utils.*;
 import main.java.utils.Session;
 import org.bson.*;
@@ -69,7 +70,10 @@ public class SearchUserController extends MainController{
 
         if(suggFromNeo.size() == 0)
         {
-            sugg = connMongo.findTopKRatedUser(10, "Italy");
+            Session session = Session.getInstance();
+            User user = session.getLoggedUser();
+
+            sugg = connMongo.findTopKRatedUser(10, user.getCountry());
             Utility.printTerminal("SUGG MONGO: " + sugg.size());
         }
         else {
