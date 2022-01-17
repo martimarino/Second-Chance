@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SignInController">
+<AnchorPane fx:id="anchorRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: #EBEBEB;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SignInController">
    <children>
-      <Text fill="#2582bf" layoutX="221.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to SecondChance ">
+      <Pane fx:id="welcomePane" layoutX="15.0" layoutY="203.0" prefHeight="418.0" prefWidth="337.0" style="-fx-background-color: rgb(70,130,180);">
+         <children>
+            <Text fill="WHITE" layoutX="71.0" layoutY="283.0" text="You are not already registered?">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="20.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to SecondChance ">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Button fx:id="SignUp" layoutX="71.0" layoutY="318.0" onMouseClicked="#ShowSignUp" prefHeight="25.0" prefWidth="179.0" style="-fx-background-color: white;" text="Sign up" textFill="#2582bf" />
+         </children>
+      </Pane>
+      <Pane layoutX="348.0" layoutY="203.0" prefHeight="418.0" prefWidth="329.0" style="-fx-background-color: white;">
+         <children>
+            <Button fx:id="SignIn" layoutX="97.0" layoutY="314.0" onAction="#login" prefHeight="25.0" prefWidth="149.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign in" />
+            <Text fill="#2582bf" layoutX="146.0" layoutY="147.0" text="Username" />
+            <TextField fx:id="us" layoutX="98.0" layoutY="168.0" style="-fx-background-radius: 5;" />
+            <PasswordField fx:id="pw" layoutX="98.0" layoutY="257.0" style="-fx-background-radius: 5;" />
+            <Text fill="#2582bf" layoutX="142.0" layoutY="238.0" text="Password" />
+         </children>
+      </Pane>
+      <ImageView fitHeight="102.0" fitWidth="200.0" layoutX="290.0" layoutY="17.0" preserveRatio="true">
+         <image>
+            <Image url="@../img/secondchance.jpg" />
+         </image>
+      </ImageView>
+      <Text fill="STEELBLUE" layoutX="241.0" layoutY="169.0" text="SecondChance" wrappingWidth="214.341796875">
          <font>
-            <Font size="24.0" />
+            <Font size="30.0" />
          </font>
       </Text>
-      <Text fill="#2582bf" layoutX="343.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-      <Text fill="#2582bf" layoutX="345.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-      <TextField fx:id="us" layoutX="295.0" layoutY="318.0" style="-fx-background-radius: 5;" />
-      <PasswordField fx:id="pw" layoutX="295.0" layoutY="421.0" style="-fx-background-radius: 5;" />
-      <Button fx:id="SignIn" layoutX="335.0" layoutY="482.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="68.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign in" />
-      <Text fill="#2582bf" layoutX="240.0" layoutY="619.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are not already registered?">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Text>
-      <Button fx:id="SignUp" layoutX="429.0" layoutY="602.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
    </children>
 </AnchorPane>

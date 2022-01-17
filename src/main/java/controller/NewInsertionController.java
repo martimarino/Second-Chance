@@ -62,7 +62,7 @@ public class NewInsertionController {
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(date);
 
         Insertion i = new Insertion(id, categ.getValue(), desc.getText(), gender, p, 0, 0, status.getValue(), color.getText(), size.getValue(),
-                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLogUser().getUsername(), "N");
+                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLogUser().getUsername());
         Utility.printTerminal(i.toString());
 
         if(!connMongo.addInsertion(i)) {

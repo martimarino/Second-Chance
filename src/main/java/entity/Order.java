@@ -2,30 +2,18 @@ package main.java.entity;
 
 public class Order {
 
-    String seller;
     String buyer;
-    String image;
-    double price;
     String timestamp;
+    Insertion insertion;
 
+    public Order(String buyer, String timestamp, Insertion insertion){
 
-    public Order(String seller, String buyer, String image, double price, String timestamp){
-
-        this.seller = seller;
         this.buyer = buyer;
-        this.image = image;
-        this.price = price;
         this.timestamp = timestamp;
+        this.insertion = insertion;
 
     }
 
-    public String getSeller() {
-        return seller;
-    }
-
-    public void setSeller(String seller) {
-        this.seller = seller;
-    }
 
     public String getBuyer() {
         return buyer;
@@ -33,22 +21,6 @@ public class Order {
 
     public void setBuyer(String buyer) {
         this.buyer = buyer;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public String getTimestamp() {
@@ -59,14 +31,20 @@ public class Order {
         this.timestamp = timestamp;
     }
 
+    public Insertion getInsertion() {
+        return insertion;
+    }
+
+    public void setInsertion(Insertion insertion) {
+        this.insertion = insertion;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
-                " seller='" + seller + '\'' +
                 ", buyer='" + buyer + '\'' +
-                ", image='" + image + '\'' +
-                ", price=" + price +
                 ", timestamp='" + timestamp + '\'' +
+                ", insertion='" + insertion + '\'' +
                 '}';
     }
 }

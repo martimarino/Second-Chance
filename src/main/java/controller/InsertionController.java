@@ -48,6 +48,7 @@ public class InsertionController {
     public Text price;
     String insertion_id;
     String image_url;
+    Insertion insertion;
 
     public void initialize(String uniq_id) {
 
@@ -120,9 +121,10 @@ public class InsertionController {
         String[] s = price.getText().split(" ");
         Double insPrice = Double.valueOf(s[0]);
 
-        if (!conn.buyCurrentInsertion(insertion_id, user.getUsername(), insPrice, seller.getText(), image_url))
-            Utility.infoBox("Cannot conclude the purchase, something wrong! /n Please retry later", "Error", "Error buying product");
-        else {
+        Insertion insertion = new Insertion(insertion_id, category.getText(), descriptionContainer.getText(), gender.getText(), insPrice, Integer.parseInt(interested.getText()), Integer.parseInt(view.getText()), status.getText(), color.getText(), size.getText(), brand.getText(), country.getText(), image_url, timestamp.getText(), seller.getText());
+
+        if (conn.buyCurrentInsertion(user.getUsername(), insertion))
+        {
             Utility.infoBox("Product buyed correctly! ", "User Advise", "Purchase done");
 
             buy.setText("Already purchased!");

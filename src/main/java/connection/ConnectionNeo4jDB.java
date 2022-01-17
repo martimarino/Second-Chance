@@ -110,8 +110,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
         ArrayList<String> suggestions = new ArrayList<>();
         try (Session session = driver.session()) {
 
-            String u = "72q0jrBM81n7vySAL";
-            String c = "Austria";
+            //String u = "72q0jrBM81n7vySAL";
+            //String c = "Austria";
 
             List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
 
@@ -121,8 +121,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "AND NOT (u)-[:FOLLOWS]->(others) " +
                                 "RETURN others.username as SuggUsers " +
                                 "LIMIT $k",
-                        parameters("username", u,
-                                "country", c,
+                        parameters("username", username,
+                                "country", country,
                                 "k", k));
 /*
                 List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
@@ -156,7 +156,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         ArrayList<String> followed = new ArrayList<>();
         try (Session session = driver.session()) {
 
-            String u = "72q0jrBM81n7vySAL";
+            //String u = "72q0jrBM81n7vySAL";
             //String c = "Austria";
 
             List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
@@ -165,7 +165,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "WHERE u.username = $username " +
                                 "RETURN i.uniq_id as SuggIns " +
                                 "LIMIT $k",
-                        parameters("username", u,
+                        parameters("username", username,
                                 "k", k));
 
                 while (result.hasNext()) {
@@ -331,7 +331,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     /* ********** USER SOCIAL FUNCTIONALITIES ********** */
 
-    public ArrayList<String> retrieveFollowersByUser(String user, int k) {
+    public ArrayList<String> retrieveFollowersByUser(String user) {
 
         this.open();
         ArrayList<String> followers = new ArrayList<>();
@@ -341,10 +341,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
             List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run( "MATCH (u:User) <- [r:FOLLOWS] - (u1:User) " +
                                 "WHERE u.username = $username " +
-                                "RETURN u1.name as name " +
-                                "LIMIT $k",
-                        parameters( "username", user,
-                                "k", k));
+                                "RETURN u1.username as name ",
+                        parameters( "username", user));
 
                 while(result.hasNext())
                 {
@@ -364,7 +362,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         return followers;
     }
 
-    public ArrayList<String> retrieveFollowingByUser(String user, int k) {
+    public ArrayList<String> retrieveFollowingByUser(String user) {
 
         this.open();
         ArrayList<String> following = new ArrayList<>();
@@ -374,10 +372,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
             List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run( "MATCH (u:User) - [r:FOLLOWS] -> (u1:User) " +
                                 "WHERE u.username = $username " +
-                                "RETURN u1.name as name " +
-                                "LIMIT $k",
-                        parameters( "username", user,
-                                "k", k));
+                                "RETURN u1.username as name ",
+                        parameters( "username", user));
 
                 while(result.hasNext())
                 {

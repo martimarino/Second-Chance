@@ -24,7 +24,6 @@ public class SearchPostController {
     @FXML private Text category;
     @FXML private Text price;
     @FXML private Text views;
-    @FXML private Text sold;
     @FXML private Text alertText;
 
     public void initialize(){
@@ -57,7 +56,6 @@ public class SearchPostController {
             category.setText(ins.getCategory());
             price.setText(Double.toString(ins.getPrice()));
             views.setText(Integer.toString(ins.getViews()));
-            sold.setText(ins.getSold());
 
             btnDeletePost.setDisable(false);
         }

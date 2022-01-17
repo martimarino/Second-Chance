@@ -1,5 +1,7 @@
 package main.java.entity;
 
+import org.bson.Document;
+
 public class Insertion {
 
     String id;
@@ -17,7 +19,6 @@ public class Insertion {
     String image_url;
     String timestamp;
     String seller;
-    String sold;
 
     public Insertion(){}
 
@@ -25,7 +26,7 @@ public class Insertion {
                      String gender, double price, int interested,
                      int views, String status, String color, String size,
                      String brand, String country, String image_url,
-                     String timestamp, String seller, String sold){
+                     String timestamp, String seller){
         this.id = id;
         this.category = category;
         this.description = description;
@@ -41,9 +42,9 @@ public class Insertion {
         this.image_url = image_url;
         this.timestamp = timestamp;
         this.seller = seller;
-        this.sold = sold;
 
     }
+
 
     public void setId(String id) {
         this.id = id;
@@ -137,14 +138,6 @@ public class Insertion {
         return color;
     }
 
-    public void setSold(String sold) {
-        this.sold = sold;
-    }
-
-    public String getSold() {
-        return this.sold;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -173,6 +166,29 @@ public class Insertion {
         return timestamp;
     }
 
+
+    public static Document toDocument(Insertion insertion) {
+
+        Document ins = new Document()
+                .append("uniq_id", insertion.getId()).
+                append("category", insertion.getCategory()).
+                append("description", insertion.getDescription()).
+                append("gender", insertion.getGender())
+                .append("price", insertion.getPrice())
+                .append("interested", insertion.getInterested())
+                .append("views", insertion.getViews())
+                .append("status", insertion.getStatus())
+                .append("color", insertion.getColor())
+                .append("size", insertion.getSize())
+                .append("country", insertion.getCountry())
+                .append("image_url", insertion.getImage_url())
+                .append("timestamp", insertion.getTimestamp())
+                .append("seller", insertion.getSeller());
+
+        return ins;
+
+    }
+
     @Override
     public String toString() {
         return "Insertion{" +
@@ -191,7 +207,6 @@ public class Insertion {
                 ", image_url='" + image_url + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 ", seller='" + seller + '\'' +
-                ", sold='" + sold + '\'' +
                 '}';
     }
 }
