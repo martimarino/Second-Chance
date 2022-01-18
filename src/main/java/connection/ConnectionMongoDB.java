@@ -665,32 +665,29 @@ public class ConnectionMongoDB{
 
     /* ********** BALANCE SECTION ********** */
 
-    public void addFundsToWallet(String username, double credit, String id_code) {
+    public void addFundsToWallet(String username, String id_code) {
 
         this.openConnection();
 
         MongoCollection<Document> myCollUser = db.getCollection("user");
         MongoCollection<Document> myCollCodes = db.getCollection("admin");
         Document code;
+        double credit;
 
-        if (credit != 0) {
-            BasicDBObject andQuery = new BasicDBObject();
-            List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
-            obj.add(new BasicDBObject("credit", credit));
-            obj.add(new BasicDBObject("assigned", "F"));
-            andQuery.put("$and", obj);
+        BasicDBObject andQuery = new BasicDBObject();
+        List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
+        obj.add(new BasicDBObject("code", id_code));
+        obj.add(new BasicDBObject("assigned", "F"));
+        andQuery.put("$and", obj);
 
-            System.out.println(andQuery.toString());
+        System.out.println(andQuery.toString());
 
-            code = myCollCodes.find(andQuery).first();
+        code = myCollCodes.find(andQuery).first();
 
-        }else {
-            code = myCollCodes.find(eq("code", id_code)).first();
-            credit = code.getDouble("credit");
-        }
+        credit = code.getInteger("credit");
 
         if (code == null)
-            return;
+            Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
 
         Document queryUser = new Document().append("username",  username);
         Document queryAdmin = new Document().append("code",  code);

@@ -77,8 +77,8 @@
                               </Text>
                            </children>
                         </GridPane>
-                        <Button fx:id="btnLogout" layoutX="515.0" layoutY="60.0" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" />
-                        <Button fx:id="btnAddFunds" layoutX="427.0" layoutY="60.0" mnemonicParsing="false" onMouseClicked="#addFundsShow" text="Add Funds" />
+                        <Button fx:id="btnLogout" layoutX="515.0" layoutY="50.0" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" />
+                        <Button fx:id="btnAddFunds" layoutX="427.0" layoutY="50.0" mnemonicParsing="false" onMouseClicked="#addFundsShow" text="Add Funds" />
                          <Text fill="#2582bf" layoutX="245.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reviews">
                              <font>
                                  <Font size="24.0" />
@@ -93,7 +93,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="refreshBtn" layoutX="136.0" layoutY="9.0" mnemonicParsing="false" onMouseClicked="#updateUserBalance">
+                              <Button fx:id="refreshBtn" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#updateUserBalance">
                                  <graphic>
                                     <ImageView fitHeight="16.0" fitWidth="16.0">
                                        <image>
