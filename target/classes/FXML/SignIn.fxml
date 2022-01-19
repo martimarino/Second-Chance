@@ -32,15 +32,10 @@
             <Text fill="#2582bf" layoutX="142.0" layoutY="238.0" text="Password" />
          </children>
       </Pane>
-      <ImageView fitHeight="102.0" fitWidth="200.0" layoutX="290.0" layoutY="17.0" preserveRatio="true">
+      <ImageView fitHeight="180.0" fitWidth="200.0" layoutX="250.0" layoutY="17.0" preserveRatio="true">
          <image>
-            <Image url="@../img/secondchance.jpg" />
+            <Image url="@../img/secondchance.png" />
          </image>
       </ImageView>
-      <Text fill="STEELBLUE" layoutX="241.0" layoutY="169.0" text="SecondChance" wrappingWidth="214.341796875">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Text>
    </children>
 </AnchorPane>

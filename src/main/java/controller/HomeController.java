@@ -159,7 +159,7 @@ public class HomeController {
     }
 
 
-    private void updateInsertionview(String uniq_id) {
+    public static void updateInsertionview(String uniq_id) {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
         conn.updateNumView(uniq_id);
@@ -303,7 +303,7 @@ public class HomeController {
 
         ImageView image;
         Label user = new Label("User: " + ins.get(index).getString("seller"));
-
+    Utility.printTerminal(ins.toString());
         try {
 
             URL url = new URL(ins.get(index).getString("image_url") );

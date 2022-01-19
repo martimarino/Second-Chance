@@ -90,10 +90,10 @@
         <TextField fx:id="ins" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search by sellers or brands" />
         <Button fx:id="searchArticlesOrBrands" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findInsertion" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
 
-        <BorderPane fx:id="insertionFind" layoutX="10.0" layoutY="200.0" prefHeight="286.0" prefWidth="660.0">
+        <BorderPane fx:id="insertionFind" layoutX="60.0" layoutY="150.0" prefHeight="900.0" prefWidth="600.0">
             <left>
                 <Pane fx:id="prevSearch" onMouseClicked="#PrevFilteredInsertion" translateY="250.0">
-                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER_LEFT" >
                         <image>
                             <Image url="@../img/prev.png"/>
                         </image>
@@ -102,7 +102,7 @@
             </left>
             <right>
                 <Pane fx:id="nextSearch" onMouseClicked="#NextFilteredInsertion" translateY="250.0">
-                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER" >
+                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER_RIGHT" >
                         <image>
                             <Image url="@../img/next.png"/>
                         </image>

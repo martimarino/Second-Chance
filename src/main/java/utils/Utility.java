@@ -1,12 +1,21 @@
 package main.java.utils;
 
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.*;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
+
+import javafx.stage.Stage;
 import org.bson.*;
 
 
@@ -70,6 +79,16 @@ public class Utility {
         System.out.println("************************************************");
         System.out.println(msg);
         System.out.println("************************************************");
+    }
+
+    public static void changePage(Button element, String page) throws IOException {
+        URL url = new File("src/main/resources/FXML/" + page + ".fxml").toURI().toURL();
+        Parent root = FXMLLoader.load(url);
+
+        Stage stage = (Stage) element.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.show();
     }
 
 }

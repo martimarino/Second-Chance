@@ -1,6 +1,5 @@
 package main.java.controller;
 
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,9 +9,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
 import main.java.utils.Session;
+import main.java.utils.Utility;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,8 @@ public class MyProfileController extends MainController {
 
     public GridPane userInfo;
     public Button btnLogout;
+    public Button followersButton, followingButton;
+    public Button interestedInsertionsButton, insertionsButton;
 
     private User user;
     private Session session;
@@ -112,13 +115,21 @@ public class MyProfileController extends MainController {
     public void showInterestedInsertions(MouseEvent mouseEvent) {
     }
 
-    public void showInsertions(MouseEvent mouseEvent) {
-    }
+    public void showInsertions(MouseEvent mouseEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/InsertionList.fxml"));
+        Stage stage = new Stage(StageStyle.DECORATED);
 
-    public void logOut(MouseEvent mouseEvent) {
+        stage.setScene(new Scene(loader.load()));
+
+        InsertionListController controller = loader.getController();
+        controller.initialize();
+
+        stage.show();
     }
 
     public void addFunds(MouseEvent mouseEvent) {
+
     }
 
     public void logout() throws IOException {

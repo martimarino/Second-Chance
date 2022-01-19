@@ -30,7 +30,10 @@ public class User implements GeneralUser {
         this.city = city;
         this.address = address;
         this.suspended = suspended;
-        this.rating = rating;
+        if(rating == null)
+            this.rating = Double.NaN;
+        else
+            this.rating = rating;
         this.balance = balance;
 
     }
