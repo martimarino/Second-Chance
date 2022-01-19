@@ -3,8 +3,6 @@ package main.java.connection;
 import main.java.entity.*;
 import main.java.utils.Utility;
 import org.neo4j.driver.*;
-import org.neo4j.driver.types.Node;
-import org.neo4j.driver.types.Path;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -392,4 +390,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
         }
         return following;
     }
+
+    public void retrieveFollowedInsertionByUser(String user) {}
 }

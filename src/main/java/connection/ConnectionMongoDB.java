@@ -1,11 +1,10 @@
 package main.java.connection;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.MongoException;
+import com.mongodb.*;
 import com.mongodb.client.*;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.UpdateResult;
-import com.mongodb.ConnectionString;
 
 import main.java.entity.*;
 import main.java.utils.*;
@@ -19,8 +18,11 @@ import static com.mongodb.client.model.Updates.set;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -514,7 +516,7 @@ public class ConnectionMongoDB{
         for (Document document : aggr) {
 
             document.append("name", document.getString("name"));
-            document.append("rating", document.getDouble("rating"));
+            document.append("rating", document.getInteger("rating"));
             array.add(document);
         }
 
@@ -664,6 +666,96 @@ public class ConnectionMongoDB{
 
     }
 
+    /* ********** BALANCE SECTION ********** */
+
+    public void addFundsToWallet(String username, String id_code) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myCollUser = db.getCollection("user");
+        MongoCollection<Document> myCollCodes = db.getCollection("admin");
+
+        Document code = myCollCodes.find(eq("code", id_code)).first();
+
+        double credit = code.getInteger("credit");
+
+        if (code == null || Objects.equals(code.getString("assigned"), "T")) {
+            Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
+            return;
+        }
+
+        Document queryUser = new Document().append("username",  username);
+        Document queryAdmin = new Document().append("code",  id_code);
+
+        Document user = myCollUser.find(eq("username", username)).first();
+
+        double new_balance = user.getDouble("balance") + credit;
+
+        Bson updatesAdmin = Updates.combine(
+                Updates.set("assigned", "T")
+        );
+
+        Bson updatesUser = Updates.combine(
+                Updates.set("balance", new_balance)
+        );
+
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        try {
+            UpdateResult resultUser = myCollUser.updateOne(queryUser, updatesUser, options);
+            UpdateResult resultAdmin = myCollCodes.updateOne(queryAdmin, updatesAdmin, options);
+            System.out.println("Modified document count: " + resultUser.getModifiedCount());
+            System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
+            System.out.println("Modified document count: " + resultAdmin.getModifiedCount());
+            System.out.println("Upserted id: " + resultAdmin.getUpsertedId()); // only contains a value when an upsert is performed
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+            return;
+        }
+    }
+
+    public double updateBalance(String username) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myCollUser = db.getCollection("user");
+        Document user = myCollUser.find(eq("username", username)).first();
+
+        double balance = user.getDouble("balance");
+
+        System.out.println("NEW BALANCE: " + balance);
+
+        return balance;
+    }
+
+    public List<Document> getReviewsByUser(String username) {
+
+        this.openConnection();
+        List<Document> list = null;
+        MongoCollection<Document> myColl = db.getCollection("user");
+
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("username", username);
+
+        Document user = myColl.find(eq("username", username)).first();
+
+        MongoCursor<Document> cursor = myColl.find(whereQuery).iterator();
+
+        try {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                list = (List<Document>)doc.get("reviews");
+
+                Document d = list.get(0);
+                System.out.println(d.getString("reviewer")); // display specific field
+            }
+        } finally {
+            cursor.close();
+        }
+        this.closeConnection();
+        return list;
+    }
+  
     public ArrayList<Document> getAllUserIns(String username) {
 
         this.openConnection();
