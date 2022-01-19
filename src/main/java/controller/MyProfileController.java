@@ -1,14 +1,19 @@
 package main.java.controller;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
@@ -17,17 +22,29 @@ import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
 import main.java.utils.Session;
+import org.bson.Document;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import java.net.URL;
 
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyProfileController extends MainController {
 
     public GridPane userInfo;
+    public GridPane reviews;
+
+    public BorderPane review;
+
+    @FXML public Pane nextReviews, prevReviews;
+
+    private List<Document> listReviews;
 
     @FXML public Button btnLogout;
     @FXML public Button btnAddFunds;
@@ -36,10 +53,14 @@ public class MyProfileController extends MainController {
     private User user;
     private Session session;
 
+    int scrollPage2;
+
     public void initialize() {
 
         Session session = Session.getInstance();
         user  = session.getLogUser();
+
+        ConnectionMongoDB conn = new ConnectionMongoDB();
 
         Label username = new Label(user.getUsername());
         Label name = new Label(user.getName());
@@ -60,6 +81,21 @@ public class MyProfileController extends MainController {
         userInfo.add(rating, 1, 6);
 
         updateUserBalance();
+
+        listReviews = conn.getReviewsByUser(user.getUsername());
+        showReviews();
+
+    }
+
+    public void showInsertions(){}
+
+    public void getReviews() {
+
+        ConnectionMongoDB conn = new ConnectionMongoDB();
+
+        listReviews = conn.getReviewsByUser(user.getUsername());
+
+        System.out.println(listReviews.get(0));
     }
 
     /* ********** FOLLOWERS/ING STATS SECTION ********** */
@@ -134,8 +170,6 @@ public class MyProfileController extends MainController {
         newWindow.show();
     }
 
-    public void showInsertions() {}
-
     /* ********** BALANCE SECTION ********** */
 
     public void updateUserBalance() {
@@ -177,5 +211,100 @@ public class MyProfileController extends MainController {
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    public void showReviews() {
+
+        reviews = new GridPane();
+        reviews.gridLinesVisibleProperty().set(true); //DEBUG
+
+        ColumnConstraints column1 = new ColumnConstraints(200);
+        column1.setPercentWidth(50);
+        reviews.getColumnConstraints().addAll(column1);
+        scrollPage2 = 0;
+
+        for (int i = 0; i < scrollPage2 + 2; i++) {
+
+            addReviews(i, i);
+            review.setCenter(reviews);
+        }
+        scrollPage2 += 2;
+    }
+
+    private void addReviews(int index, int i) {
+
+        Label reviewer = new Label(listReviews.get(index).getString("reviewer"));
+        Label title = new Label("Title: " + listReviews.get(index).getString("title"));
+        Label text = new Label(listReviews.get(index).getString("text"));
+        text.setWrapText(true);
+        reviews.add(reviewer, i, 0);
+        reviews.add(title, i, 1);
+        reviews.add(text, i, 2);
+
+        System.out.println("index:" + index);
+        GridPane.setHalignment(reviewer, HPos.CENTER);
+        GridPane.setHalignment(title, HPos.CENTER);
+        GridPane.setHalignment(text, HPos.CENTER);
+
+        reviews.setHgap(10);
+        reviews.setVgap(10);
+        reviews.setPadding(new Insets(0, 0, 5, 5));
+    }
+
+    public void prevReviews() {
+
+        reviews.getChildren().clear();
+        int row = 0;
+
+        scrollPage2 -= 4;
+
+        nextReviews.setDisable(false);
+        nextReviews.setVisible(true);
+
+        if (scrollPage2 == 0) {
+            prevReviews.setDisable(true);
+            prevReviews.setVisible(false);
+        }
+
+        System.out.println("scrollPage2 in prev: " + scrollPage2);
+        for (int i = scrollPage2; row < 2; i++) {
+            addReviews(i, row);
+            row++;
+        }
+        review.setCenter(reviews);
+        scrollPage2 += 2;
+
+
+    }
+
+    public void nextReviews() {
+
+        reviews.getChildren().clear();
+        int row = 0;
+
+        prevReviews.setDisable(false);
+        prevReviews.setVisible(true);
+
+        System.out.println("scrollPage2 in next: " + scrollPage2);
+        System.out.println("size of list: " + listReviews.size());
+
+        for (int i = scrollPage2; i < scrollPage2 + 2 && row < 2; i++) {
+            if (i == listReviews.size()) {
+                nextReviews.setDisable(true);
+                nextReviews.setVisible(false);
+                return;
+            }
+            addReviews(i, row);
+            row++;
+            review.setCenter(reviews);
+        }
+
+        scrollPage2 += 2;
+
+        if (scrollPage2 >= listReviews.size() - 1) {
+            nextReviews.setDisable(true);
+            nextReviews.setVisible(false);
+        }
+
     }
 }

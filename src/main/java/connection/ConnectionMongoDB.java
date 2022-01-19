@@ -18,8 +18,11 @@ import static com.mongodb.client.model.Updates.set;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -513,7 +516,7 @@ public class ConnectionMongoDB{
         for (Document document : aggr) {
 
             document.append("name", document.getString("name"));
-            document.append("rating", document.getDouble("rating"));
+            document.append("rating", document.getInteger("rating"));
             array.add(document);
         }
 
@@ -671,32 +674,22 @@ public class ConnectionMongoDB{
 
         MongoCollection<Document> myCollUser = db.getCollection("user");
         MongoCollection<Document> myCollCodes = db.getCollection("admin");
-        Document code;
-        double credit;
 
-        BasicDBObject andQuery = new BasicDBObject();
-        List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
-        obj.add(new BasicDBObject("code", id_code));
-        obj.add(new BasicDBObject("assigned", "F"));
-        andQuery.put("$and", obj);
+        Document code = myCollCodes.find(eq("code", id_code)).first();
 
-        System.out.println(andQuery.toString());
+        double credit = code.getInteger("credit");
 
-        code = myCollCodes.find(andQuery).first();
-
-        credit = code.getInteger("credit");
-
-        if (code == null)
+        if (code == null || Objects.equals(code.getString("assigned"), "T")) {
             Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
+            return;
+        }
 
         Document queryUser = new Document().append("username",  username);
-        Document queryAdmin = new Document().append("code",  code);
+        Document queryAdmin = new Document().append("code",  id_code);
 
         Document user = myCollUser.find(eq("username", username)).first();
-        double new_balance = user.getDouble("balance") + credit;
 
-        //System.out.println("Code document: " + code);
-        //System.out.println("New balance: " + new_balance);
+        double new_balance = user.getDouble("balance") + credit;
 
         Bson updatesAdmin = Updates.combine(
                 Updates.set("assigned", "T")
@@ -709,8 +702,8 @@ public class ConnectionMongoDB{
         UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {
-            UpdateResult resultAdmin = myCollCodes.updateOne(queryAdmin, updatesAdmin, options);
             UpdateResult resultUser = myCollUser.updateOne(queryUser, updatesUser, options);
+            UpdateResult resultAdmin = myCollCodes.updateOne(queryAdmin, updatesAdmin, options);
             System.out.println("Modified document count: " + resultUser.getModifiedCount());
             System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
             System.out.println("Modified document count: " + resultAdmin.getModifiedCount());
@@ -733,5 +726,33 @@ public class ConnectionMongoDB{
         System.out.println("NEW BALANCE: " + balance);
 
         return balance;
+    }
+
+    public List<Document> getReviewsByUser(String username) {
+
+        this.openConnection();
+        List<Document> list = null;
+        MongoCollection<Document> myColl = db.getCollection("user");
+
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("username", username);
+
+        Document user = myColl.find(eq("username", username)).first();
+
+        MongoCursor<Document> cursor = myColl.find(whereQuery).iterator();
+
+        try {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                list = (List<Document>)doc.get("reviews");
+
+                Document d = list.get(0);
+                System.out.println(d.getString("reviewer")); // display specific field
+            }
+        } finally {
+            cursor.close();
+        }
+        this.closeConnection();
+        return list;
     }
 }
