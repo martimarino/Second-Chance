@@ -755,4 +755,20 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return list;
     }
+  
+    public ArrayList<Document> getAllUserIns(String username) {
+
+        this.openConnection();
+        ArrayList<Document> insertions = new ArrayList<>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+        cursor = myColl.find(eq("seller", username)).iterator();
+
+        while (cursor.hasNext())
+            insertions.add(cursor.next());
+
+        this.closeConnection();
+        Utility.printTerminal(insertions.toString());
+        return insertions;
+
+    }
 }

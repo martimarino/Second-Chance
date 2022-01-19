@@ -61,10 +61,10 @@ public class SearchInsertionController extends MainController{
 
     }
 
-    public void showInsertionPage(String uniq_id) throws IOException {
+    public static void showInsertionPage(String uniq_id) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
+        loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
 
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setScene(new Scene(loader.load()));
@@ -156,16 +156,16 @@ public class SearchInsertionController extends MainController{
             BufferedImage img = ImageIO.read(url);
             Image images = SwingFXUtils.toFXImage(img, null);
             image = new ImageView();
-            image.setFitHeight(100);
-            image.setFitWidth(100);
+            image.setFitHeight(120);
+            image.setFitWidth(120);
             image.setImage(images);
 
         } catch (IOException e) { //case image not valid any more (link with 404 page)
             //e.printStackTrace();
             Image img = new Image("./img/empty.jpg");
             image = new ImageView(img);
-            image.setFitHeight(100);
-            image.setFitWidth(100);
+            image.setFitHeight(120);
+            image.setFitWidth(120);
             image.setPreserveRatio(true);
         }
 
@@ -206,7 +206,7 @@ public class SearchInsertionController extends MainController{
         GridPane.setHalignment(brand, HPos.CENTER);
 
         insertionList.setStyle(
-                        "-fx-padding: 20;\n" +
+                        "-fx-padding: 50;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
     }
@@ -233,7 +233,6 @@ public class SearchInsertionController extends MainController{
             scrollPage = insertionFilter.size() - 6;
         else
             scrollPage-=6;
-
 
         for (int i = scrollPage; row < 3; i++) {
 
