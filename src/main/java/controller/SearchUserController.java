@@ -68,20 +68,20 @@ public class SearchUserController extends MainController{
         ConnectionMongoDB connMongo = new ConnectionMongoDB();
         Utility.printTerminal("SUGG NEO: " + suggFromNeo.size());
 
-        if(suggFromNeo.size() == 0)
+        if(suggFromNeo.size() < k)
         {
             Session session = Session.getInstance();
             User user = session.getLoggedUser();
 
-            sugg = connMongo.findTopKRatedUser(10, user.getCountry());
+            sugg = connMongo.findTopKRatedUser(k-suggFromNeo.size(), user.getCountry());
             Utility.printTerminal("SUGG MONGO: " + sugg.size());
         }
-        else {
-            for (int i = 0; i < suggFromNeo.size(); i++) {
-                d = connMongo.findUserByUsername(suggFromNeo.get(i));
-                sugg.add(d);
-            }
+
+        for (int i = 0; i < suggFromNeo.size(); i++) {
+            d = connMongo.findUserByUsername(suggFromNeo.get(i));
+            sugg.add(d);
         }
+
         Utility.printTerminal("SUGG SIZE: " + sugg.size());
 
         showSuggestedUsers();

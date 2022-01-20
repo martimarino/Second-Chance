@@ -332,7 +332,6 @@ public class ConnectionMongoDB{
         System.out.println("Username: " + username);
         ClientSession clientSession = mongoClient.startSession();
 
-        MongoCollection<Document> userColl = db.getCollection("user");
         MongoCollection<Document> orderColl = db.getCollection("order");
 
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
@@ -371,6 +370,7 @@ public class ConnectionMongoDB{
                     .append("_id", new ObjectId())
                     .append("timestamp", timestamp)
                     .append("buyer", username)
+                    .append("reviewed", false)
                     .append("insertion", new Document("image", insertion.getImage_url()).
                             append("seller", insertion.getSeller()).
                             append("price", insertion.getPrice()).
@@ -689,6 +689,68 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return true;
 
+    }
+
+    public ArrayList<Document> findAllOrders(Boolean choice, String username) {
+
+        this.openConnection();
+
+        MongoCollection<Document> order = db.getCollection("order");
+
+        if(choice)
+            cursor = order.find(eq("buyer", username)).iterator();
+        else
+            cursor = order.find(eq("insertion.seller", username)).iterator();
+
+        ArrayList<Document> find_orders = new ArrayList<>();
+
+        while (cursor.hasNext())
+        {
+            find_orders.add(cursor.next());
+        }
+        this.closeConnection();
+        return find_orders;
+    }
+
+    public void addReview(Review rev) {
+
+        this.openConnection();
+
+        MongoCollection<Document> user = db.getCollection("user");
+
+        Document review = new Document()
+                .append("timestamp", rev.getTimestamp())
+                .append("reviewer", rev.getReviewer())
+                .append("title", rev.getTitle())
+                .append("text", rev.getText())
+                .append("rating", rev.getRating());
+
+        System.out.println("REVIEW: " + review);
+        BasicDBObject query = new BasicDBObject();
+        query.put("username",rev.getSeller());
+
+        BasicDBObject push_data = new BasicDBObject("$push", new BasicDBObject("reviews", review));
+
+        user.findOneAndUpdate(query, push_data);
+
+
+        this.closeConnection();
+
+    }
+
+    public void updateOrder(String timestamp) {
+
+        this.openConnection();
+
+        MongoCollection<Document> order = db.getCollection("order");
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("timestamp", timestamp);
+
+        BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("reviewed", true));
+        order.findOneAndUpdate(query, set);
+
+        this.closeConnection();
     }
 
     /* ********** BALANCE SECTION ********** */

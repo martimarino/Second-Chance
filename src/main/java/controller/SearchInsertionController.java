@@ -61,10 +61,10 @@ public class SearchInsertionController extends MainController{
 
     }
 
-    public static void showInsertionPage(String uniq_id) throws IOException {
+    public void showInsertionPage(String uniq_id) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
 
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setScene(new Scene(loader.load()));
@@ -127,11 +127,14 @@ public class SearchInsertionController extends MainController{
         insertionList.getChildren().clear();
         scrollPage = 0;
 
-        for (int i = scrollPage; i < scrollPage+3; i++)     //first row results
+        for (int i = scrollPage; i < scrollPage+3 && i < insertionFilter.size(); i++)     //first row results
+        {
             addFilteredInsertions(i, i, 0);
-
-        for (int i = scrollPage; i < scrollPage+3; i++)     //second row reults
+        }
+        for (int i = scrollPage; i < scrollPage+3 && i+3 < insertionFilter.size(); i++)     //second row reults
+        {
             addFilteredInsertions(i+3, i, 5);
+        }
 
         insertionFind.setCenter(insertionList);
         scrollPage+=6;
@@ -143,31 +146,7 @@ public class SearchInsertionController extends MainController{
 
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
 
-        try {
-            URL url = new URL(insertionFilter.get(index).getString("image_url") );
-            URLConnection uc = url.openConnection();
-            uc.setRequestProperty("Cookie", "foo=bar");
-            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-            //uc.setReadTimeout(5000);
-            //uc.setConnectTimeout(5000);
-            uc.getInputStream();
-            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            //connection.setRequestMethod("POST");
-            BufferedImage img = ImageIO.read(url);
-            Image images = SwingFXUtils.toFXImage(img, null);
-            image = new ImageView();
-            image.setFitHeight(120);
-            image.setFitWidth(120);
-            image.setImage(images);
-
-        } catch (IOException e) { //case image not valid any more (link with 404 page)
-            //e.printStackTrace();
-            Image img = new Image("./img/empty.jpg");
-            image = new ImageView(img);
-            image.setFitHeight(120);
-            image.setFitWidth(120);
-            image.setPreserveRatio(true);
-        }
+        image = Utility.getGoodImage(insertionFilter.get(index).getString("image_url"), 100);
 
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
         Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + "€");
@@ -233,6 +212,7 @@ public class SearchInsertionController extends MainController{
             scrollPage = insertionFilter.size() - 6;
         else
             scrollPage-=6;
+
 
         for (int i = scrollPage; row < 3; i++) {
 

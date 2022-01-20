@@ -5,13 +5,14 @@ public class Order {
     String buyer;
     String timestamp;
     Insertion insertion;
+    boolean reviewed;
 
     public Order(String buyer, String timestamp, Insertion insertion){
 
         this.buyer = buyer;
         this.timestamp = timestamp;
         this.insertion = insertion;
-
+        this.reviewed = false;
     }
 
 
