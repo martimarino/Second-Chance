@@ -17,6 +17,11 @@
                     <fx:include fx:id="MyProfile" source="MyProfile.fxml" />
                 </content>
             </Tab>
+            <Tab text="My Orders">
+                <content>
+                    <fx:include fx:id="MyOrders" source="MyOrders.fxml" />
+                </content>
+            </Tab>
             <Tab text="Search User">
                 <content>
                     <fx:include fx:id="SearchUser" source="SearchUser.fxml" />
@@ -30,11 +35,6 @@
             <Tab text="New insertion">
                 <content>
                     <fx:include fx:id="NewInsertion" source="NewInsertion.fxml" />
-                </content>
-            </Tab>
-            <Tab text="My Orders">
-                <content>
-                    <fx:include fx:id="MyOrders" source="MyOrders.fxml" />
                 </content>
             </Tab>
         </tabs>

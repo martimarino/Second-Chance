@@ -107,7 +107,8 @@ public class InsertionListLikedController {
 
         image.setOnMouseClicked(event->{
                     try {
-                        SearchInsertionController.showInsertionPage(insertions.get(index).getUniq_id());
+                        SearchInsertionController sic = new SearchInsertionController();
+                        sic.showInsertionPage(insertions.get(index).getUniq_id());
                         HomeController.updateInsertionview(insertions.get(index).getUniq_id());
                     } catch (Exception e) {
                         e.printStackTrace();

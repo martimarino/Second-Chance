@@ -99,7 +99,8 @@ public class InsertionListController {
 
         image.setOnMouseClicked(event->{
                     try {
-                        SearchInsertionController.showInsertionPage(list.get(index).getString("uniq_id"));
+                        SearchInsertionController sic = new SearchInsertionController();
+                        sic.showInsertionPage(list.get(index).getString("uniq_id"));
                         HomeController.updateInsertionview(list.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -73,6 +73,7 @@ public class SearchInsertionController extends MainController{
         stage.show();
     }
 
+
     public void findInsertion() {
 
         if (ins.getText().equals("")) {  //filters case
