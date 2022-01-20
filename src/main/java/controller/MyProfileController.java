@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
 import javafx.geometry.HPos;
@@ -43,7 +44,6 @@ public class MyProfileController extends MainController {
     @FXML public Button btnAddFunds;
     @FXML private Text balanceValue;
 
-    public Button btnLogout;
     public Button followersButton, followingButton;
     public Button interestedInsertionsButton, insertionsButton;
 
@@ -83,8 +83,6 @@ public class MyProfileController extends MainController {
         showReviews();
 
     }
-
-    public void showInsertions(){}
 
     public void getReviews() {
 
@@ -188,9 +186,9 @@ public class MyProfileController extends MainController {
         stage.setResizable(false);
         stage.show();
     }
-  
-  
-    public void showInsertions(MouseEvent mouseEvent) throws IOException {
+
+    public void showInsertions() throws IOException {
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/InsertionList.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
@@ -202,6 +200,21 @@ public class MyProfileController extends MainController {
 
         stage.show();
     }
+
+    public void showInsertionsLiked() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/InsertionListLiked.fxml"));
+        Stage stage = new Stage(StageStyle.DECORATED);
+
+        stage.setScene(new Scene(loader.load()));
+
+        InsertionListLikedController controller = loader.getController();
+        controller.initialize();
+
+        stage.show();
+    }
+
   
     public void logout() throws IOException {
 
