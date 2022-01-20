@@ -14,6 +14,7 @@ import main.java.utils.*;
 import org.bson.Document;
 
 import javax.imageio.ImageIO;
+import javax.rmi.CORBA.Util;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -54,13 +55,27 @@ public class HomeController {
         prevButton.setVisible(false);
 
         // new user
-        if(connNeo.checkNewUser(Session.getLogUser().getUsername())) {
+       /* if(connNeo.checkNewUser(Session.getLogUser().getUsername())) {
             ins = connMongo.findTopKViewedInsertion(k, "clothing");
             Utility.printTerminal("New user case");
         } else {
             followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
             ins = connMongo.followedUserInsertions(followedFromNeo);
+        }*/
+        followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
+        ins = connMongo.followedUserInsertions(followedFromNeo);
+
+        if(followedFromNeo.size() < k)
+        {
+            ArrayList<Document> topK = connMongo.findTopKViewedInsertion(k- followedFromNeo.size(), "clothing");
+
+            for(int i = 0; i < topK.size(); i++) {
+                ins.add(topK.get(i));
+                System.out.println("TOPK: " + ins);
+            }
         }
+
+        Utility.printTerminal("Size of ins: " + ins.size());
         Utility.printTerminal("Size of ins: " + ins.size());
 
         showFeed();
@@ -90,31 +105,7 @@ public class HomeController {
         ImageView image;
 
         Label user = new Label("User: " + insertions.get(index).getString("seller"));
-        try {
-            URL url = new URL(insertions.get(index).getString("image_url") );
-            URLConnection uc = url.openConnection();
-            uc.setRequestProperty("Cookie", "foo=bar");
-            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-            //uc.setReadTimeout(5000);
-            //uc.setConnectTimeout(5000);
-            uc.getInputStream();
-            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            //connection.setRequestMethod("POST");
-            BufferedImage img = ImageIO.read(url);
-            Image images = SwingFXUtils.toFXImage(img, null);
-            image = new ImageView();
-            image.setImage(images);
-
-        } catch (IOException e) { //case image not valid any more (link with 404 page)
-            //e.printStackTrace();
-            Image img = new Image("./img/empty.jpg");
-            image = new ImageView(img);
-            image.setPreserveRatio(true);
-        }
-        //ImageView image = new ImageView(insertions.get(index).getString("image_url"));
-        image.setFitHeight(150);
-        image.setFitWidth(150);
-
+        image = Utility.getGoodImage(insertions.get(index).getString("image_url"), 150);
         Label price = new Label(insertions.get(index).getDouble("price") + "€");
         Label status = new Label("Status: " + insertions.get(index).getString("status"));
         Label interested = new Label("Interested: " + insertions.get(index).getInteger("interested"));
@@ -302,34 +293,12 @@ public class HomeController {
     private void addFeedInsertions(int index, int i) {
 
         ImageView image;
+        System.out.println("INDEX: " + index);
+        System.out.println("ins(index): " + ins.get(index));
+
         Label user = new Label("User: " + ins.get(index).getString("seller"));
     Utility.printTerminal(ins.toString());
-        try {
-
-            URL url = new URL(ins.get(index).getString("image_url") );
-            URLConnection uc = url.openConnection();
-            uc.setRequestProperty("Cookie", "foo=bar");
-            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-            //uc.setReadTimeout(5000);
-            //uc.setConnectTimeout(5000);
-            uc.getInputStream();
-            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            //connection.setRequestMethod("POST");
-            BufferedImage img = ImageIO.read(url);
-            Image images = SwingFXUtils.toFXImage(img, null);
-            image = new ImageView();
-            image.setImage(images);
-
-        }catch (IOException e) { //case image not valid any more (link with 404 page)
-            //e.printStackTrace();
-            Image img = new Image("./img/empty.jpg");
-            image = new ImageView(img);
-            image.setPreserveRatio(true);
-        }
-
-        //ImageView image = new ImageView(ins.get(index).getString("image_url"));
-        image.setFitHeight(150);
-        image.setFitWidth(150);
+        image = Utility.getGoodImage(ins.get(index).getString("image_url"), 150);
 
         Label price = new Label(ins.get(index).getDouble("price") + "€");
         Label status = new Label("Status: " + ins.get(index).getString("status"));

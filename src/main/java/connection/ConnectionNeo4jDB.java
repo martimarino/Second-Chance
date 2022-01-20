@@ -99,17 +99,10 @@ public class ConnectionNeo4jDB implements AutoCloseable
         }
     }
 
-    public void likeAnInsertion(User u, Insertion i) {
-
-    }
-
     public ArrayList<String> getSuggestedUsers(String username, String country, int k) {
         this.open();
         ArrayList<String> suggestions = new ArrayList<>();
         try (Session session = driver.session()) {
-
-            //String u = "72q0jrBM81n7vySAL";
-            //String c = "Austria";
 
             List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
 
@@ -154,9 +147,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
         ArrayList<String> followed = new ArrayList<>();
         try (Session session = driver.session()) {
 
-            //String u = "72q0jrBM81n7vySAL";
-            //String c = "Austria";
-
             List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
 
                 Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]->(i:Insertion) " +
@@ -168,6 +158,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
                 while (result.hasNext()) {
                     Record r = result.next();
+                    System.out.println("SUGGINS: " + r.get("SuggIns").asString());
                     followed.add(r.get("SuggIns").asString());
                 }
                 return followed;
@@ -181,7 +172,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     }
 
-    public void setFavouriteInsertion(String username, String insertion_id) {
+    public void likeInsertion(String username, String insertion_id) {
 
         this.open();
 
@@ -238,6 +229,20 @@ public class ConnectionNeo4jDB implements AutoCloseable
             return relation;
         }
     }
+
+    public void deleteInsertion(String uniq_id) {
+        this.open();
+
+        try (Session session = driver.session()) {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run("MATCH (i:Insertion{uniq_id : $uniq_id}) DETACH DELETE i;",
+                        parameters("uniq_id", uniq_id));
+                return null;
+            });
+            this.close();
+        }
+    }
+
 
     public boolean checkNewUser(String username) {
         this.open();

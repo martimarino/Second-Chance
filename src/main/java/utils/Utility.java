@@ -1,6 +1,7 @@
 package main.java.utils;
 
 import javafx.fxml.FXMLLoader;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,14 +11,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.io.File;
+
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 import javafx.stage.Stage;
 import org.bson.*;
 
+import javax.imageio.ImageIO;
 
 
 public class Utility {
@@ -73,6 +79,39 @@ public class Utility {
 
         printTerminal(generatedString);
         return generatedString;
+    }
+
+    public static ImageView getGoodImage(String url_image, int dimension){
+
+        ImageView image = null;
+
+        try {
+            URL url = new URL(url_image);
+            URLConnection uc = url.openConnection();
+            uc.setRequestProperty("Cookie", "foo=bar");
+            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+            //uc.setReadTimeout(5000);
+            //uc.setConnectTimeout(5000);
+            uc.getInputStream();
+            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            //connection.setRequestMethod("POST");
+            BufferedImage img = ImageIO.read(url);
+            Image images = SwingFXUtils.toFXImage(img, null);
+            image = new ImageView();
+            image.setFitHeight(dimension);
+            image.setFitWidth(dimension);
+            image.setImage(images);
+
+        } catch (IOException e) { //case image not valid any more (link with 404 page)
+            //e.printStackTrace();
+            Image img = new Image("./img/empty.jpg");
+            image = new ImageView(img);
+            image.setFitHeight(100);
+            image.setFitWidth(100);
+            //image.setPreserveRatio(true);
+        }
+
+        return image;
     }
 
     public static void printTerminal(String msg){

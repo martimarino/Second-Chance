@@ -9,8 +9,18 @@ public class Review {
     String title;
     int rating;
 
+
     public String getReviewer() {
         return reviewer;
+    }
+
+    public Review(String reviewer, String seller, String text, String timestamp, String title, int rating) {
+        this.reviewer = reviewer;
+        this.seller = seller;
+        this.text = text;
+        this.timestamp = timestamp;
+        this.title = title;
+        this.rating = rating;
     }
 
     public String getSeller() {

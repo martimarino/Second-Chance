@@ -49,6 +49,8 @@ public class InsertionController {
     String insertion_id;
     String image_url;
     Insertion insertion;
+    ConnectionMongoDB conn = new ConnectionMongoDB();
+    ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
     public void initialize(String uniq_id) {
 
@@ -59,7 +61,7 @@ public class InsertionController {
         Session session = Session.getInstance();
         User user = session.getLoggedUser();
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
+        //ConnectionMongoDB conn = new ConnectionMongoDB();
         Insertion insertion = conn.findInsertion(insertion_id);
 
         try {
@@ -114,7 +116,6 @@ public class InsertionController {
 
     public void buyInsertion(MouseEvent mouseEvent) {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
         Session session = Session.getInstance();
         User user = session.getLoggedUser();
 
@@ -126,7 +127,7 @@ public class InsertionController {
         if (conn.buyCurrentInsertion(user.getUsername(), insertion))
         {
             Utility.infoBox("Product buyed correctly! ", "User Advise", "Purchase done");
-
+            connNeo.deleteInsertion(insertion.getId());
             buy.setText("Already purchased!");
             buy.setDisable(true);
         }
@@ -141,7 +142,7 @@ public class InsertionController {
         ConnectionMongoDB connMongo = new ConnectionMongoDB();
 
         if(!connNeo.showIfInterested(user.getUsername(), insertion_id)) {
-            connNeo.setFavouriteInsertion(user.getUsername(), insertion_id);
+            connNeo.likeInsertion(user.getUsername(), insertion_id);
             connMongo.updateNumInterested(insertion_id, 1);
             favourite.setText("Remove from favourite");
             interested.setText(String.valueOf(Integer.parseInt(interested.getText()) +1));
