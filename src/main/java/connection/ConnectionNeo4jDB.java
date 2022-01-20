@@ -391,5 +391,34 @@ public class ConnectionNeo4jDB implements AutoCloseable
         return following;
     }
 
-    public void retrieveFollowedInsertionByUser(String user) {}
+    public ArrayList<String> retrieveFollowedInsertionByUser(String user) {
+
+        this.open();
+        ArrayList<String> followed_ins = new ArrayList<>();
+
+        try (Session session = driver.session()) {
+
+            List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run( "MATCH (u:User) - [r:INTERESTED] -> (i:Insertion)" +
+                                "WHERE u.username = $username " +
+                                "RETURN i.uniq_id as uniq_id",
+                        parameters( "username", user));
+
+                while(result.hasNext())
+                {
+                    Record r = result.next();
+                    followed_ins.add(r.get("uniq_id").asString());
+                }
+                return followed_ins;
+            });
+            System.out.println("*************** NEO4j FOLLOWED INSERTIONS ***************");
+            if(!followed_ins.isEmpty())
+                System.out.println(followed_ins.get(0));
+            System.out.println("*************************************");
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return followed_ins;
+    }
 }
