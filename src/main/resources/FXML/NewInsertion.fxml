@@ -10,7 +10,7 @@
             prefHeight="820.0" prefWidth="680.0"
             xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1"
-            style="-fx-background-color: rgb(230, 230, 255);"
+            style="-fx-background-color: rgb(70,130,180);"
             fx:controller="main.java.controller.NewInsertionController">
     <children>
         <Text fill="#2582bf" layoutX="253.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create an insertion">

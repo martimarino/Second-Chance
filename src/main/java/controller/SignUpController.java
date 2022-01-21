@@ -31,10 +31,6 @@ public class SignUpController {
         stage.show();
     }
 
-    private void initialize() {
-
-    }
-
     public void registration() throws IOException {
 
         if (!us.getText().isEmpty()

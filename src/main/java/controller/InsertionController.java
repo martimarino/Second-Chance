@@ -126,7 +126,7 @@ public class InsertionController {
 
         if (conn.buyCurrentInsertion(user.getUsername(), insertion))
         {
-            Utility.infoBox("Product buyed correctly! ", "User Advise", "Purchase done");
+            Utility.infoBox("Product bought correctly! ", "User Advise", "Purchase done");
             connNeo.deleteInsertion(insertion.getId());
             buy.setText("Already purchased!");
             buy.setDisable(true);

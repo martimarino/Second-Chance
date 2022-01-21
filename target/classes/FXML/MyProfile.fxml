@@ -124,11 +124,6 @@
                                     <Image url="@../img/next.png" />
                                  </image>
                               </ImageView>
-                              <Label layoutX="46.0" layoutY="28.0" text="Balance: ">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
                            </children>
                         </Pane>
                      </right>

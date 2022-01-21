@@ -1,11 +1,8 @@
 package main.java.controller;
 
-import javafx.event.ActionEvent;
-import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import main.java.connection.ConnectionMongoDB;
@@ -14,7 +11,6 @@ import main.java.entity.User;
 import main.java.utils.Session;
 import main.java.utils.Utility;
 import org.bson.Document;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,8 +21,8 @@ public class MyOrderController{
     private static final int MAX_LENGTH = 50;
     public BorderPane ordersContainer;
     public ComboBox<String> comboBox;
-    public Pane prevSearch;
-    public Pane nextSearch;
+    public Pane prev;
+    public Pane next;
 
     public ArrayList<Document> ordersList;
     public VBox panel;
@@ -38,10 +34,10 @@ public class MyOrderController{
     public void initialize(){
 
         //set buttons
-        prevSearch.setDisable(true);
-        nextSearch.setDisable(true);
-        prevSearch.setVisible(false);
-        nextSearch.setVisible(false);
+        prev.setDisable(true);
+        next.setDisable(true);
+        prev.setVisible(false);
+        next.setVisible(false);
 
         k = 4;
         indexPage = 1;
@@ -83,8 +79,8 @@ public class MyOrderController{
 
         if(ordersList.size() > k)
         {
-            nextSearch.setVisible(true);
-            nextSearch.setDisable(false);
+            next.setVisible(true);
+            next.setDisable(false);
         }
         //comboBox.setValue("Select order");
     }
@@ -99,8 +95,8 @@ public class MyOrderController{
 
         if(ordersList.size() < indexPage)
         {
-            nextSearch.setDisable(true);
-            nextSearch.setVisible(false);
+            next.setDisable(true);
+            next.setVisible(false);
         }
 
     }
@@ -158,19 +154,16 @@ public class MyOrderController{
     public void PrevOrder() {
 
         panel.getChildren().clear();
-        System.out.println("INDEX: " + indexPage);
-        int ind = (indexPage%5) == 0? 1 : (indexPage%5);
+        int ind = (indexPage%(k+1)) == 0? 1 : (indexPage%(k+1));
         indexPage-= (k + ind);
-        System.out.println("INDEX: " + indexPage);
 
-        nextSearch.setDisable(false);
-        nextSearch.setVisible(true);
-        System.out.println("FIND if: " + (indexPage < k));
+        next.setDisable(false);
+        next.setVisible(true);
+
         if(indexPage < k)
         {
-            System.out.println("INDEX < k: " + indexPage);
-            prevSearch.setDisable(true);
-            prevSearch.setVisible(false);
+            prev.setDisable(true);
+            prev.setVisible(false);
         }
 
         showAllOrders(kind);
@@ -183,8 +176,8 @@ public class MyOrderController{
 
         showAllOrders(kind);
 
-        prevSearch.setDisable(false);
-        prevSearch.setVisible(true);
+        prev.setDisable(false);
+        prev.setVisible(true);
     }
 
     private void addReview(String seller, String timestampOrder, Button revButton) {
@@ -244,7 +237,6 @@ public class MyOrderController{
             sendReview(txtArea, txtTitle, sendReview, revButton, Integer.parseInt(rating.getValue()), seller, timestampOrder);
         });
 
-
     }
 
     public void sendReview(TextArea txtArea, TextField txtTitle, Button sendReview, Button revButton, int rating, String seller, String timestampOrder){
@@ -264,5 +256,8 @@ public class MyOrderController{
         sendReview.setDisable(true);
         revButton.setText("Already reviewed!");
         revButton.setDisable(true);
+
+        Stage stage = (Stage) sendReview.getScene().getWindow();
+        stage.close();
     }
 }

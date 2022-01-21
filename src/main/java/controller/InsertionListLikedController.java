@@ -36,7 +36,7 @@ public class InsertionListLikedController {
 
         followed_ins = connNeo4J.retrieveFollowedInsertionByUser(Session.getLogUser().getUsername());
         insertions = connMongo.findInsertionDetailsNeo4J(followed_ins);
-        System.out.println("Insertions: " + insertions.get(0));
+        //System.out.println("Insertions: " + insertions.get(0));
 
         box = new VBox(20);
         index = 0;

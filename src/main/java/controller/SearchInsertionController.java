@@ -61,10 +61,10 @@ public class SearchInsertionController extends MainController{
 
     }
 
-    public void showInsertionPage(String uniq_id) throws IOException {
+    public static void showInsertionPage(String uniq_id) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
+        loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
 
         Stage stage = new Stage(StageStyle.DECORATED);
         stage.setScene(new Scene(loader.load()));
@@ -90,7 +90,8 @@ public class SearchInsertionController extends MainController{
                     }
             }
         } else {    //search case
-
+            if(ins.getText().equals("admin"))
+                return;
             //search insertion by seller
             insertionFilter = conn.findInsertionBySeller(ins.getText());
 
@@ -101,6 +102,7 @@ public class SearchInsertionController extends MainController{
                 Utility.infoBox("No results", "Advise", "User Advise");
                 return;
             }
+
             ins.setText("");
         }
 

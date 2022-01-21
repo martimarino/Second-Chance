@@ -18,11 +18,7 @@ import static com.mongodb.client.model.Updates.set;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import java.io.IOException;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -860,6 +856,8 @@ public class ConnectionMongoDB{
         try {
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
+                if(doc.get("reviews") == null)
+                    return new ArrayList<>();
                 list = (List<Document>)doc.get("reviews");
 
                 Document d = list.get(0);

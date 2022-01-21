@@ -6,9 +6,6 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.MyOrderController">
    <children>
@@ -19,7 +16,7 @@
       </Label>
       <BorderPane fx:id="ordersContainer" layoutX="19.0" layoutY="121.0" prefHeight="9.0" prefWidth="663.0">
          <left>
-            <Pane fx:id="prevSearch" onMouseClicked="#PrevOrder" translateY="250.0">
+            <Pane fx:id="prev" onMouseClicked="#PrevOrder" translateY="250.0">
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
                      <image>
@@ -30,7 +27,7 @@
             </Pane>
          </left>
          <right>
-            <Pane fx:id="nextSearch" onMouseClicked="#NextOrder" translateY="250.0">
+            <Pane fx:id="next" onMouseClicked="#NextOrder" translateY="250.0">
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
                      <image>

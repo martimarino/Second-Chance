@@ -101,7 +101,7 @@ public class MyProfileController extends MainController {
         ArrayList<String> follower = conn.retrieveFollowersByUser(user.getUsername());
         StackPane secondaryLayout = new StackPane();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10 && follower.size() > i; i++) {
 
             Label x = new Label(follower.get(i));
             x.setTranslateX(10);
@@ -125,7 +125,7 @@ public class MyProfileController extends MainController {
 
         StackPane secondaryLayout = new StackPane();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10 && following.size() > i; i++) {
 
             Label x = new Label(following.get(i));
             x.setTranslateX(10);
@@ -247,7 +247,7 @@ public class MyProfileController extends MainController {
         reviews.getColumnConstraints().addAll(column1);
         scrollPage2 = 0;
 
-        for (int i = 0; i < scrollPage2 + 2; i++) {
+        for (int i = 0; i < scrollPage2 + 2 && listReviews.size() > i; i++) {
 
             addReviews(i, i);
             review.setCenter(reviews);
