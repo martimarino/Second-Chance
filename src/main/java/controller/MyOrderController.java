@@ -259,6 +259,7 @@ public class MyOrderController{
         Review rev = new Review(reviewer, seller, txtArea.getText(), timestamp, txtTitle.getText(), rating);
         ConnectionMongoDB conn = new ConnectionMongoDB();
         conn.addReview(rev);
+        conn.updateSellerRating(rev.getSeller());
         conn.updateOrder(timestampOrder);
         sendReview.setDisable(true);
         revButton.setText("Already reviewed!");

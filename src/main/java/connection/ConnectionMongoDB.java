@@ -75,15 +75,15 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("user");
 
         Document user = new Document("address", u.getAddress())
+                .append("balance", u.getBalance())
                 .append("city", u.getCity())
                 .append("country", u.getCountry())
                 .append("email", u.getEmail())
+                .append("img_profile", u.getImage())
                 .append("name", u.getName())
                 .append("password", u.getPassword())
-                .append("username", u.getUsername())
                 .append("suspended", u.getSuspended())
-                .append("rating", u.getRating())
-                .append("balance", u.getBalance());
+                .append("username", u.getUsername());
 
         myColl.insertOne(user);
 
@@ -732,10 +732,39 @@ public class ConnectionMongoDB{
         BasicDBObject push_data = new BasicDBObject("$push", new BasicDBObject("reviews", review));
 
         user.findOneAndUpdate(query, push_data);
-
-
         this.closeConnection();
 
+    }
+
+    public void updateSellerRating(String seller) {
+        this.openConnection();
+
+        MongoCollection<Document> user = db.getCollection("user");
+        Document d = user.find(eq("username", seller)).first();
+        List<Document> list = null;
+        list = d.getList("reviews", Document.class);
+
+        Double avg = 0.0;
+        int sum = 0;
+
+        for (Document document : list) {
+            sum += document.getInteger("rating");
+        }
+
+        avg = (double) sum / (double) list.size();
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.put("rating", avg);
+        // {$set: {"rating": avg}}
+        BasicDBObject updateObject = new BasicDBObject();
+        updateObject.put("$set", newDocument);
+        // condition (where field "reviews" exists)
+        BasicDBObject query = new BasicDBObject();
+        query.put("username", d.getString("username"));
+
+        user.updateOne(query, updateObject);
+
+        this.closeConnection();
     }
 
     public void updateOrder(String timestamp) {

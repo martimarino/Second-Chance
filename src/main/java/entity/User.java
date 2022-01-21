@@ -5,8 +5,6 @@ import main.java.entity.Order;
 import main.java.utils.*;
 import org.bson.Document;
 
-import java.util.ArrayList;
-
 public class User implements GeneralUser {
 
     String email;
@@ -15,12 +13,13 @@ public class User implements GeneralUser {
     String name;
     String country;
     String city;
+    String image;
     String address;
     String suspended;
     double rating;
     double balance;
 
-    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, Double rating, double balance) {
+    public User(String email, String username, String password, String name, String country, String city, String address, String suspended, Double rating, double balance, String image) {
 
         this.email = email;
         this.username = username;
@@ -28,6 +27,7 @@ public class User implements GeneralUser {
         this.name = name;
         this.country = country;
         this.city = city;
+        this.image = image;
         this.address = address;
         this.suspended = suspended;
         if(rating == null)
@@ -44,6 +44,7 @@ public class User implements GeneralUser {
         this.password = null;
         this.name = null;
         this.country = null;
+        this.image = null;
         this.city = null;
         this.address = null;
         this.email = null;
@@ -61,6 +62,7 @@ public class User implements GeneralUser {
             this.address = user.getAddress();
             this.city = user.getCity();
             this.name = user.getName();
+            this.image = user.getImage();
             this.suspended = user.getSuspended();
             this.rating = user.getRating();
             this.balance = user.getBalance();
@@ -71,7 +73,7 @@ public class User implements GeneralUser {
 
         User us = new User(user.getString("email"), user.getString("username"), null,
                 user.getString("name"), user.getString("country"), user.getString("city"), user.getString("address"),
-                user.getString("suspended"), user.getDouble("rating"), user.getDouble("balance"));
+                user.getString("suspended"), user.getDouble("rating"), user.getDouble("balance"), user.getString("image"));
 
         return us;
 
@@ -111,6 +113,8 @@ public class User implements GeneralUser {
 
     public void setBalance(Double balance){ this.balance = balance;}
 
+    public void setImage(String image) { this.image = image; }
+
     public String getEmail() {
         return email;
     }
@@ -141,26 +145,27 @@ public class User implements GeneralUser {
 
     public String getSuspended() { return suspended; }
 
-
     public Double getRating() { return rating; }
 
+    public Double getBalance() {  return this.balance; }
 
-    public Double getBalance() {  return this.balance;
-    }
+    public String getImage() { return this.image; }
 
     @Override
     public String toString() {
         return "User{" +
-                "email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", country='" + country + '\'' +
+                "address='" + address + '\'' +
+                ", balance='" + balance + '\'' +
                 ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
-                        ", suspended'" + suspended + '\'' +
+                ", country='" + country + '\'' +
+                ", email='" + email + '\'' +
+                ", imag_profile='" + image + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", suspended'" + suspended + '\'' +
+                ", username='" + username + '\'' +
+                ", rating='" + rating + '\'' +
                 '}';
     }
-
 
 }
