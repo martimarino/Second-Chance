@@ -474,7 +474,7 @@ public class ConnectionMongoDB{
         if (choice)
             myColl = db.getCollection("insertion");
         else
-            myColl = db.getCollection("orders");
+            myColl = db.getCollection("order");
 
         myCollUsr = db.getCollection("user");
         Bson limit = limit(k);
@@ -487,8 +487,8 @@ public class ConnectionMongoDB{
         );
 
         for (Document document : aggr) {
-
-            Document user = myCollUsr.find(eq("username", document.getString("_id"))).first();
+            Utility.printTerminal(document.toString());
+            Document user = myCollUsr.find(eq("username", document.getString("username"))).first();
             document.append("name", user.getString("name"));
             array.add(document);
         }
@@ -516,7 +516,7 @@ public class ConnectionMongoDB{
         for (Document document : aggr) {
 
             document.append("name", document.getString("name"));
-            document.append("rating", document.getInteger("rating"));
+            document.append("rating", document.getDouble("rating"));
             array.add(document);
         }
 

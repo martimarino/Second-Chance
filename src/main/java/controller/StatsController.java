@@ -239,7 +239,7 @@ public class StatsController {
             x.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(x);
 
-            Label y = new Label(array.get(i).getString("interested"));
+            Label y = new Label(array.get(i).getInteger("interested").toString());
             y.setTranslateX(200);
             y.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(y);
