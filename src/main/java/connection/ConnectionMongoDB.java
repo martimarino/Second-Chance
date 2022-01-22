@@ -174,18 +174,26 @@ public class ConnectionMongoDB{
         this.openConnection();
         MongoCollection<Document> myColl = db.getCollection("user");
         ArrayList<Document> users = new ArrayList<>();
+        double r ;
+        double lowerBound = 0;
+        double upperBound = 0;
+
+        if(!rating.equals("rating")){
+            r = Double.parseDouble(rating);
+            lowerBound = r-0.5;
+            upperBound = r+0.5;
+        }
 
         if(country.equals("country") && !rating.equals("rating"))
         {
-             cursor  = myColl.find(eq("rating", rating)).iterator();
+            cursor  = myColl.find(and(lte("rating", upperBound), gt("rating", lowerBound))).iterator();
         }
         else if(!country.equals("country") && rating.equals("rating"))
         {
              cursor  = myColl.find(eq("country", country)).iterator();
         }
         else{
-             cursor  = myColl.find(and(eq("country", country),
-                    eq("rating", rating))).iterator();
+             cursor  = myColl.find(and(eq("country", country), lte("rating", upperBound), gt("rating", lowerBound))).iterator();
         }
 
         while(cursor.hasNext())
@@ -883,6 +891,17 @@ public class ConnectionMongoDB{
         this.closeConnection();
         Utility.printTerminal(insertions.toString());
         return insertions;
+
+    }
+
+    public void deleteInsertion(String id) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+        myColl.deleteOne(Filters.eq("uniq_id", id));
+
+        this.closeConnection();
 
     }
 }

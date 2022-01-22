@@ -47,7 +47,7 @@
             </items>
         </ComboBox>
         <!-- Searched and filtered users results -->
-        <BorderPane fx:id="userFind" layoutX="100.0" layoutY="200.0" prefHeight="307.0" prefWidth="500.0">
+        <BorderPane fx:id="userFind" layoutX="100.0" layoutY="180.0" prefHeight="307.0" prefWidth="500.0">
             <left>
                 <Pane fx:id="prevSearch" onMouseClicked="#showPrevUser" translateY="100.0">
                    <children>

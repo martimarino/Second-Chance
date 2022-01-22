@@ -164,6 +164,31 @@ public class SearchUserController extends MainController{
 
     }
 
+    private void setFollowUnfollowButton(Button follow, String user) {
+
+        follow.setStyle("-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;");
+        follow.setPrefWidth(90.0);
+        follow.setPrefHeight(20.0);
+        follow.setDisable(false);
+        follow.setVisible(true);
+        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
+        if(connNeo.checkIfFollows(Session.getLogUser().getUsername(), user)) {
+            follow.setText("Unfollow");
+        } else {
+            follow.setText("Follow");
+        }
+
+        follow.setOnMouseClicked(event -> {
+            String action = follow.getText();
+            connNeo.followUnfollowButton(action, Session.getLogUser().getUsername(), user);
+            if(action.equals("Follow"))
+                follow.setText("Unfollow");
+            if(action.equals("Unfollow"))
+                follow.setText("Follow");
+        });
+
+    }
+
     /*----------------------------- FIND USERS -----------------------------*/
 
     public void showSearchResults() throws IOException {
@@ -194,11 +219,13 @@ public class SearchUserController extends MainController{
             Label username = new Label(searchedList.get(indexSearch).getString("username"));
             Label country = new Label(searchedList.get(indexSearch).getString("country"));
             Label city = new Label(searchedList.get(indexSearch).getString("city"));
+            Label rating = new Label(String.format("%.1f", searchedList.get(indexSearch).getDouble("rating")));
 
             vb.getChildren().add(im);
             vb.getChildren().add(username);
             vb.getChildren().add(country);
             vb.getChildren().add(city);
+            vb.getChildren().add(rating);
 
             vb.setOnMouseClicked(event->{
                         try {
@@ -232,31 +259,6 @@ public class SearchUserController extends MainController{
         indexSearch++;
         System.out.println("(add search) INDEX: " + indexSearch);
 
-
-    }
-
-    private void setFollowUnfollowButton(Button follow, String user) {
-
-        follow.setStyle("-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;");
-        follow.setPrefWidth(90.0);
-        follow.setPrefHeight(20.0);
-        follow.setDisable(false);
-        follow.setVisible(true);
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-        if(connNeo.checkIfFollows(Session.getLogUser().getUsername(), user)) {
-            follow.setText("Unfollow");
-        } else {
-            follow.setText("Follow");
-        }
-
-        follow.setOnMouseClicked(event -> {
-            String action = follow.getText();
-            connNeo.followUnfollowButton(action, Session.getLogUser().getUsername(), user);
-            if(action.equals("Follow"))
-                follow.setText("Unfollow");
-            if(action.equals("Unfollow"))
-                follow.setText("Follow");
-        });
 
     }
 
@@ -327,6 +329,7 @@ public class SearchUserController extends MainController{
             Label username = new Label(suggList.get(indexSugg).getString("username"));
             Label country = new Label(suggList.get(indexSugg).getString("country"));
             Label city = new Label(suggList.get(indexSugg).getString("city"));
+            Label rating = new Label(String.format("%.1f", suggList.get(indexSugg).getDouble("rating")));
             followUnfollow = new Button();
             setFollowUnfollowButton(followUnfollow, suggList.get(indexSugg).getString("username"));
 
@@ -334,6 +337,7 @@ public class SearchUserController extends MainController{
             vb.getChildren().add(username);
             vb.getChildren().add(country);
             vb.getChildren().add(city);
+            vb.getChildren().add(rating);
             vb.getChildren().add(followUnfollow);
             suggBox.getChildren().add(vb);
 
