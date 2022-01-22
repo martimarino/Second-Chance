@@ -61,6 +61,8 @@ public class InsertionListController {
 
     private void addInsertions() {
 
+        String uniq_id = list.get(index).getString("uniq_id");
+
         HBox hb = new HBox();
         VBox det = new VBox();
 
@@ -79,8 +81,8 @@ public class InsertionListController {
         image.setOnMouseClicked(event->{
                     try {
                         SearchInsertionController sic = new SearchInsertionController();
-                        sic.showInsertionPage(list.get(index).getString("uniq_id"));
-                        HomeController.updateInsertionview(list.get(index).getString("uniq_id"));
+                        sic.showInsertionPage(uniq_id);
+                        HomeController.updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

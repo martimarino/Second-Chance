@@ -36,5 +36,6 @@ public class AddFundsController {
         String code = txtFieldCode.getText();
 
         conn.addFundsToWallet(user.getUsername(), code);
+
     }
 }
