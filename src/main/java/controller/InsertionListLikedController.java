@@ -10,7 +10,10 @@ import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
 import main.java.utils.Session;
+import main.java.utils.Utility;
+
 import javax.imageio.ImageIO;
+import javax.rmi.CORBA.Util;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -30,9 +33,9 @@ public class InsertionListLikedController {
     ConnectionMongoDB connMongo = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo4J = new ConnectionNeo4jDB();
 
-    public void initialize() {
+    public void initialize(String username) {
 
-        followed_ins = connNeo4J.retrieveFollowedInsertionByUser(Session.getLogUser().getUsername());
+        followed_ins = connNeo4J.retrieveFollowedInsertionByUser(username);
         insertions = connMongo.findInsertionDetailsNeo4J(followed_ins);
         //System.out.println("Insertions: " + insertions.get(0));
 
@@ -69,29 +72,8 @@ public class InsertionListLikedController {
 
         HBox hb = new HBox();
         VBox det = new VBox();
-        ImageView image;
 
-        try {
-            URL url = new URL(insertions.get(index).getImage_url());
-            URLConnection uc = url.openConnection();
-            uc.setRequestProperty("Cookie", "foo=bar");
-            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-            uc.getInputStream();
-            BufferedImage img = ImageIO.read(url);
-            Image images = SwingFXUtils.toFXImage(img, null);
-            image = new ImageView();
-            image.setFitHeight(150);
-            image.setFitWidth(150);
-            image.setImage(images);
-
-        } catch (IOException e) { //case image not valid any more (link with 404 page)
-            Image img = new Image("./img/empty.jpg");
-            image = new ImageView(img);
-            image.setFitHeight(150);
-            image.setFitWidth(150);
-            image.setPreserveRatio(true);
-        }
-
+        ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150);
         Label category = new Label("Category: " + insertions.get(index).getCategory());
         Label price = new Label(insertions.get(index).getPrice() + "€");
         Label views = new Label("Views: " + insertions.get(index).getViews());

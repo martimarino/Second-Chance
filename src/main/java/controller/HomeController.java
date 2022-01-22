@@ -114,6 +114,8 @@ public class HomeController {
 
     private void addInsertionsViral() {
 
+        String uniq_id = viralList.get(scrollPage2).getString("uniq_id");
+
         ImageView image;
         Label user = new Label("User: " + viralList.get(scrollPage2).getString("seller"));
         image = Utility.getGoodImage(viralList.get(scrollPage2).getString("image_url"), 150);
@@ -129,22 +131,11 @@ public class HomeController {
         viralHBox.getChildren().add(viral);
 
 
-        user.setOnMouseClicked(event -> {
+        viral.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique: " + (viralList.get(scrollPage2).getString("uniq_id")));
-                        showInsertionPage(viralList.get(scrollPage).getString("uniq_id"));
-                        updateInsertionview(viralList.get(scrollPage).getString("uniq_id"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-
-        image.setOnMouseClicked(event -> {
-                    try {
-                        System.out.println("unique img: " + (viralList.get(scrollPage).getString("uniq_id")));
-                        showInsertionPage(viralList.get(scrollPage).getString("uniq_id"));
-                        updateInsertionview(viralList.get(scrollPage).getString("uniq_id"));
+                        System.out.println("unique: " + uniq_id);
+                        showInsertionPage(uniq_id);
+                        updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -212,8 +203,7 @@ public class HomeController {
     private void addFeedInsertions() {
 
         ImageView image;
-        System.out.println("INDEX: " + scrollPage);
-        System.out.println("ins(index): " + feedList.get(scrollPage));
+        String uniq_id = feedList.get(scrollPage).getString("uniq_id");
 
         Label user = new Label("User: " + feedList.get(scrollPage).getString("seller"));
         Utility.printTerminal(feedList.toString());
@@ -229,22 +219,11 @@ public class HomeController {
 
         feedBox.getChildren().add(feed);
 
-        user.setOnMouseClicked(event -> {
+        feed.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique: " + (feedList.get(scrollPage).getString("uniq_id")));
-                        showInsertionPage(feedList.get(scrollPage).getString("uniq_id"));
-                        updateInsertionview(feedList.get(scrollPage).getString("uniq_id"));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-
-        image.setOnMouseClicked(event -> {
-                    try {
-                        System.out.println("unique: " + (feedList.get(scrollPage).getString("uniq_id")));
-                        showInsertionPage(feedList.get(scrollPage).getString("uniq_id"));
-                        updateInsertionview(feedList.get(scrollPage).getString("uniq_id"));
+                        System.out.println("unique: " + uniq_id);
+                        showInsertionPage(uniq_id);
+                        updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

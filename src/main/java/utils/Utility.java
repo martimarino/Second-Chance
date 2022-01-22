@@ -14,6 +14,7 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -91,8 +92,8 @@ public class Utility {
             //uc.setReadTimeout(5000);
             //uc.setConnectTimeout(5000);
             uc.getInputStream();
-            //  HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            //connection.setRequestMethod("POST");
+            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("POST");
             BufferedImage img = ImageIO.read(url);
             Image images = SwingFXUtils.toFXImage(img, null);
             image = new ImageView();

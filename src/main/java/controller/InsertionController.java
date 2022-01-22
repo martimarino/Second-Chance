@@ -3,18 +3,23 @@ package main.java.controller;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
+
+import javax.imageio.ImageIO;
+import javafx.scene.image.Image;
+
 import main.java.entity.User;
 import main.java.utils.Session;
 import main.java.utils.Utility;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,7 +28,7 @@ import java.net.URL;
 public class InsertionController {
 
     public Label insertionTitle;
-    public Label descriptionContainer;
+    public TextField descriptionContainer;
 
     public Button buy;
     public Button favourite;
@@ -44,7 +49,7 @@ public class InsertionController {
     public Text price;
     String insertion_id;
     String image_url;
-
+    Insertion insertion;
     ConnectionMongoDB conn = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
@@ -53,12 +58,13 @@ public class InsertionController {
         this.insertion_id = uniq_id;
         insertionTitle = new Label();
         infoContainer.setVisible(true);
-
+        descriptionContainer.setEditable(false);
+        
         Session session = Session.getInstance();
         User user = session.getLoggedUser();
 
         //ConnectionMongoDB conn = new ConnectionMongoDB();
-        Insertion insertion = conn.findInsertion(insertion_id);
+        insertion = conn.findInsertion(insertion_id);
 
         try {
             fillInsertionInfo(insertion);
@@ -80,18 +86,9 @@ public class InsertionController {
 
     private void fillInsertionInfo(Insertion insertion) throws FileNotFoundException {
 
-        try {
-            BufferedImage img = ImageIO.read(new URL(insertion.getImage_url()));
-            Image image = SwingFXUtils.toFXImage(img, null);
-            ImageView images = new ImageView();
-            images.setFitHeight(300);
-            images.setFitWidth(300);
-            images.setImage(image);
-            imgContainer.getChildren().add(images);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("IMAGE: " + insertion.getImage_url());
+        ImageView images = Utility.getGoodImage(insertion.getImage_url(), 300);
+        imgContainer.getChildren().add(images);
 
         descriptionContainer.setText(insertion.getDescription());
 

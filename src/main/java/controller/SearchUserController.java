@@ -1,6 +1,8 @@
 package main.java.controller;
 
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -8,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
@@ -196,6 +200,16 @@ public class SearchUserController extends MainController{
             vb.getChildren().add(country);
             vb.getChildren().add(city);
 
+            vb.setOnMouseClicked(event->{
+                        try {
+                            System.out.println("USERNAME onclick: " + username.getText());
+                            showUserPage(username.getText());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
+
             GridPane.setHalignment(im, HPos.CENTER);
             GridPane.setHalignment(username, HPos.CENTER);
             GridPane.setHalignment(country, HPos.CENTER);
@@ -328,6 +342,16 @@ public class SearchUserController extends MainController{
             GridPane.setHalignment(country, HPos.CENTER);
             GridPane.setHalignment(city, HPos.CENTER);
             GridPane.setHalignment(followUnfollow, HPos.CENTER);
+
+            vb.setOnMouseClicked(event->{
+                        try {
+                            System.out.println("USERNAME onclick: " + username.getText());
+                            showUserPage(username.getText());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
         }
 
         suggBox.setStyle(
@@ -337,6 +361,23 @@ public class SearchUserController extends MainController{
 
         indexSugg++;
         System.out.println("(add sugg) INDEX: " + indexSugg);
+    }
+
+    private void showUserPage(String username) {
+
+        System.out.println("USERNAME show: " + username);
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MyProfileController.class.getResource("/FXML/MyProfile.fxml"));
+
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.setScene(new Scene(loader.load()));
+            MyProfileController controller = loader.getController();
+            controller.initialize(username);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void prevSuggestedUsers() throws IOException {

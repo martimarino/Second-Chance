@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Double.NaN;
+
 public class MyProfileController extends MainController {
 
     public GridPane userInfo;
@@ -29,6 +31,8 @@ public class MyProfileController extends MainController {
     public BorderPane review;
 
     @FXML public Pane nextReviews, prevReviews;
+    public Button refreshBtn;
+    public Label balanceText;
 
     private List<Document> listReviews;
 
@@ -41,15 +45,53 @@ public class MyProfileController extends MainController {
 
     private User user;
     private Session session;
+    private ConnectionMongoDB conn;
 
     int scrollPage2;
 
-    public void initialize() {
+    public void initialize(){
 
         Session session = Session.getInstance();
         user  = session.getLogUser();
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
+        conn = new ConnectionMongoDB();
+
+        setProfile();
+        System.out.println("USERNAME init: " + user.getUsername());
+    }
+
+
+    public void initialize(String us) {
+
+        conn = new ConnectionMongoDB();
+
+        Session session = Session.getInstance();
+        user  = session.getLogUser();
+
+        if(!us.equals(user.getUsername())) {
+
+            balanceValue.setVisible(false);
+            btnAddFunds.setDisable(true);
+            btnAddFunds.setVisible(false);
+            refreshBtn.setVisible(false);
+            refreshBtn.setDisable(true);
+            btnLogout.setDisable(true);
+            btnLogout.setVisible(false);
+            balanceText.setVisible(false);
+
+            Document userSearched = conn.findUserByUsername(us);
+            user = new User(userSearched.getString("email"), userSearched.getString("username"), null, userSearched.getString("name"), userSearched.getString("country"), userSearched.getString("city"), userSearched.getString("address"), userSearched.getString("suspended"), userSearched.getDouble("rating"), 0.0, userSearched.getString("image"));
+
+            setProfile();
+        }
+        System.out.println("USERNAME INIT: " + user.getUsername());
+    }
+
+    public void setProfile(){
+
+        userInfo.getChildren().clear();
+
+        String rate = (Double.isNaN(user.getRating()))? "No reviews" : Double.toString(user.getRating());
 
         Label username = new Label(user.getUsername());
         Label name = new Label(user.getName());
@@ -57,9 +99,24 @@ public class MyProfileController extends MainController {
         Label country = new Label(user.getCountry());
         Label city = new Label(user.getCity());
         Label address = new Label(user.getAddress());
-        Label rating = new Label(Double.toString(user.getRating()));
-      
+        Label rating = new Label(rate);
+        Label usernameText = new Label("Username:");
+        Label nameText = new Label("Name:");
+        Label emailText = new Label("Email:");
+        Label countryText = new Label("Country:");
+        Label cityText = new Label("City:");
+        Label addressText = new Label("Address:");
+        Label ratingText = new Label("Rating:");
+
         System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
+        userInfo.add(usernameText, 0, 0);
+        userInfo.add(nameText, 0, 1);
+        userInfo.add(emailText, 0, 2);
+        userInfo.add(countryText, 0, 3);
+        userInfo.add(cityText, 0, 4);
+        userInfo.add(addressText, 0, 5);
+        userInfo.add(ratingText, 0, 6);
 
         userInfo.add(username, 1,0);
         userInfo.add(name, 1, 1);
@@ -90,6 +147,7 @@ public class MyProfileController extends MainController {
     public void showUserFollowers() {
 
         ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
+        System.out.println("USERNAME : " + user.getUsername());
         ArrayList<String> follower = conn.retrieveFollowersByUser(user.getUsername());
         StackPane secondaryLayout = new StackPane();
 
@@ -176,13 +234,13 @@ public class MyProfileController extends MainController {
     public void showInsertions() throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/InsertionList.fxml"));
+        loader.setLocation(InsertionListController.class.getResource("/FXML/InsertionList.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
 
         stage.setScene(new Scene(loader.load()));
 
         InsertionListController controller = loader.getController();
-        controller.initialize();
+        controller.initialize(user.getUsername());
 
         stage.show();
     }
@@ -190,13 +248,13 @@ public class MyProfileController extends MainController {
     public void showInsertionsLiked() throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/InsertionListLiked.fxml"));
+        loader.setLocation(InsertionListLikedController.class.getResource("/FXML/InsertionListLiked.fxml"));
         Stage stage = new Stage(StageStyle.DECORATED);
 
         stage.setScene(new Scene(loader.load()));
 
         InsertionListLikedController controller = loader.getController();
-        controller.initialize();
+        controller.initialize(user.getUsername());
 
         stage.show();
     }
