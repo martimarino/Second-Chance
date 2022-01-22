@@ -3,7 +3,6 @@ package main.java.controller;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
-import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import main.java.connection.*;
 import main.java.entity.User;
@@ -37,14 +36,17 @@ public class SearchUserController extends MainController{
     public ArrayList<Document> sugg;
     public ArrayList<String> suggFromNeo;
 
-    public int item;
+    int indexSearched, indexSuggested;
     int scrollPage;
     int k = 15;
-
+    int item;
     public void initialize() throws IOException {
 
         usersList = new GridPane();
+        indexSearched = 0;
+        indexSuggested = 0;
         item = 0;
+
         us.setText("");
         country.setValue("country");
         rating.setValue("rating");
@@ -77,8 +79,8 @@ public class SearchUserController extends MainController{
             Utility.printTerminal("SUGG MONGO: " + sugg.size());
         }
 
-        for (int i = 0; i < suggFromNeo.size(); i++) {
-            d = connMongo.findUserByUsername(suggFromNeo.get(i));
+        for (String s : suggFromNeo) {
+            d = connMongo.findUserByUsername(s);
             sugg.add(d);
         }
 
@@ -318,7 +320,7 @@ public class SearchUserController extends MainController{
         scrollPage+=3;
     }
 
-    public void prevSuggestedUsers(MouseEvent mouseEvent) throws IOException {
+    public void prevSuggestedUsers() throws IOException {
 
         suggList.getChildren().clear();
         int row = 0;
@@ -343,7 +345,7 @@ public class SearchUserController extends MainController{
         scrollPage+=3;
     }
 
-    public void nextSuggestedUsers(MouseEvent mouseEvent) throws IOException {
+    public void nextSuggestedUsers() throws IOException {
 
         suggList.getChildren().clear();
         int row = 0;

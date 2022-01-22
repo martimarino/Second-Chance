@@ -2,7 +2,6 @@ package main.java.controller;
 
 import javafx.geometry.HPos;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -11,18 +10,11 @@ import javafx.scene.layout.*;
 import main.java.connection.*;
 import main.java.utils.*;
 import org.bson.*;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javafx.embed.swing.SwingFXUtils;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -46,12 +38,16 @@ public class SearchInsertionController extends MainController{
 
     public Pane prevSearch, nextSearch;
 
+    private int k = 6;      //number of elements per page
+    private int index;      //index of insertion to show
+
     public int scrollPage;
 
     ConnectionMongoDB conn = new ConnectionMongoDB();
 
     public void initialize(){
 
+        index = 0;
         insertionList = new GridPane();
         //set buttons
         prevSearch.setDisable(true);
@@ -72,7 +68,6 @@ public class SearchInsertionController extends MainController{
         controller.initialize(uniq_id);
         stage.show();
     }
-
 
     public void findInsertion() {
 

@@ -65,15 +65,18 @@ public class NewInsertionController {
                 brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLogUser().getUsername());
         Utility.printTerminal(i.toString());
 
+        //MongoDB failure
         if(!connMongo.addInsertion(i)) {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on MongoDB");
             return;
         }
+        //Nejo failure
         if((!connNeo.addInsertion(i) || (!connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId())))) {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
             return;
         }
 
+        //clear fields
         categ.setValue("-");
         price.setText("");
         status.setValue("-");

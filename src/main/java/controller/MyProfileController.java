@@ -169,14 +169,8 @@ public class MyProfileController extends MainController {
     }
 
     public void addFundsShow() throws IOException {
-
-        URL url = new File("src/main/resources/FXML/AddFunds.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
+        Utility.changePage(stage, "AddFunds");
     }
 
     public void showInsertions() throws IOException {
@@ -219,14 +213,8 @@ public class MyProfileController extends MainController {
 
         // Open sign-in window
         Stage primaryStage = new Stage();
-
-        URL url = new File("src/main/resources/FXML/SignIn.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
         primaryStage.setTitle("SecondChance");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
-        primaryStage.show();
+        Utility.changePage(primaryStage, "SignIn");
     }
 
     public void showReviews() {

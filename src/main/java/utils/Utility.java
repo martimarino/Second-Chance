@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.io.File;
@@ -15,7 +14,6 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -83,7 +81,7 @@ public class Utility {
 
     public static ImageView getGoodImage(String url_image, int dimension){
 
-        ImageView image = null;
+        ImageView image;
 
         try {
             URL url = new URL(url_image);
@@ -120,11 +118,10 @@ public class Utility {
         System.out.println("************************************************");
     }
 
-    public static void changePage(Button element, String page) throws IOException {
+    public static void changePage(Stage stage, String page) throws IOException {
         URL url = new File("src/main/resources/FXML/" + page + ".fxml").toURI().toURL();
         Parent root = FXMLLoader.load(url);
 
-        Stage stage = (Stage) element.getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.show();

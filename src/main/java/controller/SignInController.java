@@ -45,36 +45,22 @@ public class SignInController {
 
     public void ShowSignUp(MouseEvent mouseEvent) throws IOException {
 
-        URL url = new File("src/main/resources/FXML/SignUp.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
         Stage stage = (Stage) SignUp.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
+        Utility.changePage(stage, "SignUp");
     }
 
     public void ShowAdminPanel() throws IOException {
 
-        URL url = new File("src/main/resources/FXML/AdminPanel.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
         Stage stage = (Stage) SignIn.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
+        Utility.changePage(stage, "AdminPanel");
 
     }
 
     public void ShowHome() throws IOException {
 
-        URL url = new File("src/main/resources/FXML/MainPage.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
         Stage stage = (Stage) SignIn.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
+        Utility.changePage(stage, "MainPage");
+
     }
 
     public void login() throws IOException {

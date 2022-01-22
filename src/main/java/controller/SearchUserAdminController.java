@@ -132,13 +132,7 @@ public class SearchUserAdminController {
 
         // Open sign-in window
         Stage primaryStage = new Stage();
-
-        URL url = new File("src/main/resources/FXML/SignIn.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
         primaryStage.setTitle("SecondChance");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
-        primaryStage.show();
+        Utility.changePage(primaryStage, "SignIn");
     }
 }

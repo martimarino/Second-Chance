@@ -24,13 +24,9 @@ public class SignUpController {
 
     public void ShowSignIn() throws IOException {
 
-        URL url = new File("src/main/resources/FXML/SignIn.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
-
         Stage stage = (Stage) SignIn.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.show();
+        Utility.changePage(stage, "SignIn");
+
     }
 
     public void registration() throws IOException {
