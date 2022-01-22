@@ -129,6 +129,7 @@ public class MyProfileController extends MainController {
         updateUserBalance();
 
         listReviews = conn.getReviewsByUser(user.getUsername());
+
         showReviews();
 
     }

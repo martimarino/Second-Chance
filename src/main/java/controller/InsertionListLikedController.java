@@ -28,6 +28,7 @@ public class InsertionListLikedController {
     public VBox box;
     public Pane prev, next;
     private final int k = 3;
+    private int contReviews = 0;
     private int index;
 
     ConnectionMongoDB connMongo = new ConnectionMongoDB();
@@ -61,14 +62,16 @@ public class InsertionListLikedController {
         }
         System.out.println("(show) INDEX: " + index);
 
-        for (int i = 0; i < k && index < insertions.size(); i++)
+        for (int i = 0; i < k && i < insertions.size(); i++) {
             addInsertions();
-
+        }
         bp.setCenter(box);
 
     }
 
     private void addInsertions() {
+
+        String uniq_id = insertions.get(index).getUniq_id();
 
         HBox hb = new HBox();
         VBox det = new VBox();
@@ -88,8 +91,9 @@ public class InsertionListLikedController {
         image.setOnMouseClicked(event->{
                     try {
                         SearchInsertionController sic = new SearchInsertionController();
-                        sic.showInsertionPage(insertions.get(index).getUniq_id());
-                        HomeController.updateInsertionview(insertions.get(index).getUniq_id());
+                        System.out.println(uniq_id);
+                        sic.showInsertionPage(uniq_id);
+                        HomeController.updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

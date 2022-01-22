@@ -27,7 +27,7 @@ public class Insertion {
                      String gender, double price, int interested,
                      int views, String status, String color, String size,
                      String brand, String country, String image_url,
-                     String timestamp, String seller){
+                     String timestamp, String seller, String uniq_id){
         this.id = id;
         this.category = category;
         this.description = description;
@@ -43,6 +43,7 @@ public class Insertion {
         this.image_url = image_url;
         this.timestamp = timestamp;
         this.seller = seller;
+        this.uniq_id = uniq_id;
 
     }
 
