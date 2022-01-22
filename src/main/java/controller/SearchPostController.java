@@ -24,7 +24,6 @@ public class SearchPostController {
     @FXML private Text category;
     @FXML private Text price;
     @FXML private Text views;
-    @FXML private Text alertText;
 
     public void initialize(){
         btnDeletePost.setDisable(true);

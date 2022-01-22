@@ -1,22 +1,21 @@
 package main.java.controller;
 
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
-import javafx.scene.control.*;
+import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
 import javafx.scene.layout.*;
-import main.java.connection.*;
-import main.java.utils.*;
-import org.bson.*;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.java.connection.ConnectionMongoDB;
+import main.java.utils.Utility;
+import org.bson.Document;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class SearchInsertionController extends MainController{
@@ -29,31 +28,27 @@ public class SearchInsertionController extends MainController{
     public ComboBox<String> color;
 
     public TextField ins;
-
-    public GridPane insertionList;
-
     public BorderPane insertionFind;
-
     public ArrayList<Document> insertionFilter;
+    public Pane prev, next;
 
-    public Pane prevSearch, nextSearch;
-
-    private int k = 6;      //number of elements per page
-    private int index;      //index of insertion to show
-
-    public int scrollPage;
+    private final int k = 6;        //number of elements per page
+    private int index;              //index of insertion to show
+    public HBox firstRow, secondRow;
+    public VBox box;
 
     ConnectionMongoDB conn = new ConnectionMongoDB();
 
     public void initialize(){
 
-        index = 0;
-        insertionList = new GridPane();
+        firstRow = new HBox(20);
+        secondRow = new HBox(20);
+        box = new VBox(20);
         //set buttons
-        prevSearch.setDisable(true);
-        nextSearch.setDisable(true);
-        prevSearch.setVisible(false);
-        nextSearch.setVisible(false);
+        prev.setDisable(true);
+        next.setDisable(true);
+        prev.setVisible(false);
+        next.setVisible(false);
 
     }
 
@@ -67,6 +62,7 @@ public class SearchInsertionController extends MainController{
         InsertionController controller = loader.getController();
         controller.initialize(uniq_id);
         stage.show();
+
     }
 
     public void findInsertion() {
@@ -77,12 +73,12 @@ public class SearchInsertionController extends MainController{
                     && gender.getValue().equals("gender") && status.getValue().equals("status")
                     && category.getValue().equals("category") && color.getValue().equals("color"))) {
 
-                    //take combobox value and search
-                    insertionFilter = conn.findInsertionByFilters(size.getValue(), price.getValue(), gender.getValue(), status.getValue(), category.getValue(), color.getValue());
-                    if (insertionFilter.isEmpty()) {
-                        Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
-                        return;
-                    }
+                //take combobox value and search
+                insertionFilter = conn.findInsertionByFilters(size.getValue(), price.getValue(), gender.getValue(), status.getValue(), category.getValue(), color.getValue());
+                if (insertionFilter.isEmpty()) {
+                    Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
+                    return;
+                }
             }
         } else {    //search case
             if(ins.getText().equals("admin"))
@@ -102,12 +98,7 @@ public class SearchInsertionController extends MainController{
         }
 
         showFilteredInsertions();
-        insertionFind.setCenter(insertionList);
-
-        if (insertionFilter.size() > 5) {
-            nextSearch.setDisable(false);
-            nextSearch.setVisible(true);
-        }
+        insertionFind.setCenter(box);
 
         size.setValue("size");
         price.setValue("price");
@@ -119,42 +110,55 @@ public class SearchInsertionController extends MainController{
 
     private void showFilteredInsertions() {
 
-        prevSearch.setDisable(true);
-        prevSearch.setVisible(false);
-
-        insertionList.getChildren().clear();
-        scrollPage = 0;
-
-        for (int i = scrollPage; i < scrollPage+3 && i < insertionFilter.size(); i++)     //first row results
-        {
-            addFilteredInsertions(i, i, 0);
-        }
-        for (int i = scrollPage; i < scrollPage+3 && i+3 < insertionFilter.size(); i++)     //second row reults
-        {
-            addFilteredInsertions(i+3, i, 5);
+        if (insertionFilter.size() - index > k) {
+            next.setDisable(false);
+            next.setVisible(true);
         }
 
-        insertionFind.setCenter(insertionList);
-        scrollPage+=6;
+        firstRow.getChildren().clear();
+        secondRow.getChildren().clear();
+        box.getChildren().clear();
+
+        for (int i = 0; i < k && index < insertionFilter.size(); i++)
+            addFilteredInsertions(i);
+
+        insertionFind.setCenter(box);
+
     }
 
-    private void addFilteredInsertions(int index, int i, int j) {
+    private void addFilteredInsertions(int i) {
 
-        ImageView image = null;
+        VBox vb = new VBox();
+
+        ImageView image;
 
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
 
-        image = Utility.getGoodImage(insertionFilter.get(index).getString("image_url"), 100);
+        image = Utility.getGoodImage(insertionFilter.get(index).getString("image_url"), 130);
 
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
         Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + "€");
         Label brand = new Label("Brand: " + insertionFilter.get(index).getString("brand"));
 
-        insertionList.add(seller, i, j);
-        insertionList.add(image, i, j+1);
-        insertionList.add(status, i, j+2);
-        insertionList.add(price, i, j+3);
-        insertionList.add(brand, i, j+4);
+        if(i<(k/2)) {
+            vb.getChildren().add(seller);
+            vb.getChildren().add(image);
+            vb.getChildren().add(status);
+            vb.getChildren().add(price);
+            vb.getChildren().add(brand);
+            firstRow.getChildren().add(vb);
+            if(i == ((k/2)-1))
+                box.getChildren().add(firstRow);
+        } else {
+            vb.getChildren().add(seller);
+            vb.getChildren().add(image);
+            vb.getChildren().add(status);
+            vb.getChildren().add(price);
+            vb.getChildren().add(brand);
+            secondRow.getChildren().add(vb);
+            if(i == k-1)
+                box.getChildren().add(secondRow);
+        }
 
         seller.setOnMouseClicked(event->{
                     try {
@@ -182,10 +186,11 @@ public class SearchInsertionController extends MainController{
         GridPane.setHalignment(price, HPos.CENTER);
         GridPane.setHalignment(brand, HPos.CENTER);
 
-        insertionList.setStyle(
-                        "-fx-padding: 50;\n" +
+        box.setStyle(
+                "-fx-padding: 50;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
+        index++;
     }
 
     private void updateInsertionview(String uniq_id) {
@@ -196,70 +201,41 @@ public class SearchInsertionController extends MainController{
     }
 
 
-    public void PrevFilteredInsertion(MouseEvent mouseEvent) {
+    public void PrevFilteredInsertion() {
 
-        insertionList.getChildren().clear();
-        int row = 0;
+        box.getChildren().clear();
 
-        if (scrollPage == 6) {
-            prevSearch.setDisable(true);
-            prevSearch.setVisible(false);
-        }
-
-        if(scrollPage == 0)
-            scrollPage = insertionFilter.size() - 6;
+        if((index%k) == 0)
+            index -= k;
         else
-            scrollPage-=6;
+            index -= (index%k);
+        index -= k;
 
-
-        for (int i = scrollPage; row < 3; i++) {
-
-            addFilteredInsertions(i, row, 0);
-            row++;
+        if (index == 0) {
+            prev.setDisable(true);
+            prev.setVisible(false);
         }
 
-        row = 0;
+        showFilteredInsertions();
 
-        for (int i = scrollPage; row<3; i++) {
-
-            addFilteredInsertions(i+3, row, 5);
-            row++;
-        }
-
-        insertionFind.setCenter(insertionList);
+        insertionFind.setCenter(box);
     }
 
-    public void NextFilteredInsertion(MouseEvent mouseEvent) {
+    public void NextFilteredInsertion() {
 
-        insertionList.getChildren().clear();
-        int row = 0;
+        box.getChildren().clear();
 
-        for (int i = scrollPage; i < scrollPage+3 && row<3; i++) {
+        System.out.println("(next) INDEX: " + index);
 
-            if (i == insertionFilter.size()) {
-                i = 0;
-                scrollPage = 0;
-            }
-            addFilteredInsertions(i, row,0);
-            row++;
+        showFilteredInsertions();
+
+        if (index == insertionFilter.size()) {
+            next.setDisable(true);
+            next.setVisible(false);
         }
 
-        row = 0;
+        prev.setVisible(true);
+        prev.setDisable(false);
 
-        for (int i = scrollPage; i < scrollPage + 3 && row < 6; i++) {
-
-            if(i == insertionFilter.size()) {
-                i = 0;
-                scrollPage = 0;
-            }
-            addFilteredInsertions(i+3, row,5);
-            row++;
-        }
-
-        scrollPage+=6;
-        insertionFind.setCenter(insertionList);
-
-        prevSearch.setDisable(false);
-        prevSearch.setVisible(true);
     }
 }

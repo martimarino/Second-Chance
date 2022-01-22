@@ -63,7 +63,7 @@ public class InsertionListController {
 
         HBox hb = new HBox();
         VBox det = new VBox();
-        ImageView image = null;
+        ImageView image;
 
         try {
             URL url = new URL(list.get(index).getString("image_url") );

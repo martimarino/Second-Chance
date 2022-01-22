@@ -10,8 +10,6 @@ import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
 import main.java.utils.Session;
-import org.bson.Document;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -26,7 +24,7 @@ public class InsertionListLikedController {
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
-    private int k = 3;
+    private final int k = 3;
     private int index;
 
     ConnectionMongoDB connMongo = new ConnectionMongoDB();
@@ -71,7 +69,7 @@ public class InsertionListLikedController {
 
         HBox hb = new HBox();
         VBox det = new VBox();
-        ImageView image = null;
+        ImageView image;
 
         try {
             URL url = new URL(insertions.get(index).getImage_url());
@@ -143,10 +141,10 @@ public class InsertionListLikedController {
         box.getChildren().clear();
 
         if((index%k) == 0)
-            index -= 3;
+            index -= k;
         else
             index -= (index%k);
-        index -= 3;
+        index -= k;
 
         System.out.println("(prev) INDEX: " + index);
 

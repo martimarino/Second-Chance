@@ -3,22 +3,18 @@ package main.java.controller;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
-
-import javax.imageio.ImageIO;
-import javafx.scene.image.Image;
-
 import main.java.entity.User;
 import main.java.utils.Session;
 import main.java.utils.Utility;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,7 +44,7 @@ public class InsertionController {
     public Text price;
     String insertion_id;
     String image_url;
-    Insertion insertion;
+
     ConnectionMongoDB conn = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
@@ -114,7 +110,7 @@ public class InsertionController {
         
     }
 
-    public void buyInsertion(MouseEvent mouseEvent) {
+    public void buyInsertion() {
 
         Session session = Session.getInstance();
         User user = session.getLoggedUser();
@@ -133,7 +129,7 @@ public class InsertionController {
         }
     }
 
-    public void addToFavorite(MouseEvent mouseEvent) {
+    public void addToFavorite() {
 
         Session session = Session.getInstance();
         User user = session.getLoggedUser();

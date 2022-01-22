@@ -47,9 +47,9 @@
             </items>
         </ComboBox>
         <!-- Searched and filtered users results -->
-        <BorderPane fx:id="userFind" layoutX="200.0" layoutY="200.0" prefHeight="307.0" prefWidth="290.0">
+        <BorderPane fx:id="userFind" layoutX="100.0" layoutY="200.0" prefHeight="307.0" prefWidth="500.0">
             <left>
-                <Pane fx:id="prevButton" onMouseClicked="#showPrevUser" translateY="100.0">
+                <Pane fx:id="prevSearch" onMouseClicked="#showPrevUser" translateY="100.0">
                    <children>
                        <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
                            <image>
@@ -60,7 +60,7 @@
                 </Pane>
             </left>
             <right>
-                <Pane fx:id="nextButton" onMouseClicked="#showNextUser" translateY="100.0">
+                <Pane fx:id="nextSearch" onMouseClicked="#showNextUser" translateY="100.0">
                    <children>
                        <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
                            <image>
@@ -71,12 +71,12 @@
                 </Pane>
             </right>
         </BorderPane>
-        <Text fill="#2582bf" layoutX="260.0" layoutY="470.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Suggested sellers">
+        <Text fill="white" layoutX="260.0" layoutY="470.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Suggested sellers">
             <font>
                 <Font size="24.0" />
             </font>
         </Text>
-        <BorderPane fx:id="userSugg" layoutX="50.0" layoutY="500.0" prefHeight="307.0" prefWidth="600.0">
+        <BorderPane fx:id="userSugg" layoutX="100.0" layoutY="500.0" prefHeight="250.0" prefWidth="500.0">
             <left>
                 <Pane fx:id="prevSugg" onMouseClicked="#prevSuggestedUsers" translateY="100.0">
                    <children>

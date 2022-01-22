@@ -1,19 +1,22 @@
 package main.java.controller;
 
 
-import javafx.fxml.*;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.text.*;
-import javafx.stage.*;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import main.java.connection.ConnectionMongoDB;
+import main.java.connection.ConnectionNeo4jDB;
+import main.java.entity.User;
+import main.java.utils.Utility;
 
-import main.java.connection.*;
-import main.java.entity.*;
-import main.java.utils.*;
-
-import java.io.*;
-import java.net.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 public class SignUpController {
 
@@ -44,7 +47,7 @@ public class SignUpController {
                 return;
             }
 
-            System.out.println(u.toString());
+            System.out.println(u);
 
             ConnectionMongoDB conn = new ConnectionMongoDB();
 

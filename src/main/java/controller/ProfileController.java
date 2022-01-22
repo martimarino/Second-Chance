@@ -1,19 +1,11 @@
 package main.java.controller;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import main.java.entity.User;
 import main.java.utils.Session;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 public class ProfileController{
 

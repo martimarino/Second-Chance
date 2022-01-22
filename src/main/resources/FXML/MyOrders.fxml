@@ -41,8 +41,8 @@
       <ComboBox fx:id="comboBox" layoutX="275.0" layoutY="85.0" onAction="#showOrders" prefWidth="150.0" style="-fx-background-color: white;" value="Select orders">
          <items>
             <FXCollections fx:factory="observableArrayList">
-               <String fx:value="Purchased" />
-               <String fx:value="Sold" />
+               <String fx:value="Items purchased" />
+               <String fx:value="Items sold" />
             </FXCollections>
          </items>
       </ComboBox>

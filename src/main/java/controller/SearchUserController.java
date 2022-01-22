@@ -1,90 +1,107 @@
 package main.java.controller;
 
-import javafx.geometry.*;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
+import javafx.geometry.HPos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import main.java.connection.*;
+import main.java.connection.ConnectionMongoDB;
+import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
-import main.java.utils.*;
 import main.java.utils.Session;
-import org.bson.*;
+import main.java.utils.Utility;
+import org.bson.Document;
+
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 
 public class SearchUserController extends MainController{
 
-    public Button findUsers;
-    public Pane prevSugg, nextSugg;
+    Button followUnfollow;
 
+    public Button findUsers;
     public TextField us;
 
-    public BorderPane userFind;
-    public BorderPane userSugg;
+    // FindUsers panel variables
 
+    public BorderPane userFind;                 //pane to fill
     public ComboBox<String> country;
     public ComboBox<String> rating;
+    public Pane prevSearch, nextSearch;         //find users arrows
+    public HBox searchBox;                      //panel to fill and add to the BorderPane
+    public ArrayList<Document> searchedList;      //results of searched or filtered users
+    public int indexSearch;                     //next element to show
 
-    public Pane prevButton, nextButton;
-    Button followSuggested, followSearched;
+    // Suggested sellers panel variables
 
-    public GridPane usersList;
-    public GridPane suggList;
+    public BorderPane userSugg;                 //pane to fill
+    public Pane prevSugg, nextSugg;             //suggestions arrows
+    public HBox suggBox;                       //panel to fill and add to the BorderPane
+    public ArrayList<Document> suggList;            //suggested users to show
+    public ArrayList<String> suggFromNeo;       //suggestions taken from Neo4j
+    public int indexSugg;                       //next element to show
 
-    public ArrayList<Document> userFilter;
-    public ArrayList<Document> sugg;
-    public ArrayList<String> suggFromNeo;
+    int k = 3;            //how many to show per page
+    int m = 15;           //how many to show
 
-    int indexSearched, indexSuggested;
-    int scrollPage;
-    int k = 15;
-    int item;
     public void initialize() throws IOException {
 
-        usersList = new GridPane();
-        indexSearched = 0;
-        indexSuggested = 0;
-        item = 0;
+        // Find user panel
+
+        searchBox = new HBox(20);
+        indexSearch = 0;
+        searchedList = new ArrayList<>();
 
         us.setText("");
         country.setValue("country");
         rating.setValue("rating");
 
-        prevButton.setDisable(true);
-        nextButton.setDisable(true);
-        prevButton.setVisible(false);
-        nextButton.setVisible(false);
+        prevSearch.setDisable(true);
+        nextSearch.setDisable(true);
+        prevSearch.setVisible(false);
+        nextSearch.setVisible(false);
 
-        suggList = new GridPane();
-        sugg = new ArrayList<>();
+        // Suggested sellers
+
+        suggBox = new HBox(20);
+        indexSugg = 0;
+
+        suggList = new ArrayList<>();
         suggFromNeo = new ArrayList<>();
         prevSugg.setDisable(true);
         prevSugg.setVisible(false);
+        nextSugg.setDisable(true);
+        nextSugg.setVisible(false);
 
         //connection to Neo4j
         ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
         suggFromNeo = connNeo.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
-
-        Document d;
         ConnectionMongoDB connMongo = new ConnectionMongoDB();
-        Utility.printTerminal("SUGG NEO: " + suggFromNeo.size());
+
+        //if there are less than k suggested, add top k rated to the suggestions
 
         if(suggFromNeo.size() < k)
         {
             Session session = Session.getInstance();
             User user = session.getLoggedUser();
-
-            sugg = connMongo.findTopKRatedUser(k-suggFromNeo.size(), user.getCountry());
-            Utility.printTerminal("SUGG MONGO: " + sugg.size());
+            ArrayList<Document> temp = connMongo.findTopKRatedUser(m-suggFromNeo.size(), user.getCountry());
+            for(Document d : temp) {
+                suggFromNeo.add(d.getString("username"));
+            }
         }
 
+        //fill suggFromNeo list
         for (String s : suggFromNeo) {
-            d = connMongo.findUserByUsername(s);
-            sugg.add(d);
+            Document d = connMongo.findUserByUsername(s);
+            suggList.add(d);
         }
 
-        Utility.printTerminal("SUGG SIZE: " + sugg.size());
+        Utility.printTerminal("SUGG NEO: " + suggFromNeo.size());
+        Utility.printTerminal("SUGG SIZE: " + suggList.size());
 
         showSuggestedUsers();
     }
@@ -92,68 +109,92 @@ public class SearchUserController extends MainController{
     public void findUsers() throws IOException {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
+        searchedList.removeAll(searchedList);
+        indexSearch = 0;
+        prevSearch.setDisable(true);
+        nextSearch.setDisable(true);
+        prevSearch.setVisible(false);
+        nextSearch.setVisible(false);
 
+        //if the TextField is empty apply filters
         if (us.getText().equals("")) {
 
-            if (country.getValue().equals("country") && rating.getValue().equals("rating"))
-                //Utility.printTerminal("country: " + country + "rating: " + rating);
+            //no filters applied
+            if (country.getValue().equals("country") && rating.getValue().equals("rating")) {
+                prevSearch.setDisable(false);
+                prevSearch.setVisible(true);
+                nextSearch.setDisable(false);
+                nextSearch.setVisible(true);
+                searchBox.getChildren().clear();
                 return;
+            }
 
-            item = 0;
-            userFilter = conn.findUserByFilters(country.getValue(), rating.getValue());
+            searchedList = conn.findUserByFilters(country.getValue(), rating.getValue());
 
-            if (userFilter.isEmpty()) {
-
+            if (searchedList.isEmpty()) {
                 Utility.infoBox("There is not a user with this characteristics!", "Advise", "User Advise");
                 country.setValue("country");
                 rating.setValue("rating");
                 return;
             }
 
-            if(userFilter.size() > 1) {
-                nextButton.setDisable(false);
-                nextButton.setVisible(true);
-            }
+            showSearchResults();
 
-            showFilteredUsers();
-
-            item++;
-            userFind.setCenter(usersList);
+            userFind.setCenter(searchBox);
             country.setValue("country");
             rating.setValue("rating");
-        } else{
 
-            Document users = conn.findUserByUsername(us.getText());
+        } else {        //search case
 
-            if (users == null)
-                return;
+            searchedList.add(conn.findUserByUsername(us.getText()));
 
-            showSearchedUser(users);
+            if (searchedList.isEmpty())
+                Utility.infoBox("This user does not exists.", "Advise", "User Advise");
 
-            userFind.setCenter(usersList);
-            us.setText("");
-            prevButton.setDisable(true);
-            nextButton.setDisable(true);
-            prevButton.setVisible(false);
-            nextButton.setVisible(false);
+            showSearchResults();
+
         }
+
+        userFind.setCenter(searchBox);
+        us.setText("");
+
     }
 
-    private void showFilteredUsers() throws IOException {
+    /*----------------------------- FIND USERS -----------------------------*/
 
-        usersList.getChildren().clear();
+    public void showSearchResults() throws IOException {
+
+        searchBox.getChildren().clear();
+
+        //if there are more than k insertions enable next button
+        if (searchedList.size()-indexSearch > k) {
+            nextSearch.setDisable(false);
+            nextSearch.setVisible(true);
+        }
+        System.out.println("(show) INDEX: " + indexSearch);
+
+        for (int i = 0; ((i < k) && (indexSearch < m) && (indexSearch < searchedList.size())); i++)
+            addSearchResults();
+
+        userFind.setCenter(searchBox);
+
+    }
+
+    private void addSearchResults() throws IOException {
+
+        VBox vb = new VBox(10);
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             Image image = new Image(imageStream);
             ImageView im = new ImageView(image);
-            Label username = new Label(userFilter.get(item).getString("username"));
-            Label country = new Label(userFilter.get(item).getString("country"));
-            Label city = new Label(userFilter.get(item).getString("city"));
+            Label username = new Label(searchedList.get(indexSearch).getString("username"));
+            Label country = new Label(searchedList.get(indexSearch).getString("country"));
+            Label city = new Label(searchedList.get(indexSearch).getString("city"));
 
-            usersList.add(im, 0, 0);
-            usersList.add(username, 0, 1);
-            usersList.add(country, 0, 2);
-            usersList.add(city, 0, 3);
+            vb.getChildren().add(im);
+            vb.getChildren().add(username);
+            vb.getChildren().add(country);
+            vb.getChildren().add(city);
 
             GridPane.setHalignment(im, HPos.CENTER);
             GridPane.setHalignment(username, HPos.CENTER);
@@ -161,17 +202,23 @@ public class SearchUserController extends MainController{
             GridPane.setHalignment(city, HPos.CENTER);
 
             //a user can not follow itself
-            if(!(Session.getLogUser().getUsername().equals(userFilter.get(item).getString("username")))) {
-                followSearched = new Button();
-                setFollowUnfollowButton(followSearched, userFilter.get(item).getString("username"));
-                usersList.add(followSearched, 0, 4);
-                GridPane.setHalignment(followSearched, HPos.CENTER);
+            if(!(Session.getLogUser().getUsername().equals(searchedList.get(indexSearch).getString("username")))) {
+                followUnfollow = new Button();
+                setFollowUnfollowButton(followUnfollow, searchedList.get(indexSearch).getString("username"));
+                vb.getChildren().add(followUnfollow);
+                GridPane.setHalignment(followUnfollow, HPos.CENTER);
             }
+
+            searchBox.getChildren().add(vb);
         }
-        usersList.setStyle(
+        searchBox.setStyle(
                 "    -fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
+        indexSearch++;
+        System.out.println("(add search) INDEX: " + indexSearch);
+
+
     }
 
     private void setFollowUnfollowButton(Button follow, String user) {
@@ -199,178 +246,133 @@ public class SearchUserController extends MainController{
 
     }
 
-    private void showSearchedUser(Document user) throws IOException {
-
-        usersList.getChildren().clear();
-
-        try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
-            Image image = new Image(imageStream);
-            ImageView im = new ImageView(image);
-            Label username = new Label(user.getString("username"));
-            Label country = new Label(user.getString("country"));
-            Label city = new Label(user.getString("city"));
-
-            usersList.add(im, 0, 0);
-            usersList.add(username, 0, 1);
-            usersList.add(country, 0, 2);
-            usersList.add(city, 0, 3);
-
-            GridPane.setHalignment(im, HPos.CENTER);
-            GridPane.setHalignment(username, HPos.CENTER);
-            GridPane.setHalignment(country, HPos.CENTER);
-            GridPane.setHalignment(city, HPos.CENTER);
-
-            //a user can not follow itself
-            if(!(Session.getLogUser().getUsername().equals(user.getString("username")))) {
-                followSearched = new Button();
-                setFollowUnfollowButton(followSearched, user.getString("username"));
-                usersList.add(followSearched, 0, 4);
-                GridPane.setHalignment(followSearched, HPos.CENTER);
-            }
-        }
-
-        usersList.setStyle(
-                        "-fx-padding: 20;\n" +
-                        "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;");
-    }
-
     public void showPrevUser() throws IOException {
 
-        item -= 2;
+        searchBox.getChildren().clear();
 
-        if (item == 0) {
-            prevButton.setDisable(true);
-            prevButton.setVisible(false);
+        if((indexSearch%k) == 0)
+            indexSearch -= k;
+        else
+            indexSearch -= (indexSearch%k);
+        indexSearch -= k;
+
+        System.out.println("(prev search) INDEX: " + indexSearch);
+
+        if (indexSearch == 0) {
+            prevSearch.setDisable(true);
+            prevSearch.setVisible(false);
         }
 
-        showFilteredUsers();
-        item++;
-
-        if (item != userFilter.size() - 1) {
-            nextButton.setDisable(false);
-            nextButton.setVisible(true);
-        }
+        showSearchResults();
     }
 
     public void showNextUser() throws IOException {
 
-        if (item == userFilter.size()-1) {
-            nextButton.setDisable(true);
-            nextButton.setVisible(false);
-        } else{
-            nextButton.setDisable(false);
-            nextButton.setVisible(true);
+        searchBox.getChildren().clear();
+
+        System.out.println("(next search) INDEX: " + indexSearch);
+
+        showSearchResults();
+
+        if ((indexSearch == searchedList.size()) || (indexSearch == m)) {
+            nextSearch.setDisable(true);
+            nextSearch.setVisible(false);
         }
 
-        if(item >= 1) {
-            prevButton.setVisible(true);
-            prevButton.setDisable(false);
-        }
-
-        showFilteredUsers();
-        item++;
+        prevSearch.setVisible(true);
+        prevSearch.setDisable(false);
     }
 
-    /*---------------------------------------------------------------*/
+    /*------------------------ SUGGESTED SELLERS FUNCTIONS ------------------------*/
 
-    public void addSuggestedUsers(int index, int i) throws IOException {
+    private void showSuggestedUsers() throws IOException {
+
+        suggBox.getChildren().clear();
+
+        //if there are more than k insertions enable next button
+        if (suggList.size()-indexSugg > k) {
+            nextSugg.setDisable(false);
+            nextSugg.setVisible(true);
+        }
+        System.out.println("(show sugg) LIST SIZE: " + suggList.size());
+        for (int i = 0; ((i < k) && (indexSugg < m) && (indexSugg < suggList.size())); i++)
+            addSuggestedUsers();
+
+        userSugg.setCenter(suggBox);
+        System.out.println("(show sugg) INDEX: " + indexSugg);
+    }
+
+    public void addSuggestedUsers() throws IOException {
+
+        VBox vb = new VBox(10);
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
 
             Image image = new Image(imageStream);
             ImageView im = new ImageView(image);
-            Label username = new Label(sugg.get(index).getString("username"));
-            Label country = new Label(sugg.get(index).getString("country"));
-            Label city = new Label(sugg.get(index).getString("city"));
-            followSuggested = new Button();
-            setFollowUnfollowButton(followSuggested, sugg.get(index).getString("username"));
+            Label username = new Label(suggList.get(indexSugg).getString("username"));
+            Label country = new Label(suggList.get(indexSugg).getString("country"));
+            Label city = new Label(suggList.get(indexSugg).getString("city"));
+            followUnfollow = new Button();
+            setFollowUnfollowButton(followUnfollow, suggList.get(indexSugg).getString("username"));
 
-            suggList.add(im, i, 0);
-            suggList.add(username, i, 1);
-            suggList.add(country, i, 2);
-            suggList.add(city, i, 3);
-            suggList.add(followSuggested, i, 4);
+            vb.getChildren().add(im);
+            vb.getChildren().add(username);
+            vb.getChildren().add(country);
+            vb.getChildren().add(city);
+            vb.getChildren().add(followUnfollow);
+            suggBox.getChildren().add(vb);
 
             GridPane.setHalignment(im, HPos.CENTER);
             GridPane.setHalignment(username, HPos.CENTER);
             GridPane.setHalignment(country, HPos.CENTER);
             GridPane.setHalignment(city, HPos.CENTER);
-            GridPane.setHalignment(followSuggested, HPos.CENTER);
+            GridPane.setHalignment(followUnfollow, HPos.CENTER);
         }
 
-        suggList.setStyle(
-                        "-fx-padding: 20;\n" +
+        suggBox.setStyle(
+                "-fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
 
-    }
-
-    private void showSuggestedUsers() throws IOException {
-
-        suggList = new GridPane();
-        scrollPage = 0;
-
-        for (int i = scrollPage; i < scrollPage + 3; i++) {
-
-            addSuggestedUsers(i, i);
-            userSugg.setCenter(suggList);
-        }
-
-        scrollPage+=3;
+        indexSugg++;
+        System.out.println("(add sugg) INDEX: " + indexSugg);
     }
 
     public void prevSuggestedUsers() throws IOException {
 
-        suggList.getChildren().clear();
-        int row = 0;
+        suggBox.getChildren().clear();
 
-        scrollPage-=6;
+        if((indexSugg%k) == 0)
+            indexSugg -= k;
+        else
+            indexSugg -= (indexSugg%k);
+        indexSugg -= k;
 
-        nextSugg.setDisable(false);
-        nextSugg.setVisible(true);
+        System.out.println("(prev) INDEX: " + indexSugg);
 
-        if(scrollPage == 0) {
-
+        if (indexSugg == 0) {
             prevSugg.setDisable(true);
             prevSugg.setVisible(false);
         }
 
-        for(int i = scrollPage; row<3; i++) {
-            addSuggestedUsers(i, row);
-            row++;
-        }
-
-        userSugg.setCenter(suggList);
-        scrollPage+=3;
+        showSuggestedUsers();
     }
 
     public void nextSuggestedUsers() throws IOException {
 
-        suggList.getChildren().clear();
-        int row = 0;
+        suggBox.getChildren().clear();
 
-        prevSugg.setDisable(false);
-        prevSugg.setVisible(true);
+        System.out.println("(next) INDEX: " + indexSugg);
 
-        for (int i = scrollPage; i < scrollPage + 3 && row < 3; i++)
-        {
-            if (i == sugg.size()) {
-                nextButton.setDisable(true);
-                nextButton.setVisible(false);
-                return;
-            }
+        showSuggestedUsers();
 
-            addSuggestedUsers(i, row);
-            row++;
-            userSugg.setCenter(suggList);
-        }
-
-        scrollPage+= 3;
-
-        if(scrollPage >= sugg.size()-1) {
+        if ((indexSugg == suggList.size()) || (indexSugg == m)) {
             nextSugg.setDisable(true);
             nextSugg.setVisible(false);
         }
+
+        prevSugg.setVisible(true);
+        prevSugg.setDisable(false);
     }
 }
