@@ -31,15 +31,18 @@ public class HomeController {
     public Pane nextButton, prevButton;
     public Pane prevFeedButton, nextFeedButton;
 
-    GridPane viral;
-    GridPane feedGrid;
+    //GridPane viral;
+    //GridPane feedGrid;
+    HBox viralHBox;
+    HBox feedBox;
 
-    ArrayList<Document> insertions;
-    ArrayList<Document> ins;
+    ArrayList<Document> viralList;
+    ArrayList<Document> feedList;
     public ArrayList<String> followedFromNeo;
 
     int scrollPage2;
     int k = 12;
+    int nPage = 3;
     int scrollPage;
 
     public void initialize() {
@@ -49,11 +52,15 @@ public class HomeController {
 
         followedFromNeo = new ArrayList<>();
 
-        insertions = connMongo.findViralInsertions(k);
-        showViralInsertions();
+        viralList = connMongo.findViralInsertions(k);
         prevButton.setDisable(true);
         prevButton.setVisible(false);
-
+        viralHBox = new HBox();
+        viralHBox.setSpacing(10);
+        viralInsertions.setCenter(viralHBox);
+        scrollPage2 = 0;
+        showViralInsertions();
+        //viralHBox.setStyle("-fx-background-color: white; -fx-padding: 5");
         // new user
        /* if(connNeo.checkNewUser(Session.getLogUser().getUsername())) {
             ins = connMongo.findTopKViewedInsertion(k, "clothing");
@@ -62,21 +69,26 @@ public class HomeController {
             followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
             ins = connMongo.followedUserInsertions(followedFromNeo);
         }*/
+        feedBox = new HBox();
+        feedBox.setSpacing(10);
+        feed.setCenter(feedBox);
+        scrollPage = 0;
+
         followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
-        ins = connMongo.followedUserInsertions(followedFromNeo);
+        feedList = connMongo.followedUserInsertions(followedFromNeo);
 
-        if(followedFromNeo.size() < k)
-        {
-            ArrayList<Document> topK = connMongo.findTopKViewedInsertion(k- followedFromNeo.size(), "clothing");
+        if (followedFromNeo.size() < k) {
+            ArrayList<Document> topK = connMongo.findTopKViewedInsertion(k - followedFromNeo.size(), "clothing");
 
-            for(int i = 0; i < topK.size(); i++) {
-                ins.add(topK.get(i));
-                System.out.println("TOPK: " + ins);
+            for (int i = 0; i < topK.size(); i++) {
+                feedList.add(topK.get(i));
+                System.out.println("TOPK: " + feedList);
             }
         }
 
-        Utility.printTerminal("Size of ins: " + ins.size());
-        Utility.printTerminal("Size of ins: " + ins.size());
+        Utility.printTerminal("Size of ins: " + feedList.size());
+        Utility.printTerminal("Size of viral: " + viralList.size());
+
 
         showFeed();
         prevFeedButton.setDisable(true);
@@ -100,53 +112,46 @@ public class HomeController {
         stage.show();
     }
 
-    private void addInsertionsViral(int index, int i) {
+    private void addInsertionsViral() {
 
         ImageView image;
+        Label user = new Label("User: " + viralList.get(scrollPage2).getString("seller"));
+        image = Utility.getGoodImage(viralList.get(scrollPage2).getString("image_url"), 150);
+        Label price = new Label(viralList.get(scrollPage2).getDouble("price") + "€");
+        Label status = new Label("Status: " + viralList.get(scrollPage2).getString("status"));
+        Label interested = new Label("Interested: " + viralList.get(scrollPage2).getInteger("interested"));
+        System.out.println(viralList.get(scrollPage2).getString("seller"));
 
-        Label user = new Label("User: " + insertions.get(index).getString("seller"));
-        image = Utility.getGoodImage(insertions.get(index).getString("image_url"), 150);
-        Label price = new Label(insertions.get(index).getDouble("price") + "€");
-        Label status = new Label("Status: " + insertions.get(index).getString("status"));
-        Label interested = new Label("Interested: " + insertions.get(index).getInteger("interested"));
-        viral.add(user, i, 0);
-        viral.add(image, i, 1);
-        viral.add(status, i, 2);
-        viral.add(price, i, 3);
-        viral.add(interested, i, 4);
-        System.out.println("index:" + index);
-        GridPane.setHalignment(user, HPos.CENTER);
-        GridPane.setHalignment(status, HPos.CENTER);
-        GridPane.setHalignment(price, HPos.CENTER);
-        GridPane.setHalignment(interested, HPos.CENTER);
+        VBox viral = new VBox(user, image, price, status, interested);
+        viral.setStyle("-fx-background-color: white; -fx-padding: 8");
+        viral.setSpacing(10);
 
-        user.setOnMouseClicked(event->{
+        viralHBox.getChildren().add(viral);
+
+
+        user.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
-                        showInsertionPage(insertions.get(index).getString("uniq_id"));
-                        updateInsertionview(insertions.get(index).getString("uniq_id"));
+                        System.out.println("unique: " + (viralList.get(scrollPage2).getString("uniq_id")));
+                        showInsertionPage(viralList.get(scrollPage).getString("uniq_id"));
+                        updateInsertionview(viralList.get(scrollPage).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
         );
 
-        image.setOnMouseClicked(event->{
+        image.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique img: " + (insertions.get(index).getString("uniq_id") ));
-                        showInsertionPage(insertions.get(index).getString("uniq_id"));
-                        updateInsertionview(insertions.get(index).getString("uniq_id"));
+                        System.out.println("unique img: " + (viralList.get(scrollPage).getString("uniq_id")));
+                        showInsertionPage(viralList.get(scrollPage).getString("uniq_id"));
+                        updateInsertionview(viralList.get(scrollPage).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
         );
 
-        viral.setStyle(
-                        "-fx-padding: 20;\n"  +
-                        "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;"
-        );
+        scrollPage2++;
     }
 
 
@@ -159,192 +164,94 @@ public class HomeController {
 
     private void showViralInsertions() {
 
-        viral = new GridPane();
-        scrollPage2 = 0;
-
-        for (int i = scrollPage2; i < scrollPage2 + 3; i++) {
-
-            addInsertionsViral(i, i);
-            viralInsertions.setCenter(viral);
+        for (int i = 0; i < nPage && viralList.size() > i; i++) {
+            addInsertionsViral();
         }
-        scrollPage2 += 3;
+
     }
 
     public void prevViralInsertions() {
 
-        viral.getChildren().clear();
-        int row = 0;
-
-        scrollPage2 -= 6;
-
-        nextButton.setDisable(false);
-        nextButton.setVisible(true);
-
-        if (scrollPage2 == 0) {
-            prevButton.setDisable(true);
-            prevButton.setVisible(false);
-        }
-
-        for (int i = scrollPage2; row < 3; i++) {
-            addInsertionsViral(i, row);
-            row++;
-        }
-        viralInsertions.setCenter(viral);
-        scrollPage2 += 3;
-
+        viralHBox.getChildren().clear();
+        Utility.prevPage(scrollPage2, nPage, prevButton);
+        showViralInsertions();
     }
 
     public void nextViralInsertions() {
 
-        viral.getChildren().clear();
-        int row = 0;
-
-        prevButton.setDisable(false);
-        prevButton.setVisible(true);
-
-
-        for (int i = scrollPage2; i < scrollPage2 + 3 && row < 3; i++) {
-            if (i == insertions.size()) {
-                nextButton.setDisable(true);
-                nextButton.setVisible(false);
-                return;
-            }
-            addInsertionsViral(i, row);
-            row++;
-            viralInsertions.setCenter(viral);
-        }
-
-        scrollPage2 += 3;
-
-        if (scrollPage2 >= insertions.size() - 1) {
-            nextButton.setDisable(true);
-            nextButton.setVisible(false);
-        }
-
+        viralHBox.getChildren().clear();
+        Utility.nextPage(scrollPage2 + nPage, viralList, nextButton, prevButton);
+        showViralInsertions();
     }
 
     /* ********* FEED SECTION ********* */
 
     public void showFeed() {
-
-        feedGrid = new GridPane();
-        scrollPage = 0;
-
-        for (int i = scrollPage; i < scrollPage + 3; i++) {
-
-            addFeedInsertions(i, i);
-            feed.setCenter(feedGrid);
+        System.out.println("SCROLL OUT: " + scrollPage);
+        for (int i = 0; i < nPage && i < feedList.size(); i++) {
+            System.out.println("SCROLL IN: " + scrollPage + "i: " + i);
+            addFeedInsertions();
         }
-        scrollPage += 3;
+
     }
 
     public void prevFeedInsertions() {
 
-        feedGrid.getChildren().clear();
-        int row = 0;
-
-        scrollPage -= 6;
-
-        nextFeedButton.setDisable(false);
-        nextFeedButton.setVisible(true);
-
-        if (scrollPage == 0) {
-            prevFeedButton.setDisable(true);
-            prevFeedButton.setVisible(false);
-        }
-
-        for (int i = scrollPage; row < 3; i++) {
-            addFeedInsertions(i, row);
-            row++;
-        }
-        feed.setCenter(feedGrid);
-        scrollPage += 3;
+        feedBox.getChildren().clear();
+        Utility.prevPage(scrollPage, nPage, prevFeedButton);
+        showFeed();
     }
 
     public void nextFeedInsertions() {
 
-        feedGrid.getChildren().clear();
-        int row = 0;
-
-        prevFeedButton.setDisable(false);
-        prevFeedButton.setVisible(true);
-
-        for (int i = scrollPage; i < scrollPage + 3 && row < 3; i++) {
-
-            if (i == ins.size()) {
-                nextFeedButton.setDisable(true);
-                nextFeedButton.setVisible(false);
-                return;
-            }
-            addFeedInsertions(i, row);
-            row++;
-            feed.setCenter(feedGrid);
-        }
-
-        scrollPage += 3;
-
-        if (scrollPage >= ins.size() - 1) {
-
-            nextFeedButton.setDisable(true);
-            nextFeedButton.setVisible(false);
-        }
+        feedBox.getChildren().clear();
+        Utility.nextPage(scrollPage + nPage, feedList, nextFeedButton, prevFeedButton);
+        showFeed();
     }
 
-    private void addFeedInsertions(int index, int i) {
+    private void addFeedInsertions() {
 
         ImageView image;
-        System.out.println("INDEX: " + index);
-        System.out.println("ins(index): " + ins.get(index));
+        System.out.println("INDEX: " + scrollPage);
+        System.out.println("ins(index): " + feedList.get(scrollPage));
 
-        Label user = new Label("User: " + ins.get(index).getString("seller"));
-    Utility.printTerminal(ins.toString());
-        image = Utility.getGoodImage(ins.get(index).getString("image_url"), 150);
+        Label user = new Label("User: " + feedList.get(scrollPage).getString("seller"));
+        Utility.printTerminal(feedList.toString());
+        image = Utility.getGoodImage(feedList.get(scrollPage).getString("image_url"), 150);
 
-        Label price = new Label(ins.get(index).getDouble("price") + "€");
-        Label status = new Label("Status: " + ins.get(index).getString("status"));
-        Label interested = new Label("Interested: " + ins.get(index).getInteger("interested"));
+        Label price = new Label(feedList.get(scrollPage).getDouble("price") + "€");
+        Label status = new Label("Status: " + feedList.get(scrollPage).getString("status"));
+        Label interested = new Label("Interested: " + feedList.get(scrollPage).getInteger("interested"));
 
-        feedGrid.add(user, i, 0);
-        feedGrid.add(image, i, 1);
-        feedGrid.add(status, i, 2);
-        feedGrid.add(price, i, 3);
-        feedGrid.add(interested, i, 4);
+        VBox feed = new VBox(user, image, price, status, interested);
+        feed.setStyle("-fx-background-color: white; -fx-padding: 8");
+        feed.setSpacing(10);
 
-        //System.out.println("FOLLOWED index:" + index);
+        feedBox.getChildren().add(feed);
 
-        GridPane.setHalignment(user, HPos.CENTER);
-        GridPane.setHalignment(status, HPos.CENTER);
-        GridPane.setHalignment(price, HPos.CENTER);
-        GridPane.setHalignment(interested, HPos.CENTER);
-
-
-        user.setOnMouseClicked(event->{
+        user.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
-                        showInsertionPage(ins.get(index).getString("uniq_id"));
-                        updateInsertionview(insertions.get(index).getString("uniq_id"));
+                        System.out.println("unique: " + (feedList.get(scrollPage).getString("uniq_id")));
+                        showInsertionPage(feedList.get(scrollPage).getString("uniq_id"));
+                        updateInsertionview(feedList.get(scrollPage).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
         );
 
-        image.setOnMouseClicked(event->{
+        image.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique: " + (insertions.get(index).getString("uniq_id") ));
-                        showInsertionPage(ins.get(index).getString("uniq_id"));
-                        updateInsertionview(insertions.get(index).getString("uniq_id"));
+                        System.out.println("unique: " + (feedList.get(scrollPage).getString("uniq_id")));
+                        showInsertionPage(feedList.get(scrollPage).getString("uniq_id"));
+                        updateInsertionview(feedList.get(scrollPage).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
         );
 
-        feedGrid.setStyle(
-                        "-fx-padding: 20;\n" +
-                        "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;");
-
+        scrollPage++;
     }
 }
 

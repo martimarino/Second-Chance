@@ -2,30 +2,22 @@ package main.java.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-
 import javafx.stage.Stage;
 import main.java.connection.*;
 import main.java.entity.*;
 import main.java.utils.*;
 import org.bson.*;
 import javafx.stage.StageStyle;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import java.net.URL;
-
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 

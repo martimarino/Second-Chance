@@ -106,8 +106,8 @@ public class Utility {
             //e.printStackTrace();
             Image img = new Image("./img/empty.jpg");
             image = new ImageView(img);
-            image.setFitHeight(100);
-            image.setFitWidth(100);
+            image.setFitHeight(dimension);
+            image.setFitWidth(dimension);
             //image.setPreserveRatio(true);
         }
 
@@ -130,4 +130,30 @@ public class Utility {
         stage.show();
     }
 
+    public static void prevPage(int index, int k, Pane prev) {
+
+        if((index%k) == 0)
+            index -= 3;
+        else
+            index -= (index%k);
+        index -= 3;
+
+        if (index == 0) {
+            prev.setDisable(true);
+            prev.setVisible(false);
+        }
+    }
+
+    public static void nextPage(int index, ArrayList<Document> list, Pane next, Pane prev) {
+
+        System.out.println("INDEX: " + index + "list: " + list.size());
+
+        if (index == list.size()) {
+            next.setDisable(true);
+            next.setVisible(false);
+        }
+
+        prev.setVisible(true);
+        prev.setDisable(false);
+    }
 }

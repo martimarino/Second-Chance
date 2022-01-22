@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.collections.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchInsertionController">
+
+<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchInsertionController">
     <children>
-        <Text fill="#2582bf" layoutX="253.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Insertions">
+        <Text fill="WHITE" layoutX="253.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Insertions">
             <font>
                 <Font size="24.0" />
             </font>
         </Text>
-        <ComboBox fx:id="size" layoutX="35.0" layoutY="130.0" value="size">
+        <ComboBox fx:id="size" layoutX="35.0" layoutY="130.0" style="-fx-background-color: white;" value="size">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="XS" />
@@ -26,7 +27,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox fx:id="price" layoutX="115.0" layoutY="130.0" value="price">
+        <ComboBox fx:id="price" layoutX="115.0" layoutY="130.0" style="-fx-background-color: white;" value="price">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="0-50" />
@@ -37,7 +38,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox fx:id="gender" layoutX="222.0" layoutY="130.0" value="gender">
+        <ComboBox fx:id="gender" layoutX="222.0" layoutY="130.0" style="-fx-background-color: white;" value="gender">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="F" />
@@ -46,7 +47,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox fx:id="status" layoutX="324.0" layoutY="130.0" value="status">
+        <ComboBox fx:id="status" layoutX="324.0" layoutY="130.0" style="-fx-background-color: white;" value="status">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="excellent" />
@@ -57,7 +58,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox fx:id="category" layoutX="440.0" layoutY="130.0" value="category">
+        <ComboBox fx:id="category" layoutX="440.0" layoutY="130.0" style="-fx-background-color: white;" value="category">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="kids" />
@@ -70,7 +71,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <ComboBox fx:id="color" layoutX="565.0" layoutY="130.0" value="color">
+        <ComboBox fx:id="color" layoutX="565.0" layoutY="130.0" style="-fx-background-color: white;" value="color">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Yellow" />
@@ -88,25 +89,29 @@
         </ComboBox>
 
         <TextField fx:id="ins" layoutX="28.0" layoutY="81.0" prefWidth="560" promptText="Search by sellers or brands" />
-        <Button fx:id="searchArticlesOrBrands" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findInsertion" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: none; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
+        <Button fx:id="searchArticlesOrBrands" alignment="CENTER" contentDisplay="RIGHT" layoutX="597.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#findInsertion" prefHeight="20.0" prefWidth="70.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5;" text="Search" />
 
         <BorderPane fx:id="insertionFind" layoutX="60.0" layoutY="150.0" prefHeight="900.0" prefWidth="600.0">
             <left>
                 <Pane fx:id="prevSearch" onMouseClicked="#PrevFilteredInsertion" translateY="250.0">
-                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER_LEFT" >
-                        <image>
-                            <Image url="@../img/prev.png"/>
-                        </image>
-                    </ImageView>
+                   <children>
+                       <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER_LEFT">
+                           <image>
+                               <Image url="@../img/prev.png" />
+                           </image>
+                       </ImageView>
+                   </children>
                 </Pane>
             </left>
             <right>
                 <Pane fx:id="nextSearch" onMouseClicked="#NextFilteredInsertion" translateY="250.0">
-                    <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER_RIGHT" >
-                        <image>
-                            <Image url="@../img/next.png"/>
-                        </image>
-                    </ImageView>
+                   <children>
+                       <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER_RIGHT">
+                           <image>
+                               <Image url="@../img/next.png" />
+                           </image>
+                       </ImageView>
+                   </children>
                 </Pane>
             </right>
         </BorderPane>
