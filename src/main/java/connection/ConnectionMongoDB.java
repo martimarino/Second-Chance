@@ -112,6 +112,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("user");
         cursor = myColl.find(and(eq("username", username),
                 eq("password", password))).iterator();
+
         return cursor.hasNext();
     }
 
@@ -631,7 +632,7 @@ public class ConnectionMongoDB{
         return ins;
     }
 
-    public ArrayList<Insertion> findInsertionDetailsNeo4J(ArrayList<String> followed_ins) {
+    public ArrayList<Insertion> findInsertionDetailsNeo4J(ArrayList<String> followed_ins)  {
 
         this.openConnection();
 
@@ -649,6 +650,7 @@ public class ConnectionMongoDB{
             ins.setImage_url(insertion.getString("image_url"));
             ins.setViews(insertion.getInteger("views"));
             ins.setSeller(insertion.getString("seller"));
+            ins.setUniq_id(insertion.getString("uniq_id"));
 
             insertions.add(ins);
         }

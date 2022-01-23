@@ -11,14 +11,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.StatsController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.StatsController">
    <children>
       <Label layoutX="282.0" layoutY="-1.0" prefHeight="29.0" prefWidth="204.0" text="         Stats Section" textAlignment="CENTER">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <SplitPane dividerPositions="0.501254705144291" layoutX="1.0" layoutY="34.0" prefHeight="464.0" prefWidth="799.0">
+      <SplitPane dividerPositions="0.501254705144291" layoutX="1.0" layoutY="34.0" prefHeight="464.0" prefWidth="799.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -34,7 +34,7 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="boxKNumber" layoutX="180.0" layoutY="23.0" prefHeight="26.0" prefWidth="57.0" />
+                        <TextField fx:id="boxKNumber" layoutX="180.0" layoutY="23.0" prefHeight="26.0" prefWidth="57.0" promptText="K" />
                         <Separator layoutX="94.0" layoutY="97.0" prefWidth="200.0" />
                      </children>
                   </Pane>
@@ -51,11 +51,11 @@
                            </toggleGroup>
                         </RadioButton>
                         <Label layoutX="45.0" layoutY="95.0" text="Please insert the country you want:" />
-                        <TextField fx:id="txtFieldCountry" layoutX="246.0" layoutY="90.0" prefHeight="26.0" prefWidth="114.0" />
+                        <TextField fx:id="txtFieldCountry" layoutX="246.0" layoutY="90.0" prefHeight="26.0" prefWidth="114.0" promptText="Country" />
                         <RadioButton fx:id="rBTopKInterestingIns" layoutX="20.0" layoutY="149.0" mnemonicParsing="false" text="Top K Most Interesting Insertions (by category) " toggleGroup="$TopK" />
                         <RadioButton fx:id="rBTopKViewedIns" layoutX="20.0" layoutY="185.0" mnemonicParsing="false" text="Top K Most Viewed Insertions (by category) " toggleGroup="$TopK" />
                         <Label layoutX="45.0" layoutY="215.0" text="Please insert the category you want:" />
-                        <TextField fx:id="txtFieldCategory" layoutX="246.0" layoutY="212.0" prefHeight="26.0" prefWidth="114.0" />
+                        <TextField fx:id="txtFieldCategory" layoutX="246.0" layoutY="212.0" prefHeight="26.0" prefWidth="114.0" promptText="Category" />
                      </children>
                   </Pane>
                </children>
@@ -74,7 +74,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Button fx:id="elaboraButton" layoutX="149.0" layoutY="367.0" mnemonicParsing="false" onMouseClicked="#redirectToStatFunction" text="Process results" />
+                  <Button fx:id="elaboraButton" layoutX="149.0" layoutY="367.0" mnemonicParsing="false" onMouseClicked="#redirectToStatFunction" style="-fx-background-color: rgb(206, 153, 255)rgb(206, 153, 255); -fx-background-radius: 50;" text="Process results" textFill="#fffffff0" />
                </children></AnchorPane>
         </items>
       </SplitPane>

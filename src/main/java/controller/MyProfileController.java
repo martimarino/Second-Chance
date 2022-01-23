@@ -58,6 +58,7 @@ public class MyProfileController extends MainController {
 
         setProfile();
         System.out.println("USERNAME init: " + user.getUsername());
+
     }
 
 
@@ -129,8 +130,15 @@ public class MyProfileController extends MainController {
         updateUserBalance();
 
         listReviews = conn.getReviewsByUser(user.getUsername());
+        if (listReviews.size() == 0) {
+            System.out.println("Reviews nulle, disattivo i bottoni");
+            nextReviews.setDisable(true);
+            nextReviews.setVisible(false);
+            prevReviews.setDisable(true);
+            prevReviews.setVisible(false);
+            return;
+        }
         showReviews();
-
     }
 
     public void getReviews() {
@@ -276,6 +284,13 @@ public class MyProfileController extends MainController {
     }
 
     public void showReviews() {
+
+        if (listReviews.size() != 0) {
+            nextReviews.setDisable(false);
+            nextReviews.setVisible(true);
+            prevReviews.setDisable(false);
+            prevReviews.setVisible(true);
+        }
 
         reviews = new GridPane();
         reviews.gridLinesVisibleProperty().set(true); //DEBUG
