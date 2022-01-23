@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -14,6 +15,7 @@ import main.java.connection.ConnectionMongoDB;
 import main.java.utils.Utility;
 import org.bson.Document;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -54,15 +56,20 @@ public class SearchInsertionController extends MainController{
 
     public static void showInsertionPage(String uniq_id) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
 
-        Stage stage = new Stage(StageStyle.DECORATED);
-        stage.setScene(new Scene(loader.load()));
-        InsertionController controller = loader.getController();
-        controller.initialize(uniq_id);
-        stage.show();
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setTitle("Insertion details");
+            stage.setScene(new Scene(loader.load()));
+            InsertionController controller = loader.getController();
+            controller.initialize(uniq_id);
+            stage.show();
 
+        }
     }
 
     public void findInsertion() {

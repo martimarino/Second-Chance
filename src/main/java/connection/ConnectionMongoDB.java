@@ -650,7 +650,7 @@ public class ConnectionMongoDB{
             ins.setImage_url(insertion.getString("image_url"));
             ins.setViews(insertion.getInteger("views"));
             ins.setSeller(insertion.getString("seller"));
-            ins.setUniq_id(insertion.getString("uniq_id"));
+            ins.setId(insertion.getString("uniq_id"));
 
             insertions.add(ins);
         }

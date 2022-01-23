@@ -13,12 +13,8 @@ import main.java.connection.*;
 import main.java.utils.*;
 import org.bson.Document;
 
-import javax.imageio.ImageIO;
-import javax.rmi.CORBA.Util;
-import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class HomeController {
@@ -100,16 +96,19 @@ public class HomeController {
 
     public void showInsertionPage(String uniq_id) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
-        Stage stage = new Stage(StageStyle.DECORATED);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/FXML/Insertion.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setTitle("Insertion details");
+            stage.setScene(new Scene(loader.load()));
+            InsertionController controller = loader.getController();
+            controller.initialize(uniq_id);
 
-        stage.setScene(new Scene(loader.load()));
-
-        InsertionController controller = loader.getController();
-        controller.initialize(uniq_id);
-
-        stage.show();
+            stage.show();
+        }
     }
 
     private void addInsertionsViral() {

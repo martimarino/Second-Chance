@@ -19,7 +19,6 @@ public class Insertion {
     String image_url;
     String timestamp;
     String seller;
-    String uniq_id;
 
     public Insertion(){}
 
@@ -27,7 +26,7 @@ public class Insertion {
                      String gender, double price, int interested,
                      int views, String status, String color, String size,
                      String brand, String country, String image_url,
-                     String timestamp, String seller, String uniq_id){
+                     String timestamp, String seller){
         this.id = id;
         this.category = category;
         this.description = description;
@@ -43,7 +42,6 @@ public class Insertion {
         this.image_url = image_url;
         this.timestamp = timestamp;
         this.seller = seller;
-        this.uniq_id = uniq_id;
 
     }
 
@@ -108,10 +106,6 @@ public class Insertion {
         this.seller = seller;
     }
 
-    public void setUniq_id(String uniq_id) {
-        this.uniq_id = uniq_id;
-    }
-
     public String getCountry() {
         return country;
     }
@@ -172,10 +166,6 @@ public class Insertion {
         return timestamp;
     }
 
-    public String getUniq_id() {
-        return uniq_id;
-    }
-
 
     public static Document toDocument(Insertion insertion) {
 
@@ -193,8 +183,7 @@ public class Insertion {
                 .append("country", insertion.getCountry())
                 .append("image_url", insertion.getImage_url())
                 .append("timestamp", insertion.getTimestamp())
-                .append("seller", insertion.getSeller())
-                .append("uniq_id", insertion.getUniq_id());
+                .append("seller", insertion.getSeller());
 
         return ins;
 
@@ -218,7 +207,6 @@ public class Insertion {
                 ", image_url='" + image_url + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 ", seller='" + seller + '\'' +
-                ", uniq_id='" + uniq_id + '\'' +
                 '}';
     }
 }

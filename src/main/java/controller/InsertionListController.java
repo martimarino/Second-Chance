@@ -26,6 +26,7 @@ public class InsertionListController {
     private int index;
 
     ConnectionMongoDB connMongo = new ConnectionMongoDB();
+    ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
     public void initialize(String username) {
 
@@ -61,7 +62,7 @@ public class InsertionListController {
 
     private void addInsertions() {
 
-        String uniq_id = list.get(index).getString("uniq_id");
+        String id = list.get(index).getString("uniq_id");
 
         HBox hb = new HBox();
         VBox det = new VBox();
@@ -70,36 +71,45 @@ public class InsertionListController {
         Label status = new Label("Status: " + list.get(index).getString("status"));
         Label price = new Label(list.get(index).getDouble("price") + " " + "€");
         Label brand = new Label("Brand: " + list.get(index).getString("brand"));
+        Button delete = new Button("Delete");
 
         det.getChildren().add(status);
         det.getChildren().add(price);
         det.getChildren().add(brand);
         hb.getChildren().add(image);
         hb.getChildren().add(det);
+        hb.getChildren().add(delete);
         box.getChildren().add(hb);
 
         image.setOnMouseClicked(event->{
                     try {
                         SearchInsertionController sic = new SearchInsertionController();
-                        sic.showInsertionPage(uniq_id);
-                        HomeController.updateInsertionview(uniq_id);
+                        sic.showInsertionPage(id);
+                        HomeController.updateInsertionview(id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
         );
 
+        delete.setOnMouseClicked(event -> {
+            connMongo.deleteInsertion(id);
+            connNeo.deleteInsertion(id);
+            initialize(Session.getLogUser().getUsername());
+        });
+
         GridPane.setHalignment(image, HPos.LEFT);
         GridPane.setHalignment(status, HPos.LEFT);
         GridPane.setHalignment(price, HPos.LEFT);
         GridPane.setHalignment(brand, HPos.LEFT);
+        GridPane.setHalignment(delete, HPos.RIGHT);
 
-        det.setStyle("-fx-padding: 0 0 0 50;");
+        det.setStyle("-fx-padding: 0 100 0 50;");
         hb.setStyle(
                 "-fx-padding: 20;" +
                 " -fx-background-color: rgb(230, 230, 255);");
         box.setStyle(
-                " -fx-hgap: 10;" +
+                "-fx-hgap: 10;" +
                 " -fx-vgap: 10;" +
                 " -fx-max-height: 180;" +
                 " -fx-min-width: 530;" +

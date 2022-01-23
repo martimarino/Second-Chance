@@ -6,6 +6,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,6 +16,7 @@ import main.java.utils.*;
 import org.bson.*;
 import javafx.stage.StageStyle;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.net.URL;
@@ -241,30 +243,37 @@ public class MyProfileController extends MainController {
 
     public void showInsertions() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(InsertionListController.class.getResource("/FXML/InsertionList.fxml"));
-        Stage stage = new Stage(StageStyle.DECORATED);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(InsertionListController.class.getResource("/FXML/InsertionList.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Your insertions");
+            InsertionListController controller = loader.getController();
+            controller.initialize(user.getUsername());
 
-        stage.setScene(new Scene(loader.load()));
-
-        InsertionListController controller = loader.getController();
-        controller.initialize(user.getUsername());
-
-        stage.show();
+            stage.show();
+        }
     }
 
     public void showInsertionsLiked() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(InsertionListLikedController.class.getResource("/FXML/InsertionListLiked.fxml"));
-        Stage stage = new Stage(StageStyle.DECORATED);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(InsertionListLikedController.class.getResource("/FXML/InsertionListLiked.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setTitle("Insertions you are interested in");
+            stage.setScene(new Scene(loader.load()));
 
-        stage.setScene(new Scene(loader.load()));
+            InsertionListLikedController controller = loader.getController();
+            controller.initialize(user.getUsername());
 
-        InsertionListLikedController controller = loader.getController();
-        controller.initialize(user.getUsername());
-
-        stage.show();
+            stage.show();
+        }
     }
 
   

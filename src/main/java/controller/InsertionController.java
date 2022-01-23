@@ -115,7 +115,7 @@ public class InsertionController {
         String[] s = price.getText().split(" ");
         Double insPrice = Double.valueOf(s[0]);
 
-        Insertion insertion = new Insertion(insertion_id, category.getText(), descriptionContainer.getText(), gender.getText(), insPrice, Integer.parseInt(interested.getText()), Integer.parseInt(view.getText()), status.getText(), color.getText(), size.getText(), brand.getText(), country.getText(), image_url, timestamp.getText(), seller.getText(), insertion_id);
+        Insertion insertion = new Insertion(insertion_id, category.getText(), descriptionContainer.getText(), gender.getText(), insPrice, Integer.parseInt(interested.getText()), Integer.parseInt(view.getText()), status.getText(), color.getText(), size.getText(), brand.getText(), country.getText(), image_url, timestamp.getText(), seller.getText());
 
         if (conn.buyCurrentInsertion(user.getUsername(), insertion))
         {

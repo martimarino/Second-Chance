@@ -71,7 +71,7 @@ public class InsertionListLikedController {
 
     private void addInsertions() {
 
-        String uniq_id = insertions.get(index).getUniq_id();
+        String uniq_id = insertions.get(index).getId();
 
         HBox hb = new HBox();
         VBox det = new VBox();

@@ -2,9 +2,13 @@ package main.java.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import main.java.connection.ConnectionMongoDB;
 import main.java.utils.Utility;
 import org.bson.Document;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -132,7 +136,7 @@ public class StatsController {
         });
     }
 
-    public void redirectToStatFunction() {
+    public void redirectToStatFunction() throws IOException {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
         int k;
@@ -163,7 +167,7 @@ public class StatsController {
         }
     }
 
-    public void showMostActiveUsersSellers(ConnectionMongoDB conn, boolean choice){
+    public void showMostActiveUsersSellers(ConnectionMongoDB conn, boolean choice) throws IOException{
 
         ArrayList<Document> array = conn.findMostActiveUsersSellers(10, choice);
         StackPane secondaryLayout = new StackPane();
@@ -176,17 +180,21 @@ public class StatsController {
             secondaryLayout.getChildren().add(x);
         }
 
-        Scene secondScene = new Scene(secondaryLayout, 920, 400);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            Scene secondScene = new Scene(secondaryLayout, 920, 400);
 
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Top " + 5);
-        newWindow.setScene(secondScene);
+            // New window (Stage)
+            Stage newWindow = new Stage();
+            newWindow.setTitle("Top " + 5);
+            newWindow.getIcons().add(image);
+            newWindow.setScene(secondScene);
 
-        newWindow.show();
+            newWindow.show();
+        }
     }
 
-    public void showTopKRatedUser(ConnectionMongoDB conn, int k) {
+    public void showTopKRatedUser(ConnectionMongoDB conn, int k) throws IOException {
 
         ArrayList<Document> array = new ArrayList<Document>();
         String country = txtFieldCountry.getText();
@@ -211,17 +219,21 @@ public class StatsController {
             secondaryLayout.getChildren().add(y);
         }
 
-        Scene secondScene = new Scene(secondaryLayout, 1200, 800);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
 
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Top " + k);
-        newWindow.setScene(secondScene);
+            // New window (Stage)
+            Stage newWindow = new Stage();
+            newWindow.getIcons().add(image);
+            newWindow.setTitle("Top " + k);
+            newWindow.setScene(secondScene);
 
-        newWindow.show();
+            newWindow.show();
+        }
     }
 
-    public void showTopKInterestingInsertion(ConnectionMongoDB conn, int k) {
+    public void showTopKInterestingInsertion(ConnectionMongoDB conn, int k) throws IOException {
 
         ArrayList<Document> array;
         String category = txtFieldCategory.getText();
@@ -245,17 +257,21 @@ public class StatsController {
             secondaryLayout.getChildren().add(y);
         }
 
-        Scene secondScene = new Scene(secondaryLayout, 1200, 800);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
 
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Top " + k);
-        newWindow.setScene(secondScene);
+            // New window (Stage)
+            Stage newWindow = new Stage();
+            newWindow.getIcons().add(image);
+            newWindow.setTitle("Top " + k);
+            newWindow.setScene(secondScene);
 
-        newWindow.show();
+            newWindow.show();
+        }
     }
 
-    public void showTopKViewedInsertion(ConnectionMongoDB conn, int k) {
+    public void showTopKViewedInsertion(ConnectionMongoDB conn, int k) throws IOException {
 
         ArrayList<Document> array;
 
@@ -280,13 +296,17 @@ public class StatsController {
             secondaryLayout.getChildren().add(y);
         }
 
-        Scene secondScene = new Scene(secondaryLayout, 1200, 800);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
 
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Top " + k);
-        newWindow.setScene(secondScene);
+            // New window (Stage)
+            Stage newWindow = new Stage();
+            newWindow.getIcons().add(image);
+            newWindow.setTitle("Top " + k);
+            newWindow.setScene(secondScene);
 
-        newWindow.show();
+            newWindow.show();
+        }
     }
 }
