@@ -483,19 +483,39 @@ public class ConnectionMongoDB{
 
         myCollUsr = db.getCollection("user");
         Bson limit = limit(k);
-        AggregateIterable<Document> aggr  = myColl.aggregate(
-                Arrays.asList(
-                        Aggregates.group("$seller", Accumulators.sum("count", 1)),
-                        Aggregates.sort(descending("count")),
-                        limit
-                )
-        );
 
-        for (Document document : aggr) {
-            Utility.printTerminal(document.toString());
-            Document user = myCollUsr.find(eq("username", document.getString("username"))).first();
-            document.append("name", user.getString("name"));
-            array.add(document);
+        if (!choice) {
+            System.out.println("Sezione orders");
+            AggregateIterable<Document> aggr = myColl.aggregate(
+                    Arrays.asList(
+                            Aggregates.group("$insertion.seller",
+                                    Accumulators.sum("count", 1)),
+                            Aggregates.sort(descending("count"))
+                    )
+            );
+
+            for (Document document : aggr) {
+                System.out.println(document);
+                document.append("_id", document.getString("_id"));
+                document.append("count", document.getInteger("count"));
+                array.add(document);
+            }
+        } else {
+            System.out.println("Sezione insertions");
+            AggregateIterable<Document> aggr = myColl.aggregate(
+                    Arrays.asList(
+                            Aggregates.group("$seller",
+                                    Accumulators.sum("count", 1)),
+                            Aggregates.sort(descending("count"))
+                    )
+            );
+
+            for (Document document : aggr) {
+                System.out.println(document);
+                document.append("seller", document.getString("seller"));
+                document.append("count", document.getInteger("count"));
+                array.add(document);
+            }
         }
 
         this.closeConnection();

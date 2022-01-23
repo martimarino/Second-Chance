@@ -174,7 +174,7 @@ public class StatsController {
 
         for (int i = 0; i < 10; i++) {
 
-            Label x = new Label(array.get(i).getString("name"));
+            Label x = new Label(array.get(i).getString("_id"));
             x.setTranslateX(10);
             x.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(x);
