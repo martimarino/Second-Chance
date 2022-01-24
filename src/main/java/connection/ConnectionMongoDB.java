@@ -652,6 +652,32 @@ public class ConnectionMongoDB{
         return ins;
     }
 
+    public ArrayList<Insertion> findMultipleInsertionDetails(String seller) {
+
+        this.openConnection();
+        ArrayList<Insertion> array = new ArrayList<Insertion>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        AggregateIterable<Document> aggr  = myColl.aggregate(
+                Arrays.asList(
+                        Aggregates.match(Filters.eq("seller", seller))
+                )
+        );
+
+        for (Document document : aggr) {
+            Insertion ins = new Insertion();
+            ins.setCategory(document.getString("category"));
+            ins.setPrice(document.getDouble("price"));
+            ins.setViews(document.getInteger("views"));
+            ins.setId(document.getString("uniq_id"));
+            array.add(ins);
+        }
+
+        this.closeConnection();
+
+        return array;
+    }
+
     public ArrayList<Insertion> findInsertionDetailsNeo4J(ArrayList<String> followed_ins)  {
 
         this.openConnection();

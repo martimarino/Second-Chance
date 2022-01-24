@@ -27,7 +27,7 @@ public class Insertion {
                      String gender, double price, int interested,
                      int views, String status, String color, String size,
                      String brand, String country, String image_url,
-                     String timestamp, String seller){
+                     String timestamp, String seller, String uniq_id){
         this.id = id;
         this.category = category;
         this.description = description;
@@ -47,6 +47,7 @@ public class Insertion {
 
     }
 
+    public void setUniq_Id(String uniq_id) {this.uniq_id = uniq_id;};
 
     public void setId(String id) {
         this.id = id;
@@ -148,9 +149,7 @@ public class Insertion {
         return description;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() {return id;}
 
     public String getImage_url() {
         return image_url;
@@ -170,6 +169,10 @@ public class Insertion {
 
     public String getTimestamp() {
         return timestamp;
+    }
+
+    public String getUniq_id() {
+        return uniq_id;
     }
 
 
