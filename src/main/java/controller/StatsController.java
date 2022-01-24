@@ -193,7 +193,7 @@ public class StatsController {
 
         for (int i = 0; i < k; i++) {
 
-            String str = array.get(i).getString("_id") + ": " + array.get(i).getInteger("count").toString();
+            String str = array.get(i).getString("seller") + ": " + array.get(i).getInteger("count").toString();
             items.add(str);
         }
 

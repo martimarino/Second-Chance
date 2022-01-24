@@ -51,7 +51,7 @@ public class NewInsertionController {
         //generate random values from 0-9999999
         int int_random = rand.nextInt(upperbound);
         String id = Integer.toString(int_random);
-        while (connMongo.findInsertionId(id))
+        while (connMongo.findByInsertionId(id))
             id = Integer.toString(int_random);
 
         RadioButton chk = (RadioButton)myToggleGroup.getSelectedToggle(); // Cast object to radio button

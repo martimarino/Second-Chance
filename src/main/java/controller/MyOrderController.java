@@ -86,7 +86,6 @@ public class MyOrderController{
             next.setVisible(true);
             next.setDisable(false);
         }
-        //comboBox.setValue("Select order");
     }
 
     private void showAllOrders(boolean choice) {
