@@ -115,17 +115,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
                         parameters("username", username,
                                 "country", country,
                                 "k", k));
-/*
-                List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                    Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:FOLLOWS]->(others) " +
-                                "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
-                                "AND NOT (u)-[:FOLLOWS]->(others) " +
-                                "RETURN others.username as SuggUsers " +
-                                "LIMIT $k",
-                            parameters( "username", username,
-                                    "country", country,
-                                    "k", k));
-*/
                 while (result.hasNext()) {
                     Record r = result.next();
                     suggestions.add(r.get("SuggUsers").asString());

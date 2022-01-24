@@ -334,7 +334,6 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        System.out.println("Username: " + username);
         ClientSession clientSession = mongoClient.startSession();
 
         MongoCollection<Document> orderColl = db.getCollection("order");
@@ -645,8 +644,8 @@ public class ConnectionMongoDB{
         Document insertion = myColl.find(eq("_id", id)).first();
 
         ins.setCategory(insertion.getString("category"));
-        ins.setPrice(Double.parseDouble(insertion.getString("price")));
-        ins.setViews(Integer.parseInt(insertion.getString("views")));
+        ins.setPrice(insertion.getDouble("price"));
+        ins.setViews(insertion.getInteger("views"));
 
         this.closeConnection();
         return ins;
@@ -659,9 +658,8 @@ public class ConnectionMongoDB{
         Insertion ins;
         ArrayList<Insertion> insertions = new ArrayList<Insertion>();
         MongoCollection<Document> myColl = db.getCollection("insertion");
-        //
 
-        for (int i=0; i < followed_ins.size(); i++) {
+        for(int i=0; i < followed_ins.size(); i++) {
             Document insertion = myColl.find(eq("uniq_id", followed_ins.get(i).toString())).first();
 
             ins = new Insertion();

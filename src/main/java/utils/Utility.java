@@ -41,21 +41,22 @@ public class Utility {
 
         list.getChildren().clear();
 
-        try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
-           Image image = new Image(imageStream);
+        try(FileInputStream imageStream = new FileInputStream("target/classes/img/user.png"))
+        {
+            Image image = new Image(imageStream);
 
-           Label username = new Label(filter.get(item).getString("username"));
-           Label country = new Label(filter.get(item).getString("country"));
-           Label city = new Label(filter.get(item).getString("city"));
+            Label username = new Label(filter.get(item).getString("username"));
+            Label country = new Label(filter.get(item).getString("country"));
+            Label city = new Label(filter.get(item).getString("city"));
 
-           list.add(new ImageView(image), 0, 0);
-           list.add(username, 0, 1);
-           list.add(country, 0, 2);
-           list.add(city, 0, 3);
+            list.add(new ImageView(image), 0, 0);
+            list.add(username, 0, 1);
+            list.add(country, 0, 2);
+            list.add(city, 0, 3);
 
-           GridPane.setHalignment(username, HPos.CENTER);
-           GridPane.setHalignment(country, HPos.CENTER);
-           GridPane.setHalignment(city, HPos.CENTER);
+            GridPane.setHalignment(username, HPos.CENTER);
+            GridPane.setHalignment(country, HPos.CENTER);
+            GridPane.setHalignment(city, HPos.CENTER);
         }
         list.setStyle(
                 "    -fx-padding: 20;\n" +
