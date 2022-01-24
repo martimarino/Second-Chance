@@ -30,7 +30,7 @@ public class InsertionListController {
 
     public void initialize(String username) {
 
-        list = connMongo.getAllUserIns(username);
+        list = connMongo.findInsertionBySeller(username);
         box = new VBox(20);
         index = 0;
 

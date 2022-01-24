@@ -12,6 +12,7 @@ import main.java.utils.*;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Updates.inc;
 import static com.mongodb.client.model.Updates.set;
@@ -484,36 +485,38 @@ public class ConnectionMongoDB{
         myCollUsr = db.getCollection("user");
         Bson limit = limit(k);
 
-        if (!choice) {
+        if (!choice) { //most sold orders
             System.out.println("Sezione orders");
+            Bson project = project(fields(excludeId(), include("count"), computed("seller", "$_id")));
             AggregateIterable<Document> aggr = myColl.aggregate(
                     Arrays.asList(
                             Aggregates.group("$insertion.seller",
                                     Accumulators.sum("count", 1)),
-                            Aggregates.sort(descending("count"))
+                            project,
+                            Aggregates.sort(descending("count")),
+                            limit
                     )
             );
 
             for (Document document : aggr) {
-                System.out.println(document);
-                document.append("_id", document.getString("_id"));
-                document.append("count", document.getInteger("count"));
+                System.out.println("DOCUMENT:" + document);
                 array.add(document);
             }
-        } else {
+        } else { //most insertions published
             System.out.println("Sezione insertions");
+            Bson project = project(fields(excludeId(), include("count"), computed("seller", "$_id")));
             AggregateIterable<Document> aggr = myColl.aggregate(
                     Arrays.asList(
                             Aggregates.group("$seller",
                                     Accumulators.sum("count", 1)),
-                            Aggregates.sort(descending("count"))
+                            project,
+                            Aggregates.sort(descending("count")),
+                            limit
                     )
             );
 
             for (Document document : aggr) {
                 System.out.println(document);
-                document.append("seller", document.getString("seller"));
-                document.append("count", document.getInteger("count"));
                 array.add(document);
             }
         }
@@ -530,18 +533,20 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("user");
 
         Bson limit = limit(k);
+        Bson project = project(fields(excludeId(), include("username"), include("rating")));
         AggregateIterable<Document> aggr  = myColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("country", country)),
                         Aggregates.sort(descending("rating")),
+                        project,
                         limit
                 )
         );
 
         for (Document document : aggr) {
 
-            document.append("name", document.getString("name"));
-            document.append("rating", document.getDouble("rating"));
+            //document.append("name", document.getString("name"));
+            //document.append("rating", document.getDouble("rating"));
             array.add(document);
         }
 
@@ -703,7 +708,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
-    public boolean findInsertionId (String id) {
+    public boolean findByInsertionId (String id) {
 
         this.openConnection();
         MongoCollection<Document> myColl = db.getCollection("insertion");
@@ -924,7 +929,7 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return list;
     }
-  
+  /*
     public ArrayList<Document> getAllUserIns(String username) {
 
         this.openConnection();
@@ -939,7 +944,7 @@ public class ConnectionMongoDB{
         Utility.printTerminal(insertions.toString());
         return insertions;
 
-    }
+    }*/
 
     public void deleteInsertionMongo(String id) {
 
