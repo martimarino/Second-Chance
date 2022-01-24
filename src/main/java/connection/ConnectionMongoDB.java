@@ -4,6 +4,7 @@ import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.*;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import main.java.entity.*;
@@ -458,7 +459,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("insertion");
 
         if (choice)
-            insertion = myColl.find(eq("_id", id)).first();
+            insertion = myColl.find(eq("uniq_id", id)).first();
          else
             insertion = myColl.find(eq("seller", id)).first();
 
@@ -914,14 +915,21 @@ public class ConnectionMongoDB{
 
     }
 
-    public void deleteInsertion(String id) {
+    public void deleteInsertionMongo(String id) {
 
         this.openConnection();
 
         MongoCollection<Document> myColl = db.getCollection("insertion");
-        myColl.deleteOne(Filters.eq("uniq_id", id));
+
+        Bson query = eq("uniq_id", id);
+
+        try {
+            DeleteResult result = myColl.deleteOne(query);
+            System.out.println("Deleted document count: " + result.getDeletedCount());
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
+        }
 
         this.closeConnection();
-
     }
 }
