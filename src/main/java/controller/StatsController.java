@@ -172,7 +172,7 @@ public class StatsController {
         ArrayList<Document> array = conn.findMostActiveUsersSellers(10, choice);
         StackPane secondaryLayout = new StackPane();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10 && array.size() > i; i++) {
 
             Label x = new Label(array.get(i).getString("name"));
             x.setTranslateX(10);
@@ -208,7 +208,7 @@ public class StatsController {
 
         for (int i = 0; i < k; i++) {
 
-            Label x = new Label(array.get(i).getString("name"));
+            Label x = new Label(array.get(i).getString("username"));
             x.setTranslateX(10);
             x.setTranslateY(-100 + i*50);
             secondaryLayout.getChildren().add(x);

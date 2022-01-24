@@ -22,7 +22,7 @@ public class Session{
         if(session == null)
             throw new RuntimeException("Session not already active");
         else {
-            session.logUser = User.fromDocument(user);
+                session.logUser = User.fromDocument(user);
         }
     }
 
@@ -46,6 +46,7 @@ public class Session{
         logUser = null;
         session = null; // [1]
     }
+
 }
 
 

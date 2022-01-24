@@ -47,24 +47,22 @@ public class InsertionController {
     public Text country;
     public Text seller;
     public Text price;
-    String insertion_id;
-    String image_url;
     Insertion insertion;
-    ConnectionMongoDB conn = new ConnectionMongoDB();
+    User user;
+    ConnectionMongoDB connMongo = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
     public void initialize(String uniq_id) {
 
-        this.insertion_id = uniq_id;
         insertionTitle = new Label();
         infoContainer.setVisible(true);
         descriptionContainer.setEditable(false);
         
         Session session = Session.getInstance();
-        User user = session.getLoggedUser();
+        user = session.getLoggedUser();
 
         //ConnectionMongoDB conn = new ConnectionMongoDB();
-        insertion = conn.findInsertion(insertion_id);
+        insertion = connMongo.findInsertion(uniq_id);
 
         try {
             fillInsertionInfo(insertion);
@@ -72,11 +70,9 @@ public class InsertionController {
             e.printStackTrace();
         }
 
-        image_url = insertion.getImage_url();
-
         ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
         String favouriteText;
-        if(!connNeo.showIfInterested(user.getUsername(), insertion_id))
+        if(!connNeo.showIfInterested(user.getUsername(), insertion.getId()))
             favouriteText = "Add to favourite";
         else
             favouriteText = "Remove from favourite";
@@ -109,15 +105,7 @@ public class InsertionController {
 
     public void buyInsertion() {
 
-        Session session = Session.getInstance();
-        User user = session.getLoggedUser();
-
-        String[] s = price.getText().split(" ");
-        Double insPrice = Double.valueOf(s[0]);
-
-        Insertion insertion = new Insertion(insertion_id, category.getText(), descriptionContainer.getText(), gender.getText(), insPrice, Integer.parseInt(interested.getText()), Integer.parseInt(view.getText()), status.getText(), color.getText(), size.getText(), brand.getText(), country.getText(), image_url, timestamp.getText(), seller.getText());
-
-        if (conn.buyCurrentInsertion(user.getUsername(), insertion))
+        if (connMongo.buyCurrentInsertion(user.getUsername(), insertion))
         {
             Utility.infoBox("Product bought correctly! ", "User Advise", "Purchase done");
             connNeo.deleteInsertion(insertion.getId());
@@ -128,27 +116,24 @@ public class InsertionController {
 
     public void addToFavorite() {
 
-        Session session = Session.getInstance();
-        User user = session.getLoggedUser();
+        connNeo = new ConnectionNeo4jDB();
+        connMongo = new ConnectionMongoDB();
 
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-        ConnectionMongoDB connMongo = new ConnectionMongoDB();
-
-        if(!connNeo.showIfInterested(user.getUsername(), insertion_id)) {
-            connNeo.likeInsertion(user.getUsername(), insertion_id);
-            connMongo.updateNumInterested(insertion_id, 1);
+        if(!connNeo.showIfInterested(user.getUsername(), insertion.getId())) {
+            connNeo.likeInsertion(user.getUsername(), insertion.getId());
+            connMongo.updateNumInterested(insertion.getId(), 1);
             favourite.setText("Remove from favourite");
             interested.setText(String.valueOf(Integer.parseInt(interested.getText()) +1));
         }
         else{
-            connNeo.dislikeInsertion(user.getUsername(), insertion_id);
-            connMongo.updateNumInterested(insertion_id, -1);
+            connNeo.dislikeInsertion(user.getUsername(), insertion.getId());
+            connMongo.updateNumInterested(insertion.getId(), -1);
             favourite.setText("Add to favourite");
             interested.setText(String.valueOf(Integer.parseInt(interested.getText()) -1));
         }
 
-        connNeo.showIfInterested(user.getUsername(), insertion_id);
+        connNeo.showIfInterested(user.getUsername(), insertion.getId());
 
-        connNeo.showIfInterested(user.getUsername(), insertion_id);
+        connNeo.showIfInterested(user.getUsername(), insertion.getId());
     }
 }

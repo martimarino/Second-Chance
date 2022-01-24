@@ -19,6 +19,7 @@ public class Insertion {
     String image_url;
     String timestamp;
     String seller;
+    String uniq_id;
 
     public Insertion(){}
 
@@ -42,6 +43,7 @@ public class Insertion {
         this.image_url = image_url;
         this.timestamp = timestamp;
         this.seller = seller;
+        this.uniq_id = uniq_id;
 
     }
 
@@ -104,6 +106,10 @@ public class Insertion {
 
     public void setSeller(String seller) {
         this.seller = seller;
+    }
+
+    public void setUniq_id(String uniq_id) {
+        this.uniq_id = uniq_id;
     }
 
     public String getCountry() {
