@@ -61,16 +61,17 @@ public class MyOrderController{
         Session session = Session.getInstance();
         user = session.getLoggedUser();
 
-        if(type.equals("Purchased"))
+        if(type.equals("Items purchased"))
         {
             ordersList.clear();
             panel.getChildren().clear();
             indexPage = 1;
             ordersList = conn.findAllOrders(true, user.getUsername());
+            System.out.println("ORDER: " + ordersList);
             kind = true;
             showAllOrders(true);
         }
-        else if(type.equals("Sold"))
+        else if(type.equals("Items sold"))
         {
             ordersList.clear();
             panel.getChildren().clear();
