@@ -57,7 +57,7 @@ public class SignInController {
             if (us.getText().equals("admin") && pw.getText().equals("admin")) {
                 session = Session.getInstance();
                 Document user  = conn.findUserByUsername(us.getText());
-                session.setLogUser(user);
+                //session.setLogUser(user, true);
                 ShowAdminPanel();
             }else {
 

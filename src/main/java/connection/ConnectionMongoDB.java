@@ -4,7 +4,6 @@ import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.*;
-import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import main.java.entity.*;
@@ -335,7 +334,6 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        System.out.println("Username: " + username);
         ClientSession clientSession = mongoClient.startSession();
 
         MongoCollection<Document> orderColl = db.getCollection("order");
@@ -460,7 +458,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("insertion");
 
         if (choice)
-            insertion = myColl.find(eq("uniq_id", id)).first();
+            insertion = myColl.find(eq("_id", id)).first();
          else
             insertion = myColl.find(eq("seller", id)).first();
 
@@ -649,7 +647,6 @@ public class ConnectionMongoDB{
         ins.setPrice(insertion.getDouble("price"));
         ins.setViews(insertion.getInteger("views"));
 
-
         this.closeConnection();
         return ins;
     }
@@ -661,9 +658,8 @@ public class ConnectionMongoDB{
         Insertion ins;
         ArrayList<Insertion> insertions = new ArrayList<Insertion>();
         MongoCollection<Document> myColl = db.getCollection("insertion");
-        //
 
-        for (int i=0; i < followed_ins.size(); i++) {
+        for(int i=0; i < followed_ins.size(); i++) {
             Document insertion = myColl.find(eq("uniq_id", followed_ins.get(i).toString())).first();
 
             ins = new Insertion();
@@ -918,21 +914,14 @@ public class ConnectionMongoDB{
 
     }
 
-    public void deleteInsertionMongo(String id) {
+    public void deleteInsertion(String id) {
 
         this.openConnection();
 
         MongoCollection<Document> myColl = db.getCollection("insertion");
-
-        Bson query = eq("uniq_id", id);
-
-        try {
-            DeleteResult result = myColl.deleteOne(query);
-            System.out.println("Deleted document count: " + result.getDeletedCount());
-        } catch (MongoException me) {
-            System.err.println("Unable to delete due to an error: " + me);
-        }
+        myColl.deleteOne(Filters.eq("uniq_id", id));
 
         this.closeConnection();
+
     }
 }

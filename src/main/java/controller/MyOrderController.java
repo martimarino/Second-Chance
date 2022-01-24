@@ -26,10 +26,13 @@ public class MyOrderController{
 
     public ArrayList<Document> ordersList;
     public VBox panel;
+    User user;
 
     int indexPage;
     int k = 6;
     boolean kind;
+
+    ConnectionMongoDB conn = new ConnectionMongoDB();
 
     public void initialize(){
 
@@ -56,18 +59,19 @@ public class MyOrderController{
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
         Session session = Session.getInstance();
-        User user = session.getLoggedUser();
+        user = session.getLoggedUser();
 
-        if(type.equals("Purchased"))
+        if(type.equals("Items purchased"))
         {
             ordersList.clear();
             panel.getChildren().clear();
             indexPage = 1;
             ordersList = conn.findAllOrders(true, user.getUsername());
+            System.out.println("ORDER: " + ordersList);
             kind = true;
             showAllOrders(true);
         }
-        else if(type.equals("Sold"))
+        else if(type.equals("Items sold"))
         {
             ordersList.clear();
             panel.getChildren().clear();
@@ -241,15 +245,12 @@ public class MyOrderController{
 
     public void sendReview(TextArea txtArea, TextField txtTitle, Button sendReview, Button revButton, int rating, String seller, String timestampOrder){
 
-        Session session = Session.getInstance();
-        String reviewer = session.getLoggedUser().getUsername();
-
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         String timestamp = date.format(new Date());
         System.out.println("timestamp: " + timestamp);
 
-        Review rev = new Review(reviewer, seller, txtArea.getText(), timestamp, txtTitle.getText(), rating);
-        ConnectionMongoDB conn = new ConnectionMongoDB();
+        Review rev = new Review( user.getUsername(), seller, txtArea.getText(), timestamp, txtTitle.getText(), rating);
+
         conn.addReview(rev);
         conn.updateSellerRating(rev.getSeller());
         conn.updateOrder(timestampOrder);
