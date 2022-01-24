@@ -1,10 +1,13 @@
 package main.java.controller;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 
+import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
 import main.java.connection.ConnectionMongoDB;
 import main.java.utils.Utility;
@@ -25,6 +28,10 @@ public class SearchPostController {
     @FXML private Text price;
     @FXML private Text views;
 
+    private String idPost;
+    private String sellerIdPost;
+    private Document found;
+
     public void initialize(){
         btnDeletePost.setDisable(true);
     }
@@ -33,10 +40,8 @@ public class SearchPostController {
 
         ConnectionMongoDB conn = new ConnectionMongoDB();
 
-        Document found;
-
-        String idPost = postIdField.getText();
-        String sellerIdPost = sellerIdField.getText();
+        idPost = postIdField.getText();
+        sellerIdPost = sellerIdField.getText();
 
         if (idPost != null && !idPost.trim().isEmpty())
             found = conn.verifyInsertionInDB(idPost, true);
@@ -62,6 +67,13 @@ public class SearchPostController {
 
     public void deletePost() {
 
+        ConnectionMongoDB connMongo = new ConnectionMongoDB();
+        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
+
+        connMongo.deleteInsertionMongo(found.getString("uniq_id"));
+        connNeo.deleteInsertionNeo4J(found.getString("uniq_id"));
+
+        System.out.println("Deleted post and relation in MongoDB and Neo4J!");
     }
 
 

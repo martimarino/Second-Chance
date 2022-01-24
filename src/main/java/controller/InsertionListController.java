@@ -93,8 +93,8 @@ public class InsertionListController {
         );
 
         delete.setOnMouseClicked(event -> {
-            connMongo.deleteInsertion(id);
-            connNeo.deleteInsertion(id);
+            connMongo.deleteInsertionMongo(id);
+            connNeo.deleteInsertionNeo4J(id);
             initialize(Session.getLogUser().getUsername());
         });
 
