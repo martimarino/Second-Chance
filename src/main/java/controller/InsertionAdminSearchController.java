@@ -126,7 +126,10 @@ public class InsertionAdminSearchController {
                         " -fx-max-width: 600;");
 
         btnDelete.setStyle(
-                " -fx-padding: 0 20px 0 20px;"
+                " -fx-padding: 0 20px 0 20px;" +
+                        "-fx-background-color:  rgb(206, 153, 255);" +
+                        "-fx-background-radius: 50;" +
+                        "-fx-text-fill: #ffffff;"
         );
         btnDelete.setTranslateX(70);
         btnDelete.setTranslateY(50);
