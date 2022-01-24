@@ -1,5 +1,8 @@
 package main.java.controller;
 
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -15,6 +18,8 @@ import java.util.Objects;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import javax.swing.event.ChangeListener;
 
 public class StatsController {
 
@@ -51,6 +56,9 @@ public class StatsController {
                System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
                txtFieldCountry.setText("");
+               txtFieldCountry.setEditable(false);
+               txtFieldCountry.setMouseTransparent(true);
+
                elaboraButton.setDisable(true);
 
                if (!txtFieldCategory.isEditable()) {
@@ -63,6 +71,9 @@ public class StatsController {
            System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
            txtFieldCountry.setText("");
+           txtFieldCountry.setEditable(false);
+           txtFieldCountry.setMouseTransparent(true);
+
            elaboraButton.setDisable(true);
 
            if (!txtFieldCategory.isEditable()) {
@@ -75,6 +86,9 @@ public class StatsController {
             System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
             txtFieldCategory.setText("");
+            txtFieldCategory.setEditable(false);
+            txtFieldCategory.setMouseTransparent(true);
+
             elaboraButton.setDisable(true);
 
             if (txtFieldCategory.isEditable()) {
@@ -142,11 +156,13 @@ public class StatsController {
         int k;
         // Section Most
 
+        k = Integer.parseInt(boxKNumber.getText());
+
         if (rBSellers.isSelected())
-            showMostActiveUsersSellers(conn,false);
+            showMostActiveUsersSellers(conn,false, k);
 
         if (rBUsers.isSelected())
-            showMostActiveUsersSellers(conn, true);
+            showMostActiveUsersSellers(conn, true, k);
 
         // Section K
 
@@ -154,7 +170,7 @@ public class StatsController {
             Utility.infoBox("Please insert a valid K number", "Error", "Empty box!");
         } else {
 
-            k = Integer.parseInt(boxKNumber.getText());
+
 
             if (rBTopKUsers.isSelected())
                 showTopKRatedUser(conn, k);
@@ -167,18 +183,21 @@ public class StatsController {
         }
     }
 
-    public void showMostActiveUsersSellers(ConnectionMongoDB conn, boolean choice) throws IOException{
+    public void showMostActiveUsersSellers(ConnectionMongoDB conn, boolean choice, int k) throws IOException{
 
-        ArrayList<Document> array = conn.findMostActiveUsersSellers(10, choice);
+        ArrayList<Document> array = conn.findMostActiveUsersSellers(k, choice);
         StackPane secondaryLayout = new StackPane();
 
-        for (int i = 0; i < 10 && array.size() > i; i++) {
+        ListView<String> list = new ListView<String>();
+        ObservableList items = FXCollections.observableArrayList();
 
-            Label x = new Label(array.get(i).getString("name"));
-            x.setTranslateX(10);
-            x.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(x);
+        for (int i = 0; i < k; i++) {
+
+            String str = array.get(i).getString("_id") + ": " + array.get(i).getInteger("count").toString();
+            items.add(str);
         }
+
+        list.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
@@ -186,8 +205,9 @@ public class StatsController {
 
             // New window (Stage)
             Stage newWindow = new Stage();
-            newWindow.setTitle("Top " + 5);
+            newWindow.setTitle("Top " + k);
             newWindow.getIcons().add(image);
+            secondaryLayout.getChildren().add(list);
             newWindow.setScene(secondScene);
 
             newWindow.show();
