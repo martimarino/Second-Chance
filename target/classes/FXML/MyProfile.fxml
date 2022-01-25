@@ -71,7 +71,6 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Button layoutX="289.0" layoutY="726.0" mnemonicParsing="false" onMouseClicked="#showReviews" text="Load more reviews" />
                   <BorderPane fx:id="review" layoutX="10.0" layoutY="408.0" prefHeight="309.0" prefWidth="680.0">
                      <left>
                         <Pane fx:id="prevReviews" onMouseClicked="#prevReviews" prefHeight="215.0" prefWidth="50.0" BorderPane.alignment="CENTER">

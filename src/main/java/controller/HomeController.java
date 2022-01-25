@@ -129,7 +129,6 @@ public class HomeController {
 
         viralHBox.getChildren().add(viral);
 
-
         viral.setOnMouseClicked(event -> {
                     try {
                         System.out.println("unique: " + uniq_id);
