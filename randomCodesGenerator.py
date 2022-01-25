@@ -1,11 +1,14 @@
 import random
 import string
 import pandas as pd
-import bs
+from random_object_id import generate
+
 S = 10  # number of characters in the string.
 
 array_credits_value = [10, 20, 25, 50, 100, 200]
 assigned = "F"
+
+print("Hello World!")
 
 df = pd.DataFrame()
 
@@ -19,8 +22,8 @@ for i in range(1000):
     ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
     #print("The randomly generated string is : " + str(ran)) # print the random data
     credit =  random.choice(array_credits_value)
-    object_id = ObjectID()
-    df.loc[i] = [i, ran, credit, assigned]
+    object_id = generate()
+    df.loc[i] = [object_id, ran, credit, assigned]
 
 print(df.head(10))
 
