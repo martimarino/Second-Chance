@@ -156,6 +156,9 @@ public class StatsController {
         int k;
         // Section Most
 
+        if (Objects.equals(boxKNumber.getText(), ""))
+            Utility.infoBox("Please insert a valid K number", "Error", "Empty box!");
+
         k = Integer.parseInt(boxKNumber.getText());
 
         if (rBSellers.isSelected())
@@ -169,8 +172,6 @@ public class StatsController {
         if (Objects.equals(boxKNumber.getText(), "")) {
             Utility.infoBox("Please insert a valid K number", "Error", "Empty box!");
         } else {
-
-
 
             if (rBTopKUsers.isSelected())
                 showTopKRatedUser(conn, k);
@@ -226,18 +227,16 @@ public class StatsController {
 
         StackPane secondaryLayout = new StackPane();
 
+        ListView<String> list = new ListView<String>();
+        ObservableList items = FXCollections.observableArrayList();
+
         for (int i = 0; i < k; i++) {
 
-            Label x = new Label(array.get(i).getString("username"));
-            x.setTranslateX(10);
-            x.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(x);
-
-            Label y = new Label(Double.toString(array.get(i).getDouble("rating")));
-            y.setTranslateX(100);
-            y.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(y);
+            String str = array.get(i).getString("username") + ": " + array.get(i).getDouble("rating").toString();
+            items.add(str);
         }
+
+        list.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
@@ -247,6 +246,7 @@ public class StatsController {
             Stage newWindow = new Stage();
             newWindow.getIcons().add(image);
             newWindow.setTitle("Top " + k);
+            secondaryLayout.getChildren().add(list);
             newWindow.setScene(secondScene);
 
             newWindow.show();
@@ -265,17 +265,16 @@ public class StatsController {
 
         StackPane secondaryLayout = new StackPane();
 
-        for (int i=0; i < k; i++) {
-            Label x = new Label(array.get(i).getString("description"));
-            x.setTranslateX(10);
-            x.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(x);
+        ListView<String> list = new ListView<String>();
+        ObservableList items = FXCollections.observableArrayList();
 
-            Label y = new Label(array.get(i).getInteger("interested").toString());
-            y.setTranslateX(200);
-            y.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(y);
+        for (int i=0; i < k; i++) {
+
+            String str = array.get(i).getString("description") + ": " + array.get(i).getInteger("interested").toString();
+            items.add(str);
         }
+
+        list.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
@@ -285,6 +284,7 @@ public class StatsController {
             Stage newWindow = new Stage();
             newWindow.getIcons().add(image);
             newWindow.setTitle("Top " + k);
+            secondaryLayout.getChildren().add(list);
             newWindow.setScene(secondScene);
 
             newWindow.show();
@@ -304,17 +304,16 @@ public class StatsController {
 
         StackPane secondaryLayout = new StackPane();
 
-        for (int i=0; i < k; i++) {
-            Label x = new Label(array.get(i).getString("description"));
-            x.setTranslateX(10);
-            x.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(x);
+        ListView<String> list = new ListView<String>();
+        ObservableList items = FXCollections.observableArrayList();
 
-            Label y = new Label(array.get(i).getString("views"));
-            y.setTranslateX(200);
-            y.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(y);
+        for (int i=0; i < k; i++) {
+
+            String str = array.get(i).getString("description") + ": " + array.get(i).getInteger("views").toString();
+            items.add(str);
         }
+
+        list.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
@@ -324,6 +323,7 @@ public class StatsController {
             Stage newWindow = new Stage();
             newWindow.getIcons().add(image);
             newWindow.setTitle("Top " + k);
+            secondaryLayout.getChildren().add(list);
             newWindow.setScene(secondScene);
 
             newWindow.show();

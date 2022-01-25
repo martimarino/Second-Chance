@@ -415,4 +415,21 @@ public class ConnectionNeo4jDB implements AutoCloseable
         }
         return followed_ins;
     }
+
+    public void deleteInsertionNeo4J(String id) {
+        this.open();
+
+        try (Session session = driver.session()) {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
+                tx.run(
+                        "MATCH (u:Insertion {uniq_id: $id})" +
+                                "DETACH DELETE u", parameters("id", id));
+                return null;
+            });
+
+            this.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -15,15 +15,13 @@ import main.java.entity.*;
 import main.java.utils.*;
 import org.bson.*;
 import javafx.stage.StageStyle;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Double.NaN;
 
 public class MyProfileController extends MainController {
 
@@ -60,7 +58,6 @@ public class MyProfileController extends MainController {
 
         setProfile();
         System.out.println("USERNAME init: " + user.getUsername());
-
     }
 
 
@@ -69,7 +66,7 @@ public class MyProfileController extends MainController {
         conn = new ConnectionMongoDB();
 
         Session session = Session.getInstance();
-        user  = session.getLogUser();
+        user = session.getLogUser();
 
         if(!us.equals(user.getUsername())) {
 
@@ -276,7 +273,6 @@ public class MyProfileController extends MainController {
         }
     }
 
-  
     public void logout() throws IOException {
 
         session = Session.getInstance();
@@ -294,11 +290,17 @@ public class MyProfileController extends MainController {
 
     public void showReviews() {
 
-        if (listReviews.size() != 0) {
+        prevReviews.setDisable(true);
+        prevReviews.setVisible(false);
+
+        if (listReviews.size() != 0 && listReviews.size() < 4) {
+            nextReviews.setDisable(true);
+            nextReviews.setVisible(false);
+        }
+
+        if (listReviews.size() > 3) {
             nextReviews.setDisable(false);
             nextReviews.setVisible(true);
-            prevReviews.setDisable(false);
-            prevReviews.setVisible(true);
         }
 
         reviews = new GridPane();
@@ -323,6 +325,7 @@ public class MyProfileController extends MainController {
         Label title = new Label("Title: " + listReviews.get(index).getString("title"));
         Label text = new Label(listReviews.get(index).getString("text"));
         text.setWrapText(true);
+
         reviews.add(reviewer, i, 0);
         reviews.add(title, i, 1);
         reviews.add(text, i, 2);

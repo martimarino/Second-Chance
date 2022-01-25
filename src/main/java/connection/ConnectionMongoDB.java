@@ -4,6 +4,7 @@ import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.*;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
 import main.java.entity.*;
@@ -459,7 +460,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("insertion");
 
         if (choice)
-            insertion = myColl.find(eq("_id", id)).first();
+            insertion = myColl.find(eq("uniq_id", id)).first();
          else
             insertion = myColl.find(eq("seller", id)).first();
 
@@ -654,6 +655,32 @@ public class ConnectionMongoDB{
 
         this.closeConnection();
         return ins;
+    }
+
+    public ArrayList<Insertion> findMultipleInsertionDetails(String seller) {
+
+        this.openConnection();
+        ArrayList<Insertion> array = new ArrayList<Insertion>();
+        MongoCollection<Document> myColl = db.getCollection("insertion");
+
+        AggregateIterable<Document> aggr  = myColl.aggregate(
+                Arrays.asList(
+                        Aggregates.match(Filters.eq("seller", seller))
+                )
+        );
+
+        for (Document document : aggr) {
+            Insertion ins = new Insertion();
+            ins.setCategory(document.getString("category"));
+            ins.setPrice(document.getDouble("price"));
+            ins.setViews(document.getInteger("views"));
+            ins.setId(document.getString("uniq_id"));
+            array.add(ins);
+        }
+
+        this.closeConnection();
+
+        return array;
     }
 
     public ArrayList<Insertion> findInsertionDetailsNeo4J(ArrayList<String> followed_ins)  {
@@ -919,14 +946,21 @@ public class ConnectionMongoDB{
 
     }*/
 
-    public void deleteInsertion(String id) {
+    public void deleteInsertionMongo(String id) {
 
         this.openConnection();
 
         MongoCollection<Document> myColl = db.getCollection("insertion");
-        myColl.deleteOne(Filters.eq("uniq_id", id));
+
+        Bson query = eq("uniq_id", id);
+
+        try {
+            DeleteResult result = myColl.deleteOne(query);
+            System.out.println("Deleted document count: " + result.getDeletedCount());
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
+        }
 
         this.closeConnection();
-
     }
 }

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.StatsController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.StatsController">
    <children>
       <Label layoutX="282.0" layoutY="-1.0" prefHeight="29.0" prefWidth="204.0" text="         Stats Section" textAlignment="CENTER">
          <font>
@@ -20,7 +20,7 @@
       </Label>
       <SplitPane dividerPositions="0.501254705144291" layoutX="1.0" layoutY="34.0" prefHeight="464.0" prefWidth="799.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);">
                <children>
                   <Label layoutX="147.0" layoutY="17.0" text="Top K Section">
                      <font>
@@ -60,7 +60,7 @@
                   </Pane>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);">
                <children>
                   <Label layoutX="136.0" layoutY="17.0" text="Most Items Stats">
                      <font>
