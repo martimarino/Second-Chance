@@ -186,7 +186,7 @@ public class HomeController {
     public void prevFeedInsertions() {
 
         feedBox.getChildren().clear();
-        Utility.prevPage(scrollPage, nPage, prevFeedButton);
+        scrollPage = Utility.prevPage(scrollPage, nPage, prevFeedButton);
         showFeed();
     }
 
