@@ -134,19 +134,24 @@ public class Utility {
         stage.show();
     }
 
-    public static void prevPage(int index, int k, Pane prev) {
+    public static int prevPage(int index, int k, Pane prev) {
+
+        int new_index = 0;
 
         if((index%k) == 0)
-            index -= 3;
+            new_index = index - 3;
         else
-            index -= (index%k);
-        index -= 3;
+            new_index = index - (index%k);
+        new_index -= 3;
 
-        if (index == 0) {
+        if (new_index == 0) {
             prev.setDisable(true);
             prev.setVisible(false);
         }
+
+        return new_index;
     }
+
 
     public static void nextPage(int index, ArrayList<Document> list, Pane next, Pane prev) {
 
@@ -161,4 +166,21 @@ public class Utility {
         prev.setDisable(false);
     }
 
+    public static int prevPageReviews(int index, int k, Pane prev) {
+
+        int new_index = 0;
+
+        if((index%k) == 0)
+            new_index = index - 2;
+        else
+            new_index = index - (index%k);
+        new_index -= 2;
+
+        if (new_index == 0) {
+            prev.setDisable(true);
+            prev.setVisible(false);
+        }
+
+        return new_index;
+    }
 }

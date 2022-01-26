@@ -77,6 +77,5 @@
                 </AnchorPane>
             </items>
         </SplitPane>
-      <Button layoutX="712.0" layoutY="6.0" mnemonicParsing="false" text="Logout" />
     </children>
 </AnchorPane>

@@ -26,10 +26,10 @@
                         <Font size="24.0" />
                      </font>
                   </Text>
-                  <Button fx:id="followersButton" layoutX="429.0" layoutY="117.0" mnemonicParsing="false" onMouseClicked="#showUserFollowers" prefHeight="25.0" prefWidth="245.0" text="Followers" />
-                  <Button fx:id="followingButton" layoutX="429.0" layoutY="158.0" mnemonicParsing="false" onMouseClicked="#showUserFollowing" prefHeight="25.0" prefWidth="245.0" text="Following" />
-                  <Button fx:id="interestedInsertionsButton" layoutX="429.0" layoutY="197.0" mnemonicParsing="false" onMouseClicked="#showInsertionsLiked" prefHeight="25.0" prefWidth="245.0" text="View insertion you are interested in" />
-                  <Button fx:id="insertionButton" layoutX="429.0" layoutY="238.0" mnemonicParsing="false" onMouseClicked="#showInsertions" prefHeight="25.0" prefWidth="245.0" text="View insertion you published" />
+                  <Button fx:id="followersButton" layoutX="429.0" layoutY="117.0" mnemonicParsing="false" onMouseClicked="#showUserFollowers" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 20;" text="Followers" textFill="#65626b" />
+                  <Button fx:id="followingButton" layoutX="429.0" layoutY="158.0" mnemonicParsing="false" onMouseClicked="#showUserFollowing" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237) rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 30;" text="Following" textFill="#65626b" />
+                  <Button fx:id="interestedInsertionsButton" layoutX="429.0" layoutY="197.0" mnemonicParsing="false" onMouseClicked="#showInsertionsLiked" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237) rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 30;" text="View insertion you are interested in" textFill="#65626b" />
+                  <Button fx:id="insertionButton" layoutX="429.0" layoutY="238.0" mnemonicParsing="false" onMouseClicked="#showInsertions" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237) rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 30;" text="View insertion you published" textFill="#65626b" />
                   <GridPane fx:id="userInfo" layoutX="47.0" layoutY="108.0" prefHeight="180.0" prefWidth="361.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -44,8 +44,8 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                   </GridPane>
-                  <Button fx:id="btnLogout" layoutX="613.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" />
-                  <Button fx:id="btnAddFunds" layoutX="515.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#addFundsShow" text="Add Funds" />
+                  <Button fx:id="btnLogout" layoutX="613.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#logout" style="-fx-background-color: rgb(213, 128, 255)rgb(213, 128, 255); -fx-background-radius: 30;" text="Logout" textFill="WHITE" />
+                  <Button fx:id="btnAddFunds" layoutX="515.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#addFundsShow" style="-fx-background-color: rgb(238, 204, 255)rgb(238, 204, 255); -fx-background-radius: 30;" text="Add Funds" textFill="WHITE" />
                    <Text fill="#2582bf" layoutX="308.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reviews">
                        <font>
                            <Font size="24.0" />
@@ -60,7 +60,7 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Button fx:id="refreshBtn" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#updateUserBalance">
+                        <Button fx:id="refreshBtn" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#updateUserBalance" style="-fx-background-color: rgb(255, 166, 77)rgb(255, 166, 77); -fx-background-radius: 30;">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0">
                                  <image>
@@ -71,11 +71,11 @@
                         </Button>
                      </children>
                   </Pane>
-                  <BorderPane fx:id="review" layoutX="10.0" layoutY="408.0" prefHeight="309.0" prefWidth="680.0">
+                  <BorderPane fx:id="review" layoutX="10.0" layoutY="408.0" prefHeight="200.0" prefWidth="680.0">
                      <left>
                         <Pane fx:id="prevReviews" onMouseClicked="#prevReviews" prefHeight="215.0" prefWidth="50.0" BorderPane.alignment="CENTER">
                            <children>
-                              <ImageView fitHeight="50.0" fitWidth="50.0" layoutY="130.0">
+                              <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="-1.0" layoutY="74.0">
                                  <image>
                                     <Image url="@../img/prev.png" />
                                  </image>
@@ -86,7 +86,7 @@
                      <right>
                         <Pane fx:id="nextReviews" onMouseClicked="#nextReviews" prefHeight="200.0" prefWidth="50.0" BorderPane.alignment="CENTER">
                            <children>
-                              <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="-1.0" layoutY="130.0">
+                              <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="-1.0" layoutY="74.0">
                                  <image>
                                     <Image url="@../img/next.png" />
                                  </image>

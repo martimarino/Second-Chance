@@ -856,6 +856,8 @@ public class ConnectionMongoDB{
             return;
         }
 
+        double credit = code.getInteger("credit");
+
         Document queryUser = new Document().append("username",  username);
         Document queryAdmin = new Document().append("code",  id_code);
 
@@ -884,6 +886,9 @@ public class ConnectionMongoDB{
             System.err.println("Unable to update due to an error: " + me);
             return;
         }
+
+        Utility.infoBox("Deposit of " + code.getInteger("credit") + "€ euros successfully executed", "Success", "Deposit done!");
+        deleteCode(code.getString("_id"));
     }
 
     public double updateBalance(String username) {
@@ -953,6 +958,24 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl = db.getCollection("insertion");
 
         Bson query = eq("uniq_id", id);
+
+        try {
+            DeleteResult result = myColl.deleteOne(query);
+            System.out.println("Deleted document count: " + result.getDeletedCount());
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
+        }
+
+        this.closeConnection();
+    }
+
+    private void deleteCode(String id) {
+
+        this.openConnection();
+
+        MongoCollection<Document> myColl = db.getCollection("admin");
+
+        Bson query = eq("_id", id);
 
         try {
             DeleteResult result = myColl.deleteOne(query);

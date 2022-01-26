@@ -62,7 +62,7 @@ public class InsertionListLikedController {
         }
         System.out.println("(show) INDEX: " + index);
 
-        for (int i = 0; i < k && i < insertions.size(); i++) {
+        for (int i = 0; i < k && index < insertions.size(); i++) {
             addInsertions();
         }
         bp.setCenter(box);
