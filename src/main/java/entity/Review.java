@@ -9,7 +9,6 @@ public class Review {
     String title;
     int rating;
 
-
     public String getReviewer() {
         return reviewer;
     }

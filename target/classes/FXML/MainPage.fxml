@@ -5,7 +5,7 @@
 
 <AnchorPane fx:id="anchorRoot" style="-fx-background-color: rgb(230, 230, 255);"  prefHeight="800.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.MainController">
    <children>
-      <TabPane fx:id ="tabpane" prefHeight="800.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id ="tabpane" prefHeight="800.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: white; ">
         <tabs>
             <Tab text="Feed">
                 <content>

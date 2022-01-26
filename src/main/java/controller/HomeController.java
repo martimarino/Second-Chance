@@ -56,15 +56,7 @@ public class HomeController {
         viralInsertions.setCenter(viralHBox);
         scrollPage2 = 0;
         showViralInsertions();
-        //viralHBox.setStyle("-fx-background-color: white; -fx-padding: 5");
-        // new user
-       /* if(connNeo.checkNewUser(Session.getLogUser().getUsername())) {
-            ins = connMongo.findTopKViewedInsertion(k, "clothing");
-            Utility.printTerminal("New user case");
-        } else {
-            followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
-            ins = connMongo.followedUserInsertions(followedFromNeo);
-        }*/
+
         feedBox = new HBox();
         feedBox.setSpacing(10);
         feed.setCenter(feedBox);

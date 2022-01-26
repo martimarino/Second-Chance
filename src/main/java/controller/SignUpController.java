@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
+import main.java.utils.CryptWithMD5;
 import main.java.utils.Utility;
 
 import java.io.File;
@@ -39,7 +40,8 @@ public class SignUpController {
                 && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getValue().isEmpty()
                 && !ad.getText().isEmpty()) {
 
-            User u = new User(em.getText(), us.getText(), pw.getText(), nm.getText(), co.getValue(), ci.getText(), ad.getText(), "N", Double.NaN, 0.0, "image.png");
+            String encrypted = CryptWithMD5.cryptWithMD5(pw.getText());
+            User u = new User(em.getText(), us.getText(), encrypted, nm.getText(), co.getValue(), ci.getText(), ad.getText(), "N", Double.NaN, 0.0, "image.png");
 
             if(us.getText().equals("admin")) {
                 Utility.infoBox("You can not register as admin", "Error", "Please, insert a different username-");
