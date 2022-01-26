@@ -143,6 +143,7 @@ public class Utility {
         }
     }
 
+
     public static void nextPage(int index, ArrayList<Document> list, Pane next, Pane prev) {
 
         System.out.println("INDEX: " + index + "list: " + list.size());
@@ -154,5 +155,23 @@ public class Utility {
 
         prev.setVisible(true);
         prev.setDisable(false);
+    }
+
+    public static int prevPageReviews(int index, int k, Pane prev) {
+
+        int new_index = 0;
+
+        if((index%k) == 0)
+            new_index = index - 2;
+        else
+            new_index = index - (index%k);
+        new_index -= 2;
+
+        if (new_index == 0) {
+            prev.setDisable(true);
+            prev.setVisible(false);
+        }
+
+        return new_index;
     }
 }

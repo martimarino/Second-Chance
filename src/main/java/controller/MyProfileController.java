@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.connection.*;
@@ -29,6 +32,7 @@ public class MyProfileController extends MainController {
     public GridPane reviews;
 
     public BorderPane review;
+    HBox reviewsBox;
 
     @FXML public Pane nextReviews, prevReviews;
     public Button refreshBtn;
@@ -47,15 +51,14 @@ public class MyProfileController extends MainController {
     private Session session;
     private ConnectionMongoDB conn;
 
-    int scrollPage2;
+    int scrollPage;
+    int nPage = 2;
 
     public void initialize(){
 
         Session session = Session.getInstance();
         user  = session.getLogUser();
-
         conn = new ConnectionMongoDB();
-
         setProfile();
         System.out.println("USERNAME init: " + user.getUsername());
     }
@@ -64,7 +67,6 @@ public class MyProfileController extends MainController {
     public void initialize(String us) {
 
         conn = new ConnectionMongoDB();
-
         Session session = Session.getInstance();
         user = session.getLogUser();
 
@@ -88,6 +90,13 @@ public class MyProfileController extends MainController {
     }
 
     public void setProfile(){
+
+        prevReviews.setDisable(true);
+        prevReviews.setVisible(false);
+        reviewsBox = new HBox();
+        reviewsBox.setSpacing(100);
+        review.setCenter(reviewsBox);
+        scrollPage = 0;
 
         userInfo.getChildren().clear();
 
@@ -129,13 +138,10 @@ public class MyProfileController extends MainController {
         updateUserBalance();
 
         listReviews = conn.getReviewsByUser(user.getUsername());
-        if (listReviews.size() == 0) {
+        if (listReviews.size() < 3) {
             System.out.println("Reviews nulle, disattivo i bottoni");
             nextReviews.setDisable(true);
             nextReviews.setVisible(false);
-            prevReviews.setDisable(true);
-            prevReviews.setVisible(false);
-            return;
         }
         showReviews();
     }
@@ -289,111 +295,56 @@ public class MyProfileController extends MainController {
     }
 
     public void showReviews() {
-
-        prevReviews.setDisable(true);
-        prevReviews.setVisible(false);
-
-        if (listReviews.size() != 0 && listReviews.size() < 4) {
-            nextReviews.setDisable(true);
-            nextReviews.setVisible(false);
+        System.out.println("SCROLL OUT REVIEWS: " + scrollPage);
+        for (int i = 0; i < nPage && scrollPage < listReviews.size(); i++) {
+            System.out.println("SCROLL IN REVIEWS: " + scrollPage + "i: " + i);
+            addReviews();
         }
-
-        if (listReviews.size() > 3) {
-            nextReviews.setDisable(false);
-            nextReviews.setVisible(true);
-        }
-
-        reviews = new GridPane();
-        reviews.gridLinesVisibleProperty().set(true); //DEBUG
-
-        ColumnConstraints column1 = new ColumnConstraints(200);
-        column1.setPercentWidth(50);
-        reviews.getColumnConstraints().addAll(column1);
-        scrollPage2 = 0;
-
-        for (int i = 0; i < scrollPage2 + 2 && listReviews.size() > i; i++) {
-
-            addReviews(i, i);
-            review.setCenter(reviews);
-        }
-        scrollPage2 += 2;
     }
 
-    private void addReviews(int index, int i) {
+    private void addReviews() {
 
-        Label reviewer = new Label(listReviews.get(index).getString("reviewer"));
-        Label title = new Label("Title: " + listReviews.get(index).getString("title"));
-        Label text = new Label(listReviews.get(index).getString("text"));
+        Label user = new Label("User: " + listReviews.get(scrollPage).getString("reviewer"));
+        user.setTextFill(Color.WHITE);
+        Utility.printTerminal(listReviews.toString());
+
+        Label text = new Label(listReviews.get(scrollPage).getString("text"));
+        text.setTextFill(Color.WHITE);
+        Label title = new Label("Title: " + listReviews.get(scrollPage).getString("title"));
+        title.setTextFill(Color.WHITE);
+        Label rating = new Label("Rating: " + listReviews.get(scrollPage).getInteger("rating"));
+        rating.setTextFill(Color.WHITE);
         text.setWrapText(true);
 
-        reviews.add(reviewer, i, 0);
-        reviews.add(title, i, 1);
-        reviews.add(text, i, 2);
+        VBox feed = new VBox(user, text, title, rating);
+        feed.setStyle("-fx-background-color: white; -fx-padding: 8");
+        feed.setSpacing(10);
+        feed.setPadding(new Insets(5, 5, 5, 5));
+        feed.setPrefHeight(100);
+        feed.setPrefWidth(300);
+        feed.setAlignment(Pos.CENTER);
 
-        System.out.println("index:" + index);
-        GridPane.setHalignment(reviewer, HPos.CENTER);
-        GridPane.setHalignment(title, HPos.CENTER);
-        GridPane.setHalignment(text, HPos.CENTER);
+        String cssLayout =
+                "-fx-border-color: rgb(102, 153, 255);\n" +
+                        "-fx-background-color: rgb(230, 179, 255);\n" +
+                        "-fx-background-radius: 50;\n" +
+                        "-fx-border-radius: 50;\n";
+        feed.setStyle(cssLayout);
 
-        reviews.setHgap(10);
-        reviews.setVgap(10);
-        reviews.setPadding(new Insets(0, 0, 5, 5));
+        reviewsBox.getChildren().add(feed);
+
+        scrollPage++;
     }
 
     public void prevReviews() {
-
-        reviews.getChildren().clear();
-        int row = 0;
-
-        scrollPage2 -= 4;
-
-        nextReviews.setDisable(false);
-        nextReviews.setVisible(true);
-
-        if (scrollPage2 == 0) {
-            prevReviews.setDisable(true);
-            prevReviews.setVisible(false);
-        }
-
-        System.out.println("scrollPage2 in prev: " + scrollPage2);
-        for (int i = scrollPage2; row < 2; i++) {
-            addReviews(i, row);
-            row++;
-        }
-        review.setCenter(reviews);
-        scrollPage2 += 2;
-
-
+        reviewsBox.getChildren().clear();
+        scrollPage = Utility.prevPageReviews(scrollPage, nPage, prevReviews);
+        showReviews();
     }
 
     public void nextReviews() {
-
-        reviews.getChildren().clear();
-        int row = 0;
-
-        prevReviews.setDisable(false);
-        prevReviews.setVisible(true);
-
-        System.out.println("scrollPage2 in next: " + scrollPage2);
-        System.out.println("size of list: " + listReviews.size());
-
-        for (int i = scrollPage2; i < scrollPage2 + 2 && row < 2; i++) {
-            if (i == listReviews.size()) {
-                nextReviews.setDisable(true);
-                nextReviews.setVisible(false);
-                return;
-            }
-            addReviews(i, row);
-            row++;
-            review.setCenter(reviews);
-        }
-
-        scrollPage2 += 2;
-
-        if (scrollPage2 >= listReviews.size() - 1) {
-            nextReviews.setDisable(true);
-            nextReviews.setVisible(false);
-        }
-
+        reviewsBox.getChildren().clear();
+        Utility.nextPage(scrollPage + nPage, (ArrayList<Document>) listReviews, nextReviews, prevReviews);
+        showReviews();
     }
 }

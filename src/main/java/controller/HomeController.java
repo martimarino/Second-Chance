@@ -85,7 +85,6 @@ public class HomeController {
         Utility.printTerminal("Size of ins: " + feedList.size());
         Utility.printTerminal("Size of viral: " + viralList.size());
 
-
         showFeed();
         prevFeedButton.setDisable(true);
         prevFeedButton.setVisible(false);
