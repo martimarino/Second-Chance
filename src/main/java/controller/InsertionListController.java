@@ -73,6 +73,13 @@ public class InsertionListController {
         Label brand = new Label("Brand: " + list.get(index).getString("brand"));
         Button delete = new Button("Delete");
 
+        String cssLayout =
+                        "-fx-background-color:  rgb(238, 204, 255)rgb(238, 204, 255);\n" +
+                        "-fx-background-radius: 30;\n" +
+                "-fx-text-fill: rgb(255,255,255)";
+
+        delete.setStyle(cssLayout);
+
         det.getChildren().add(status);
         det.getChildren().add(price);
         det.getChildren().add(brand);
