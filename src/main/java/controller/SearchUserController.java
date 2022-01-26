@@ -90,9 +90,10 @@ public class SearchUserController extends MainController{
 
         if(suggFromNeo.size() < k)
         {
+            Utility.printTerminal("Not enough suggestions");
             Session session = Session.getInstance();
             User user = session.getLoggedUser();
-            ArrayList<Document> temp = connMongo.findTopKRatedUser(m-suggFromNeo.size(), user.getCountry());
+            ArrayList<Document> temp = connMongo.findTopKRatedUser((m-suggFromNeo.size()), user.getCountry());
             for(Document d : temp) {
                 suggFromNeo.add(d.getString("username"));
             }
@@ -104,7 +105,6 @@ public class SearchUserController extends MainController{
             suggList.add(d);
         }
 
-        Utility.printTerminal("SUGG NEO: " + suggFromNeo.size());
         Utility.printTerminal("SUGG SIZE: " + suggList.size());
 
         showSuggestedUsers();

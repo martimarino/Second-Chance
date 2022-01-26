@@ -1,20 +1,36 @@
 package main.java;
 
-import javafx.application.*;
-import javafx.fxml.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.stage.*;
-import javafx.scene.*;
+import javafx.stage.Stage;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
 
 public class SecondChanceGUI extends Application {
 
     public static void main(String[] args) {
-        launch(args);
-    }
+/*
+        ConnectionString uri = new ConnectionString(
+                "mongodb+srv://root:<password>@largescaleproject.n8fgw.mongodb.net/test");
+        MongoClient mongoClientAtlas = MongoClients.create(uri);
 
+        MongoDatabase db = mongoClientAtlas.getDatabase("LargeScaleProject");
+
+        for(String name : db.listCollectionNames()) {
+
+            Utility.printTerminal(name);
+        }
+*/
+
+        launch(args);
+
+    }
 
 
     @Override

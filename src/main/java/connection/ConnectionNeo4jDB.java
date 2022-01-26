@@ -214,7 +214,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 return result.hasNext();
             });
             System.out.println(relation);
-
+            this.close();
             return relation;
         }
     }
@@ -232,53 +232,24 @@ public class ConnectionNeo4jDB implements AutoCloseable
         }
     }
 
-
-    public boolean checkNewUser(String username) {
-        this.open();
-        Boolean check = false;
-
-        try(Session session = driver.session()) {
-            check = session.writeTransaction((TransactionWork<Boolean>) tx -> {
-                Result result = tx.run(
-                        "MATCH (u:User)-[r:FOLLOWS]->(v) " +
-                                "WHERE u.username = $username " +
-                                "RETURN COUNT(r) AS NewUser;",
-                        parameters( "username", username));
-
-                Record r = result.next();
-                if((r.get("NewUser").asInt()) == 0)
-                    return true;
-                return false;
-            });
-            this.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return check;
-    }
-
     public boolean checkIfFollows(String us1, String us2) {
 
         this.open();
-        boolean check = false;
+        Boolean check;
 
         try(Session session = driver.session()) {
             check = session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
-                        "MATCH  (p:User), (b:User) " +
-                                "WHERE p.username = $username1 AND b.username = $username2 " +
-                                "RETURN exists( (p)-[:FOLLOWS]-(b) ) AS Follows",
+                        "MATCH (a:User {username: $username1})-[r:FOLLOWS]->(b:User {username: $username2}) " +
+                                "RETURN r",
                         parameters( "username1", us1,
                                 "username2", us2));
 
-                Record r = result.next();
-                return r.get(0).asBoolean();
+                return result.hasNext();
             });
             this.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            return check;
         }
-        return check;
     }
 
     public void followUnfollowButton(String text, String us1, String us2) {
@@ -426,7 +397,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "DETACH DELETE u", parameters("id", id));
                 return null;
             });
-
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
