@@ -93,9 +93,11 @@ public class MyProfileController extends MainController {
 
         prevReviews.setDisable(true);
         prevReviews.setVisible(false);
+
         reviewsBox = new HBox();
         reviewsBox.setSpacing(100);
         review.setCenter(reviewsBox);
+
         scrollPage = 0;
 
         userInfo.getChildren().clear();
@@ -339,12 +341,24 @@ public class MyProfileController extends MainController {
     public void prevReviews() {
         reviewsBox.getChildren().clear();
         scrollPage = Utility.prevPageReviews(scrollPage, nPage, prevReviews);
+
+        if (scrollPage == 0) {
+            nextReviews.setDisable(false);
+            nextReviews.setVisible(true);
+        }
+
         showReviews();
     }
 
     public void nextReviews() {
         reviewsBox.getChildren().clear();
         Utility.nextPage(scrollPage + nPage, (ArrayList<Document>) listReviews, nextReviews, prevReviews);
+
+        if (scrollPage == listReviews.size() - 1) {
+            nextReviews.setVisible(false);
+            nextReviews.setDisable(true);
+        }
+
         showReviews();
     }
 }
