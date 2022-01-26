@@ -11,3 +11,4 @@ public interface GeneralUser {
     public String getPassword();
 
 }
+

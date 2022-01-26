@@ -70,7 +70,7 @@ public class NewInsertionController {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on MongoDB");
             return;
         }
-        //Nejo failure
+        //Neo4j failure
         if((!connNeo.addInsertion(i) || (!connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId())))) {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
             return;

@@ -47,6 +47,8 @@ public class SignInController {
 
         String username = us.getText();
         String password = pw.getText();
+        String encrypted = CryptWithMD5.cryptWithMD5(password);
+        Utility.printTerminal("PASSWORD: " + password + "\nENCRYPTED: " + encrypted);
         Session session;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
@@ -60,8 +62,8 @@ public class SignInController {
                 //session.setLogUser(user, true);
                 ShowAdminPanel();
             }else {
-
-                boolean logged = conn.logInUser(username, password);
+                boolean logged = conn.logInUser(username, encrypted);
+                //boolean logged = conn.logInUser(username, password);
                 if (logged) {
                     session = Session.getInstance();
                     Document user  = conn.findUserByUsername(us.getText());

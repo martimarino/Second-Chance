@@ -849,6 +849,8 @@ public class ConnectionMongoDB{
 
         Document code = myCollCodes.find(eq("code", id_code)).first();
 
+        double credit = code.getDouble("credit");
+
         if (code == null || Objects.equals(code.getString("assigned"), "T")) {
             Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
             return;
