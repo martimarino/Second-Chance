@@ -31,6 +31,12 @@ public class ConnectionMongoDB{
     private MongoDatabase db;
     MongoCursor<Document> cursor;
 
+    MongoCollection<Document> userColl;
+    MongoCollection<Document> orderColl;
+    MongoCollection<Document> insertionColl;
+    MongoCollection<Document> adminColl;
+
+
     /* ********* CONNECTION SECTION ********* */
 
     public void openConnection() {
@@ -47,27 +53,25 @@ public class ConnectionMongoDB{
                         "?retryWrites=true&w=majority&wtimeout=10000");
 
         // Read Preferences at DB level
-        MongoDatabase db = mongoClient.getDatabase("lsmdb")
+        db = mongoClient.getDatabase("lsmdb")
                 .withReadPreference(ReadPreference.secondary());
 
         // Read Preferences at collection level
-        MongoCollection<Document> userColl = db.getCollection("user")
+        userColl = db.getCollection("user")
                 .withReadPreference(ReadPreference.secondary());
 
-        MongoCollection<Document> insertionColl = db.getCollection("insertion")
+        insertionColl = db.getCollection("insertion")
                 .withReadPreference(ReadPreference.secondary());
 
-        MongoCollection<Document> orderColl = db.getCollection("order")
+        orderColl = db.getCollection("order")
                 .withReadPreference(ReadPreference.secondary());
 
-        MongoCollection<Document> adminColl = db.getCollection("admin")
+        adminColl = db.getCollection("admin")
                 .withReadPreference(ReadPreference.secondary());
 
         // Write concern at DB level
         db = mongoClient.getDatabase("lsmdb")
                 .withWriteConcern(WriteConcern.W1);
-
-        //populateDB(myColl);
 
         System.out.println("**************** USER ******************");
         System.out.println(userColl.countDocuments());
@@ -75,13 +79,11 @@ public class ConnectionMongoDB{
         System.out.println(orderColl.countDocuments());
         System.out.println("**************** INSERTION ******************");
         System.out.println(insertionColl.countDocuments());
+        System.out.println("**************** ADMIN ******************");
+        System.out.println(adminColl.countDocuments());
 
         // 2 - Find the first document
         userColl.find().limit(1).forEach(printDocuments());
-
-        //--- Close connection ---
-        mongoClient.close();
-
 
     }
 
@@ -116,8 +118,6 @@ public class ConnectionMongoDB{
             return false;
         }
 
-        MongoCollection<Document> myColl = db.getCollection("user");
-
         Document user = new Document("address", u.getAddress())
                 .append("balance", u.getBalance())
                 .append("city", u.getCity())
@@ -129,7 +129,7 @@ public class ConnectionMongoDB{
                 .append("suspended", u.getSuspended())
                 .append("username", u.getUsername());
 
-        myColl.insertOne(user);
+        userColl.insertOne(user);
 
         this.closeConnection();
         return true;
@@ -142,8 +142,7 @@ public class ConnectionMongoDB{
     public Document findUserByUsername(String username) {
 
         this.openConnection();
-        MongoCollection<Document> myColl = db.getCollection("user");
-        cursor = myColl.find(eq("username", username)).iterator();
+        cursor = userColl.find(eq("username", username)).iterator();
 
         this.closeConnection();
 
@@ -157,8 +156,7 @@ public class ConnectionMongoDB{
 
     private boolean userAlreadyPresent(String username, String password) {
 
-        MongoCollection<Document> myColl = db.getCollection("user");
-        cursor = myColl.find(and(eq("username", username),
+        cursor = userColl.find(and(eq("username", username),
                 eq("password", password))).iterator();
 
         return cursor.hasNext();
@@ -168,8 +166,7 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         User logUser = new User();
-        MongoCollection<Document> myColl = db.getCollection("user");
-        Document user = myColl.find(eq("username", username)).first();
+        Document user = userColl.find(eq("username", username)).first();
         logUser.setUsername(user.getString("username"));
         logUser.setName(user.getString("name"));
         logUser.setEmail(user.getString("email"));
@@ -187,12 +184,11 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> insertions = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
         //System.out.println("insertion id: " + usList);
 
         for (int i = 0; i < usList.size(); i++) {
-            Document d = myColl.find(eq("uniq_id", usList.get(i))).first();
+            Document d = insertionColl.find(eq("uniq_id", usList.get(i))).first();
             insertions.add(d);
         }
 
@@ -204,11 +200,10 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> insertions = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
         Bson sort = sort(descending("interested"));
         Bson limit = limit(k);
 
-        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(sort ,limit));
+        AggregateIterable<Document> r = insertionColl.aggregate(Arrays.asList(sort ,limit));
 
         for (Document document : r)
         {
@@ -221,7 +216,6 @@ public class ConnectionMongoDB{
     public ArrayList<Document> findUserByFilters(String country, String rating) {
 
         this.openConnection();
-        MongoCollection<Document> myColl = db.getCollection("user");
         ArrayList<Document> users = new ArrayList<>();
         double r ;
         double lowerBound = 0;
@@ -235,14 +229,14 @@ public class ConnectionMongoDB{
 
         if(country.equals("country") && !rating.equals("rating"))
         {
-            cursor  = myColl.find(and(lte("rating", upperBound), gt("rating", lowerBound))).iterator();
+            cursor  = userColl.find(and(lte("rating", upperBound), gt("rating", lowerBound))).iterator();
         }
         else if(!country.equals("country") && rating.equals("rating"))
         {
-             cursor  = myColl.find(eq("country", country)).iterator();
+             cursor  = userColl.find(eq("country", country)).iterator();
         }
         else{
-             cursor  = myColl.find(and(eq("country", country), lte("rating", upperBound), gt("rating", lowerBound))).iterator();
+             cursor  = userColl.find(and(eq("country", country), lte("rating", upperBound), gt("rating", lowerBound))).iterator();
         }
 
         while(cursor.hasNext())
@@ -255,34 +249,34 @@ public class ConnectionMongoDB{
 
     }
 
-    private ArrayList<Document> partialSearch(int index, MongoCollection<Document> myColl, ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
+    private ArrayList<Document> partialSearch(int index, ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
 
         switch (index) {
             case 0:
-                cursor  = myColl.find(eq("size", size)).iterator();
+                cursor  = insertionColl.find(eq("size", size)).iterator();
                 break;
             case 1:
                 String[] split = price.split("-");
                 Utility.printTerminal("Selected range: " + split[0]);
                 if(split.length == 1) {
-                    cursor  = myColl.find(gte("price", Double.parseDouble(split[0]))).iterator();
+                    cursor  = insertionColl.find(gte("price", Double.parseDouble(split[0]))).iterator();
                 } else {
                     Utility.printTerminal("Selected range: " + split[1]);
-                    cursor  = myColl.find(and(gte("price", Double.parseDouble(split[0])),
+                    cursor  = insertionColl.find(and(gte("price", Double.parseDouble(split[0])),
                             lte("price", Double.parseDouble(split[1])))).iterator();
                 }
                 break;
             case 2:
-                cursor  = myColl.find(eq("gender", gender)).iterator();
+                cursor  = insertionColl.find(eq("gender", gender)).iterator();
                 break;
             case 3:
-                cursor  = myColl.find(eq("status", status)).iterator();
+                cursor  = insertionColl.find(eq("status", status)).iterator();
                 break;
             case 4:
-                cursor  = myColl.find(eq("category", category)).iterator();
+                cursor  = insertionColl.find(eq("category", category)).iterator();
                 break;
             case 5:
-                cursor  = myColl.find(eq("color", color)).iterator();
+                cursor  = insertionColl.find(eq("color", color)).iterator();
                 break;
             default:
                 break;
@@ -299,7 +293,6 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> insertions = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
         //the following variables are 1 if the relative filter is applied
         int sizeFilterOn, priceFilterOn, genderFilterOn, statusFilterOn, categoryFilterOn, colorFilterOn;
@@ -315,7 +308,7 @@ public class ConnectionMongoDB{
 
         for (int i = 0; i < 6; i++) {
             if (filter[i] == 1)
-                partialSearch(i, myColl, insertions, size, price, gender, status, category, color);
+                partialSearch(i, insertions, size, price, gender, status, category, color);
         }
 
         this.closeConnection();
@@ -326,9 +319,8 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> insertions = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
-        cursor = myColl.find(eq("seller", seller)).iterator();
+        cursor = insertionColl.find(eq("seller", seller)).iterator();
         while (cursor.hasNext())
             insertions.add(cursor.next());
 
@@ -340,9 +332,8 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> insertions = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
-        cursor = myColl.find(eq("brand", brand)).iterator();
+        cursor = insertionColl.find(eq("brand", brand)).iterator();
         while (cursor.hasNext())
             insertions.add(cursor.next());
 
@@ -355,8 +346,7 @@ public class ConnectionMongoDB{
         this.openConnection();
 
         Insertion insertion = new Insertion();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
-        Document insertion_found = myColl.find(eq("uniq_id", insertion_id)).first();
+        Document insertion_found = insertionColl.find(eq("uniq_id", insertion_id)).first();
 
         insertion.setBrand(insertion_found.getString("brand"));
         insertion.setCountry(insertion_found.getString("country"));
@@ -383,8 +373,6 @@ public class ConnectionMongoDB{
         this.openConnection();
 
         ClientSession clientSession = mongoClient.startSession();
-
-        MongoCollection<Document> orderColl = db.getCollection("order");
 
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         String timestamp = date.format(new Date());
@@ -487,12 +475,11 @@ public class ConnectionMongoDB{
         Document user;
 
         this.openConnection();
-        MongoCollection<Document> myColl = db.getCollection("user");
 
         if (choice)
-            user = myColl.find(eq("username", username)).first();
+            user = userColl.find(eq("username", username)).first();
         else
-            user = myColl.find(eq("name", username)).first();
+            user = userColl.find(eq("name", username)).first();
 
         this.closeConnection();
         return user;
@@ -503,12 +490,11 @@ public class ConnectionMongoDB{
         this.openConnection();
 
         Document insertion;
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
         if (choice)
-            insertion = myColl.find(eq("uniq_id", id)).first();
+            insertion = insertionColl.find(eq("uniq_id", id)).first();
          else
-            insertion = myColl.find(eq("seller", id)).first();
+            insertion = insertionColl.find(eq("seller", id)).first();
 
         this.closeConnection();
         return insertion;
@@ -521,14 +507,12 @@ public class ConnectionMongoDB{
         this.openConnection();
         ArrayList<Document> array = new ArrayList<>();
         MongoCollection<Document> myColl;
-        MongoCollection<Document> myCollUsr;
 
         if (choice)
-            myColl = db.getCollection("insertion");
+            myColl = userColl;
         else
-            myColl = db.getCollection("order");
+            myColl = orderColl;
 
-        myCollUsr = db.getCollection("user");
         Bson limit = limit(k);
 
         if (!choice) { //most sold orders
@@ -576,11 +560,10 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> array = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("user");
 
         Bson limit = limit(k);
         Bson project = project(fields(excludeId(), include("username"), include("rating")));
-        AggregateIterable<Document> aggr  = myColl.aggregate(
+        AggregateIterable<Document> aggr  = userColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("country", country)),
                         Aggregates.sort(descending("rating")),
@@ -604,10 +587,9 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> array = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
         Bson limit = limit(k);
-        AggregateIterable<Document> aggr  = myColl.aggregate(
+        AggregateIterable<Document> aggr  = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
                         Aggregates.sort(descending("interested")),
@@ -626,10 +608,9 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Document> array = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
         Bson limit = limit(k);
-        AggregateIterable<Document> aggr  = myColl.aggregate(
+        AggregateIterable<Document> aggr  = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
                         Aggregates.sort(descending("viewed")),
@@ -648,15 +629,13 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> myColl = db.getCollection("user");
-
         Document query = new Document().append("username",  username);
         Bson updates = Updates.combine(
                 Updates.set("suspended", "Y"));
                 UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {
-            UpdateResult result = myColl.updateOne(query, updates, options);
+            UpdateResult result = userColl.updateOne(query, updates, options);
             System.out.println("Modified document count: " + result.getModifiedCount());
             System.out.println("Upserted id: " + result.getUpsertedId()); // only contains a value when an upsert is performed
         }catch (MongoException me) {
@@ -671,7 +650,6 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> myColl = db.getCollection("user");
         Document query = new Document().append("username",  username);
 
         Bson updates = Updates.combine(
@@ -679,7 +657,7 @@ public class ConnectionMongoDB{
                 UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {
-            UpdateResult result = myColl.updateOne(query, updates, options);
+            UpdateResult result = userColl.updateOne(query, updates, options);
             System.out.println("Modified document count: " + result.getModifiedCount());
             System.out.println("Upserted id: " + result.getUpsertedId()); // only contains a value when an upsert is performed
         } catch (MongoException me) {
@@ -692,8 +670,7 @@ public class ConnectionMongoDB{
         this.openConnection();
 
         Insertion ins = new Insertion();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
-        Document insertion = myColl.find(eq("_id", id)).first();
+        Document insertion = insertionColl.find(eq("_id", id)).first();
 
         ins.setCategory(insertion.getString("category"));
         ins.setPrice(insertion.getDouble("price"));
@@ -707,9 +684,8 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         ArrayList<Insertion> array = new ArrayList<Insertion>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
-        AggregateIterable<Document> aggr  = myColl.aggregate(
+        AggregateIterable<Document> aggr  = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("seller", seller))
                 )
@@ -736,10 +712,9 @@ public class ConnectionMongoDB{
 
         Insertion ins;
         ArrayList<Insertion> insertions = new ArrayList<Insertion>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
 
         for(int i=0; i < followed_ins.size(); i++) {
-            Document insertion = myColl.find(eq("uniq_id", followed_ins.get(i).toString())).first();
+            Document insertion = insertionColl.find(eq("uniq_id", followed_ins.get(i).toString())).first();
 
             ins = new Insertion();
             ins.setCategory(insertion.getString("category"));
@@ -758,8 +733,7 @@ public class ConnectionMongoDB{
     public boolean findByInsertionId (String id) {
 
         this.openConnection();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
-        cursor = myColl.find(eq("uniq_id", id)).iterator();
+        cursor = insertionColl.find(eq("uniq_id", id)).iterator();
 
         this.closeConnection();
 
@@ -772,7 +746,6 @@ public class ConnectionMongoDB{
     public boolean addInsertion(Insertion i) {
 
         this.openConnection();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
         Document ins = new Document("brand", i.getBrand())
                 .append("category", i.getCategory())
                 .append("color", i.getColor())
@@ -788,7 +761,7 @@ public class ConnectionMongoDB{
                 .append("timestamp", i.getTimestamp())
                 .append("uniq_id", i.getId())
                 .append("views", i.getViews());
-        myColl.insertOne(ins);
+        insertionColl.insertOne(ins);
         this.closeConnection();
         return true;
 
@@ -798,12 +771,10 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> order = db.getCollection("order");
-
         if(choice)
-            cursor = order.find(eq("buyer", username)).iterator();
+            cursor = orderColl.find(eq("buyer", username)).iterator();
         else
-            cursor = order.find(eq("insertion.seller", username)).iterator();
+            cursor = orderColl.find(eq("insertion.seller", username)).iterator();
 
         ArrayList<Document> find_orders = new ArrayList<>();
 
@@ -819,8 +790,6 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> user = db.getCollection("user");
-
         Document review = new Document()
                 .append("timestamp", rev.getTimestamp())
                 .append("reviewer", rev.getReviewer())
@@ -834,7 +803,7 @@ public class ConnectionMongoDB{
 
         BasicDBObject push_data = new BasicDBObject("$push", new BasicDBObject("reviews", review));
 
-        user.findOneAndUpdate(query, push_data);
+        userColl.findOneAndUpdate(query, push_data);
         this.closeConnection();
 
     }
@@ -842,8 +811,7 @@ public class ConnectionMongoDB{
     public void updateSellerRating(String seller) {
         this.openConnection();
 
-        MongoCollection<Document> user = db.getCollection("user");
-        Document d = user.find(eq("username", seller)).first();
+        Document d = userColl.find(eq("username", seller)).first();
         List<Document> list = null;
         list = d.getList("reviews", Document.class);
 
@@ -874,13 +842,11 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> order = db.getCollection("order");
-
         BasicDBObject query = new BasicDBObject();
         query.put("timestamp", timestamp);
 
         BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("reviewed", true));
-        order.findOneAndUpdate(query, set);
+        orderColl.findOneAndUpdate(query, set);
 
         this.closeConnection();
     }
@@ -891,10 +857,7 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> myCollUser = db.getCollection("user");
-        MongoCollection<Document> myCollCodes = db.getCollection("admin");
-
-        Document code = myCollCodes.find(eq("code", id_code)).first();
+        Document code = adminColl.find(eq("code", id_code)).first();
 
         if (code == null || Objects.equals(code.getString("assigned"), "T")) {
             Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
@@ -906,7 +869,7 @@ public class ConnectionMongoDB{
         Document queryUser = new Document().append("username",  username);
         Document queryAdmin = new Document().append("code",  id_code);
 
-        Document user = myCollUser.find(eq("username", username)).first();
+        Document user = userColl.find(eq("username", username)).first();
 
         double new_balance = user.getDouble("balance") + credit;
 
@@ -921,8 +884,8 @@ public class ConnectionMongoDB{
         UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {
-            UpdateResult resultUser = myCollUser.updateOne(queryUser, updatesUser, options);
-            UpdateResult resultAdmin = myCollCodes.updateOne(queryAdmin, updatesAdmin, options);
+            UpdateResult resultUser = userColl.updateOne(queryUser, updatesUser, options);
+            UpdateResult resultAdmin = adminColl.updateOne(queryAdmin, updatesAdmin, options);
             System.out.println("Modified document count: " + resultUser.getModifiedCount());
             System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
             System.out.println("Modified document count: " + resultAdmin.getModifiedCount());
@@ -940,8 +903,7 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> myCollUser = db.getCollection("user");
-        Document user = myCollUser.find(eq("username", username)).first();
+        Document user = userColl.find(eq("username", username)).first();
 
         double balance = user.getDouble("balance");
 
@@ -954,14 +916,13 @@ public class ConnectionMongoDB{
 
         this.openConnection();
         List<Document> list = null;
-        MongoCollection<Document> myColl = db.getCollection("user");
 
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("username", username);
 
-        Document user = myColl.find(eq("username", username)).first();
+        Document user = userColl.find(eq("username", username)).first();
 
-        MongoCursor<Document> cursor = myColl.find(whereQuery).iterator();
+        MongoCursor<Document> cursor = userColl.find(whereQuery).iterator();
 
         try {
             while (cursor.hasNext()) {
@@ -979,33 +940,15 @@ public class ConnectionMongoDB{
         this.closeConnection();
         return list;
     }
-  /*
-    public ArrayList<Document> getAllUserIns(String username) {
-
-        this.openConnection();
-        ArrayList<Document> insertions = new ArrayList<>();
-        MongoCollection<Document> myColl = db.getCollection("insertion");
-        cursor = myColl.find(eq("seller", username)).iterator();
-
-        while (cursor.hasNext())
-            insertions.add(cursor.next());
-
-        this.closeConnection();
-        Utility.printTerminal(insertions.toString());
-        return insertions;
-
-    }*/
 
     public void deleteInsertionMongo(String id) {
 
         this.openConnection();
 
-        MongoCollection<Document> myColl = db.getCollection("insertion");
-
         Bson query = eq("uniq_id", id);
 
         try {
-            DeleteResult result = myColl.deleteOne(query);
+            DeleteResult result = insertionColl.deleteOne(query);
             System.out.println("Deleted document count: " + result.getDeletedCount());
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
@@ -1018,12 +961,10 @@ public class ConnectionMongoDB{
 
         this.openConnection();
 
-        MongoCollection<Document> myColl = db.getCollection("admin");
-
         Bson query = eq("_id", id);
 
         try {
-            DeleteResult result = myColl.deleteOne(query);
+            DeleteResult result = adminColl.deleteOne(query);
             System.out.println("Deleted document count: " + result.getDeletedCount());
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);

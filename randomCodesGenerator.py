@@ -25,4 +25,4 @@ for i in range(1000):
 
 print(df.head(10))
 
-df.to_csv('codes.csv', encoding='utf-8', index=False)
+df.to_json('codes.json', encoding='utf-8', index=False)
