@@ -82,8 +82,7 @@ public class SearchUserController extends MainController{
         nextSugg.setVisible(false);
 
         //connection to Neo4j
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-        suggFromNeo = connNeo.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
+        suggFromNeo = ConnectionNeo4jDB.connNeo.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
 
         //if there are less than k suggested, add top k rated to the suggestions
 
@@ -169,8 +168,7 @@ public class SearchUserController extends MainController{
         follow.setPrefHeight(20.0);
         follow.setDisable(false);
         follow.setVisible(true);
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-        if(connNeo.checkIfFollows(Session.getLogUser().getUsername(), user)) {
+        if(ConnectionNeo4jDB.connNeo.checkIfFollows(Session.getLogUser().getUsername(), user)) {
             follow.setText("Unfollow");
         } else {
             follow.setText("Follow");
@@ -178,7 +176,7 @@ public class SearchUserController extends MainController{
 
         follow.setOnMouseClicked(event -> {
             String action = follow.getText();
-            connNeo.followUnfollowButton(action, Session.getLogUser().getUsername(), user);
+            ConnectionNeo4jDB.connNeo.followUnfollowButton(action, Session.getLogUser().getUsername(), user);
             if(action.equals("Follow"))
                 follow.setText("Unfollow");
             if(action.equals("Unfollow"))

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import main.java.connection.ConnectionMongoDB;
+import main.java.connection.ConnectionNeo4jDB;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ public class SecondChanceGUI extends Application {
     public static void main(String[] args) {
 
         ConnectionMongoDB.connMongo = new ConnectionMongoDB();
+        ConnectionNeo4jDB.connNeo = new ConnectionNeo4jDB();
         launch(args);
 
     }

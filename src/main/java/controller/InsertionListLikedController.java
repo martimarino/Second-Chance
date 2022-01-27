@@ -21,11 +21,9 @@ public class InsertionListLikedController {
     private final int k = 3;
     private int index;
 
-    ConnectionNeo4jDB connNeo4J = new ConnectionNeo4jDB();
-
     public void initialize(String username) {
 
-        ArrayList<String> followed_ins = connNeo4J.retrieveFollowedInsertionByUser(username);
+        ArrayList<String> followed_ins = ConnectionNeo4jDB.connNeo.retrieveFollowedInsertionByUser(username);
         insertions = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(followed_ins);
         //System.out.println("Insertions: " + insertions.get(0));
 

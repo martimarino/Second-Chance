@@ -15,6 +15,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
     String uri = "neo4j://127.0.0.1:7687";
     String user = "neo4j";
     String password = "2nd-chance";
+    public static ConnectionNeo4jDB connNeo;
 
     public void open()
     {

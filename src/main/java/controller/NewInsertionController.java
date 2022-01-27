@@ -25,8 +25,6 @@ public class NewInsertionController {
     @FXML private TextField link;
     int upperbound = 9999999;
 
-    ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-
     public void AddNewInsertion() {
         if((categ.getValue().equals("-")) || (status.getValue().equals("-"))
             || (size.getValue().equals("-")) || country.getValue().equals("-")
@@ -70,7 +68,7 @@ public class NewInsertionController {
             return;
         }
         //Neo4j failure
-        if((!connNeo.addInsertion(i) || (!connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId())))) {
+        if((!ConnectionNeo4jDB.connNeo.addInsertion(i) || (!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId())))) {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
             return;
         }

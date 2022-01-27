@@ -49,7 +49,6 @@ public class MyProfileController extends MainController {
 
     private User user;
     private Session session;
-    private ConnectionMongoDB conn;
 
     int scrollPage;
     int nPage = 2;
@@ -77,7 +76,7 @@ public class MyProfileController extends MainController {
             btnLogout.setVisible(false);
             balanceText.setVisible(false);
 
-            Document userSearched = conn.findUserByUsername(us);
+            Document userSearched = ConnectionMongoDB.connMongo.findUserByUsername(us);
             user = new User(userSearched.getString("email"), userSearched.getString("username"), null, userSearched.getString("name"), userSearched.getString("country"), userSearched.getString("city"), userSearched.getString("address"), userSearched.getString("suspended"), userSearched.getDouble("rating"), 0.0, userSearched.getString("image"));
 
             setProfile();
@@ -135,7 +134,7 @@ public class MyProfileController extends MainController {
 
         updateUserBalance();
 
-        listReviews = conn.getReviewsByUser(user.getUsername());
+        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
         if (listReviews.size() < 3) {
             System.out.println("Reviews nulle, disattivo i bottoni");
             nextReviews.setDisable(true);
@@ -155,9 +154,8 @@ public class MyProfileController extends MainController {
 
     public void showUserFollowers() {
 
-        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
         System.out.println("USERNAME : " + user.getUsername());
-        ArrayList<String> follower = conn.retrieveFollowersByUser(user.getUsername());
+        ArrayList<String> follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
         StackPane secondaryLayout = new StackPane();
 
         for (int i = 0; i < 10 && follower.size() > i; i++) {
@@ -179,8 +177,7 @@ public class MyProfileController extends MainController {
 
     public void showUserFollowing() {
 
-        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
-        ArrayList<String> following = conn.retrieveFollowingByUser(user.getUsername());
+        ArrayList<String> following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
 
         StackPane secondaryLayout = new StackPane();
 
@@ -203,8 +200,7 @@ public class MyProfileController extends MainController {
 
     public void showInterestedInsertions() {
 
-        ConnectionNeo4jDB conn = new ConnectionNeo4jDB();
-        ArrayList<String> followed_post = conn.retrieveFollowersByUser(user.getUsername());
+        ArrayList<String> followed_post = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
         StackPane secondaryLayout = new StackPane();
 
         for (int i = 0; i < 10; i++) {
@@ -228,7 +224,7 @@ public class MyProfileController extends MainController {
 
     public void updateUserBalance() {
 
-        double new_balance = conn.updateBalance(user.getUsername());
+        double new_balance = ConnectionMongoDB.connMongo.updateBalance(user.getUsername());
         System.out.println("NEW BALANCE HERE: " + new_balance);
         balanceValue.setText(new_balance + "€");
     }

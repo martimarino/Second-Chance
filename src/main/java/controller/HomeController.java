@@ -41,8 +41,6 @@ public class HomeController {
 
     public void initialize() {
 
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-
         followedFromNeo = new ArrayList<>();
 
         viralList = ConnectionMongoDB.connMongo.findViralInsertions(k);
@@ -59,7 +57,7 @@ public class HomeController {
         feed.setCenter(feedBox);
         scrollPage = 0;
 
-        followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
+        followedFromNeo = ConnectionNeo4jDB.connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
         feedList = ConnectionMongoDB.connMongo.followedUserInsertions(followedFromNeo);
 
         if (followedFromNeo.size() < k) {

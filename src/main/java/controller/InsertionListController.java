@@ -22,7 +22,6 @@ public class InsertionListController {
     private int k = 3;
     private int index;
 
-    ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
     String user;
 
     public void initialize(String username) {
@@ -100,7 +99,7 @@ public class InsertionListController {
 
         delete.setOnMouseClicked(event -> {
             ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
-            connNeo.deleteInsertionNeo4J(id);
+            ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id);
             initialize(Session.getLogUser().getUsername());
         });
 

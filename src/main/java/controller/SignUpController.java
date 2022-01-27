@@ -54,8 +54,7 @@ public class SignUpController {
                 co.setValue("Select your country");
                 ad.setText("");
 
-                ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-                connNeo.addUser(u);
+                ConnectionNeo4jDB.connNeo.addUser(u);
                 ShowSignIn();
                 Utility.infoBox("Now you can login!", "Confirmed", "Registration completed with success!");
 

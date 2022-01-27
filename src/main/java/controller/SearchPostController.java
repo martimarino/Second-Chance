@@ -1,27 +1,22 @@
 package main.java.controller;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.result.DeleteResult;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
-import javafx.scene.control.Button;
-
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
-import main.java.connection.ConnectionMongoDB;
 import main.java.utils.Utility;
-
 import org.bson.Document;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class SearchPostController {
@@ -97,20 +92,16 @@ public class SearchPostController {
 
     public void deletePost(String id) {
 
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-
         ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
-        connNeo.deleteInsertionNeo4J(id);
+        ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id);
 
         System.out.println("Deleted post and relation in MongoDB and Neo4J!");
     }
 
     public void deleteOnePost() {
 
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
-
         ConnectionMongoDB.connMongo.deleteInsertionMongo(found.getString("uniq_id"));
-        connNeo.deleteInsertionNeo4J(found.getString("uniq_id"));
+        ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(found.getString("uniq_id"));
 
         System.out.println("Deleted post and relation in MongoDB and Neo4J!");
     }

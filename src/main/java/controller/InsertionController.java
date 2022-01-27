@@ -49,7 +49,6 @@ public class InsertionController {
     public Text price;
     Insertion insertion;
     User user;
-    ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
     public void initialize(String uniq_id) {
 
@@ -68,9 +67,8 @@ public class InsertionController {
             e.printStackTrace();
         }
 
-        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
         String favouriteText;
-        if(!connNeo.showIfInterested(user.getUsername(), insertion.getId()))
+        if(!ConnectionNeo4jDB.connNeo.showIfInterested(user.getUsername(), insertion.getId()))
             favouriteText = "Add to favourite";
         else
             favouriteText = "Remove from favourite";
@@ -106,7 +104,7 @@ public class InsertionController {
         if (ConnectionMongoDB.connMongo.buyCurrentInsertion(user.getUsername(), insertion))
         {
             Utility.infoBox("Product bought correctly! ", "User Advise", "Purchase done");
-            connNeo.deleteInsertion(insertion.getId());
+            ConnectionNeo4jDB.connNeo.deleteInsertion(insertion.getId());
             buy.setText("Already purchased!");
             buy.setDisable(true);
         }
@@ -114,23 +112,21 @@ public class InsertionController {
 
     public void addToFavorite() {
 
-        connNeo = new ConnectionNeo4jDB();
-
-        if(!connNeo.showIfInterested(user.getUsername(), insertion.getId())) {
-            connNeo.likeInsertion(user.getUsername(), insertion.getId());
+        if(!ConnectionNeo4jDB.connNeo.showIfInterested(user.getUsername(), insertion.getId())) {
+            ConnectionNeo4jDB.connNeo.likeInsertion(user.getUsername(), insertion.getId());
             ConnectionMongoDB.connMongo.updateNumInterested(insertion.getId(), 1);
             favourite.setText("Remove from favourite");
             interested.setText(String.valueOf(Integer.parseInt(interested.getText()) +1));
         }
         else{
-            connNeo.dislikeInsertion(user.getUsername(), insertion.getId());
+            ConnectionNeo4jDB.connNeo.dislikeInsertion(user.getUsername(), insertion.getId());
             ConnectionMongoDB.connMongo.updateNumInterested(insertion.getId(), -1);
             favourite.setText("Add to favourite");
             interested.setText(String.valueOf(Integer.parseInt(interested.getText()) -1));
         }
 
-        connNeo.showIfInterested(user.getUsername(), insertion.getId());
+        ConnectionNeo4jDB.connNeo.showIfInterested(user.getUsername(), insertion.getId());
 
-        connNeo.showIfInterested(user.getUsername(), insertion.getId());
+        ConnectionNeo4jDB.connNeo.showIfInterested(user.getUsername(), insertion.getId());
     }
 }
