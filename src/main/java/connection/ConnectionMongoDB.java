@@ -34,9 +34,55 @@ public class ConnectionMongoDB{
     /* ********* CONNECTION SECTION ********* */
 
     public void openConnection() {
+        /*
+        // LOCAL DATABASE WITHOUT REPLICAS
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
         db = mongoClient.getDatabase("local");
+        */
+
+
+        MongoClient mongoClient = MongoClients.create(
+                "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
+                        "?retryWrites=true&w=majority&wtimeout=10000");
+
+        // Read Preferences at DB level
+        MongoDatabase db = mongoClient.getDatabase("lsmdb")
+                .withReadPreference(ReadPreference.secondary());
+
+        // Read Preferences at collection level
+        MongoCollection<Document> userColl = db.getCollection("user")
+                .withReadPreference(ReadPreference.secondary());
+
+        MongoCollection<Document> insertionColl = db.getCollection("insertion")
+                .withReadPreference(ReadPreference.secondary());
+
+        MongoCollection<Document> orderColl = db.getCollection("order")
+                .withReadPreference(ReadPreference.secondary());
+
+        MongoCollection<Document> adminColl = db.getCollection("admin")
+                .withReadPreference(ReadPreference.secondary());
+
+        // Write concern at DB level
+        db = mongoClient.getDatabase("lsmdb")
+                .withWriteConcern(WriteConcern.W1);
+
+        //populateDB(myColl);
+
+        System.out.println("**************** USER ******************");
+        System.out.println(userColl.countDocuments());
+        System.out.println("**************** ORDER ******************");
+        System.out.println(orderColl.countDocuments());
+        System.out.println("**************** INSERTION ******************");
+        System.out.println(insertionColl.countDocuments());
+
+        // 2 - Find the first document
+        userColl.find().limit(1).forEach(printDocuments());
+
+        //--- Close connection ---
+        mongoClient.close();
+
+
     }
 
     public void closeConnection() {

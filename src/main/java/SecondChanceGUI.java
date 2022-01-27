@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import main.java.connection.ConnectionMongoDB;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,8 +28,9 @@ public class SecondChanceGUI extends Application {
             Utility.printTerminal(name);
         }
 */
-
-        launch(args);
+        ConnectionMongoDB con = new ConnectionMongoDB();
+        con.openConnection();
+       // launch(args);
 
     }
 

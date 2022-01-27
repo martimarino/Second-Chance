@@ -27,9 +27,11 @@ public class InsertionListController {
 
     ConnectionMongoDB connMongo = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
+    String user;
 
     public void initialize(String username) {
 
+        user = username;
         list = connMongo.findInsertionBySeller(username);
         box = new VBox(20);
         index = 0;
@@ -85,7 +87,8 @@ public class InsertionListController {
         det.getChildren().add(brand);
         hb.getChildren().add(image);
         hb.getChildren().add(det);
-        hb.getChildren().add(delete);
+        if(!Session.getLogUser().getUsername().equals(user))
+            hb.getChildren().add(delete);
         box.getChildren().add(hb);
 
         image.setOnMouseClicked(event->{

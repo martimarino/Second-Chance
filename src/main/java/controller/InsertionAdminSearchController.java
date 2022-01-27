@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
+import main.java.utils.Session;
 import main.java.utils.Utility;
 
 import java.util.ArrayList;
