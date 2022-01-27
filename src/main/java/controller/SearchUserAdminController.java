@@ -66,14 +66,26 @@ public class SearchUserAdminController {
         username = usernameField.getText();
         String name = nameField.getText();
 
+        System.out.println("username: " + username);
+        System.out.println("name: " + name);
+
         if(name != null && !name.trim().isEmpty()) {
+
             found = conn.verifyUserInDB(name, false);
+
+            if (found == null) {
+                Utility.infoBox("The user is not present in the system. Please try again.",
+                        "Error!",
+                        "User not found!");
+                return;
+            }
+
             username = found.getString("username");
         }else {
             found = conn.verifyUserInDB(username, true);
         }
 
-        if (found == null ||   ((name == null && name.trim().isEmpty()) &&
+        if (found == null || ((name == null && name.trim().isEmpty()) &&
                         (username != null && username.trim().isEmpty()))) {
             Utility.infoBox("The user is not present in the system. Please try again.",
                             "Error!",

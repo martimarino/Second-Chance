@@ -675,6 +675,7 @@ public class ConnectionMongoDB{
             ins.setPrice(document.getDouble("price"));
             ins.setViews(document.getInteger("views"));
             ins.setId(document.getString("uniq_id"));
+            ins.setImage_url(document.getString("image_url"));
             array.add(ins);
         }
 

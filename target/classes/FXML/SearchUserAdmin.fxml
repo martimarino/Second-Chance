@@ -77,14 +77,14 @@
                         <Text fx:id="address" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="3" />
                       </children>
                   </GridPane>
-                  <Text fx:id="alertText" fill="#f50606" layoutX="137.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <Text fx:id="alertText" fill="#f50606" layoutX="206.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <Button layoutX="211.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#generateCodes" style="-fx-background-color: rgb(206, 153, 255); -fx-background-radius: 30;" text="Generate New Codes!" textFill="WHITE" />
-                  <Separator layoutX="178.0" layoutY="272.0" prefWidth="200.0" />
-                  <Text fx:id="txtResult" layoutX="170.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Here you can generate new codes!">
+                  <Button layoutX="210.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#generateCodes" style="-fx-background-color: rgb(206, 153, 255); -fx-background-radius: 30;" text="Generate New Codes!" textFill="WHITE" />
+                  <Separator layoutX="179.0" layoutY="301.0" prefWidth="200.0" />
+                  <Text fx:id="txtResult" layoutX="163.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Here you can generate new codes!">
                      <font>
                         <Font size="16.0" />
                      </font>
