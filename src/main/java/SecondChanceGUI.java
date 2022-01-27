@@ -16,21 +16,8 @@ import java.net.URL;
 public class SecondChanceGUI extends Application {
 
     public static void main(String[] args) {
-/*
-        ConnectionString uri = new ConnectionString(
-                "mongodb+srv://root:<password>@largescaleproject.n8fgw.mongodb.net/test");
-        MongoClient mongoClientAtlas = MongoClients.create(uri);
 
-        MongoDatabase db = mongoClientAtlas.getDatabase("LargeScaleProject");
-
-        for(String name : db.listCollectionNames()) {
-
-            Utility.printTerminal(name);
-        }
-*/
-        ConnectionMongoDB con = new ConnectionMongoDB();
-        con.openConnection();
-       // launch(args);
+        launch(args);
 
     }
 

@@ -23,6 +23,11 @@ public class SignInController {
     @FXML private TextField us;
     @FXML private PasswordField pw;
 
+    public void initialize() {
+        ConnectionMongoDB conn = new ConnectionMongoDB();
+        conn.openConnection();
+    }
+
     public void ShowSignUp() throws IOException {
 
         Stage stage = (Stage) SignUp.getScene().getWindow();
