@@ -25,7 +25,6 @@ public class NewInsertionController {
     @FXML private TextField link;
     int upperbound = 9999999;
 
-    ConnectionMongoDB connMongo = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
     public void AddNewInsertion() {
@@ -51,7 +50,7 @@ public class NewInsertionController {
         //generate random values from 0-9999999
         int int_random = rand.nextInt(upperbound);
         String id = Integer.toString(int_random);
-        while (connMongo.findByInsertionId(id))
+        while (ConnectionMongoDB.connMongo.findByInsertionId(id))
             id = Integer.toString(int_random);
 
         RadioButton chk = (RadioButton)myToggleGroup.getSelectedToggle(); // Cast object to radio button
@@ -66,7 +65,7 @@ public class NewInsertionController {
         Utility.printTerminal(i.toString());
 
         //MongoDB failure
-        if(!connMongo.addInsertion(i)) {
+        if(!ConnectionMongoDB.connMongo.addInsertion(i)) {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on MongoDB");
             return;
         }

@@ -1,43 +1,32 @@
 package main.java.controller;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import main.java.SecondChanceGUI;
 import main.java.connection.ConnectionMongoDB;
 import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.Insertion;
-import main.java.utils.Session;
 import main.java.utils.Utility;
 
-import javax.imageio.ImageIO;
-import javax.rmi.CORBA.Util;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class InsertionListLikedController {
 
-    private ArrayList<String> followed_ins;
     private ArrayList<Insertion> insertions;
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
     private final int k = 3;
-    private int contReviews = 0;
     private int index;
 
-    ConnectionMongoDB connMongo = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo4J = new ConnectionNeo4jDB();
 
     public void initialize(String username) {
 
-        followed_ins = connNeo4J.retrieveFollowedInsertionByUser(username);
-        insertions = connMongo.findInsertionDetailsNeo4J(followed_ins);
+        ArrayList<String> followed_ins = connNeo4J.retrieveFollowedInsertionByUser(username);
+        insertions = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(followed_ins);
         //System.out.println("Insertions: " + insertions.get(0));
 
         box = new VBox(20);

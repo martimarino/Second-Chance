@@ -23,11 +23,6 @@ public class SignInController {
     @FXML private TextField us;
     @FXML private PasswordField pw;
 
-    public void initialize() {
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-        conn.openConnection();
-    }
-
     public void ShowSignUp() throws IOException {
 
         Stage stage = (Stage) SignUp.getScene().getWindow();
@@ -59,19 +54,17 @@ public class SignInController {
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
             Utility.printTerminal("Value: " + us.getText() + "\nValue: " + pw.getText());
 
-            ConnectionMongoDB conn = new ConnectionMongoDB();
-
             if (us.getText().equals("admin") && pw.getText().equals("admin")) {
                 session = Session.getInstance();
-                Document user  = conn.findUserByUsername(us.getText());
+                Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
                 //session.setLogUser(user, true);
                 ShowAdminPanel();
             }else {
-                boolean logged = conn.logInUser(username, encrypted);
+                boolean logged = ConnectionMongoDB.connMongo.logInUser(username, encrypted);
                 //boolean logged = conn.logInUser(username, password);
                 if (logged) {
                     session = Session.getInstance();
-                    Document user  = conn.findUserByUsername(us.getText());
+                    Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
                     session.setLogUser(user);
                     ShowHome();
                 }

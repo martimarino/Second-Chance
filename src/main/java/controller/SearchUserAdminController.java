@@ -60,7 +60,6 @@ public class SearchUserAdminController {
 
     public void searchUser(){
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
         Document found;
 
         username = usernameField.getText();
@@ -71,7 +70,7 @@ public class SearchUserAdminController {
 
         if(name != null && !name.trim().isEmpty()) {
 
-            found = conn.verifyUserInDB(name, false);
+            found = ConnectionMongoDB.connMongo.verifyUserInDB(name, false);
 
             if (found == null) {
                 Utility.infoBox("The user is not present in the system. Please try again.",
@@ -82,7 +81,7 @@ public class SearchUserAdminController {
 
             username = found.getString("username");
         }else {
-            found = conn.verifyUserInDB(username, true);
+            found = ConnectionMongoDB.connMongo.verifyUserInDB(username, true);
         }
 
         if (found == null || ((name == null && name.trim().isEmpty()) &&
@@ -92,7 +91,7 @@ public class SearchUserAdminController {
                             "User not found!");
         }else {
 
-            User usr = conn.findUserDetails(username);
+            User usr = ConnectionMongoDB.connMongo.findUserDetails(username);
             //System.out.println("Suspended: " + usr.getSuspended());
 
             if (Objects.equals(usr.getSuspended(), "Y")) {
@@ -114,8 +113,7 @@ public class SearchUserAdminController {
 
     public void suspendUser() {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-        conn.suspendUser(username);
+        ConnectionMongoDB.connMongo.suspendUser(username);
 
         alertText.setText("User suspended!");
 
@@ -125,8 +123,7 @@ public class SearchUserAdminController {
 
     public void unsuspendUser() {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-        conn.unsuspendUser(username);
+        ConnectionMongoDB.connMongo.unsuspendUser(username);
 
         alertText.setText("User unsuspended!");
 

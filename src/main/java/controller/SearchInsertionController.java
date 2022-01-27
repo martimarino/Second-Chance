@@ -39,8 +39,6 @@ public class SearchInsertionController extends MainController{
     public HBox firstRow, secondRow;
     public VBox box;
 
-    ConnectionMongoDB conn = new ConnectionMongoDB();
-
     public void initialize(){
 
         firstRow = new HBox(20);
@@ -81,7 +79,7 @@ public class SearchInsertionController extends MainController{
                     && category.getValue().equals("category") && color.getValue().equals("color"))) {
 
                 //take combobox value and search
-                insertionFilter = conn.findInsertionByFilters(size.getValue(), price.getValue(), gender.getValue(), status.getValue(), category.getValue(), color.getValue());
+                insertionFilter = ConnectionMongoDB.connMongo.findInsertionByFilters(size.getValue(), price.getValue(), gender.getValue(), status.getValue(), category.getValue(), color.getValue());
                 if (insertionFilter.isEmpty()) {
                     Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
                     return;
@@ -91,10 +89,10 @@ public class SearchInsertionController extends MainController{
             if(ins.getText().equals("admin"))
                 return;
             //search insertion by seller
-            insertionFilter = conn.findInsertionBySeller(ins.getText());
+            insertionFilter = ConnectionMongoDB.connMongo.findInsertionBySeller(ins.getText());
 
             if (insertionFilter.isEmpty())  //if no article is found try to search for brands
-                insertionFilter = conn.findInsertionByBrand(ins.getText());
+                insertionFilter = ConnectionMongoDB.connMongo.findInsertionByBrand(ins.getText());
 
             if(insertionFilter.isEmpty()) {
                 Utility.infoBox("No results", "Advise", "User Advise");
@@ -202,8 +200,7 @@ public class SearchInsertionController extends MainController{
 
     private void updateInsertionview(String uniq_id) {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-        conn.updateNumView(uniq_id);
+        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
 
     }
 

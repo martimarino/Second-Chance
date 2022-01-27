@@ -1,20 +1,17 @@
 package main.java.controller;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.HPos;
-import javafx.scene.image.*;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import main.java.connection.*;
-import main.java.utils.*;
+import main.java.connection.ConnectionMongoDB;
+import main.java.connection.ConnectionNeo4jDB;
+import main.java.utils.Session;
+import main.java.utils.Utility;
+import org.bson.Document;
 
-import org.bson.*;
-
-import javax.imageio.*;
-import java.awt.image.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.util.ArrayList;
 
 public class InsertionListController {
 
@@ -25,14 +22,13 @@ public class InsertionListController {
     private int k = 3;
     private int index;
 
-    ConnectionMongoDB connMongo = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
     String user;
 
     public void initialize(String username) {
 
         user = username;
-        list = connMongo.findInsertionBySeller(username);
+        list = ConnectionMongoDB.connMongo.findInsertionBySeller(username);
         box = new VBox(20);
         index = 0;
 
@@ -103,7 +99,7 @@ public class InsertionListController {
         );
 
         delete.setOnMouseClicked(event -> {
-            connMongo.deleteInsertionMongo(id);
+            ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
             connNeo.deleteInsertionNeo4J(id);
             initialize(Session.getLogUser().getUsername());
         });

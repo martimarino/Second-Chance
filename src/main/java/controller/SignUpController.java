@@ -44,9 +44,7 @@ public class SignUpController {
 
             System.out.println(u);
 
-            ConnectionMongoDB conn = new ConnectionMongoDB();
-
-            if(conn.registerUser(u)) {
+            if(ConnectionMongoDB.connMongo.registerUser(u)) {
                 //clear TextField
                 us.setText("");
                 pw.setText("");

@@ -56,9 +56,7 @@ public class MyProfileController extends MainController {
 
     public void initialize(){
 
-        Session session = Session.getInstance();
-        user  = session.getLogUser();
-        conn = new ConnectionMongoDB();
+        user  = Session.getLogUser();
         setProfile();
         System.out.println("USERNAME init: " + user.getUsername());
     }
@@ -66,9 +64,7 @@ public class MyProfileController extends MainController {
 
     public void initialize(String us) {
 
-        conn = new ConnectionMongoDB();
-        Session session = Session.getInstance();
-        user = session.getLogUser();
+        user = Session.getLogUser();
 
         if(!us.equals(user.getUsername())) {
 
@@ -150,9 +146,7 @@ public class MyProfileController extends MainController {
 
     public void getReviews() {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-
-        listReviews = conn.getReviewsByUser(user.getUsername());
+        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
 
         System.out.println(listReviews.get(0));
     }
@@ -233,8 +227,6 @@ public class MyProfileController extends MainController {
     /* ********** BALANCE SECTION ********** */
 
     public void updateUserBalance() {
-
-        ConnectionMongoDB conn = new ConnectionMongoDB();
 
         double new_balance = conn.updateBalance(user.getUsername());
         System.out.println("NEW BALANCE HERE: " + new_balance);

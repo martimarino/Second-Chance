@@ -47,15 +47,13 @@ public class SearchPostController {
 
     public void searchPost() throws IOException {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-
         idPost = postIdField.getText();
         sellerIdPost = sellerIdField.getText();
 
         if (idPost != null && !idPost.trim().isEmpty())
-            found = conn.verifyInsertionInDB(idPost, true);
+            found = ConnectionMongoDB.connMongo.verifyInsertionInDB(idPost, true);
         else
-            found = conn.verifyInsertionInDB(sellerIdPost, false);
+            found = ConnectionMongoDB.connMongo.verifyInsertionInDB(sellerIdPost, false);
 
         if (found == null || ((idPost == null && idPost.trim().isEmpty()) && (id != null && id.trim().isEmpty()))) {
             Utility.infoBox("There are not insertion.",
@@ -66,7 +64,7 @@ public class SearchPostController {
 
             if (idPost != null && !idPost.trim().isEmpty()) {
                 // cerco solo un'inserzione perché è stato inserito solo un codice
-                Insertion ins = conn.findInsertionDetails(found.getString("_id"));
+                Insertion ins = ConnectionMongoDB.connMongo.findInsertionDetails(found.getString("_id"));
                 System.out.println("Post: " + ins.getDescription());
 
                 category.setText(ins.getCategory());
@@ -99,10 +97,9 @@ public class SearchPostController {
 
     public void deletePost(String id) {
 
-        ConnectionMongoDB connMongo = new ConnectionMongoDB();
         ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
-        connMongo.deleteInsertionMongo(id);
+        ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
         connNeo.deleteInsertionNeo4J(id);
 
         System.out.println("Deleted post and relation in MongoDB and Neo4J!");
@@ -110,10 +107,9 @@ public class SearchPostController {
 
     public void deleteOnePost() {
 
-        ConnectionMongoDB connMongo = new ConnectionMongoDB();
         ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
-        connMongo.deleteInsertionMongo(found.getString("uniq_id"));
+        ConnectionMongoDB.connMongo.deleteInsertionMongo(found.getString("uniq_id"));
         connNeo.deleteInsertionNeo4J(found.getString("uniq_id"));
 
         System.out.println("Deleted post and relation in MongoDB and Neo4J!");

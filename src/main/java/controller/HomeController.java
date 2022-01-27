@@ -41,12 +41,11 @@ public class HomeController {
 
     public void initialize() {
 
-        ConnectionMongoDB connMongo = new ConnectionMongoDB();
         ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
         followedFromNeo = new ArrayList<>();
 
-        viralList = connMongo.findViralInsertions(k);
+        viralList = ConnectionMongoDB.connMongo.findViralInsertions(k);
         prevButton.setDisable(true);
         prevButton.setVisible(false);
         viralHBox = new HBox();
@@ -61,10 +60,10 @@ public class HomeController {
         scrollPage = 0;
 
         followedFromNeo = connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
-        feedList = connMongo.followedUserInsertions(followedFromNeo);
+        feedList = ConnectionMongoDB.connMongo.followedUserInsertions(followedFromNeo);
 
         if (followedFromNeo.size() < k) {
-            ArrayList<Document> topK = connMongo.findTopKViewedInsertion(k - followedFromNeo.size(), "clothing");
+            ArrayList<Document> topK = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k - followedFromNeo.size(), "clothing");
 
             for (int i = 0; i < topK.size(); i++) {
                 feedList.add(topK.get(i));
@@ -135,8 +134,7 @@ public class HomeController {
 
     public static void updateInsertionview(String uniq_id) {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
-        conn.updateNumView(uniq_id);
+        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
 
     }
 

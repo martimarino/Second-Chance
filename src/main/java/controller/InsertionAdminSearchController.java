@@ -23,11 +23,9 @@ public class InsertionAdminSearchController {
     private int contReviews = 0;
     private int index;
 
-    ConnectionMongoDB connMongo = new ConnectionMongoDB();
-
     public void initialize(String seller) {
 
-        insertions = connMongo.findMultipleInsertionDetails(seller);
+        insertions = ConnectionMongoDB.connMongo.findMultipleInsertionDetails(seller);
         System.out.println("Insertions: " + insertions.get(0));
 
         box = new VBox(20);

@@ -84,7 +84,6 @@ public class SearchUserController extends MainController{
         //connection to Neo4j
         ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
         suggFromNeo = connNeo.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
-        ConnectionMongoDB connMongo = new ConnectionMongoDB();
 
         //if there are less than k suggested, add top k rated to the suggestions
 
@@ -93,7 +92,7 @@ public class SearchUserController extends MainController{
             Utility.printTerminal("Not enough suggestions");
             Session session = Session.getInstance();
             User user = session.getLoggedUser();
-            ArrayList<Document> temp = connMongo.findTopKRatedUser((m-suggFromNeo.size()), user.getCountry());
+            ArrayList<Document> temp = ConnectionMongoDB.connMongo.findTopKRatedUser((m-suggFromNeo.size()), user.getCountry());
             for(Document d : temp) {
                 suggFromNeo.add(d.getString("username"));
             }
@@ -101,7 +100,7 @@ public class SearchUserController extends MainController{
 
         //fill suggFromNeo list
         for (String s : suggFromNeo) {
-            Document d = connMongo.findUserByUsername(s);
+            Document d = ConnectionMongoDB.connMongo.findUserByUsername(s);
             suggList.add(d);
         }
 
@@ -112,7 +111,6 @@ public class SearchUserController extends MainController{
 
     public void findUsers() throws IOException {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
         searchedList.removeAll(searchedList);
         indexSearch = 0;
         prevSearch.setDisable(true);
@@ -133,7 +131,7 @@ public class SearchUserController extends MainController{
                 return;
             }
 
-            searchedList = conn.findUserByFilters(country.getValue(), rating.getValue());
+            searchedList = ConnectionMongoDB.connMongo.findUserByFilters(country.getValue(), rating.getValue());
 
             if (searchedList.isEmpty()) {
                 Utility.infoBox("There is not a user with this characteristics!", "Advise", "User Advise");
@@ -150,7 +148,7 @@ public class SearchUserController extends MainController{
 
         } else {        //search case
 
-            searchedList.add(conn.findUserByUsername(us.getText()));
+            searchedList.add(ConnectionMongoDB.connMongo.findUserByUsername(us.getText()));
 
             if (searchedList.isEmpty())
                 Utility.infoBox("This user does not exists.", "Advise", "User Advise");

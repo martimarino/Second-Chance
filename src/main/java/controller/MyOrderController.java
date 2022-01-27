@@ -32,8 +32,6 @@ public class MyOrderController{
     int k = 6;
     boolean kind;
 
-    ConnectionMongoDB conn = new ConnectionMongoDB();
-
     public void initialize(){
 
         //set buttons
@@ -56,7 +54,6 @@ public class MyOrderController{
     public void showOrders() {
 
         String type = comboBox.getValue();
-        ConnectionMongoDB conn = new ConnectionMongoDB();
 
         Session session = Session.getInstance();
         user = session.getLoggedUser();
@@ -66,7 +63,7 @@ public class MyOrderController{
             ordersList.clear();
             panel.getChildren().clear();
             indexPage = 1;
-            ordersList = conn.findAllOrders(true, user.getUsername());
+            ordersList = ConnectionMongoDB.connMongo.findAllOrders(true, user.getUsername());
             System.out.println("ORDER: " + ordersList);
             kind = true;
             showAllOrders(true);
@@ -76,7 +73,7 @@ public class MyOrderController{
             ordersList.clear();
             panel.getChildren().clear();
             indexPage = 1;
-            ordersList = conn.findAllOrders(false, user.getUsername());
+            ordersList = ConnectionMongoDB.connMongo.findAllOrders(false, user.getUsername());
             kind = false;
             showAllOrders(false);
         }
@@ -250,9 +247,9 @@ public class MyOrderController{
 
         Review rev = new Review( user.getUsername(), seller, txtArea.getText(), timestamp, txtTitle.getText(), rating);
 
-        conn.addReview(rev);
-        conn.updateSellerRating(rev.getSeller());
-        conn.updateOrder(timestampOrder);
+        ConnectionMongoDB.connMongo.addReview(rev);
+        ConnectionMongoDB.connMongo.updateSellerRating(rev.getSeller());
+        ConnectionMongoDB.connMongo.updateOrder(timestampOrder);
         sendReview.setDisable(true);
         revButton.setText("Already reviewed!");
         revButton.setDisable(true);

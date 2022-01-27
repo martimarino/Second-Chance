@@ -17,6 +17,7 @@ public class SecondChanceGUI extends Application {
 
     public static void main(String[] args) {
 
+        ConnectionMongoDB.connMongo = new ConnectionMongoDB();
         launch(args);
 
     }

@@ -1,11 +1,13 @@
 package main.java.controller;
 
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import main.java.connection.ConnectionMongoDB;
 import main.java.utils.Utility;
 import org.bson.Document;
@@ -15,16 +17,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-
-import javax.swing.event.ChangeListener;
 
 public class StatsController {
 
-    private String[] countries = new String[]{"Italy", "Canada", "Spain", "Austria", "Germany", "France", "Brazil", "Netherlands", "Poland", "Ireland", "United Kingdom (Great Britain)"};
-    private String[] categories = new String[]{"clothing","accessories", "bags","beauty", "house", "jewelry", "kids", "shoes"};
+    private final String[] countries = new String[]{"Italy", "Canada", "Spain", "Austria", "Germany", "France", "Brazil", "Netherlands", "Poland", "Ireland", "United Kingdom (Great Britain)"};
+    private final String[] categories = new String[]{"clothing","accessories", "bags","beauty", "house", "jewelry", "kids", "shoes"};
 
     @FXML private RadioButton rBUsers;
     @FXML private RadioButton rBSellers;
@@ -134,25 +131,18 @@ public class StatsController {
         txtFieldCategory.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("text changed from " + oldValue + " to " + newValue);
 
-            if (Objects.equals(newValue, ""))
-                elaboraButton.setDisable(true);
-            else
-                elaboraButton.setDisable(false);
+            elaboraButton.setDisable(Objects.equals(newValue, ""));
         });
 
         txtFieldCountry.textProperty().addListener((observable, oldValue, newValue) -> {
             Utility.printTerminal("text changed from " + oldValue + " to " + newValue);
 
-            if (Objects.equals(newValue, ""))
-                elaboraButton.setDisable(true);
-            else
-                elaboraButton.setDisable(false);
+            elaboraButton.setDisable(Objects.equals(newValue, ""));
         });
     }
 
     public void redirectToStatFunction() throws IOException {
 
-        ConnectionMongoDB conn = new ConnectionMongoDB();
         int k;
         // Section Most
 
@@ -164,21 +154,21 @@ public class StatsController {
         k = Integer.parseInt(boxKNumber.getText());
 
         if (rBSellers.isSelected())
-            showMostActiveUsersSellers(conn,false, k);
+            showMostActiveUsersSellers(ConnectionMongoDB.connMongo,false, k);
 
         if (rBUsers.isSelected())
-            showMostActiveUsersSellers(conn, true, k);
+            showMostActiveUsersSellers(ConnectionMongoDB.connMongo, true, k);
 
         // Section K
 
         if (rBTopKUsers.isSelected())
-            showTopKRatedUser(conn, k);
+            showTopKRatedUser(ConnectionMongoDB.connMongo, k);
 
         if (rBTopKInterestingIns.isSelected())
-            showTopKInterestingInsertion(conn, k);
+            showTopKInterestingInsertion(ConnectionMongoDB.connMongo, k);
 
         if(rBTopKViewedIns.isSelected())
-            showTopKViewedInsertion(conn, k);
+            showTopKViewedInsertion(ConnectionMongoDB.connMongo, k);
 
     }
 

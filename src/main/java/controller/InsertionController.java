@@ -49,7 +49,6 @@ public class InsertionController {
     public Text price;
     Insertion insertion;
     User user;
-    ConnectionMongoDB connMongo = new ConnectionMongoDB();
     ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
 
     public void initialize(String uniq_id) {
@@ -61,8 +60,7 @@ public class InsertionController {
         Session session = Session.getInstance();
         user = session.getLoggedUser();
 
-        //ConnectionMongoDB conn = new ConnectionMongoDB();
-        insertion = connMongo.findInsertion(uniq_id);
+        insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
 
         try {
             fillInsertionInfo(insertion);
@@ -105,7 +103,7 @@ public class InsertionController {
 
     public void buyInsertion() {
 
-        if (connMongo.buyCurrentInsertion(user.getUsername(), insertion))
+        if (ConnectionMongoDB.connMongo.buyCurrentInsertion(user.getUsername(), insertion))
         {
             Utility.infoBox("Product bought correctly! ", "User Advise", "Purchase done");
             connNeo.deleteInsertion(insertion.getId());
@@ -117,17 +115,16 @@ public class InsertionController {
     public void addToFavorite() {
 
         connNeo = new ConnectionNeo4jDB();
-        connMongo = new ConnectionMongoDB();
 
         if(!connNeo.showIfInterested(user.getUsername(), insertion.getId())) {
             connNeo.likeInsertion(user.getUsername(), insertion.getId());
-            connMongo.updateNumInterested(insertion.getId(), 1);
+            ConnectionMongoDB.connMongo.updateNumInterested(insertion.getId(), 1);
             favourite.setText("Remove from favourite");
             interested.setText(String.valueOf(Integer.parseInt(interested.getText()) +1));
         }
         else{
             connNeo.dislikeInsertion(user.getUsername(), insertion.getId());
-            connMongo.updateNumInterested(insertion.getId(), -1);
+            ConnectionMongoDB.connMongo.updateNumInterested(insertion.getId(), -1);
             favourite.setText("Add to favourite");
             interested.setText(String.valueOf(Integer.parseInt(interested.getText()) -1));
         }

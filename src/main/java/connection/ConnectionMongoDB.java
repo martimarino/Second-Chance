@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 
 public class ConnectionMongoDB{
 
+    public static ConnectionMongoDB connMongo;
     private MongoClient mongoClient;
     private MongoDatabase db;
     MongoCursor<Document> cursor;
