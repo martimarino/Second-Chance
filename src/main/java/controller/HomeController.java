@@ -27,8 +27,6 @@ public class HomeController {
     public Pane nextButton, prevButton;
     public Pane prevFeedButton, nextFeedButton;
 
-    //GridPane viral;
-    //GridPane feedGrid;
     HBox viralHBox;
     HBox feedBox;
 
@@ -153,7 +151,7 @@ public class HomeController {
     public void prevViralInsertions() {
 
         viralHBox.getChildren().clear();
-        scrollPage2 = Utility.prevPage(scrollPage2, nPage, prevButton);
+        scrollPage2 = Utility.prevPage(scrollPage2, nPage, prevFeedButton);
         showViralInsertions();
     }
 

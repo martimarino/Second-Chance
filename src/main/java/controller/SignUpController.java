@@ -1,10 +1,6 @@
 package main.java.controller;
 
-
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -14,10 +10,7 @@ import main.java.connection.ConnectionNeo4jDB;
 import main.java.entity.User;
 import main.java.utils.CryptWithMD5;
 import main.java.utils.Utility;
-
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 public class SignUpController {
 
