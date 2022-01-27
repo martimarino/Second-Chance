@@ -833,7 +833,7 @@ public class ConnectionMongoDB{
         BasicDBObject query = new BasicDBObject();
         query.put("username", d.getString("username"));
 
-        user.updateOne(query, updateObject);
+        userColl.updateOne(query, updateObject);
 
         this.closeConnection();
     }
