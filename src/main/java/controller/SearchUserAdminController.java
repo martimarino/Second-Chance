@@ -28,6 +28,7 @@ public class SearchUserAdminController {
     @FXML private Text city;
     @FXML private Text address;
     @FXML private Text alertText;
+    @FXML private Text txtResult;
 
     @FXML private Button btnLogout;
     @FXML private Button btnSuspendUsr;
@@ -134,5 +135,22 @@ public class SearchUserAdminController {
         Stage primaryStage = new Stage();
         primaryStage.setTitle("SecondChance");
         Utility.changePage(primaryStage, "SignIn");
+    }
+
+    public void generateCodes() throws IOException {
+
+        Process p = Runtime.getRuntime().exec("python randomCodesGenerator.py");
+
+        txtResult.setText("  Codes generated successfully! ");
+
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        txtResult.setText("Here you can generated new codes!");
+                    }
+                },
+                5000
+        );
     }
 }
