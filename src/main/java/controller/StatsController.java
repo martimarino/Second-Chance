@@ -156,8 +156,10 @@ public class StatsController {
         int k;
         // Section Most
 
-        if (Objects.equals(boxKNumber.getText(), ""))
+        if (Objects.equals(boxKNumber.getText(), "")) {
             Utility.infoBox("Please insert a valid K number", "Error", "Empty box!");
+            return;
+        }
 
         k = Integer.parseInt(boxKNumber.getText());
 
@@ -169,19 +171,15 @@ public class StatsController {
 
         // Section K
 
-        if (Objects.equals(boxKNumber.getText(), "")) {
-            Utility.infoBox("Please insert a valid K number", "Error", "Empty box!");
-        } else {
+        if (rBTopKUsers.isSelected())
+            showTopKRatedUser(conn, k);
 
-            if (rBTopKUsers.isSelected())
-                showTopKRatedUser(conn, k);
+        if (rBTopKInterestingIns.isSelected())
+            showTopKInterestingInsertion(conn, k);
 
-            if (rBTopKInterestingIns.isSelected())
-                showTopKInterestingInsertion(conn, k);
+        if(rBTopKViewedIns.isSelected())
+            showTopKViewedInsertion(conn, k);
 
-            if(rBTopKViewedIns.isSelected())
-                showTopKViewedInsertion(conn, k);
-        }
     }
 
     public void showMostActiveUsersSellers(ConnectionMongoDB conn, boolean choice, int k) throws IOException{
@@ -194,7 +192,7 @@ public class StatsController {
 
         for (int i = 0; i < k; i++) {
 
-            String str = array.get(i).getString("seller") + ": " + array.get(i).getInteger("count").toString();
+            String str = array.get(i).getString("seller") + ":    " + array.get(i).getInteger("count").toString();
             items.add(str);
         }
 
@@ -220,8 +218,11 @@ public class StatsController {
         ArrayList<Document> array = new ArrayList<Document>();
         String country = txtFieldCountry.getText();
 
-        if(!Arrays.asList(countries).contains(country))
+        if(!Arrays.asList(countries).contains(country)) {
             Utility.infoBox("Please insert a valid country", "Error", "Country not found!");
+            txtFieldCountry.setText("");
+            return;
+        }
 
         array = conn.findTopKRatedUser(k, country);
 
@@ -258,8 +259,10 @@ public class StatsController {
         ArrayList<Document> array;
         String category = txtFieldCategory.getText();
 
-        if(!Arrays.asList(categories).contains(category))
+        if(!Arrays.asList(categories).contains(category)) {
             Utility.infoBox("Please insert a valid category", "Error", "Category not found!");
+            return;
+        }
 
         array = conn.findTopKInterestingInsertion(k, category);
 

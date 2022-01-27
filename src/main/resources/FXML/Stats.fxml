@@ -51,11 +51,11 @@
                            </toggleGroup>
                         </RadioButton>
                         <Label layoutX="45.0" layoutY="95.0" text="Please insert the country you want:" />
-                        <TextField fx:id="txtFieldCountry" layoutX="246.0" layoutY="90.0" prefHeight="26.0" prefWidth="114.0" promptText="Country" />
+                        <TextField fx:id="txtFieldCountry" layoutX="267.0" layoutY="91.0" prefHeight="26.0" prefWidth="114.0" promptText="Country" />
                         <RadioButton fx:id="rBTopKInterestingIns" layoutX="20.0" layoutY="149.0" mnemonicParsing="false" text="Top K Most Interesting Insertions (by category) " toggleGroup="$TopK" />
                         <RadioButton fx:id="rBTopKViewedIns" layoutX="20.0" layoutY="185.0" mnemonicParsing="false" text="Top K Most Viewed Insertions (by category) " toggleGroup="$TopK" />
                         <Label layoutX="45.0" layoutY="215.0" text="Please insert the category you want:" />
-                        <TextField fx:id="txtFieldCategory" layoutX="246.0" layoutY="212.0" prefHeight="26.0" prefWidth="114.0" promptText="Category" />
+                        <TextField fx:id="txtFieldCategory" layoutX="267.0" layoutY="211.0" prefHeight="26.0" prefWidth="114.0" promptText="Category" />
                      </children>
                   </Pane>
                </children>

@@ -153,7 +153,7 @@ public class HomeController {
     public void prevViralInsertions() {
 
         viralHBox.getChildren().clear();
-        Utility.prevPage(scrollPage2, nPage, prevButton);
+        scrollPage2 = Utility.prevPage(scrollPage2, nPage, prevButton);
         showViralInsertions();
     }
 

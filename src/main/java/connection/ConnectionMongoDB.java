@@ -675,6 +675,7 @@ public class ConnectionMongoDB{
             ins.setPrice(document.getDouble("price"));
             ins.setViews(document.getInteger("views"));
             ins.setId(document.getString("uniq_id"));
+            ins.setImage_url(document.getString("image_url"));
             array.add(ins);
         }
 
@@ -848,8 +849,6 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myCollCodes = db.getCollection("admin");
 
         Document code = myCollCodes.find(eq("code", id_code)).first();
-
-        double credit = code.getDouble("credit");
 
         if (code == null || Objects.equals(code.getString("assigned"), "T")) {
             Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");

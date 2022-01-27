@@ -28,6 +28,7 @@ public class SearchUserAdminController {
     @FXML private Text city;
     @FXML private Text address;
     @FXML private Text alertText;
+    @FXML private Text txtResult;
 
     @FXML private Button btnLogout;
     @FXML private Button btnSuspendUsr;
@@ -65,14 +66,26 @@ public class SearchUserAdminController {
         username = usernameField.getText();
         String name = nameField.getText();
 
+        System.out.println("username: " + username);
+        System.out.println("name: " + name);
+
         if(name != null && !name.trim().isEmpty()) {
+
             found = conn.verifyUserInDB(name, false);
+
+            if (found == null) {
+                Utility.infoBox("The user is not present in the system. Please try again.",
+                        "Error!",
+                        "User not found!");
+                return;
+            }
+
             username = found.getString("username");
         }else {
             found = conn.verifyUserInDB(username, true);
         }
 
-        if (found == null ||   ((name == null && name.trim().isEmpty()) &&
+        if (found == null || ((name == null && name.trim().isEmpty()) &&
                         (username != null && username.trim().isEmpty()))) {
             Utility.infoBox("The user is not present in the system. Please try again.",
                             "Error!",
@@ -134,5 +147,22 @@ public class SearchUserAdminController {
         Stage primaryStage = new Stage();
         primaryStage.setTitle("SecondChance");
         Utility.changePage(primaryStage, "SignIn");
+    }
+
+    public void generateCodes() throws IOException {
+
+        Process p = Runtime.getRuntime().exec("python randomCodesGenerator.py");
+
+        txtResult.setText("  Codes generated successfully! ");
+
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        txtResult.setText("Here you can generated new codes!");
+                    }
+                },
+                5000
+        );
     }
 }

@@ -58,7 +58,7 @@ public class SearchPostController {
             found = conn.verifyInsertionInDB(sellerIdPost, false);
 
         if (found == null || ((idPost == null && idPost.trim().isEmpty()) && (id != null && id.trim().isEmpty()))) {
-            Utility.infoBox("There are not insertion..",
+            Utility.infoBox("There are not insertion.",
                             "Error!",
                             "No insertions found!");
         } else {
@@ -76,7 +76,6 @@ public class SearchPostController {
                 btnDeletePost.setDisable(false);
             } else {
                 // cerco un'array di inserzioni perché è stato inserito un seller_id
-
 
                 try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
                     Image image = new Image(imageStream);

@@ -51,7 +51,7 @@ public class InsertionAdminSearchController {
         }
         System.out.println("(show) INDEX: " + index);
 
-        for (int i = 0; i < k && i < insertions.size() - 1; i++) {
+        for (int i = 0; i < k && index < insertions.size(); i++) {
             addInsertions();
         }
         bp.setCenter(box);
@@ -67,7 +67,6 @@ public class InsertionAdminSearchController {
         Button btnDelete = new Button();
 
         btnDelete.setText("Delete");
-
 
         ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150);
         Label category = new Label("Category: " + insertions.get(index).getCategory());
@@ -99,7 +98,9 @@ public class InsertionAdminSearchController {
                         SearchPostController spc = new SearchPostController();
                         System.out.println(uniq_id);
                         spc.deletePost(uniq_id);
-                        System.out.println("Deleted post");
+                        Utility.infoBox("The post is removed correctly!",
+                                "Success!",
+                                "Post deleted!");
                         index = 0;
                         showInsertionList();
                     } catch (Exception e) {
