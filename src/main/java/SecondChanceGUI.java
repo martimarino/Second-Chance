@@ -19,9 +19,10 @@ public class SecondChanceGUI extends Application {
     public static void main(String[] args) {
 
         ConnectionMongoDB.connMongo = new ConnectionMongoDB();
+        ConnectionMongoDB.connMongo.openConnection();
         ConnectionNeo4jDB.connNeo = new ConnectionNeo4jDB();
         launch(args);
-
+        ConnectionMongoDB.connMongo.closeConnection();
     }
 
 
