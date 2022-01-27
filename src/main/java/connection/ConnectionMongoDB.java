@@ -40,6 +40,7 @@ public class ConnectionMongoDB{
     /* ********* CONNECTION SECTION ********* */
 
     public void openConnection() {
+
         /*
         // LOCAL DATABASE WITHOUT REPLICAS
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
@@ -48,7 +49,7 @@ public class ConnectionMongoDB{
         */
 
 
-        MongoClient mongoClient = MongoClients.create(
+        mongoClient = MongoClients.create(
                 "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
                         "?retryWrites=true&w=majority&wtimeout=10000");
 
