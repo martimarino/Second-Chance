@@ -1,0 +1,67 @@
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.CryptWithMD5;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
+import java.io.IOException;
+
+public class SignUpController {
+
+    public Text SignIn;
+    @FXML private TextField us, pw, em, nm, ci, ad;
+    @FXML
+    private ComboBox<String> co;
+
+    public void ShowSignIn() throws IOException {
+
+        Stage stage = (Stage) SignIn.getScene().getWindow();
+        Utility.changePage(stage, "SignIn");
+
+    }
+
+    public void registration() throws IOException {
+
+        if (!us.getText().isEmpty()
+                && !pw.getText().isEmpty() && !em.getText().isEmpty()
+                && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getValue().isEmpty()
+                && !ad.getText().isEmpty()) {
+
+            String encrypted = CryptWithMD5.cryptWithMD5(pw.getText());
+            User u = new User(em.getText(), us.getText(), encrypted, nm.getText(), co.getValue(), ci.getText(), ad.getText(), "N", Double.NaN, 0.0, "image.png");
+
+            if(us.getText().equals("admin")) {
+                Utility.infoBox("You can not register as admin", "Error", "Please, insert a different username-");
+                us.setText("");
+                return;
+            }
+
+            System.out.println(u);
+
+            if(ConnectionMongoDB.connMongo.registerUser(u)) {
+                //clear TextField
+                us.setText("");
+                pw.setText("");
+                em.setText("");
+                nm.setText("");
+                ci.setText("");
+                co.setValue("Select your country");
+                ad.setText("");
+
+                ConnectionNeo4jDB.connNeo.addUser(u);
+                ShowSignIn();
+                Utility.infoBox("Now you can login!", "Confirmed", "Registration completed with success!");
+
+            }
+
+        }else {
+            Utility.infoBox("Please, fill all information.", "Error", "Empty fields!");
+        }
+    }
+}

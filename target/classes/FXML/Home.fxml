@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
+<AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.HomeController">
    <children>
       <Text fill="WHITE" layoutX="250.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View viral insertions">
          <font>
@@ -16,7 +16,7 @@
       </Text>
       <BorderPane fx:id="viralInsertions" layoutX="25.0" layoutY="70.0" prefHeight="286.0" prefWidth="650.0">
          <left>
-            <Pane fx:id="prevButton" onMouseClicked="#prevViralInsertions" translateY="100.0">
+            <Pane fx:id="prevViralButton" onMouseClicked="#prevViralInsertions" translateY="100.0">
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
                      <image>
@@ -27,7 +27,7 @@
             </Pane>
          </left>
          <right>
-            <Pane fx:id="nextButton" onMouseClicked="#nextViralInsertions" translateY="100.0">
+            <Pane fx:id="nextViralButton" onMouseClicked="#nextViralInsertions" translateY="100.0">
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
                      <image>

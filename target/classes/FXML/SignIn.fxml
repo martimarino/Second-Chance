@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: #EBEBEB;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SignInController">
+<AnchorPane fx:id="anchorRoot" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: #EBEBEB;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.SignInController">
    <children>
       <Pane fx:id="welcomePane" layoutX="15.0" layoutY="203.0" prefHeight="418.0" prefWidth="337.0" style="-fx-background-color: rgb(70,130,180);">
          <children>

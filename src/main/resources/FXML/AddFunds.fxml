@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.AddFundsController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.AddFundsController">
    <children>
       <Label layoutX="205.0" layoutY="14.0" text="Add Funds to your wallet!" textFill="#c53ed7">
          <font>

@@ -9,7 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.SearchInsertionController">
+<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.SearchInsertionController">
     <children>
         <Text fill="WHITE" layoutX="253.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Insertions">
             <font>

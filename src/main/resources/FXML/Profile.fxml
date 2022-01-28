@@ -1,16 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchorRoot" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.ProfileController">
+<AnchorPane prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.ProfileController">
    <children>
-      <AnchorPane layoutX="-2.0" prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <Label fx:id="username" layoutX="286.0" layoutY="45.0" text="Profile of " />
-         </children></AnchorPane>
+      <SplitPane orientation="VERTICAL" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(0,0,0);">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(70,130,180) rgb(70,130,180);">
+              <children>
+                  <Text fill="WHITE" layoutX="294.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="followersButton" layoutX="429.0" layoutY="117.0" mnemonicParsing="false" onMouseClicked="#showUserFollowers" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 20;" text="Followers" textFill="#65626b" />
+                  <Button fx:id="followingButton" layoutX="429.0" layoutY="158.0" mnemonicParsing="false" onMouseClicked="#showUserFollowing" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237) rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 30;" text="Following" textFill="#65626b" />
+                  <Button fx:id="interestedInsertionsButton" layoutX="429.0" layoutY="197.0" mnemonicParsing="false" onMouseClicked="#showInsertionsLiked" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237) rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 30;" text="View insertion you are interested in" textFill="#65626b" />
+                  <Button fx:id="insertionButton" layoutX="429.0" layoutY="238.0" mnemonicParsing="false" onMouseClicked="#showInsertions" prefHeight="25.0" prefWidth="245.0" style="-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237) rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 30;" text="View insertion you published" textFill="#65626b" />
+                  <GridPane fx:id="userInfo" layoutX="47.0" layoutY="108.0" prefHeight="180.0" prefWidth="361.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <Button fx:id="btnLogout" layoutX="613.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#logout" style="-fx-background-color: rgb(213, 128, 255)rgb(213, 128, 255); -fx-background-radius: 30;" text="Logout" textFill="WHITE" />
+                  <Button fx:id="btnAddFunds" layoutX="515.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#addFundsShow" style="-fx-background-color: rgb(238, 204, 255)rgb(238, 204, 255); -fx-background-radius: 30;" text="Add Funds" textFill="WHITE" />
+                   <Text fill="WHITE" layoutX="308.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reviews">
+                       <font>
+                           <Font size="24.0" />
+                       </font>
+                   </Text>
+                  <Separator layoutX="261.0" layoutY="325.0" prefWidth="200.0" />
+                  <Pane layoutX="29.0" layoutY="15.0" prefHeight="44.0" prefWidth="200.0">
+                     <children>
+                        <Text fx:id="balanceValue" fill="#2582bf" layoutX="100.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" />
+                        <Label fx:id="balanceText" layoutX="14.0" layoutY="14.0" text="Balance: " textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="refreshBtn" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#updateUserBalance" style="-fx-background-color: rgb(255, 166, 77)rgb(255, 166, 77); -fx-background-radius: 30;">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0">
+                                 <image>
+                                    <Image url="@../img/refresh.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <BorderPane fx:id="review" layoutX="10.0" layoutY="408.0" prefHeight="200.0" prefWidth="680.0">
+                     <left>
+                        <Pane fx:id="prevReviews" onMouseClicked="#prevReviews" prefHeight="215.0" prefWidth="50.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="-1.0" layoutY="74.0">
+                                 <image>
+                                    <Image url="@../img/prev.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                     </left>
+                     <right>
+                        <Pane fx:id="nextReviews" onMouseClicked="#nextReviews" prefHeight="200.0" prefWidth="50.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="-1.0" layoutY="74.0">
+                                 <image>
+                                    <Image url="@../img/next.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                     </right>
+                  </BorderPane>
+               </children>
+          </AnchorPane>
+        </items>
+      </SplitPane>
    </children>
 </AnchorPane>

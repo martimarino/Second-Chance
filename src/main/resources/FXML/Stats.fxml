@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.StatsController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.StatsController">
    <children>
       <Label layoutX="282.0" layoutY="-1.0" prefHeight="29.0" prefWidth="204.0" text="         Stats Section" textAlignment="CENTER">
          <font>
