@@ -36,6 +36,9 @@ public class ProfileController extends MainController {
     public Button refreshBtn;
     public Label balanceText;
 
+    public ArrayList<String> follower;
+    public ArrayList<String> following;
+
     private List<Document> listReviews;
 
     @FXML public Button btnLogout;
@@ -49,6 +52,7 @@ public class ProfileController extends MainController {
     private Session session;
 
     int scrollPage;
+    int scrollPage2;
     int nPage = 2;
 
     public void initialize(){
@@ -62,6 +66,9 @@ public class ProfileController extends MainController {
     public void initialize(String us) {
 
         user = Session.getLogUser();
+
+        scrollPage = 0;
+        scrollPage2 = 0;
 
         if(!us.equals(user.getUsername())) {
 
@@ -131,8 +138,73 @@ public class ProfileController extends MainController {
         userInfo.add(rating, 1, 6);
 
         updateUserBalance();
-
+        following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
+        follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
         listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
+        if (listReviews.size() < 3) {
+            System.out.println("Reviews nulle, disattivo i bottoni");
+            nextReviews.setDisable(true);
+            nextReviews.setVisible(false);
+        }
+        showReviews();
+    }
+
+    public void setProfile(String us){
+
+        prevReviews.setDisable(true);
+        prevReviews.setVisible(false);
+
+        reviewsBox = new HBox();
+        reviewsBox.setSpacing(100);
+        review.setCenter(reviewsBox);
+
+        scrollPage = 0;
+        scrollPage2 = 0;
+
+        userInfo.getChildren().clear();
+
+        String rate = (Double.isNaN(user.getRating()))? "No reviews" : Double.toString(user.getRating());
+
+        Label username = new Label(user.getUsername());
+        Label name = new Label(user.getName());
+        Label email = new Label(user.getEmail());
+        Label country = new Label(user.getCountry());
+        Label city = new Label(user.getCity());
+        Label address = new Label(user.getAddress());
+        Label rating = new Label(rate);
+        Label usernameText = new Label("Username:");
+        Label nameText = new Label("Name:");
+        Label emailText = new Label("Email:");
+        Label countryText = new Label("Country:");
+        Label cityText = new Label("City:");
+        Label addressText = new Label("Address:");
+        Label ratingText = new Label("Rating:");
+
+        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
+        userInfo.add(usernameText, 0, 0);
+        userInfo.add(nameText, 0, 1);
+        userInfo.add(emailText, 0, 2);
+        userInfo.add(countryText, 0, 3);
+        userInfo.add(cityText, 0, 4);
+        userInfo.add(addressText, 0, 5);
+        userInfo.add(ratingText, 0, 6);
+
+        userInfo.add(username, 1,0);
+        userInfo.add(name, 1, 1);
+        userInfo.add(email, 1, 2);
+        userInfo.add(country, 1, 3);
+        userInfo.add(city, 1, 4);
+        userInfo.add(address, 1, 5);
+        userInfo.add(rating, 1, 6);
+
+        updateUserBalance();
+
+        following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(us);
+        follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(us);
+        System.out.println("Abdelhakam: " + user.getUsername());
+        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
+
         if (listReviews.size() < 3) {
             System.out.println("Reviews nulle, disattivo i bottoni");
             nextReviews.setDisable(true);
@@ -152,48 +224,49 @@ public class ProfileController extends MainController {
 
     public void showUserFollowers() {
 
-        System.out.println("USERNAME : " + user.getUsername());
-        ArrayList<String> follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
-        StackPane secondaryLayout = new StackPane();
 
-        for (int i = 0; i < 10 && follower.size() > i; i++) {
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
 
-            Label x = new Label(follower.get(i));
-            x.setTranslateX(10);
-            x.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(x);
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(FollowersController.class.getResource("/FXML/FollowersPage.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Your insertions");
+            FollowersController controller = loader.getController();
+            if (follower.size() == 0) {
+                Utility.infoBox("This profile has not followers.", "Information", "No following!");
+                return;
+            }
+            controller.initialize(follower);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        Scene secondScene = new Scene(secondaryLayout, 920, 400);
-
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Followers");
-        newWindow.setScene(secondScene);
-        newWindow.show();
     }
 
     public void showUserFollowing() {
 
-        ArrayList<String> following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
 
-        StackPane secondaryLayout = new StackPane();
-
-        for (int i = 0; i < 10 && following.size() > i; i++) {
-
-            Label x = new Label(following.get(i));
-            x.setTranslateX(10);
-            x.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(x);
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(FollowingController.class.getResource("/FXML/FollowingPage.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Your insertions");
+            FollowingController controller = loader.getController();
+            if (following.size() == 0) {
+                Utility.infoBox("This profile has not following.", "Information", "No following!");
+                return;
+            }
+            controller.initialize(following);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        Scene secondScene = new Scene(secondaryLayout, 920, 400);
-
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Following");
-        newWindow.setScene(secondScene);
-        newWindow.show();
     }
 
     public void showInterestedInsertions() {
