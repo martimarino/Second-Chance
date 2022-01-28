@@ -6,6 +6,7 @@ import javafx.geometry.HPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -178,5 +180,22 @@ public class Utility {
         }
 
         return new_index;
+    }
+
+    public static boolean confirmDeletion() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Alert");
+        alert.setHeaderText("Please confirm.");
+        alert.setContentText("Are you sure to delete this insertion?");
+        Optional<ButtonType> result = alert.showAndWait();
+        ButtonType button = result.orElse(ButtonType.CANCEL);
+
+        if (button == ButtonType.OK) {
+            System.out.println("Ok pressed");
+            return true;
+        } else {
+            System.out.println("canceled");
+            return false;
+        }
     }
 }

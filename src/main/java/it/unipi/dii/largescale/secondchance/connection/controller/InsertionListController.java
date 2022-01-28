@@ -98,9 +98,11 @@ public class InsertionListController {
         );
 
         delete.setOnMouseClicked(event -> {
-            ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
-            ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id);
-            initialize(Session.getLogUser().getUsername());
+            if(Utility.confirmDeletion()) {
+                ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
+                ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id);
+                initialize(Session.getLogUser().getUsername());
+            }
         });
 
         GridPane.setHalignment(image, HPos.LEFT);
