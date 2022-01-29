@@ -1,7 +1,8 @@
 package main.java.it.unipi.dii.largescale.secondchance.connection;
 
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.*;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.neo4j.driver.*;
 
 import java.util.ArrayList;
