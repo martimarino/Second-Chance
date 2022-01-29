@@ -82,7 +82,7 @@ public class FollowingController {
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage(listFollowing.get(scrollPage).getString("image_url"), 150);
+        ImageView image = Utility.getGoodImage(listFollowing.get(scrollPage).getString("img_profile"), 150);
         Label username = new Label("Username: " + listFollowing.get(scrollPage).getString("username"));
         Label city = new Label("City: " + listFollowing.get(scrollPage).getString("city"));
 

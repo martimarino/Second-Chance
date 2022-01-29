@@ -75,7 +75,7 @@ public class FollowersController {
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage(listFollowers.get(scrollPage).getString("image_url"), 150);
+        ImageView image = Utility.getGoodImage(listFollowers.get(scrollPage).getString("img_profile"), 150);
         Label username = new Label("Username: " + listFollowers.get(scrollPage).getString("username"));
         Label city = new Label("City: " + listFollowers.get(scrollPage).getString("city"));
 
