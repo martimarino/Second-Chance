@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="anchorRoot"
+            prefHeight="820.0" prefWidth="680.0"
+            xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
+            style="-fx-background-color: rgb(70,130,180);"
+            fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.NewInsertionController">
+    <children>
+        <Text fill="white" layoutX="253.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create an insertion">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+        <Label layoutX="150.0" layoutY="105.0" text="Category">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="categ" layoutX="250.0" layoutY="100.0" value="-" prefWidth="300.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="beauty" />
+                    <String fx:value="clothing" />
+                    <String fx:value="house" />
+                    <String fx:value="kids" />
+                    <String fx:value="bags" />
+                    <String fx:value="shoes" />
+                    <String fx:value="accessories" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Label layoutX="150.0" layoutY="150.0" text="Gender">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <HBox layoutX="250.0" layoutY="145.0" >
+            <fx:define>
+                <ToggleGroup fx:id="myToggleGroup"/>
+            </fx:define>
+            <children>
+                <RadioButton fx:id="RadioBtnF" text="F" toggleGroup="$myToggleGroup" style="-fx-padding: 5.0"/>
+                <RadioButton fx:id="RadioBtnM" text="M" toggleGroup="$myToggleGroup" style="-fx-padding: 5.0"/>
+                <RadioButton fx:id="RadioBtnU" text="U" toggleGroup="$myToggleGroup" style="-fx-padding: 5.0"/>
+            </children>
+        </HBox>
+        <Label layoutX="150.0" layoutY="200.0" text="Price">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <TextField fx:id="price" layoutX="250.0" layoutY="195.0" style="-fx-background-radius: 5; " prefWidth="300.0"/>
+        <Label layoutX="150.0" layoutY="250.0" text="Status">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="status" layoutX="250.0" layoutY="245.0" value="-" prefWidth="300.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="excellent" />
+                    <String fx:value="new" />
+                    <String fx:value="good" />
+                    <String fx:value="used" />
+                    <String fx:value="very used" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Label layoutX="150.0" layoutY="300.0" text="Color">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <TextField fx:id="color" layoutX="250.0" layoutY="295.0" style="-fx-background-radius: 5;" prefWidth="300.0"/>
+        <Label layoutX="150.0" layoutY="350.0" text="Size">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="size" layoutX="250.0" layoutY="345.0" value="-" prefWidth="300.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="XS" />
+                    <String fx:value="S" />
+                    <String fx:value="M" />
+                    <String fx:value="L" />
+                    <String fx:value="XL" />
+                    <String fx:value="U" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Label layoutX="150.0" layoutY="400.0" text="Brand">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <TextField fx:id="brand" layoutX="250.0" layoutY="395.0" style="-fx-background-radius: 5;" prefWidth="300.0"/>
+        <Label layoutX="150.0" layoutY="450.0" text="Country">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="country" layoutX="250.0" layoutY="445.0" value="-" prefWidth="300.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Italy" />
+                    <String fx:value="Canada" />
+                    <String fx:value="Spain" />
+                    <String fx:value="Austria" />
+                    <String fx:value="France" />
+                    <String fx:value="Brazil" />
+                    <String fx:value="Netherlands" />
+                    <String fx:value="Poland" />
+                    <String fx:value="Ireland" />
+                    <String fx:value="United Kingdom (Great Britain)" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <Label layoutX="150.0" layoutY="500.0" text="Description">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <TextArea fx:id="desc" layoutX="250.0" layoutY="500.0" prefHeight="80.0" prefWidth="300.0"/>
+
+        <Label layoutX="150.0" layoutY="600.0" text="Image">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Label>
+        <TextField fx:id="link" layoutX="250.0" layoutY="595.0" style="-fx-background-radius: 5;" prefWidth="300.0"/>
+
+        <Button fx:id="add" layoutX="150.0" layoutY="650.0" onMouseClicked="#AddNewInsertion" mnemonicParsing="false" text="Publish" textFill="#2582bf" prefWidth="400.0"/>
+    </children>
+</AnchorPane>

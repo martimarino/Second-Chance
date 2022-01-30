@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.MyOrderController">
+   <children>
+      <Label layoutX="290.0" layoutY="33.0" text="My Orders" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <BorderPane fx:id="ordersContainer" layoutX="19.0" layoutY="121.0" prefHeight="9.0" prefWidth="663.0">
+         <left>
+            <Pane fx:id="prev" onMouseClicked="#PrevOrder" translateY="250.0">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@../img/prev.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </left>
+         <right>
+            <Pane fx:id="next" onMouseClicked="#NextOrder" translateY="250.0">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@../img/next.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </right>
+      </BorderPane>
+      <ComboBox fx:id="comboBox" layoutX="275.0" layoutY="85.0" onAction="#showOrders" prefWidth="150.0" style="-fx-background-color: white;" value="Select orders">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Items purchased" />
+               <String fx:value="Items sold" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+   </children>
+</AnchorPane>
