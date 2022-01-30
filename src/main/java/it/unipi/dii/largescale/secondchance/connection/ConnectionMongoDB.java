@@ -7,6 +7,9 @@ import com.mongodb.client.model.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.*;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
+
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
@@ -14,10 +17,6 @@ import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Updates.inc;
 import static com.mongodb.client.model.Updates.set;
 
-import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
-import main.java.it.unipi.dii.largescale.secondchance.entity.Review;
-import main.java.it.unipi.dii.largescale.secondchance.entity.User;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -42,12 +41,17 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        /*
+
         // LOCAL DATABASE WITHOUT REPLICAS
-        ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
+       /* ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
         db = mongoClient.getDatabase("local");
-        */
+
+        userColl = db.getCollection("user");
+        adminColl = db.getCollection("admin");
+        insertionColl = db.getCollection("insertion");
+        orderColl = db.getCollection("order");
+*/
 
         mongoClient = MongoClients.create(
                 "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
@@ -164,6 +168,8 @@ public class ConnectionMongoDB{
         logUser.setCountry(user.getString("country"));
         logUser.setSuspended(user.getString("suspended"));
         logUser.setBalance(user.getDouble("balance"));
+        logUser.setImage(user.getString("img_profile"));
+        logUser.setRating(user.getDouble("rating"));
 
         return logUser;
     }
@@ -321,6 +327,7 @@ public class ConnectionMongoDB{
         Insertion insertion = new Insertion();
         Document insertion_found = insertionColl.find(eq("uniq_id", insertion_id)).first();
 
+        insertion.setId(insertion_found.getString("uniq_id"));
         insertion.setBrand(insertion_found.getString("brand"));
         insertion.setCountry(insertion_found.getString("country"));
         insertion.setCategory(insertion_found.getString("category"));
@@ -371,6 +378,7 @@ public class ConnectionMongoDB{
 
             if (ret3 == null) {
                 Utility.infoBox("Cannot buy product", "Error", "Error purchase");
+
                 return "Cannot increment seller balance";
             }
 
@@ -400,6 +408,34 @@ public class ConnectionMongoDB{
         return executeTransaction(clientSession, txnFunc);
     }
 
+    public boolean deleteBuyInsertion(String username, Insertion insertion) {
+
+        ClientSession clientSession = mongoClient.startSession();
+
+        TransactionBody<String> txnFunc = () -> {
+
+            Bson filter = and(eq("username", username), gte("balance", insertion.getPrice()));
+            Bson update = inc("balance", insertion.getPrice());
+
+            //update buyer balance
+            Document ret = db.getCollection("user").findOneAndUpdate(filter, update);
+
+
+            //update seller balance
+            Bson filter2 = eq("username", insertion.getSeller());
+            Bson update2 = inc("balance", -(insertion.getPrice()));
+
+            Document ret3 = db.getCollection("user").findOneAndUpdate(filter2, update2);
+
+            insertionColl.insertOne(Insertion.toDocument(insertion));
+
+            return "OK";
+
+        };
+        return executeTransaction(clientSession, txnFunc);
+
+    }
+
     private boolean executeTransaction(ClientSession clientSession, TransactionBody<String> txnFunc) {
 
         String message = "";
@@ -411,12 +447,16 @@ public class ConnectionMongoDB{
         return message.equals("OK");
     }
 
-    public void updateNumInterested(String insertion_id, int i) {
+    public boolean updateNumInterested(String insertion_id, int i) {
 
         Bson filter = eq("uniq_id", insertion_id);
         Bson update = inc("interested", i);
-
-        db.getCollection("insertion").findOneAndUpdate(filter, update);
+        try {
+            db.getCollection("insertion").findOneAndUpdate(filter, update);
+            return true;
+        }catch(MongoException me){
+            return false;
+        }
     }
 
     public void updateNumView(String uniq_id) {
@@ -462,7 +502,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl;
 
         if (choice)
-            myColl = insertionColl;
+            myColl = userColl;
         else
             myColl = orderColl;
 
@@ -607,7 +647,7 @@ public class ConnectionMongoDB{
     public Insertion findInsertionDetails(String id) {
 
         Insertion ins = new Insertion();
-        Document insertion = insertionColl.find(eq("_id", id)).first();
+        Document insertion = insertionColl.find(eq("uniq_id", id)).first();
 
         ins.setCategory(insertion.getString("category"));
         ins.setPrice(insertion.getDouble("price"));
@@ -671,21 +711,7 @@ public class ConnectionMongoDB{
 
     public boolean addInsertion(Insertion i) {
 
-        Document ins = new Document("brand", i.getBrand())
-                .append("category", i.getCategory())
-                .append("color", i.getColor())
-                .append("country", i.getCountry())
-                .append("description", i.getDescription())
-                .append("gender", i.getGender())
-                .append("image_url", i.getImage_url())
-                .append("interested", i.getInterested())
-                .append("price", i.getPrice())
-                .append("seller", i.getSeller())
-                .append("size", i.getSize())
-                .append("status", i.getStatus())
-                .append("timestamp", i.getTimestamp())
-                .append("uniq_id", i.getId())
-                .append("views", i.getViews());
+        Document ins = Insertion.toDocument(i);
         insertionColl.insertOne(ins);
         return true;
 
@@ -845,15 +871,16 @@ public class ConnectionMongoDB{
         return list;
     }
 
-    public void deleteInsertionMongo(String id) {
+    public boolean deleteInsertionMongo(String id) {
 
         Bson query = eq("uniq_id", id);
 
         try {
             DeleteResult result = insertionColl.deleteOne(query);
-            System.out.println("Deleted document count: " + result.getDeletedCount());
+            return true;
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
+            return false;
         }
     }
 
@@ -870,27 +897,15 @@ public class ConnectionMongoDB{
 
     }
 
-    public ArrayList<Document> findTopRatedUsersByCountry(String country) {
+    public void deleteUserMongo(String username) {
 
-        ArrayList<Document> list = new ArrayList<>();
-
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put("country", country);
-
-        MongoCursor<Document> cursor = userColl.find(whereQuery).iterator();
+        Bson query = eq("username", username);
 
         try {
-            while (cursor.hasNext()) {
-                Document doc = cursor.next();
-                if(doc.get("rating") == null)
-                    continue;
-                list.add(doc);
-            }
-        } finally {
-            cursor.close();
+             userColl.deleteOne(query);
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
         }
-        return list;
-
     }
 
 }

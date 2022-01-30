@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.InsertionController">
+<AnchorPane prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.InsertionController">
    <children>
       <Label fx:id="insertionTitle" layoutX="273.0" layoutY="34.0" prefHeight="38.0" prefWidth="107.0" text="Insertion" textFill="WHITE">
          <font>

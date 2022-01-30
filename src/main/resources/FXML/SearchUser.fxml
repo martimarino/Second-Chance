@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" style="-fx-background-color: rgb(70,130,180)" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.SearchUserController">
+<AnchorPane fx:id="anchorRoot" prefHeight="820.0" prefWidth="680.0" style="-fx-background-color: rgb(70,130,180)" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.SearchUserController">
     <children>
                                             <!-- Search users -->
         <Text fill="WHITE" layoutX="297.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Users">
