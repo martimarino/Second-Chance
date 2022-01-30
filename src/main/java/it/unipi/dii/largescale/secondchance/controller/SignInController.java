@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,8 +7,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import main.java.it.unipi.dii.largescale.secondchance.connection.*;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
+import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+import main.java.it.unipi.dii.largescale.secondchance.utils.CryptWithMD5;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 import java.io.IOException;
 

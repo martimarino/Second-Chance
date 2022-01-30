@@ -9,7 +9,7 @@
 <?import javafx.scene.image.Image?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.InsertionAdminSearchController"
+            fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.InsertionAdminSearchController"
             prefHeight="800.0" prefWidth="700.0"
             style="-fx-background-color: #2582bf;">
     <!-- page title -->

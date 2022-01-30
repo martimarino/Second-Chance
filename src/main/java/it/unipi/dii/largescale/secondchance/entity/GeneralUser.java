@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.entity;
+package main.java.it.unipi.dii.largescale.secondchance.entity;
 
 public interface GeneralUser {
 

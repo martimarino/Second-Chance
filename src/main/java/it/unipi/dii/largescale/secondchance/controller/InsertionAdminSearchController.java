@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -6,8 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.Insertion;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.util.ArrayList;
 

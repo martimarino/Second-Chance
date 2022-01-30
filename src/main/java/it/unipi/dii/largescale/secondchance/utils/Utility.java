@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.utils;
+package main.java.it.unipi.dii.largescale.secondchance.utils;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
@@ -106,12 +106,6 @@ public class Utility {
             image.setImage(images);
 
         } catch (IOException e) { //case image not valid any more (link with 404 page)
-            //e.printStackTrace();
-            /*Image img = new Image("./img/empty.jpg");
-            image = new ImageView(img);
-            image.setFitHeight(dimension);
-            image.setFitWidth(dimension);*/
-            //image.setPreserveRatio(true);
             image = localImage("./img/empty.jpg", dimension);
         }
 

@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
@@ -6,8 +6,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.Insertion;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -22,11 +22,9 @@ public class InsertionListLikedController {
 
     public void initialize(String username) {
 
-        System.out.println("username: " + username);
         ArrayList<String> followed_ins = ConnectionNeo4jDB.connNeo.retrieveFollowedInsertionByUser(username);
-        System.out.println("followed_ins: " + followed_ins);
         insertions = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(followed_ins);
-        System.out.println("Insertions: " + insertions.get(0));
+        //System.out.println("Insertions: " + insertions.get(0));
 
         box = new VBox(20);
         index = 0;

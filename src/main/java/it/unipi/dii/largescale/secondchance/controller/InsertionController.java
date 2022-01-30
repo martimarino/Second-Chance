@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,11 +8,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.User;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Session;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.io.FileNotFoundException;
 

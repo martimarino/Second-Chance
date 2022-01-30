@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.StatsController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.StatsController">
    <children>
       <Label layoutX="282.0" layoutY="-1.0" prefHeight="29.0" prefWidth="204.0" text="         Stats Section" textAlignment="CENTER">
          <font>
@@ -67,8 +67,8 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="rBSellers" layoutX="27.0" layoutY="113.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="181.0" text="Most Active Users" toggleGroup="$TopK" />
-                  <RadioButton fx:id="rBUsers" layoutX="27.0" layoutY="140.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="197.0" text="Most Active Sellers" toggleGroup="$TopK" />
+                  <RadioButton fx:id="rBUsers" layoutX="27.0" layoutY="113.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="181.0" text="Most Active Users" toggleGroup="$TopK" />
+                  <RadioButton fx:id="rBSellers" layoutX="27.0" layoutY="140.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="197.0" text="Most Active Sellers" toggleGroup="$TopK" />
                   <Label layoutX="22.0" layoutY="67.0" text="Select the query do you want to perform:">
                      <font>
                         <Font size="15.0" />

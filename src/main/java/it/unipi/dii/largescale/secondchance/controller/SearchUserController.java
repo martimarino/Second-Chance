@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -14,9 +14,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.User;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Session;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
 import java.io.FileInputStream;
@@ -317,7 +317,7 @@ public class SearchUserController extends MainController{
     public void addSuggestedUsers() throws IOException {
 
         VBox vb = new VBox(10);
-        System.out.println("IMAGE OF " +  suggList.get(indexSugg).getString("username") + " IS" + suggList.get(indexSugg).getString("img_profile") );
+
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
 
             Image image = new Image(imageStream);

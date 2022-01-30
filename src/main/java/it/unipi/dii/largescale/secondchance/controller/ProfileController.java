@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,18 +7,18 @@ import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.java.it.unipi.dii.largescale.secondchance.connection.*;
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.*;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
+import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.*;
 import javafx.stage.StageStyle;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
@@ -171,10 +171,72 @@ public class ProfileController extends MainController {
 
         updateUserBalance();
         following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
-        System.out.println("FOLLOWING: " + following);
         follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
-        System.out.println("FOLLOWERS: " + follower);
         listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
+        if (listReviews.size() < 3) {
+            System.out.println("Reviews nulle, disattivo i bottoni");
+            nextReviews.setDisable(true);
+            nextReviews.setVisible(false);
+        }
+        showReviews();
+    }
+
+    public void setProfile(String us){
+
+        prevReviews.setDisable(true);
+        prevReviews.setVisible(false);
+
+        reviewsBox = new HBox();
+        reviewsBox.setSpacing(100);
+        review.setCenter(reviewsBox);
+
+        scrollPage = 0;
+        scrollPage2 = 0;
+
+        userInfo.getChildren().clear();
+
+        String rate = (Double.isNaN(user.getRating()))? "No reviews" : Double.toString(user.getRating());
+
+        Label username = new Label(user.getUsername());
+        Label name = new Label(user.getName());
+        Label email = new Label(user.getEmail());
+        Label country = new Label(user.getCountry());
+        Label city = new Label(user.getCity());
+        Label address = new Label(user.getAddress());
+        Label rating = new Label(rate);
+        Label usernameText = new Label("Username:");
+        Label nameText = new Label("Name:");
+        Label emailText = new Label("Email:");
+        Label countryText = new Label("Country:");
+        Label cityText = new Label("City:");
+        Label addressText = new Label("Address:");
+        Label ratingText = new Label("Rating:");
+
+        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
+        userInfo.add(usernameText, 0, 0);
+        userInfo.add(nameText, 0, 1);
+        userInfo.add(emailText, 0, 2);
+        userInfo.add(countryText, 0, 3);
+        userInfo.add(cityText, 0, 4);
+        userInfo.add(addressText, 0, 5);
+        userInfo.add(ratingText, 0, 6);
+
+        userInfo.add(username, 1,0);
+        userInfo.add(name, 1, 1);
+        userInfo.add(email, 1, 2);
+        userInfo.add(country, 1, 3);
+        userInfo.add(city, 1, 4);
+        userInfo.add(address, 1, 5);
+        userInfo.add(rating, 1, 6);
+
+        updateUserBalance();
+
+        following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(us);
+        follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(us);
+        System.out.println("Abdelhakam: " + user.getUsername());
+        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
+
         if (listReviews.size() < 3) {
             System.out.println("Reviews nulle, disattivo i bottoni");
             nextReviews.setDisable(true);

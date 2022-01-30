@@ -1,11 +1,12 @@
-package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
+package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.connection.entity.*;
-import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
