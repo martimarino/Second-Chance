@@ -462,7 +462,7 @@ public class ConnectionMongoDB{
         MongoCollection<Document> myColl;
 
         if (choice)
-            myColl = userColl;
+            myColl = insertionColl;
         else
             myColl = orderColl;
 
@@ -869,4 +869,28 @@ public class ConnectionMongoDB{
         }
 
     }
+
+    public ArrayList<Document> findTopRatedUsersByCountry(String country) {
+
+        ArrayList<Document> list = new ArrayList<>();
+
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("country", country);
+
+        MongoCursor<Document> cursor = userColl.find(whereQuery).iterator();
+
+        try {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                if(doc.get("rating") == null)
+                    continue;
+                list.add(doc);
+            }
+        } finally {
+            cursor.close();
+        }
+        return list;
+
+    }
+
 }

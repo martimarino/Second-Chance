@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: rgb(70,130,180) rgb(70,130,180);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.FollowersController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: rgb(70,130,180) rgb(70,130,180);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.connection.controller.FollowersController">
     <children>
         <Text layoutX="259.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Followers Page" />
         <BorderPane fx:id="bp" layoutX="31.0" layoutY="52.0" prefHeight="297.0" prefWidth="538.0" style="-fx-background-color: rgb(70,130,180) rgb(70,130,180);">
