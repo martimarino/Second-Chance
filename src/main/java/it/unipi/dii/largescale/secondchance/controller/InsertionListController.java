@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
@@ -7,8 +7,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -99,8 +100,21 @@ public class InsertionListController {
 
         delete.setOnMouseClicked(event -> {
             if(Utility.confirmDeletion()) {
-                ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
-                ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id);
+                Insertion i = ConnectionMongoDB.connMongo.findInsertion(id);
+
+                if(ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
+                {
+                    Utility.printTerminal("Error deleting insertion MongoDB");
+                    Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
+                    return;
+                }
+                if(ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
+                {
+                    Utility.printTerminal("Error deleting insertion Neo4j");
+                    Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
+                    ConnectionMongoDB.connMongo.addInsertion(i);
+                    return;
+                }
                 initialize(Session.getLogUser().getUsername());
             }
         });

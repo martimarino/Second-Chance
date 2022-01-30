@@ -1,12 +1,11 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.*;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,7 +59,7 @@ public class NewInsertionController {
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(date);
 
         Insertion i = new Insertion(id, categ.getValue(), desc.getText(), gender, p, 0, 0, status.getValue(), color.getText(), size.getValue(),
-                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLogUser().getUsername(), id);
+                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLogUser().getUsername());
         Utility.printTerminal(i.toString());
 
         //MongoDB failure
@@ -69,8 +68,15 @@ public class NewInsertionController {
             return;
         }
         //Neo4j failure
-        if((!ConnectionNeo4jDB.connNeo.addInsertion(i) || (!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId())))) {
+        if(!ConnectionNeo4jDB.connNeo.addInsertion(i)) {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
+            ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
+            return;
+        }
+        if((!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId()))){
+            Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
+            ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
+            ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(i.getId());
             return;
         }
 

@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -12,7 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
 import org.bson.Document;
 
 import java.io.FileInputStream;
@@ -168,7 +168,7 @@ public class SearchInsertionController extends MainController{
         seller.setOnMouseClicked(event->{
                     try {
                         showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
-                        updateInsertionview(insertionFilter.get(index).getString("uniq_id"));
+                        ConnectionMongoDB.connMongo.updateNumView((insertionFilter.get(index).getString("uniq_id")));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -178,7 +178,7 @@ public class SearchInsertionController extends MainController{
         image.setOnMouseClicked(event->{
                     try {
                         showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
-                        updateInsertionview(insertionFilter.get(index).getString("uniq_id"));
+                        ConnectionMongoDB.connMongo.updateNumView(insertionFilter.get(index).getString("uniq_id"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -197,13 +197,6 @@ public class SearchInsertionController extends MainController{
                         "    -fx-vgap: 10;");
         index++;
     }
-
-    private void updateInsertionview(String uniq_id) {
-
-        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
-
-    }
-
 
     public void PrevFilteredInsertion() {
 

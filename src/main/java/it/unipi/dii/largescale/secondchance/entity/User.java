@@ -1,7 +1,7 @@
-package main.java.it.unipi.dii.largescale.secondchance.entity;
+package main.java.it.unipi.dii.largescale.secondchance.connection.entity;
 
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
 import org.bson.Document;
 
 public class User implements GeneralUser {
@@ -34,7 +34,6 @@ public class User implements GeneralUser {
         else
             this.rating = rating;
         this.balance = balance;
-
     }
 
     public User()
@@ -47,6 +46,7 @@ public class User implements GeneralUser {
         this.city = null;
         this.address = null;
         this.email = null;
+
     }
      public User(String username)
     {
@@ -71,7 +71,7 @@ public class User implements GeneralUser {
 
         User us = new User(user.getString("email"), user.getString("username"), null,
                 user.getString("name"), user.getString("country"), user.getString("city"), user.getString("address"),
-                user.getString("suspended"), user.getDouble("rating"), user.getDouble("balance"), user.getString("image"));
+                user.getString("suspended"), user.getDouble("rating"), user.getDouble("balance"), user.getString("img_profile"));
 
         return us;
 

@@ -1,15 +1,16 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.*;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
 import org.bson.Document;
 
 import java.io.IOException;
@@ -74,7 +75,7 @@ public class FollowersController {
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage(listFollowers.get(scrollPage).getString("img_profile"), 150);
+        ImageView image = Utility.getGoodImage(listFollowers.get(scrollPage).getString("image_url"), 150);
         Label username = new Label("Username: " + listFollowers.get(scrollPage).getString("username"));
         Label city = new Label("City: " + listFollowers.get(scrollPage).getString("city"));
 

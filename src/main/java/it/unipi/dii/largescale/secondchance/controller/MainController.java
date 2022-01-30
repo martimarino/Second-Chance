@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;

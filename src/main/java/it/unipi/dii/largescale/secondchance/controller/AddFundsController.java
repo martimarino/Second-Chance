@@ -1,11 +1,11 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.entity.User;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Session;
 
 import java.util.Objects;
 

@@ -1,22 +1,19 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
 import org.bson.Document;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -208,7 +205,7 @@ public class StatsController {
 
     public void showTopKRatedUser(ConnectionMongoDB conn, int k) throws IOException {
 
-        ArrayList<Document> array;
+        ArrayList<Document> array = new ArrayList<Document>();
         String country = txtFieldCountry.getText();
 
         if(!Arrays.asList(countries).contains(country)) {
@@ -217,38 +214,32 @@ public class StatsController {
             return;
         }
 
-        array = conn.findTopRatedUsersByCountry(country);
+        array = conn.findTopKRatedUser(k, country);
 
+        StackPane secondaryLayout = new StackPane();
+
+        ListView<String> list = new ListView<String>();
         ObservableList items = FXCollections.observableArrayList();
-        int arrayRatings[] = new int[6];
 
+        for (int i = 0; i < k; i++) {
 
-        for (int i = 0; i < array.size()-1; i++) {
-
-            int rating = array.get(i).getDouble("rating").intValue();
-            arrayRatings[rating]++;
+            String str = array.get(i).getString("username") + ": " + array.get(i).getDouble("rating").toString();
+            items.add(str);
         }
 
-        ObservableList<PieChart.Data> pieChartData =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("Rating 5", arrayRatings[5]),
-                        new PieChart.Data("Rating 4", arrayRatings[4]),
-                        new PieChart.Data("Rating 3", arrayRatings[3]),
-                        new PieChart.Data("Rating 2", arrayRatings[2]),
-                        new PieChart.Data("Rating 1", arrayRatings[1]));
-
-        final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Top K Rated User in " + country);
+        list.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
-            Scene scene = new Scene(new Group());
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
+
             // New window (Stage)
-            ((Group) scene.getRoot()).getChildren().add(chart);
             Stage newWindow = new Stage();
             newWindow.getIcons().add(image);
             newWindow.setTitle("Top " + k);
-            newWindow.setScene(scene);
+            secondaryLayout.getChildren().add(list);
+            newWindow.setScene(secondScene);
+
             newWindow.show();
         }
     }

@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -6,10 +6,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.entity.Review;
-import main.java.it.unipi.dii.largescale.secondchance.entity.User;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.Review;
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Session;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
 import org.bson.Document;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

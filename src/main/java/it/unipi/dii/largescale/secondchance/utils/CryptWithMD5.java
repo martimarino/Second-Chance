@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.utils;
+package main.java.it.unipi.dii.largescale.secondchance.connection.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

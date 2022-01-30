@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,10 +7,8 @@ import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.*;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.*;
 import org.bson.Document;
 
 import java.io.FileInputStream;

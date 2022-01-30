@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.entity;
+package main.java.it.unipi.dii.largescale.secondchance.connection.entity;
 
 import org.bson.Document;
 
@@ -19,15 +19,13 @@ public class Insertion {
     String image_url;
     String timestamp;
     String seller;
-    String uniq_id;
-
     public Insertion(){}
 
     public Insertion(String id, String category, String description,
                      String gender, double price, int interested,
                      int views, String status, String color, String size,
                      String brand, String country, String image_url,
-                     String timestamp, String seller, String uniq_id){
+                     String timestamp, String seller){
         this.id = id;
         this.category = category;
         this.description = description;
@@ -43,11 +41,17 @@ public class Insertion {
         this.image_url = image_url;
         this.timestamp = timestamp;
         this.seller = seller;
-        this.uniq_id = uniq_id;
-
     }
 
-    public void setUniq_Id(String uniq_id) {this.uniq_id = uniq_id;};
+    public static Insertion toInsertion(Document found) {
+
+        Insertion ins = new Insertion(found.getString("uniq_id"), found.getString("category"), found.getString("description"), found.getString("gender"),
+                found.getDouble("price"), found.getInteger("interested"), found.getInteger("views"), found.getString("status"), found.getString("color"),
+                found.getString("size"), found.getString("brand"), found.getString("country"), found.getString("image_url"), found.getString("timestamp"),
+                found.getString("seller"));
+
+        return ins;
+    }
 
     public void setId(String id) {
         this.id = id;
@@ -109,10 +113,6 @@ public class Insertion {
         this.seller = seller;
     }
 
-    public void setUniq_id(String uniq_id) {
-        this.uniq_id = uniq_id;
-    }
-
     public String getCountry() {
         return country;
     }
@@ -170,11 +170,6 @@ public class Insertion {
     public String getTimestamp() {
         return timestamp;
     }
-
-    public String getUniq_id() {
-        return uniq_id;
-    }
-
 
     public static Document toDocument(Insertion insertion) {
 

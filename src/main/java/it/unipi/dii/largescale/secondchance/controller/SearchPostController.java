@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.controller;
+package main.java.it.unipi.dii.largescale.secondchance.connection.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +11,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import main.java.it.unipi.dii.largescale.secondchance.connection.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.connection.utils.Utility;
 import org.bson.Document;
 
+import javax.rmi.CORBA.Util;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -59,7 +60,7 @@ public class SearchPostController {
 
             if (idPost != null && !idPost.trim().isEmpty()) {
                 // cerco solo un'inserzione perché è stato inserito solo un codice
-                Insertion ins = ConnectionMongoDB.connMongo.findInsertionDetails(found.getString("_id"));
+                Insertion ins = ConnectionMongoDB.connMongo.findInsertionDetails(found.getString("uniq_id"));
                 System.out.println("Post: " + ins.getDescription());
 
                 category.setText(ins.getCategory());
@@ -89,11 +90,21 @@ public class SearchPostController {
         }
     }
 
-
     public void deletePost(String id) {
 
-        ConnectionMongoDB.connMongo.deleteInsertionMongo(id);
-        ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id);
+        if(!ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
+        {
+            Utility.printTerminal("Error deleting insertion MongoDB");
+            Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
+            return;
+        }
+        if(!ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
+        {
+            Utility.printTerminal("Error deleting insertion Neo4j");
+            Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
+            ConnectionMongoDB.connMongo.addInsertion(Insertion.toInsertion(found));
+            return;
+        }
 
         System.out.println("Deleted post and relation in MongoDB and Neo4J!");
     }

@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance;
+package main.java.it.unipi.dii.largescale.secondchance.connection;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

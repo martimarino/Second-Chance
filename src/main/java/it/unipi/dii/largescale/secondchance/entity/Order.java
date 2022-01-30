@@ -1,4 +1,4 @@
-package main.java.it.unipi.dii.largescale.secondchance.entity;
+package main.java.it.unipi.dii.largescale.secondchance.connection.entity;
 
 public class Order {
 
