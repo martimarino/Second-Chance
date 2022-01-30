@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -19,6 +20,7 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.*;
 import javafx.stage.StageStyle;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 

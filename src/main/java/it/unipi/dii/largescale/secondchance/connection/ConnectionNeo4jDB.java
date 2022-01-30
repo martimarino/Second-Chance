@@ -29,7 +29,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         driver.close();
     }
 
-    public void addUser(final User u)
+    public boolean addUser(final User u)
     {
         this.open();
         try ( Session session = driver.session() )
@@ -40,9 +40,12 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "country", u.getCountry()));
                 return null;
             });
-            this.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        }finally{
+            this.close();
         }
     }
 
@@ -163,9 +166,10 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     }
 
-    public void likeInsertion(String username, String insertion_id) {
+    public boolean likeInsertion(String username, String insertion_id) {
 
         this.open();
+        System.out.println("INSERTION NEO : " + insertion_id);
 
         try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
@@ -175,15 +179,16 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "id", insertion_id));
                 return null;
             });
-
-            this.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        }finally{
+            this.close();
         }
-
     }
 
-    public void dislikeInsertion(String username, String insertion_id) {
+    public boolean dislikeInsertion(String username, String insertion_id) {
 
         this.open();
 
@@ -195,10 +200,12 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "id", insertion_id));
                 return null;
             });
-
-            this.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        }finally {
+            this.close();
         }
     }
 
@@ -221,7 +228,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         }
     }
 
-    public void deleteInsertion(String uniq_id) {
+    public boolean deleteInsertion(String uniq_id) {
         this.open();
 
         try (Session session = driver.session()) {
@@ -230,6 +237,11 @@ public class ConnectionNeo4jDB implements AutoCloseable
                         parameters("uniq_id", uniq_id));
                 return null;
             });
+            return true;
+        }catch(Exception e)
+        {
+            return false;
+        }finally{
             this.close();
         }
     }
@@ -389,7 +401,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         return followed_ins;
     }
 
-    public void deleteInsertionNeo4J(String id) {
+    public boolean deleteInsertionNeo4J(String id) {
         this.open();
 
         try (Session session = driver.session()) {
@@ -399,9 +411,12 @@ public class ConnectionNeo4jDB implements AutoCloseable
                                 "DETACH DELETE u", parameters("id", id));
                 return null;
             });
-            this.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
+        }finally{
+            this.close();
         }
     }
 }

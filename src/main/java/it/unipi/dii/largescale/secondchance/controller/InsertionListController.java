@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
