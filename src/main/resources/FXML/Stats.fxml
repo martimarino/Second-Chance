@@ -67,8 +67,8 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="rBSellers" layoutX="27.0" layoutY="113.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="181.0" text="Most Active Users" toggleGroup="$TopK" />
-                  <RadioButton fx:id="rBUsers" layoutX="27.0" layoutY="140.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="197.0" text="Most Active Sellers" toggleGroup="$TopK" />
+                  <RadioButton fx:id="rBUsers" layoutX="27.0" layoutY="113.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="181.0" text="Most Active Users" toggleGroup="$TopK" />
+                  <RadioButton fx:id="rBSellers" layoutX="27.0" layoutY="140.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="197.0" text="Most Active Sellers" toggleGroup="$TopK" />
                   <Label layoutX="22.0" layoutY="67.0" text="Select the query do you want to perform:">
                      <font>
                         <Font size="15.0" />
