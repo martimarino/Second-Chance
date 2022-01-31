@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <?import javafx.collections.FXCollections?>
+
 <AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #EBEBEB;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.SignUpController">
    <children>
       <Pane layoutX="352.0" layoutY="145.0" prefHeight="487.0" prefWidth="526.0" style="-fx-background-color: rgb(70,130,180);">
@@ -15,64 +16,70 @@
                   <Font size="13.0" />
                </font>
             </Label>
-            <TextField fx:id="us" layoutX="67.0" layoutY="125.0" style="-fx-background-radius: 5;" />
+            <PasswordField fx:id="us" layoutX="67.0" layoutY="125.0" style="-fx-background-radius: 5;" />
             <Label layoutX="353.0" layoutY="103.0" text="Password:">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
             <TextField fx:id="pw" layoutX="314.0" layoutY="125.0" style="-fx-background-radius: 5;" />
-            <Label layoutX="365.0" layoutY="169.0" text="Email:">
+            <Label layoutX="123.0" layoutY="236.0" text="Email:">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <TextField fx:id="em" layoutX="307.0" layoutY="192.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+            <TextField fx:id="em" layoutX="72.0" layoutY="259.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
             <Label layoutX="83.0" layoutY="168.0" text="Name and Surname:">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
             <TextField fx:id="nm" layoutX="67.0" layoutY="192.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
-            <Label layoutX="117.0" layoutY="241.0" text="Country:">
+            <Label layoutX="355.0" layoutY="176.0" text="Country:">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label layoutX="376.0" layoutY="241.0" text="City:">
+            <Label layoutX="368.0" layoutY="240.0" text="City:">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
             <TextField fx:id="ci" layoutX="314.0" layoutY="260.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
-            <Label layoutX="234.0" layoutY="299.0" text="Address:">
+            <Label layoutX="360.0" layoutY="308.0" text="Address:">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <TextField fx:id="ad" layoutX="200.0" layoutY="334.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+            <TextField fx:id="ad" layoutX="314.0" layoutY="334.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
             <Button layoutX="155.0" layoutY="405.0" onAction="#registration" prefHeight="25.0" prefWidth="240.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign up" />
             <Text fill="WHITE" layoutX="146.0" layoutY="44.0" text="Signup to join SecondChance!">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
-            <ComboBox fx:id="co" layoutX="69.0" layoutY="260.0" prefHeight="22.0" prefWidth="149.0" promptText="Select your country" >
-            <items>
-               <FXCollections fx:factory="observableArrayList">
-                  <String fx:value="Italy" />
-                  <String fx:value="Netherlands" />
-                  <String fx:value="Spain" />
-                  <String fx:value="Austria" />
-                  <String fx:value="Poland" />
-                  <String fx:value="Ireland" />
-                  <String fx:value="France" />
-                  <String fx:value="Canada" />
-                  <String fx:value="United Kingdom (Great Britain)" />
-                  <String fx:value="Brazil" />
-               </FXCollections>
-            </items>
+            <ComboBox fx:id="co" layoutX="307.0" layoutY="197.0" prefHeight="22.0" prefWidth="149.0" promptText="Select your country">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Italy" />
+                     <String fx:value="Netherlands" />
+                     <String fx:value="Spain" />
+                     <String fx:value="Austria" />
+                     <String fx:value="Poland" />
+                     <String fx:value="Ireland" />
+                     <String fx:value="France" />
+                     <String fx:value="Canada" />
+                     <String fx:value="United Kingdom (Great Britain)" />
+                     <String fx:value="Brazil" />
+                  </FXCollections>
+               </items>
             </ComboBox>
+            <TextField fx:id="image" layoutX="73.0" layoutY="333.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+            <Label layoutX="102.0" layoutY="308.0" text="Profile image:">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <Pane layoutX="35.0" layoutY="145.0" prefHeight="487.0" prefWidth="317.0" style="-fx-background-color: white;">
