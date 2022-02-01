@@ -44,6 +44,7 @@ public class SearchInsertionController extends MainController{
         firstRow = new HBox(20);
         secondRow = new HBox(20);
         box = new VBox(20);
+        index = 0;
         //set buttons
         prev.setDisable(true);
         next.setDisable(true);
@@ -101,7 +102,7 @@ public class SearchInsertionController extends MainController{
 
             ins.setText("");
         }
-
+        index = 0;
         showFilteredInsertions();
         insertionFind.setCenter(box);
 
@@ -115,9 +116,16 @@ public class SearchInsertionController extends MainController{
 
     private void showFilteredInsertions() {
 
+        System.out.println("INDEX: " + index);
         if (insertionFilter.size() - index > k) {
             next.setDisable(false);
             next.setVisible(true);
+        }
+
+        if(index == 0)
+        {
+            prev.setDisable(true);
+            prev.setVisible(false);
         }
 
         firstRow.getChildren().clear();
