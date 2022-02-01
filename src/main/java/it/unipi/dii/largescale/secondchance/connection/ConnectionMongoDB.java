@@ -41,13 +41,18 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        /*
+
         // LOCAL DATABASE WITHOUT REPLICAS
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
         db = mongoClient.getDatabase("local");
-        */
 
+        userColl = db.getCollection("user");
+        orderColl = db.getCollection("order");
+        insertionColl = db.getCollection("insertion");
+        adminColl = db.getCollection("admin");
+
+/*
         mongoClient = MongoClients.create(
                 "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
                         "?retryWrites=true&w=majority&wtimeout=10000");
@@ -84,7 +89,7 @@ public class ConnectionMongoDB{
 
         // 2 - Find the first document
         userColl.find().limit(1).forEach(printDocuments());
-
+*/
     }
 
     public void closeConnection() {
@@ -346,7 +351,7 @@ public class ConnectionMongoDB{
 
         ClientSession clientSession = mongoClient.startSession();
 
-        SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        SimpleDateFormat date = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
         String timestamp = date.format(new Date());
 
         TransactionBody<String> txnFunc = () -> {
@@ -713,16 +718,31 @@ public class ConnectionMongoDB{
 
     public ArrayList<Document> findAllOrders(Boolean choice, String username) {
 
-        if(choice)
-            cursor = orderColl.find(eq("buyer", username)).iterator();
+        AggregateIterable<Document> aggr;
+
+        if(choice) {
+             aggr = orderColl.aggregate(
+                    Arrays.asList(
+                            Aggregates.match(Filters.eq("buyer", username)),
+                            Aggregates.sort(Sorts.descending("timestamp"))
+                    )
+            );
+        } //cursor = orderColl.find(eq("buyer", username)).iterator();
         else
-            cursor = orderColl.find(eq("insertion.seller", username)).iterator();
+        {
+            aggr = orderColl.aggregate(
+                    Arrays.asList(
+                            Aggregates.match(Filters.eq("insertion.seller", username)),
+                            Aggregates.sort(Sorts.descending("timestamp"))
+                    )
+            );
+        }//cursor = orderColl.find(eq("insertion.seller", username)).iterator();
 
         ArrayList<Document> find_orders = new ArrayList<>();
 
-        while (cursor.hasNext())
+        for (Document document : aggr)
         {
-            find_orders.add(cursor.next());
+            find_orders.add(document);
         }
         return find_orders;
     }

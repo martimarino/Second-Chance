@@ -68,7 +68,6 @@
                     <String fx:value="beauty" />
                     <String fx:value="bags" />
                     <String fx:value="shoes" />
-                    <String fx:value="accessories" />
                 </FXCollections>
             </items>
         </ComboBox>

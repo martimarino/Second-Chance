@@ -353,7 +353,6 @@ public class SearchUserController extends MainController{
                     }
             );
         }
-
         suggBox.setStyle(
                 "-fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
