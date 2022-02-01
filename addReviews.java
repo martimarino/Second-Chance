@@ -49,17 +49,15 @@ public class Main {
                             // change to do
             // {"rating" = avg}
             BasicDBObject newDocument = new BasicDBObject();
-            newDocument.put("rating", avg); // (2)
+            newDocument.put("rating", avg);
             // {$set: {"rating": avg}}
             BasicDBObject updateObject = new BasicDBObject();
-            updateObject.put("$set", newDocument); // (3)
+            updateObject.put("$set", newDocument);
 
-            // condition (where field "reviews" exists)
-            //DBObject query = new BasicDBObject("reviews", new BasicDBObject("$exists", true));
             BasicDBObject query = new BasicDBObject();
             query.put("username", d.getString("username"));
 
-            user.updateOne(query, updateObject); // (4)
+            user.updateOne(query, updateObject);
 
             i++;
 

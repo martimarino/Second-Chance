@@ -75,6 +75,7 @@ public class SearchInsertionController extends MainController{
 
         if (ins.getText().equals("")) {  //filters case
 
+            //if at least one filter is applied
             if (!(size.getValue().equals("size") && price.getValue().equals("price")
                     && gender.getValue().equals("gender") && status.getValue().equals("status")
                     && category.getValue().equals("category") && color.getValue().equals("color"))) {
