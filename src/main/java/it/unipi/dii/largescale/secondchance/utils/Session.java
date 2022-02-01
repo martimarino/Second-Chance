@@ -16,11 +16,14 @@ public class Session{
         return session;
     }
 
-    public void setLogUser(Document user){
+    public void setLogUser(Document user, Boolean isAdmin){
 
         if(session == null)
             throw new RuntimeException("Session not already active");
         else {
+            if(isAdmin)
+                session.logUser = User.fromDocumentAdmin(user);
+            else
                 session.logUser = User.fromDocument(user);
         }
     }
