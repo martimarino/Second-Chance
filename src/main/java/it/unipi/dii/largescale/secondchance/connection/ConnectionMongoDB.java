@@ -244,14 +244,16 @@ public class ConnectionMongoDB{
                 cursor  = insertionColl.find(eq("size", size)).iterator();
                 break;
             case 1:
-                String[] split = price.split("-");
-                Utility.printTerminal("Selected range: " + split[0]);
-                if(split.length == 1) {
-                    cursor  = insertionColl.find(gte("price", Double.parseDouble(split[0]))).iterator();
+                String[] range = price.split("-");
+                Utility.printTerminal("Selected range: " + range[0]);
+                if(range.length == 1) {
+                    Utility.printTerminal("Selected range: " + range[0]);
+                    cursor  = insertionColl.find(gte("price", Double.parseDouble(range[0]))).iterator();
                 } else {
-                    Utility.printTerminal("Selected range: " + split[1]);
-                    cursor  = insertionColl.find(and(gte("price", Double.parseDouble(split[0])),
-                            lte("price", Double.parseDouble(split[1])))).iterator();
+                    Utility.printTerminal("Selected range: " + range[0]);
+                    Utility.printTerminal("Selected range: " + range[1]);
+                    cursor  = insertionColl.find(and(gte("price", Double.parseDouble(range[0])),
+                            lte("price", Double.parseDouble(range[1])))).iterator();
                 }
                 break;
             case 2:
@@ -274,8 +276,24 @@ public class ConnectionMongoDB{
 
         return insertions;
     }
+/*
+    private ArrayList<Document> partialSearch(int index, ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
 
-    /* ********* INSERTION SECTION ********* */
+
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("timestamp", timestamp);
+
+        BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("reviewed", true));
+        orderColl.findOneAndUpdate(query, set);
+
+
+        return insertions;
+    }
+
+*/
+
+        /* ********* INSERTION SECTION ********* */
 
     public ArrayList<Document> findInsertionByFilters(String size, String price, String gender, String status, String category, String color) {
 
@@ -290,14 +308,22 @@ public class ConnectionMongoDB{
         categoryFilterOn = (category.equals("category")) ? 0 : 1;
         colorFilterOn = (color.equals("color")) ? 0 : 1;
 
+        //HashMap<String, String>
         int[] filter = {sizeFilterOn, priceFilterOn, genderFilterOn,
                 statusFilterOn,categoryFilterOn, colorFilterOn};
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < filter.length; i++)
             if (filter[i] == 1)
                 partialSearch(i, insertions, size, price, gender, status, category, color);
-        }
+
+
         return insertions;
+    }
+
+    private void checkConditions(ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
+
+
+
     }
 
     public ArrayList<Document> findInsertionBySeller(String seller) {
