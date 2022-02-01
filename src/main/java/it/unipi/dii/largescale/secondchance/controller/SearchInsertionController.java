@@ -142,8 +142,8 @@ public class SearchInsertionController extends MainController{
     private void addFilteredInsertions(int i) {
 
         VBox vb = new VBox();
-
         ImageView image;
+        String uniq_id = insertionFilter.get(index).getString("uniq_id");
 
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
 
@@ -175,8 +175,8 @@ public class SearchInsertionController extends MainController{
 
         seller.setOnMouseClicked(event->{
                     try {
-                        showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
-                        ConnectionMongoDB.connMongo.updateNumView((insertionFilter.get(index).getString("uniq_id")));
+                        showInsertionPage(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -185,8 +185,8 @@ public class SearchInsertionController extends MainController{
 
         image.setOnMouseClicked(event->{
                     try {
-                        showInsertionPage(insertionFilter.get(index).getString("uniq_id"));
-                        ConnectionMongoDB.connMongo.updateNumView(insertionFilter.get(index).getString("uniq_id"));
+                        showInsertionPage(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
