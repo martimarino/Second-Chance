@@ -52,15 +52,17 @@ public class SignInController {
         String encrypted = CryptWithMD5.cryptWithMD5(password);
         Utility.printTerminal("PASSWORD: " + password + "\nENCRYPTED: " + encrypted);
         Session session;
+        Boolean isAdmin = false;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
             Utility.printTerminal("Value: " + us.getText() + "\nValue: " + pw.getText());
 
             if (us.getText().equals("admin")) {
-                session = Session.getInstance();
+                isAdmin = true;
                 Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
                 System.out.println("USER: " + user);
-                //session.setLogUser(user, true);
+                session = Session.getInstance();
+                session.setLogUser(user, isAdmin);
                 if(ConnectionMongoDB.connMongo.logInUser(username, encrypted))
                     ShowAdminPanel();
             }else {
@@ -69,7 +71,7 @@ public class SignInController {
                 if (logged) {
                     session = Session.getInstance();
                     Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
-                    session.setLogUser(user);
+                    session.setLogUser(user, isAdmin);
                     ShowHome();
                 }
             }

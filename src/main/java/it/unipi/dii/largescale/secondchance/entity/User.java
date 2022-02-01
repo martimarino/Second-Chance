@@ -73,9 +73,14 @@ public class User implements GeneralUser {
         User us = new User(user.getString("email"), user.getString("username"), null,
                 user.getString("name"), user.getString("country"), user.getString("city"), user.getString("address"),
                 user.getString("suspended"), user.getDouble("rating"), user.getDouble("balance"), user.getString("img_profile"));
-
         return us;
 
+    }
+
+    public static User fromDocumentAdmin(Document user){
+
+        User us = new User(null, user.getString("username"), null, null, null, null, null, null, Double.NaN, 0.0, null);
+        return us;
     }
 
     public void setEmail(String email) {
