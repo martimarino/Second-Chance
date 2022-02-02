@@ -1,5 +1,6 @@
 package main.java.it.unipi.dii.largescale.secondchance.controller;
 
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -135,23 +136,7 @@ public class ProfileController extends MainController {
         Label addressText = new Label("Address:");
         Label ratingText = new Label("Rating:");
 
-        if(user.getImage().equals("image.png"))
-        {
-            System.out.println("HERE!!");
-            try {
-                FileInputStream imageStream = new FileInputStream("target/classes/img/user.png");
-                Image img = new Image(imageStream);
-                imageProfile = new ImageView();
-                imageProfile.setImage(img);
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        else
-            imageProfile = Utility.getGoodImage(user.getImage(), 100);
-
-        profileImage.getChildren().add(imageProfile);
+        setProfileImage();
 
         System.out.println("USER:" + username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address + " "+ user.getImage());
 
@@ -181,6 +166,52 @@ public class ProfileController extends MainController {
             nextReviews.setVisible(false);
         }
         showReviews();
+    }
+
+    public void setProfileImage() {
+
+        Label label = new Label("Change image!");
+        label.setVisible(false);
+
+        if (user.getImage().equals("image.png")) {
+
+            System.out.println("HERE!!");
+
+            try {
+                FileInputStream imageStream = new FileInputStream("target/classes/img/user.png");
+                Image img = new Image(imageStream);
+                imageProfile = new ImageView();
+                imageProfile.setImage(img);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            imageProfile = Utility.getGoodImage(user.getImage(), 100);
+        }
+
+        label.setTranslateX(10);
+        label.setTranslateY(45);
+        label.setTextFill(Color.RED);
+        profileImage.getChildren().add(imageProfile);
+        profileImage.getChildren().add(label);
+
+        profileImage.setOnMouseClicked(event->{
+                    try {
+                        showAddImgProfile();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+
+        profileImage.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+            if (newValue) {
+                label.setVisible(true);
+            } else {
+                label.setVisible(false);
+            }
+        });
     }
 
     public void setProfile(String us){
@@ -453,5 +484,25 @@ public class ProfileController extends MainController {
         }
 
         showReviews();
+    }
+
+    public void showAddImgProfile() throws FileNotFoundException {
+
+        try (FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png")) {
+
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SearchInsertionController.class.getResource("/FXML/UpdateProfileImage.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setTitle("Update Profile Image");
+            stage.setScene(new Scene(loader.load()));
+            AddProfileImageController controller = loader.getController();
+            controller.initialize();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

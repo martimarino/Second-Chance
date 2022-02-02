@@ -925,4 +925,23 @@ public class ConnectionMongoDB{
         }
     }
 
+    public void submitNewProfileImg(String url, String user) {
+
+        Document queryUser = new Document().append("username",  user);
+
+        Bson updatesUser = Updates.combine(
+                Updates.set("img_profile", url)
+        );
+
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        try {
+            UpdateResult resultUser = userColl.updateOne(queryUser, updatesUser, options);
+            System.out.println("Modified document count: " + resultUser.getModifiedCount());
+            System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+            return;
+        }
+    }
 }
