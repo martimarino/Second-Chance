@@ -63,22 +63,22 @@ public class SignInController {
                 System.out.println("USER: " + user);
                 session = Session.getInstance();
                 session.setLogUser(user, isAdmin);
-                if(ConnectionMongoDB.connMongo.logInUser(username, encrypted))
+                if(ConnectionMongoDB.connMongo.userAlreadyPresent(username, encrypted))
                     ShowAdminPanel();
             }else {
-                boolean logged = ConnectionMongoDB.connMongo.logInUser(username, encrypted);
-                //boolean logged = conn.logInUser(username, password);
-                if (logged) {
-                    session = Session.getInstance();
-                    Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
-                    session.setLogUser(user, isAdmin);
-                    ShowHome();
+                boolean logged = ConnectionMongoDB.connMongo.userAlreadyPresent(username, encrypted);
+                if (!logged) {
+                    Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
+                    //clear TextField
+                    us.setText("");
+                    pw.setText("");
+                    return;
                 }
+                session = Session.getInstance();
+                Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
+                session.setLogUser(user, isAdmin);
+                ShowHome();
             }
-            //clear TextField
-            us.setText("");
-            pw.setText("");
-
         }else {
             Utility.infoBox("Please, insert username and password.", "Error", "Empty fields!");
         }

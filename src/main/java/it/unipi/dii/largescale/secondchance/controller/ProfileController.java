@@ -289,7 +289,6 @@ public class ProfileController extends MainController {
 
     public void showUserFollowers() {
 
-
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
 
             Image image = new Image(imageStream);

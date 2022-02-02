@@ -2,22 +2,20 @@ package main.java.it.unipi.dii.largescale.secondchance.connection;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Review;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
-import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -101,17 +99,6 @@ public class ConnectionMongoDB{
 
     /* ********* USER SECTION ********* */
 
-    public boolean logInUser(String username, String password) {
-
-        if(!userAlreadyPresent(username, password)) {
-            Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
-            return false;
-        } else{
-            Utility.printTerminal("User found in db");
-        }
-        return true;
-    }
-
     public boolean registerUser(User u) {
 
         if (userAlreadyPresent(u.getUsername(), u.getPassword())) {
@@ -151,7 +138,7 @@ public class ConnectionMongoDB{
 
     }
 
-    private boolean userAlreadyPresent(String username, String password) {
+    public boolean userAlreadyPresent(String username, String password) {
 
         cursor = userColl.find(and(eq("username", username),
                 eq("password", password))).iterator();
@@ -181,8 +168,8 @@ public class ConnectionMongoDB{
 
         ArrayList<Document> insertions = new ArrayList<>();
 
-        for (int i = 0; i < usList.size(); i++) {
-            Document d = insertionColl.find(eq("uniq_id", usList.get(i))).first();
+        for (String s : usList) {
+            Document d = insertionColl.find(eq("uniq_id", s)).first();
             insertions.add(d);
         }
 
@@ -395,7 +382,6 @@ public class ConnectionMongoDB{
 
             //update buyer balance
             Document ret = db.getCollection("user").findOneAndUpdate(filter, update);
-
 
             //update seller balance
             Bson filter2 = eq("username", insertion.getSeller());
@@ -634,7 +620,7 @@ public class ConnectionMongoDB{
 
     public ArrayList<Insertion> findMultipleInsertionDetails(String seller) {
 
-        ArrayList<Insertion> array = new ArrayList<Insertion>();
+        ArrayList<Insertion> array = new ArrayList<>();
 
         AggregateIterable<Document> aggr  = insertionColl.aggregate(
                 Arrays.asList(
@@ -659,8 +645,8 @@ public class ConnectionMongoDB{
         Insertion ins;
         ArrayList<Insertion> insertions = new ArrayList<Insertion>();
 
-        for(int i=0; i < followed_ins.size(); i++) {
-            Document insertion = insertionColl.find(eq("uniq_id", followed_ins.get(i).toString())).first();
+        for (String followed_in : followed_ins) {
+            Document insertion = insertionColl.find(eq("uniq_id", followed_in)).first();
 
             ins = new Insertion();
             ins.setCategory(insertion.getString("category"));
@@ -678,11 +664,7 @@ public class ConnectionMongoDB{
     public boolean findByInsertionId (String id) {
 
         cursor = insertionColl.find(eq("uniq_id", id)).iterator();
-
-        if (cursor.hasNext())
-            return true;
-
-        return false;
+        return cursor.hasNext();
     }
 
     public boolean addInsertion(Insertion i) {
@@ -745,10 +727,10 @@ public class ConnectionMongoDB{
     public void updateSellerRating(String seller) {
 
         Document d = userColl.find(eq("username", seller)).first();
-        List<Document> list = null;
+        List<Document> list;
         list = d.getList("reviews", Document.class);
 
-        Double avg = 0.0;
+        Double avg;
         int sum = 0;
 
         for (Document document : list) {
@@ -842,22 +824,16 @@ public class ConnectionMongoDB{
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("username", username);
 
-        Document user = userColl.find(eq("username", username)).first();
-
-        MongoCursor<Document> cursor = userColl.find(whereQuery).iterator();
-
-        try {
+        try (MongoCursor<Document> cursor = userColl.find(whereQuery).iterator()) {
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
-                if(doc.get("reviews") == null)
+                if (doc.get("reviews") == null)
                     return new ArrayList<>();
-                list = (List<Document>)doc.get("reviews");
+                list = (List<Document>) doc.get("reviews");
 
                 Document d = list.get(0);
                 System.out.println(d.getString("reviewer")); // display specific field
             }
-        } finally {
-            cursor.close();
         }
         return list;
     }
@@ -868,7 +844,7 @@ public class ConnectionMongoDB{
 
         try {
             DeleteResult result = insertionColl.deleteOne(query);
-            return true;
+            return (result.getDeletedCount() == 1);
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
             return false;
@@ -895,17 +871,13 @@ public class ConnectionMongoDB{
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("country", country);
 
-        MongoCursor<Document> cursor = userColl.find(whereQuery).iterator();
-
-        try {
+        try (MongoCursor<Document> cursor = userColl.find(whereQuery).iterator()) {
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
-                if(doc.get("rating") == null)
+                if (doc.get("rating") == null)
                     continue;
                 list.add(doc);
             }
-        } finally {
-            cursor.close();
         }
         return list;
 
@@ -938,7 +910,6 @@ public class ConnectionMongoDB{
             System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
         } catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
-            return;
         }
     }
 }
