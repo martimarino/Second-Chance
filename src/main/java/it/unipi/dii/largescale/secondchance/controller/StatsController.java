@@ -170,7 +170,7 @@ public class StatsController {
         if (rBTopKInterestingIns.isSelected())
             showTopKInterestingInsertion(ConnectionMongoDB.connMongo, k);
 
-        if(rBTopKViewedIns.isSelected())
+        if (rBTopKViewedIns.isSelected())
             showTopKViewedInsertion(ConnectionMongoDB.connMongo, k);
 
     }
@@ -180,7 +180,7 @@ public class StatsController {
         ArrayList<Document> array = conn.findMostActiveUsersSellers(k, choice);
         StackPane secondaryLayout = new StackPane();
 
-        ListView<String> list = new ListView<String>();
+        ListView<String> list = new ListView<>();
         ObservableList items = FXCollections.observableArrayList();
 
         for (int i = 0; i < k; i++) {
@@ -218,10 +218,7 @@ public class StatsController {
         }
 
         array = conn.findTopRatedUsersByCountry(country);
-
-        ObservableList items = FXCollections.observableArrayList();
         int arrayRatings[] = new int[6];
-
 
         for (int i = 0; i < array.size()-1; i++) {
 

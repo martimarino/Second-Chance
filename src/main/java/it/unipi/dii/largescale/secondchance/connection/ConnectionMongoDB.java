@@ -41,7 +41,6 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-
         // LOCAL DATABASE WITHOUT REPLICAS
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
@@ -98,7 +97,7 @@ public class ConnectionMongoDB{
 
     /* ********* USER SECTION ********* */
 
-    public boolean logInUser(String username, String password) throws IOException {
+    public boolean logInUser(String username, String password) {
 
         if(!userAlreadyPresent(username, password)) {
             Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
@@ -177,8 +176,6 @@ public class ConnectionMongoDB{
     public ArrayList<Document> followedUserInsertions(ArrayList<String> usList) {
 
         ArrayList<Document> insertions = new ArrayList<>();
-
-        //System.out.println("insertion id: " + usList);
 
         for (int i = 0; i < usList.size(); i++) {
             Document d = insertionColl.find(eq("uniq_id", usList.get(i))).first();

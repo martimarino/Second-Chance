@@ -52,6 +52,7 @@ public class InsertionController {
         System.out.println("uniq_id controller: " + uniq_id);
         insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
         System.out.println("INSERTION insertionController: " + insertion);
+        
         try {
             fillInsertionInfo(insertion);
         }catch (FileNotFoundException e) {

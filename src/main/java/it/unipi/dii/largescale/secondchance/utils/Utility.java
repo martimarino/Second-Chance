@@ -154,7 +154,6 @@ public class Utility {
         return new_index;
     }
 
-
     public static void nextPage(int index, ArrayList<Document> list, Pane next, Pane prev) {
 
         System.out.println("INDEX: " + index + "list: " + list.size());

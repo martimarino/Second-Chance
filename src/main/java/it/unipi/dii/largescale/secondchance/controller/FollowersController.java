@@ -27,7 +27,6 @@ public class FollowersController {
 
     public void initialize(ArrayList<String> followersUsers){
 
-        //System.out.println("User 0: " + followingUsers.get(0));
 
         listFollowers = new ArrayList<Document>();
         scrollPage = 0;

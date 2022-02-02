@@ -17,8 +17,7 @@ public class SignUpController {
 
     public Text SignIn;
     @FXML private TextField us, pw, em, nm, ci, ad, image;
-    @FXML
-    private ComboBox<String> co;
+    @FXML private ComboBox<String> co;
 
     public void ShowSignIn() throws IOException {
 

@@ -301,7 +301,7 @@ public class ProfileController extends MainController {
             stage.setTitle("Your insertions");
             FollowersController controller = loader.getController();
             if (follower.size() == 0) {
-                Utility.infoBox("This profile has not followers.", "Information", "No following!");
+                Utility.infoBox("You have not followers.", "Information", "No followers!");
                 return;
             }
             controller.initialize(follower);
@@ -324,7 +324,7 @@ public class ProfileController extends MainController {
             stage.setTitle("Your insertions");
             FollowingController controller = loader.getController();
             if (following.size() == 0) {
-                Utility.infoBox("This profile has not following.", "Information", "No following!");
+                Utility.infoBox("You have not following.", "Information", "No following!");
                 return;
             }
             controller.initialize(following);
