@@ -1,29 +1,33 @@
 package main.java.it.unipi.dii.largescale.secondchance.connection;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoException;
 import com.mongodb.client.*;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Review;
+import main.java.it.unipi.dii.largescale.secondchance.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import org.bson.BsonDocument;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.function.Consumer;
+
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Updates.inc;
 import static com.mongodb.client.model.Updates.set;
-
-import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
-import main.java.it.unipi.dii.largescale.secondchance.entity.Review;
-import main.java.it.unipi.dii.largescale.secondchance.entity.User;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
-import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.function.Consumer;
 
 public class ConnectionMongoDB{
 
@@ -234,93 +238,43 @@ public class ConnectionMongoDB{
 
     }
 
-    private ArrayList<Document> partialSearch(int index, ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
-
-        switch (index) {
-            case 0:
-                cursor  = insertionColl.find(eq("size", size)).iterator();
-                break;
-            case 1:
-                String[] range = price.split("-");
-                Utility.printTerminal("Selected range: " + range[0]);
-                if(range.length == 1) {
-                    Utility.printTerminal("Selected range: " + range[0]);
-                    cursor  = insertionColl.find(gte("price", Double.parseDouble(range[0]))).iterator();
-                } else {
-                    Utility.printTerminal("Selected range: " + range[0]);
-                    Utility.printTerminal("Selected range: " + range[1]);
-                    cursor  = insertionColl.find(and(gte("price", Double.parseDouble(range[0])),
-                            lte("price", Double.parseDouble(range[1])))).iterator();
-                }
-                break;
-            case 2:
-                cursor  = insertionColl.find(eq("gender", gender)).iterator();
-                break;
-            case 3:
-                cursor  = insertionColl.find(eq("status", status)).iterator();
-                break;
-            case 4:
-                cursor  = insertionColl.find(eq("category", category)).iterator();
-                break;
-            case 5:
-                cursor  = insertionColl.find(eq("color", color)).iterator();
-                break;
-            default:
-                break;
-        }
-        while(cursor.hasNext())
-            insertions.add(cursor.next());
-
-        return insertions;
-    }
-/*
-    private ArrayList<Document> partialSearch(int index, ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
-
-
-
-        BasicDBObject query = new BasicDBObject();
-        query.put("timestamp", timestamp);
-
-        BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("reviewed", true));
-        orderColl.findOneAndUpdate(query, set);
-
-
-        return insertions;
-    }
-
-*/
-
         /* ********* INSERTION SECTION ********* */
 
     public ArrayList<Document> findInsertionByFilters(String size, String price, String gender, String status, String category, String color) {
 
         ArrayList<Document> insertions = new ArrayList<>();
+        List<Bson> filters = new ArrayList<>();
 
-        //the following variables are 1 if the relative filter is applied
-        int sizeFilterOn, priceFilterOn, genderFilterOn, statusFilterOn, categoryFilterOn, colorFilterOn;
-        sizeFilterOn = (size.equals("size")) ? 0 : 1;
-        priceFilterOn = (price.equals("price")) ? 0 : 1;
-        genderFilterOn = (gender.equals("gender")) ? 0 : 1;
-        statusFilterOn = (status.equals("status")) ? 0 : 1;
-        categoryFilterOn = (category.equals("category")) ? 0 : 1;
-        colorFilterOn = (color.equals("color")) ? 0 : 1;
+        if(!size.equals("size")) {
+            filters.add(Filters.eq("size", size));
+        }
+        if(!price.equals("price")) {
+            String[] range = price.split("-");
+            if(range.length == 1) {
+                filters.add(Filters.gte("price", Double.parseDouble(range[0])));
+            } else {
+                filters.add(Filters.gte("price", Double.parseDouble(range[0])));
+                filters.add(Filters.lte("price", Double.parseDouble(range[1])));
+            }
+        }
+        if(!gender.equals("gender")) {
+            filters.add(Filters.eq("gender", gender));
+        }
+        if(!status.equals("status")) {
+            filters.add(Filters.eq("status", status));
+        }
+        if(!category.equals("category")) {
+            filters.add(Filters.eq("category", category));
+        }
+        if(!color.equals("color")) {
+            filters.add(Filters.eq("color", color));
+        }
 
-        //HashMap<String, String>
-        int[] filter = {sizeFilterOn, priceFilterOn, genderFilterOn,
-                statusFilterOn,categoryFilterOn, colorFilterOn};
-
-        for (int i = 0; i < filter.length; i++)
-            if (filter[i] == 1)
-                partialSearch(i, insertions, size, price, gender, status, category, color);
-
+        cursor = insertionColl.find(Filters.and(filters)).iterator();
+        while(cursor.hasNext())
+            insertions.add(cursor.next());
 
         return insertions;
-    }
-
-    private void checkConditions(ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {
-
-
-
     }
 
     public ArrayList<Document> findInsertionBySeller(String seller) {

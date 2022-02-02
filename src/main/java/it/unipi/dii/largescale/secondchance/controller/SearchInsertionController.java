@@ -82,10 +82,8 @@ public class SearchInsertionController extends MainController{
 
                 //take combobox value and search
                 insertionFilter = ConnectionMongoDB.connMongo.findInsertionByFilters(size.getValue(), price.getValue(), gender.getValue(), status.getValue(), category.getValue(), color.getValue());
-                if (insertionFilter.isEmpty()) {
+                if (insertionFilter.isEmpty())
                     Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
-                    return;
-                }
             }
         } else {    //search case
             if(ins.getText().equals("admin"))
