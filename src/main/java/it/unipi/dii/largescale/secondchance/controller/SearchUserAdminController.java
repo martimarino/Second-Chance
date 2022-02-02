@@ -61,9 +61,6 @@ public class SearchUserAdminController {
         username = usernameField.getText();
         String name = nameField.getText();
 
-        System.out.println("username: " + username);
-        System.out.println("name: " + name);
-
         if(name != null && !name.trim().isEmpty()) {
 
             found = ConnectionMongoDB.connMongo.verifyUserInDB(name, false);
@@ -76,6 +73,7 @@ public class SearchUserAdminController {
             }
 
             username = found.getString("username");
+
         }else {
             found = ConnectionMongoDB.connMongo.verifyUserInDB(username, true);
         }
@@ -88,14 +86,11 @@ public class SearchUserAdminController {
         }else {
 
             User usr = ConnectionMongoDB.connMongo.findUserDetails(username);
-            //System.out.println("Suspended: " + usr.getSuspended());
 
             if (Objects.equals(usr.getSuspended(), "Y")) {
-                //System.out.println("Suspended!");
                 btnSuspendUsr.setDisable(true);
                 btnUnsuspendUsr.setDisable(false);
             }else{
-                //System.out.println("Unsuspended!");
                 btnSuspendUsr.setDisable(false);
                 btnUnsuspendUsr.setDisable(true);
             }
