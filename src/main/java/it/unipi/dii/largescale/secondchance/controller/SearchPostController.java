@@ -59,7 +59,7 @@ public class SearchPostController {
 
             if (idPost != null && !idPost.trim().isEmpty()) {
                 // cerco solo un'inserzione perché è stato inserito solo un codice
-                Insertion ins = ConnectionMongoDB.connMongo.findInsertionDetails(found.getString("uniq_id"));
+                Insertion ins = ConnectionMongoDB.connMongo.findInsertionDetails(found.get("_id").toString());
                 System.out.println("Post: " + ins.getDescription());
 
                 category.setText(ins.getCategory());
@@ -110,8 +110,8 @@ public class SearchPostController {
 
     public void deleteOnePost() {
 
-        ConnectionMongoDB.connMongo.deleteInsertionMongo(found.getString("uniq_id"));
-        ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(found.getString("uniq_id"));
+        ConnectionMongoDB.connMongo.deleteInsertionMongo(found.get("_id").toString());
+        ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(found.get("_id").toString());
 
         System.out.println("Deleted post and relation in MongoDB and Neo4J!");
     }

@@ -60,7 +60,7 @@ public class InsertionListController {
 
     private void addInsertions() {
 
-        String id = list.get(index).getString("uniq_id");
+        String id = list.get(index).get("_id").toString();
 
         HBox hb = new HBox();
         VBox det = new VBox();

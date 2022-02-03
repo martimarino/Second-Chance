@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.thesett:common:0.9.117">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thesett/common/0.9.117/common-0.9.117.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thesett/common/0.9.117/common-0.9.117-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/thesett/common/0.9.117/common-0.9.117-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

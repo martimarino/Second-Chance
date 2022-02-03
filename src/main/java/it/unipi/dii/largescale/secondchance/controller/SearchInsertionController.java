@@ -141,7 +141,7 @@ public class SearchInsertionController extends MainController{
 
         VBox vb = new VBox();
         ImageView image;
-        String uniq_id = insertionFilter.get(index).getString("uniq_id");
+        String uniq_id = insertionFilter.get(index).get("_id").toString();
 
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
 

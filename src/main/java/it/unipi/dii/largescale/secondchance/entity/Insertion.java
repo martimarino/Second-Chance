@@ -1,6 +1,7 @@
 package main.java.it.unipi.dii.largescale.secondchance.entity;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class Insertion {
 
@@ -45,7 +46,7 @@ public class Insertion {
 
     public static Insertion toInsertion(Document found) {
 
-        Insertion ins = new Insertion(found.getString("uniq_id"), found.getString("category"), found.getString("description"), found.getString("gender"),
+        Insertion ins = new Insertion(found.get("_id").toString(), found.getString("category"), found.getString("description"), found.getString("gender"),
                 found.getDouble("price"), found.getInteger("interested"), found.getInteger("views"), found.getString("status"), found.getString("color"),
                 found.getString("size"), found.getString("brand"), found.getString("country"), found.getString("image_url"), found.getString("timestamp"),
                 found.getString("seller"));
@@ -174,7 +175,7 @@ public class Insertion {
     public static Document toDocument(Insertion insertion) {
 
         Document ins = new Document()
-                .append("uniq_id", insertion.getId()).
+                .append("id", new ObjectId(insertion.getId())).
                 append("category", insertion.getCategory()).
                 append("description", insertion.getDescription()).
                 append("gender", insertion.getGender())

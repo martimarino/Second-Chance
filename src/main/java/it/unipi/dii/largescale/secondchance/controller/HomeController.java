@@ -99,7 +99,7 @@ public class HomeController {
 
     private void addInsertionsViral() {
 
-        String uniq_id = viralList.get(scrollViralPage).getString("uniq_id");
+        String uniq_id = viralList.get(scrollViralPage).get("_id").toString();
 
         ImageView image;
         Label user = new Label("User: " + viralList.get(scrollViralPage).getString("seller"));
@@ -185,7 +185,7 @@ public class HomeController {
     private void addFeedInsertions() {
 
         ImageView image;
-        String uniq_id = feedList.get(scrollFeedPage).getString("uniq_id");
+        String uniq_id = feedList.get(scrollFeedPage).get("_id").toString();
 
         Label user = new Label("User: " + feedList.get(scrollFeedPage).getString("seller"));
         Utility.printTerminal(feedList.toString());
