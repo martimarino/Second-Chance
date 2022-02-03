@@ -125,11 +125,16 @@ BALANCE | Double
 CITY | String
 COUNTRY | String
 EMAIL | String
+IMG_PROFILE | String
 NAME | String
 PASSWORD | String
-RATING | Double
 SUSPENDED | String
 USERNAME | String
+RATING | Double
+REVIEWS | []
+SOLD | []
+PURCHASED | []
+
 
 #### INSERTION
 
