@@ -98,7 +98,7 @@ public class ProfileController extends MainController {
             profileImage.setLayoutX(70);
 
             Document userSearched = ConnectionMongoDB.connMongo.findUserByUsername(us);
-            user = new User(userSearched.getString("email"), userSearched.getString("username"), null, userSearched.getString("name"), userSearched.getString("country"), userSearched.getString("city"), userSearched.getString("address"), userSearched.getString("suspended"), userSearched.getDouble("rating"), 0.0, userSearched.getString("img_profile"));
+            user = User.fromDocument(userSearched);
 
             setProfile();
         }

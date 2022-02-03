@@ -40,7 +40,10 @@ public class SignUpController {
             else
                 img = image.getText();
             String encrypted = CryptWithMD5.cryptWithMD5(pw.getText());
-            User u = new User(em.getText(), us.getText(), encrypted, nm.getText(), co.getValue(), ci.getText(), ad.getText(), "N", Double.NaN, 0.0, img);
+            User u = new User(em.getText(), us.getText(),
+                    encrypted, nm.getText(), co.getValue(),
+                    ci.getText(), ad.getText(), false,
+                    Double.NaN, 0.0, img, null, null, null);
 
             if(us.getText().equals("admin")) {
                 Utility.infoBox("You can not register as admin", "Error", "Please, insert a different username-");

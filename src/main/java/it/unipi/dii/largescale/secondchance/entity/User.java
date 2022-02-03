@@ -16,7 +16,7 @@ public class User implements GeneralUser {
     String city;
     String image;
     String address;
-    String suspended;
+    boolean suspended;
     double rating;
     double balance;
     ArrayList<Document> reviews;
@@ -63,7 +63,7 @@ public class User implements GeneralUser {
      public User(String username)
     {
         User user = ConnectionMongoDB.connMongo.findUserDetails(username);
-        if(user.getSuspended().equals("Y"))
+        if(user.getSuspended())
             Utility.infoBox("You can't login because your account has been suspended.", "Error", "Account suspended!");
         else {
             this.username = user.getUsername();
@@ -86,7 +86,8 @@ public class User implements GeneralUser {
 
         User us = new User(user.getString("email"), user.getString("username"), null,
                 user.getString("name"), user.getString("country"), user.getString("city"), user.getString("address"),
-                user.getBoolean("suspended"), user.getDouble("rating"), user.getDouble("balance"), user.getString("img_profile"), (ArrayList<Document>) user.get("reviews"), (ArrayList<Document>) user.get("sold"), (ArrayList<Document>) user.get("purchased"));
+                user.getBoolean("suspended"), user.getDouble("rating"), user.getDouble("balance"), user.getString("img_profile"),
+                (ArrayList<Document>) user.get("reviews"), (ArrayList<Document>) user.get("sold"), (ArrayList<Document>) user.get("purchased"));
         return us;
 
     }
@@ -125,7 +126,7 @@ public class User implements GeneralUser {
         this.address = address;
     }
 
-    public void setSuspended(String suspended) { this.suspended = suspended; }
+    public void setSuspended(boolean suspended) { this.suspended = suspended; }
 
     public void setRating(Double rating) { this.rating = rating; }
 
@@ -167,7 +168,7 @@ public class User implements GeneralUser {
         return address;
     }
 
-    public String getSuspended() { return suspended; }
+    public boolean getSuspended() { return suspended; }
 
     public Double getRating() { return rating; }
 
