@@ -134,7 +134,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
         return suggestions;
     }
 
-
     public ArrayList<String> getFollowedInsertions(String username, int k) {
 
         this.open();
@@ -208,7 +207,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
             this.close();
         }
     }
-
 
     public boolean showIfInterested(String username, String insertion_id) {
 
