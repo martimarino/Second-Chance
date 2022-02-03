@@ -119,7 +119,7 @@ Insertion | details, #interested, #views
 
 Field | Type
 ------------- | -------------
-ID | 61c05c3e13a1030b20ac150a | Varchar
+ID | Varchar
 ADDRESS | String
 BALANCE | Double
 CITY | String
