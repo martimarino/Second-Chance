@@ -185,7 +185,7 @@ INSERTION| [] | Object
 
 - User - User: follow
 
-- User - Insertion: view, intereste, published
+- User - Insertion: view, interested, published
 
 ## License
 
