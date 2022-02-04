@@ -19,8 +19,8 @@ public class Order {
         return user;
     }
 
-    public void setUser(String buyer) {
-        this.user = buyer;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getTimestamp() {

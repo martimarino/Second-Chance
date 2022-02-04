@@ -42,6 +42,7 @@ public class ConnectionMongoDB{
     public void openConnection() {
 
         // LOCAL DATABASE WITHOUT REPLICAS
+/*
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
         db = mongoClient.getDatabase("local");
@@ -390,11 +391,9 @@ public class ConnectionMongoDB{
 
 
             Bson filter_purchased = eq("username", username);
-
-            Bson filter_sold = eq("username", insertion.getSeller());
-
             BasicDBObject update_purchased = new BasicDBObject("$push", new BasicDBObject("purchased", purchased));
 
+            Bson filter_sold = eq("username", insertion.getSeller());
             BasicDBObject update_sold = new BasicDBObject("$push", new BasicDBObject("sold", sold));
 
             //insert new document into order collection
@@ -406,7 +405,7 @@ public class ConnectionMongoDB{
                 System.err.println("Unable to insert due to an error: " + me);
             }
 
-            db.getCollection("insertion").deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()));
+            insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));
             return "OK";
         };
         return executeTransaction(clientSession, txnFunc);
@@ -615,7 +614,7 @@ public class ConnectionMongoDB{
 
         Document query = new Document().append("username",  username);
         Bson updates = Updates.combine(
-                Updates.set("suspended", "Y"));
+                Updates.set("suspended", true));
                 UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {
@@ -635,7 +634,7 @@ public class ConnectionMongoDB{
         Document query = new Document().append("username",  username);
 
         Bson updates = Updates.combine(
-                Updates.set("suspended", "N"));
+                Updates.set("suspended", false));
                 UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {

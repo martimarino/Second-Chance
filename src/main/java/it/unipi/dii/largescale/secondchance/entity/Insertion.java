@@ -20,6 +20,7 @@ public class Insertion {
     String image_url;
     String timestamp;
     String seller;
+
     public Insertion(){}
 
     public Insertion(String id, String category, String description,
