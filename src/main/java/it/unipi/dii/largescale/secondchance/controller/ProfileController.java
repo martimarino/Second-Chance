@@ -61,12 +61,14 @@ public class ProfileController extends MainController {
     int scrollPage;
     int scrollPage2;
     int nPage = 2;
+    String type_img;
 
     public void initialize(){
 
         user  = Session.getLogUser();
         balanceValue.setText(String.format("%.2f",user.getBalance()) + "€");
         setProfile();
+        type_img = "user";
         System.out.println("USERNAME init: " + user.getUsername());
     }
 
@@ -191,7 +193,7 @@ public class ProfileController extends MainController {
                 e.printStackTrace();
             }
         } else {
-            imageProfile = Utility.getGoodImage(user.getImage(), 100);
+            imageProfile = Utility.getGoodImage(user.getImage(), 100, type_img);
         }
 
         label.setTranslateX(10);

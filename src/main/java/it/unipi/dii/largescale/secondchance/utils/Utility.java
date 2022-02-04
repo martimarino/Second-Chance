@@ -84,9 +84,9 @@ public class Utility {
         return generatedString;
     }
 
-    public static ImageView getGoodImage(String url_image, int dimension){
+    public static ImageView getGoodImage(String url_image, int dimension, String type_img){
 
-        ImageView image;
+        ImageView image = null;
 
         try {
             URL url = new URL(url_image);
@@ -106,7 +106,10 @@ public class Utility {
             image.setImage(images);
 
         } catch (IOException e) { //case image not valid any more (link with 404 page)
-            image = localImage("./img/empty.jpg", dimension);
+            if(type_img.equals("insertion"))
+                image = localImage("./img/empty.jpg", dimension);
+            else if(type_img.equals("user"))
+                image = localImage("./img/user.png", dimension);
         }
 
         return image;
@@ -141,10 +144,10 @@ public class Utility {
         int new_index = 0;
 
         if((index%k) == 0)
-            new_index = index - 3;
+            new_index = index - k;
         else
             new_index = index - (index%k);
-        new_index -= 3;
+        new_index -= k;
 
         if (new_index == 0) {
             prev.setDisable(true);

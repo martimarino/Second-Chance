@@ -113,10 +113,7 @@ public class ConnectionMongoDB{
                 .append("name", u.getName())
                 .append("password", u.getPassword())
                 .append("suspended", u.getSuspended())
-                .append("username", u.getUsername())
-                .append("reviews", null)
-                .append("sold", null)
-                .append("purchased", null);
+                .append("username", u.getUsername());
 
         userColl.insertOne(user);
 
@@ -341,7 +338,6 @@ public class ConnectionMongoDB{
             Bson update2 = inc("credit", insertion.getPrice());
 
 */
-
             Document balance = db.getCollection("user").find(eq("username", username)).first();
             double balanceBuyer = balance.getDouble("balance") - insertion.getPrice();
 
@@ -370,7 +366,7 @@ public class ConnectionMongoDB{
             Document purchased = new Document()
                     .append("_id", new ObjectId())
                     .append("timestamp", timestamp)
-                    .append("user", insertion.getSeller())
+                    .append("seller", insertion.getSeller())
                     .append("reviewed", false)
                     .append("insertion", new Document("image", insertion.getImage_url()).
                             append("price", insertion.getPrice()).
@@ -382,7 +378,7 @@ public class ConnectionMongoDB{
             Document sold = new Document()
                     .append("_id", new ObjectId())
                     .append("timestamp", timestamp)
-                    .append("user", username)
+                    .append("buyer", username)
                     .append("reviewed", false)
                     .append("insertion", new Document("image", insertion.getImage_url()).
                             append("price", insertion.getPrice()).
@@ -402,8 +398,8 @@ public class ConnectionMongoDB{
                 userColl.findOneAndUpdate(filter_purchased, update_purchased);
                 userColl.findOneAndUpdate(filter_sold, update_sold);
 
-            } catch (MongoException me) {
-                System.err.println("Unable to insert due to an error: " + me);
+            } catch (Exception e) {
+                System.err.println("Unable to insert due to an error: " + e);
             }
 
             insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));

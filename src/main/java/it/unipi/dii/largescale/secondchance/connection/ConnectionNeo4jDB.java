@@ -73,6 +73,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     public void followUser(String follower, String followed) {
         this.open();
+        System.out.println("USER_FOLLOWER: " + follower + "USER_FOLLOWED : " + follower);
         try ( Session session = driver.session() )
         {
             session.writeTransaction((TransactionWork<Void>) tx -> {

@@ -37,6 +37,7 @@ public class HomeController {
     //general paramenters
     int k = 12;                     //how many to show
     int nPage = 3;                  //how many per page
+    String type_img;
 
     public void initialize() {
 
@@ -50,6 +51,7 @@ public class HomeController {
         scrollViralPage = 0;
         Utility.printTerminal("Size of viral: " + viralList.size());
         showViralInsertions();
+        type_img = "insertion";
 
         // feed
         feedBox = new HBox();
@@ -73,7 +75,6 @@ public class HomeController {
         }
         Utility.printTerminal("Size of feed: " + feedList.size());
         showFeed();
-
     }
 
     /* ********* INSERTION DETAILS ********* */
@@ -103,7 +104,7 @@ public class HomeController {
 
         ImageView image;
         Label user = new Label("User: " + viralList.get(scrollViralPage).getString("seller"));
-        image = Utility.getGoodImage(viralList.get(scrollViralPage).getString("image_url"), 150);
+        image = Utility.getGoodImage(viralList.get(scrollViralPage).getString("image_url"), 150, type_img);
         Label price = new Label(viralList.get(scrollViralPage).getDouble("price") + "€");
         Label status = new Label("Status: " + viralList.get(scrollViralPage).getString("status"));
         Label interested = new Label("Interested: " + viralList.get(scrollViralPage).getInteger("interested"));
@@ -190,7 +191,7 @@ public class HomeController {
 
         Label user = new Label("User: " + feedList.get(scrollFeedPage).getString("seller"));
         Utility.printTerminal(feedList.toString());
-        image = Utility.getGoodImage(feedList.get(scrollFeedPage).getString("image_url"), 150);
+        image = Utility.getGoodImage(feedList.get(scrollFeedPage).getString("image_url"), 150, type_img);
 
         Label price = new Label(feedList.get(scrollFeedPage).getDouble("price") + "€");
         Label status = new Label("Status: " + feedList.get(scrollFeedPage).getString("status"));
