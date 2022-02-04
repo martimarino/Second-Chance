@@ -48,7 +48,6 @@ public class ConnectionMongoDB{
         db = mongoClient.getDatabase("local");
 
         userColl = db.getCollection("user");
-        orderColl = db.getCollection("order");
         insertionColl = db.getCollection("insertion");
         codeColl = db.getCollection("code");
         */
@@ -490,10 +489,36 @@ public class ConnectionMongoDB{
 
         if (choice)
             insertion = insertionColl.find(eq("_id", new ObjectId(id))).first();
-         else
+        else
             insertion = insertionColl.find(eq("seller", id)).first();
 
         return insertion;
+    }
+
+
+    private void getNumOfOrdersByUser(String user) {
+/*
+        ArrayList<Document> array = new ArrayList<>();
+
+
+        Bson match = Aggregates.match(eq("username", user));
+        Bson projection = new Document("$size", "$sold");
+        //Bson group = group("$username", Accumulators.sum("count", projection));
+        //or
+        Bson group = Aggregates.project(new Document("count", projection).append("username",user));
+        //Bson project = project(fields(excludeId(), include("count"), computed("username", "$_id")));
+        Bson sort = sort(descending("count"));*/
+      /*
+        Bson unwind = unwind("sold");
+        Bson group = group("", Accumulators.sum("count", 1));
+        Bson sort = sort(descending("count"));
+      */
+/*
+        AggregateIterable<Document> aggr = userColl.aggregate(
+                Arrays.asList(unwind, project, group, sort)
+        );
+
+*/
     }
 
     public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
@@ -513,6 +538,7 @@ public class ConnectionMongoDB{
         if (!choice) { //most sold orders
             System.out.println("Sezione orders");
             Bson project = project(fields(excludeId(), include("count"), computed("seller", "$_id")));
+
             AggregateIterable<Document> aggr = myColl.aggregate(
                     Arrays.asList(
                             Aggregates.group("$insertion.seller",
@@ -521,6 +547,7 @@ public class ConnectionMongoDB{
                             Aggregates.sort(descending("count")),
                             limit
                     )
+
             );
 
             for (Document document : aggr) {
