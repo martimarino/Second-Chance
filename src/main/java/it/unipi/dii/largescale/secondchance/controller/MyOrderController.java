@@ -60,25 +60,29 @@ public class MyOrderController{
 
         if(type.equals("Items purchased"))
         {
-            ordersList.clear();
-            panel.getChildren().clear();
-            indexPage = 1;
-            ordersList = ConnectionMongoDB.connMongo.findAllOrders(true, user.getUsername());
+            if(ordersList != null && ordersList.size() != 0) {
+                ordersList.clear();
+                panel.getChildren().clear();
+                indexPage = 1;
+            }
+            ordersList = Session.getLogUser().getPurchased();
             System.out.println("ORDER: " + ordersList);
             kind = true;
             showAllOrders(true);
         }
         else if(type.equals("Items sold"))
         {
-            ordersList.clear();
-            panel.getChildren().clear();
-            indexPage = 1;
-            ordersList = ConnectionMongoDB.connMongo.findAllOrders(false, user.getUsername());
+            if(ordersList != null && ordersList.size() != 0) {
+                ordersList.clear();
+                panel.getChildren().clear();
+                indexPage = 1;
+            }
+            ordersList = Session.getLogUser().getSold();
             kind = false;
             showAllOrders(false);
         }
 
-        if(ordersList.size() > k)
+        if(ordersList != null && ordersList.size() > k)
         {
             next.setVisible(true);
             next.setDisable(false);
@@ -87,16 +91,16 @@ public class MyOrderController{
 
     private void showAllOrders(boolean choice) {
 
-        for(int i = 0; i < k && indexPage <= ordersList.size(); i++)
-        {
-            addOrder(choice);
-            indexPage++;
-        }
+        if(ordersList != null && ordersList.size() != 0) {
+            for (int i = 0; i < k && indexPage <= ordersList.size(); i++) {
+                addOrder(choice);
+                indexPage++;
+            }
 
-        if(ordersList.size() < indexPage)
-        {
-            next.setDisable(true);
-            next.setVisible(false);
+            if (ordersList.size() < indexPage) {
+                next.setDisable(true);
+                next.setVisible(false);
+            }
         }
 
     }
@@ -249,12 +253,27 @@ public class MyOrderController{
 
         ConnectionMongoDB.connMongo.addReview(rev);
         ConnectionMongoDB.connMongo.updateSellerRating(rev.getSeller());
-        ConnectionMongoDB.connMongo.updateOrder(timestampOrder);
+        Document updated = setIsertionReviewed(timestampOrder);     //update local array
+        ConnectionMongoDB.connMongo.setInsertionReviewed(timestampOrder, updated);  //update remote array
         sendReview.setDisable(true);
         revButton.setText("Already reviewed!");
         revButton.setDisable(true);
 
         Stage stage = (Stage) sendReview.getScene().getWindow();
         stage.close();
+    }
+
+    private Document setIsertionReviewed(String ts) {
+
+        ArrayList<Document> purc = Session.getLogUser().getPurchased();
+
+        Document n = null;
+        for(Document d : purc)
+            if(d.getString("timestamp").equals(ts)) {
+                d.replace("reviewed", true);
+                n = d;
+            }
+
+        return n;
     }
 }

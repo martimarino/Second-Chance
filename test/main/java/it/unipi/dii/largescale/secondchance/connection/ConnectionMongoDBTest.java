@@ -20,10 +20,10 @@ class ConnectionMongoDBTest {
     @DisplayName("The user should not log in.")
     void shouldLogInUser() {
         Assertions.assertAll(
-                () -> assertTrue(connMongo.userAlreadyPresent("Aaliyah","dcc2bd1379fa18c65989882c2222b19c")),
-                () -> assertFalse(connMongo.userAlreadyPresent("","")),
-                () -> assertFalse(connMongo.userAlreadyPresent("?","?")),
-                () -> assertFalse(connMongo.userAlreadyPresent("!","!"))
+                () -> assertTrue(connMongo.userAlreadyPresent("Aaliyah")),
+                () -> assertFalse(connMongo.userAlreadyPresent("")),
+                () -> assertFalse(connMongo.userAlreadyPresent("?")),
+                () -> assertFalse(connMongo.userAlreadyPresent("!"))
         );
     }
 

@@ -186,6 +186,7 @@ public class HomeController {
 
         ImageView image;
         String uniq_id = feedList.get(scrollFeedPage).get("_id").toString();
+        Utility.printTerminal("UNIQ ID: " + uniq_id);
 
         Label user = new Label("User: " + feedList.get(scrollFeedPage).getString("seller"));
         Utility.printTerminal(feedList.toString());

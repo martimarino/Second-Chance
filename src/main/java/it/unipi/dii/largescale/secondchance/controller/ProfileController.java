@@ -159,13 +159,19 @@ public class ProfileController extends MainController {
         updateUserBalance();
         following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
         follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
-        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
-        if (listReviews.size() < 3) {
-            System.out.println("Reviews nulle, disattivo i bottoni");
+        listReviews = user.getReviews();
+
+        if (listReviews == null) {
             nextReviews.setDisable(true);
             nextReviews.setVisible(false);
+        } else {
+            if (listReviews.size() < 3) {
+                System.out.println("Reviews nulle, disattivo i bottoni");
+                nextReviews.setDisable(true);
+                nextReviews.setVisible(false);
+            }
+            showReviews();
         }
-        showReviews();
     }
 
     public void setProfileImage() {
@@ -174,8 +180,6 @@ public class ProfileController extends MainController {
         label.setVisible(false);
 
         if (user.getImage().equals("image.png")) {
-
-            System.out.println("HERE!!");
 
             try {
                 FileInputStream imageStream = new FileInputStream("target/classes/img/user.png");
