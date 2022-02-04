@@ -614,6 +614,16 @@ public class ConnectionMongoDB{
         Bson unwind = unwind("sold");
         Bson group = group("", Accumulators.sum("count", 1));
         Bson sort = sort(descending("count"));
+
+        username    count
+        A           3
+        B           5
+
+        sort()
+
+        B
+        A
+
       */
         return array;
 
@@ -707,7 +717,7 @@ public class ConnectionMongoDB{
         ArrayList<Document> array = new ArrayList<>();
 
         Bson limit = limit(k);
-        AggregateIterable<Document> aggr  = insertionColl.aggregate(
+        AggregateIterable<Document> aggr = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
                         Aggregates.sort(descending("interested")),
