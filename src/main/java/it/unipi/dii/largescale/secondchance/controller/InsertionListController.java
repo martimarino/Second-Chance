@@ -102,13 +102,13 @@ public class InsertionListController {
             if(Utility.confirmDeletion()) {
                 Insertion i = ConnectionMongoDB.connMongo.findInsertion(id);
 
-                if(ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
+                if(!ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
                 {
                     Utility.printTerminal("Error deleting insertion MongoDB");
                     Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
                     return;
                 }
-                if(ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
+                if(!ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
                 {
                     Utility.printTerminal("Error deleting insertion Neo4j");
                     Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");

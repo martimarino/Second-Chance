@@ -183,7 +183,7 @@ public class StatsController {
         ListView<String> list = new ListView<>();
         ObservableList items = FXCollections.observableArrayList();
 
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < array.size(); i++) {
 
             String str = array.get(i).getString("seller") + ":    " + array.get(i).getInteger("count").toString();
             items.add(str);

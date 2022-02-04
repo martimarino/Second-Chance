@@ -9,8 +9,5 @@
         <module name="Large-Scale-Project" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Large-Scale-Project" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

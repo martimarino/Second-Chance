@@ -36,7 +36,7 @@ public class SignUpController {
                 && !ad.getText().isEmpty()) {
 
             if(image.getText().equals(""))
-                img = "image.png";
+                img = "user.png";
             else
                 img = image.getText();
             String encrypted = CryptWithMD5.cryptWithMD5(pw.getText());
