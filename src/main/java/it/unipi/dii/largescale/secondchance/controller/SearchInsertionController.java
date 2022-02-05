@@ -37,9 +37,11 @@ public class SearchInsertionController extends MainController{
     private int index;              //index of insertion to show
     public HBox firstRow, secondRow;
     public VBox box;
+    String type_img;
 
     public void initialize(){
 
+        type_img = "insertion";
         firstRow = new HBox(20);
         secondRow = new HBox(20);
         box = new VBox(20);
@@ -145,7 +147,7 @@ public class SearchInsertionController extends MainController{
 
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
 
-        image = Utility.getGoodImage(insertionFilter.get(index).getString("image_url"), 130);
+        image = Utility.getGoodImage(insertionFilter.get(index).getString("image_url"), 130, type_img);
 
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
         Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + "€");

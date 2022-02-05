@@ -31,9 +31,11 @@ public class MyOrderController{
     int indexPage;
     int k = 6;
     boolean kind;
+    String type_img;
 
     public void initialize(){
 
+        type_img = "insertion";
         //set buttons
         prev.setDisable(true);
         next.setDisable(true);
@@ -119,7 +121,7 @@ public class MyOrderController{
         Label size = new Label("Size: " + ins.getString("size"));
         Label status = new Label("Status: " + ins.getString("status"));
         Label category = new Label("Category: " + ins.getString("category"));
-        ImageView image = Utility.getGoodImage(ins.getString("image"), 110);
+        ImageView image = Utility.getGoodImage(ins.getString("image"), 110, type_img);
 
         if(ordersList.get(indexPage-1).getBoolean("reviewed") && choice) {
             review.setText("Already reviewed!");

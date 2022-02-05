@@ -3,7 +3,6 @@ package main.java.it.unipi.dii.largescale.secondchance.controller;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -21,13 +20,14 @@ public class FollowingController {
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
-    private int k = 3;
+    private int nPage = 1;
     private int scrollPage;
+    String type_img;
 
     public void initialize(ArrayList<String> followingUsers){
 
         //System.out.println("User 0: " + followingUsers.get(0));
-
+        type_img = "user";
         listFollowing = new ArrayList<Document>();
         scrollPage = 0;
         box = new VBox(20);
@@ -41,17 +41,17 @@ public class FollowingController {
             return;
         }
 
-        if (followingUsers.size() == 1) {
+        /*if (followingUsers.size() == 1) {
             Document user = ConnectionMongoDB.connMongo.findUserByUsername(followingUsers.get(0));
             listFollowing.add(user);
 
         } else {
-
-            for (int i = 0; i < followingUsers.size() - 1 && i < 10*k; i++) {
+    */
+            for (int i = 0; i < followingUsers.size(); i++) {
                 Document user = ConnectionMongoDB.connMongo.findUserByUsername(followingUsers.get(i));
                 listFollowing.add(user);
             }
-        }
+       // }
         showFollowing();
     }
 
@@ -60,13 +60,13 @@ public class FollowingController {
         box.getChildren().clear();
 
         //if there are more than k insertions enable next button
-        if (listFollowing.size() - scrollPage > k) {
+        if (listFollowing.size() == scrollPage-1) {
             next.setDisable(false);
             next.setVisible(true);
         }
         System.out.println("(show) INDEX: " + scrollPage);
 
-        for (int i = 0; i < k && i < listFollowing.size(); i++)
+        for (int i = 0; i < nPage && i < listFollowing.size(); i++)
             addUser();
 
         bp.setCenter(box);
@@ -80,7 +80,7 @@ public class FollowingController {
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage(listFollowing.get(scrollPage).getString("image_url"), 150);
+        ImageView image = Utility.getGoodImage("./img/" + listFollowing.get(scrollPage).getString("image_url"), 150, type_img);
         Label username = new Label("Username: " + listFollowing.get(scrollPage).getString("username"));
         Label city = new Label("City: " + listFollowing.get(scrollPage).getString("city"));
 
@@ -123,7 +123,12 @@ public class FollowingController {
 
         System.out.println("(prev) INDEX: " + scrollPage);
         box.getChildren().clear();
-        scrollPage = Utility.prevPage(scrollPage, k, prev);
+        scrollPage = Utility.prevPage(scrollPage, nPage, prev);
+        if(scrollPage < listFollowing.size())
+        {
+            next.setDisable(false);
+            next.setVisible(true);
+        }
         showFollowing();
 
     }
@@ -132,11 +137,10 @@ public class FollowingController {
 
         box.getChildren().clear();
         System.out.println("(next) INDEX: " + scrollPage);
-        Utility.nextPage(scrollPage + k, listFollowing, next, prev);
+        Utility.nextPage(scrollPage + nPage, listFollowing, next, prev);
         showFollowing();
 
     }
-
 
     private void showUserPage(String username) {
 

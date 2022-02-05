@@ -19,9 +19,11 @@ public class InsertionListLikedController {
     public Pane prev, next;
     private final int k = 3;
     private int index;
+    String type_img;
 
     public void initialize(String username) {
 
+        type_img = "insertion";
         ArrayList<String> followed_ins = ConnectionNeo4jDB.connNeo.retrieveFollowedInsertionByUser(username);
         insertions = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(followed_ins);
         //System.out.println("Insertions: " + insertions.get(0));
@@ -62,7 +64,7 @@ public class InsertionListLikedController {
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150);
+        ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150, type_img);
         Label category = new Label("Category: " + insertions.get(index).getCategory());
         Label price = new Label(insertions.get(index).getPrice() + "€");
         Label views = new Label("Views: " + insertions.get(index).getViews());

@@ -24,9 +24,11 @@ public class InsertionListController {
     private int index;
 
     String user;
+    String type_img;
 
     public void initialize(String username) {
 
+        type_img = "user";
         user = username;
         list = ConnectionMongoDB.connMongo.findInsertionBySeller(username);
         box = new VBox(20);
@@ -65,7 +67,7 @@ public class InsertionListController {
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage(list.get(index).getString("image_url"), 150);
+        ImageView image = Utility.getGoodImage(list.get(index).getString("image_url"), 150, type_img);
         Label status = new Label("Status: " + list.get(index).getString("status"));
         Label price = new Label(list.get(index).getDouble("price") + " " + "€");
         Label brand = new Label("Brand: " + list.get(index).getString("brand"));
@@ -102,13 +104,13 @@ public class InsertionListController {
             if(Utility.confirmDeletion()) {
                 Insertion i = ConnectionMongoDB.connMongo.findInsertion(id);
 
-                if(ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
+                if(!ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
                 {
                     Utility.printTerminal("Error deleting insertion MongoDB");
                     Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
                     return;
                 }
-                if(ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
+                if(!ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
                 {
                     Utility.printTerminal("Error deleting insertion Neo4j");
                     Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");

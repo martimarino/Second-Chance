@@ -20,11 +20,13 @@ public class InsertionAdminSearchController {
     private final int k = 3;
     private int contReviews = 0;
     private int index;
+    String type_img;
 
     public void initialize(String seller) {
 
         insertions = ConnectionMongoDB.connMongo.findMultipleInsertionDetails(seller);
         System.out.println("Insertions: " + insertions.get(0));
+        type_img = "insertion";
 
         box = new VBox(20);
         index = 0;
@@ -65,7 +67,7 @@ public class InsertionAdminSearchController {
 
         btnDelete.setText("Delete");
 
-        ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150);
+        ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150, type_img);
         Label category = new Label("Category: " + insertions.get(index).getCategory());
         Label price = new Label(insertions.get(index).getPrice() + "€");
         Label views = new Label("Views: " + insertions.get(index).getViews());

@@ -61,12 +61,14 @@ public class ProfileController extends MainController {
     int scrollPage;
     int scrollPage2;
     int nPage = 2;
+    String type_img;
 
     public void initialize(){
 
         user  = Session.getLogUser();
         balanceValue.setText(String.format("%.2f",user.getBalance()) + "€");
         setProfile();
+        type_img = "user";
         System.out.println("USERNAME init: " + user.getUsername());
     }
 
@@ -179,7 +181,7 @@ public class ProfileController extends MainController {
         Label label = new Label("Change image!");
         label.setVisible(false);
 
-        if (user.getImage().equals("image.png")) {
+        if (user.getImage().equals("user.png")) {
 
             try {
                 FileInputStream imageStream = new FileInputStream("target/classes/img/user.png");
@@ -191,7 +193,7 @@ public class ProfileController extends MainController {
                 e.printStackTrace();
             }
         } else {
-            imageProfile = Utility.getGoodImage(user.getImage(), 100);
+            imageProfile = Utility.getGoodImage(user.getImage(), 100, type_img);
         }
 
         label.setTranslateX(10);
@@ -217,6 +219,78 @@ public class ProfileController extends MainController {
             }
         });
     }
+
+    public void setProfile(String us){
+
+        prevReviews.setDisable(true);
+        prevReviews.setVisible(false);
+
+        reviewsBox = new HBox();
+        reviewsBox.setSpacing(100);
+        review.setCenter(reviewsBox);
+
+        scrollPage = 0;
+        scrollPage2 = 0;
+
+        userInfo.getChildren().clear();
+
+        String rate = (Double.isNaN(user.getRating()))? "No reviews" : Double.toString(user.getRating());
+
+        Label username = new Label(user.getUsername());
+        Label name = new Label(user.getName());
+        Label email = new Label(user.getEmail());
+        Label country = new Label(user.getCountry());
+        Label city = new Label(user.getCity());
+        Label address = new Label(user.getAddress());
+        Label rating = new Label(rate);
+        Label usernameText = new Label("Username:");
+        Label nameText = new Label("Name:");
+        Label emailText = new Label("Email:");
+        Label countryText = new Label("Country:");
+        Label cityText = new Label("City:");
+        Label addressText = new Label("Address:");
+        Label ratingText = new Label("Rating:");
+
+        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
+
+        userInfo.add(usernameText, 0, 0);
+        userInfo.add(nameText, 0, 1);
+        userInfo.add(emailText, 0, 2);
+        userInfo.add(countryText, 0, 3);
+        userInfo.add(cityText, 0, 4);
+        userInfo.add(addressText, 0, 5);
+        userInfo.add(ratingText, 0, 6);
+
+        userInfo.add(username, 1,0);
+        userInfo.add(name, 1, 1);
+        userInfo.add(email, 1, 2);
+        userInfo.add(country, 1, 3);
+        userInfo.add(city, 1, 4);
+        userInfo.add(address, 1, 5);
+        userInfo.add(rating, 1, 6);
+
+        updateUserBalance();
+
+        following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(us);
+        follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(us);
+        System.out.println("Abdelhakam: " + user.getUsername());
+        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
+
+        if (listReviews.size() < 3) {
+            System.out.println("Reviews nulle, disattivo i bottoni");
+            nextReviews.setDisable(true);
+            nextReviews.setVisible(false);
+        }
+        showReviews();
+    }
+
+    public void getReviews() {
+
+        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
+
+        System.out.println(listReviews.get(0));
+    }
+
     /* ********** FOLLOWERS/ING STATS SECTION ********** */
 
     public void showUserFollowers() {

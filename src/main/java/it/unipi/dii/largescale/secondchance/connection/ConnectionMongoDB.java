@@ -15,6 +15,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import javax.print.Doc;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -326,6 +327,26 @@ public class ConnectionMongoDB{
 
         TransactionBody<String> txnFunc = () -> {
 
+/*
+            Document bal = db.getCollection("balance").find(eq("username", username)).first();
+            double balanceBuyer = balance.getDouble("credit") - insertion.getPrice();
+
+            Bson filter = and(eq("username", username), gte("credit", insertion.getPrice()));
+            Bson update = set("credit", balanceBuyer);
+
+            //update buyer balance
+            Document ret = db.getCollection("balance").findOneAndUpdate(filter, update);
+
+            if (ret == null) {
+                Utility.infoBox("Cannot purchase, not enough balance", "Error", "Error purchase");
+                return "Buyer has not enough balance";
+            }
+
+            //update seller balance
+            Bson filter2 = eq("username", insertion.getSeller());
+            Bson update2 = inc("credit", insertion.getPrice());
+
+*/
             Document balance = db.getCollection("user").find(eq("username", username)).first();
             double balanceBuyer = balance.getDouble("balance") - insertion.getPrice();
 
@@ -385,8 +406,8 @@ public class ConnectionMongoDB{
                 userColl.findOneAndUpdate(filter_purchased, update_purchased);
                 userColl.findOneAndUpdate(filter_sold, update_sold);
 
-            } catch (MongoException me) {
-                System.err.println("Unable to insert due to an error: " + me);
+            } catch (Exception e) {
+                System.err.println("Unable to insert due to an error: " + e);
             }
 
             insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));
@@ -480,37 +501,148 @@ public class ConnectionMongoDB{
         return insertion;
     }
 
+    private ArrayList<Document> getNumOfOrdersByUserSold() {
 
-    private void getNumOfOrdersByUser(String user) {
-/*
         ArrayList<Document> array = new ArrayList<>();
+        ArrayList<Document> user = new ArrayList<>();
 
 
-        Bson match = Aggregates.match(eq("username", user));
+        cursor = userColl.find().iterator();
+
+        while(cursor.hasNext())
+            user.add(cursor.next());
+
+        for (int i = 0; i < user.size(); i++) {
+
+            Bson match = match(eq("username", user.get(i).getString("username")));
+            Bson match1 = match(exists("sold"));
+            Bson projection = new Document("$size", "$sold");
+            Bson project = Aggregates.project(new Document("count", projection).append("username","$username"));
+            AggregateIterable<Document> aggr = userColl.aggregate(
+                    Arrays.asList(
+                            match, match1, project
+                    )
+            );
+            System.out.println("USER: " + aggr.first());
+
+            if(aggr.first() != null)
+                array.add(aggr.first());
+        }
+
+
+        /*
+        DBObject exists = new BasicDBObject("$exists", "$sold");
+
+        //Document query = new Document("sold", new BasicDBObject("$exists", true));
+        //System.out.println("USER_SOLD: " + userSold);
+
+
+        Document soldDoc = new Document("$ifNull", Arrays.asList("$sold", "true"));
+        Document projectDoc = new Document("$project" , new Document("sold_doc", soldDoc).append("username", 1));
+        Document groupDoc = new Document("$group", new Document("_id", "$id").append("details", new Document("$push", concat)));
+        Document ne = new Document("$ne", new Document("sold_doc", "true"));
+        Document matchDoc = new Document("$ne", ne);
+
         Bson projection = new Document("$size", "$sold");
-        //Bson group = group("$username", Accumulators.sum("count", projection));
-        //or
-        Bson group = Aggregates.project(new Document("count", projection).append("username",user));
+        //Bson group = group("username", Accumulators.sum("count", projection
+        Bson group = Aggregates.project(new Document("count", projection).append("username","$username"));
         //Bson project = project(fields(excludeId(), include("count"), computed("username", "$_id")));
-        Bson sort = sort(descending("count"));*/
-      /*
+        //Bson sort = sort(descending("count"));
+
         Bson unwind = unwind("sold");
         Bson group = group("", Accumulators.sum("count", 1));
         Bson sort = sort(descending("count"));
-      */
-/*
-        AggregateIterable<Document> aggr = userColl.aggregate(
-                Arrays.asList(unwind, project, group, sort)
-        );
 
-*/
+        username    count
+        A           3
+        B           5
+
+        sort()
+
+        B
+        A
+
+      */
+        return array;
+
+    }
+
+    private ArrayList<Document> getNumOfOrdersByUserPurchased() {
+
+        ArrayList<Document> array = new ArrayList<>();
+        ArrayList<Document> user = new ArrayList<>();
+
+
+        cursor = userColl.find().iterator();
+
+        while(cursor.hasNext())
+            user.add(cursor.next());
+
+        for (int i = 0; i < user.size(); i++) {
+
+            Bson match = match(eq("username", user.get(i).getString("username")));
+            Bson match1 = match(exists("purchased"));
+            Bson projection = new Document("$size", "$purchased");
+            Bson project = Aggregates.project(new Document("count", projection).append("username","$username"));
+            AggregateIterable<Document> aggr = userColl.aggregate(
+                    Arrays.asList(
+                           match, match1, project
+                    )
+            );
+            System.out.println("USER: " + aggr.first());
+
+            if(aggr.first() != null)
+                array.add(aggr.first());
+        }
+
+
+        /*
+        DBObject exists = new BasicDBObject("$exists", "$sold");
+
+        //Document query = new Document("sold", new BasicDBObject("$exists", true));
+        //System.out.println("USER_SOLD: " + userSold);
+
+
+        Document soldDoc = new Document("$ifNull", Arrays.asList("$sold", "true"));
+        Document projectDoc = new Document("$project" , new Document("sold_doc", soldDoc).append("username", 1));
+        Document groupDoc = new Document("$group", new Document("_id", "$id").append("details", new Document("$push", concat)));
+        Document ne = new Document("$ne", new Document("sold_doc", "true"));
+        Document matchDoc = new Document("$ne", ne);
+
+        Bson projection = new Document("$size", "$sold");
+        //Bson group = group("username", Accumulators.sum("count", projection
+        Bson group = Aggregates.project(new Document("count", projection).append("username","$username"));
+        //Bson project = project(fields(excludeId(), include("count"), computed("username", "$_id")));
+        //Bson sort = sort(descending("count"));
+
+        Bson unwind = unwind("sold");
+        Bson group = group("", Accumulators.sum("count", 1));
+        Bson sort = sort(descending("count"));
+
+        username    count
+        A           3
+        B           5
+
+        sort()
+
+        B
+        A
+
+      */
+        return array;
+
     }
 
     public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
         // true = select the top k most active users
         // false = select the top k most active sellers
 
-        ArrayList<Document> array = new ArrayList<>();/*
+        ArrayList<Document> array = new ArrayList<>();
+        array = getNumOfOrdersByUserSold();
+        System.out.println(array.get(0));
+
+        /*
+
         MongoCollection<Document> myColl;
 
         if (choice)
@@ -589,7 +721,7 @@ public class ConnectionMongoDB{
         ArrayList<Document> array = new ArrayList<>();
 
         Bson limit = limit(k);
-        AggregateIterable<Document> aggr  = insertionColl.aggregate(
+        AggregateIterable<Document> aggr = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
                         Aggregates.sort(descending("interested")),
@@ -781,6 +913,8 @@ public class ConnectionMongoDB{
         filters.add(Filters.eq("purchased.timestamp", timestamp));
         userColl.findOneAndReplace(Filters.and(filters), up);
 
+        //BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("reviewed", true));
+        //userColl.findOneAndUpdate(query, set);
     }
 
     /* ********** BALANCE SECTION ********** */

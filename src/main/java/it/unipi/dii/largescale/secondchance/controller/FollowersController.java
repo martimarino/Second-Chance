@@ -22,12 +22,13 @@ public class FollowersController {
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
-    private int k = 3;
+    private int nPage = 1;
     private int scrollPage;
+    String type_img;
 
     public void initialize(ArrayList<String> followersUsers){
 
-
+        type_img = "user";
         listFollowers = new ArrayList<Document>();
         scrollPage = 0;
         box = new VBox(20);
@@ -35,17 +36,11 @@ public class FollowersController {
         prev.setVisible(false);
         prev.setDisable(true);
 
-        if (followersUsers.size() == 1) {
-            Document user = ConnectionMongoDB.connMongo.findUserByUsername(followersUsers.get(0));
+        for (int i = 0; i < followersUsers.size(); i++) {
+            Document user = ConnectionMongoDB.connMongo.findUserByUsername(followersUsers.get(i));
             listFollowers.add(user);
-
-        } else {
-
-            for (int i = 0; i < followersUsers.size() - 1&& i < 10*k; i++) {
-                Document user = ConnectionMongoDB.connMongo.findUserByUsername(followersUsers.get(i));
-                listFollowers.add(user);
-            }
         }
+
         showFollowers();
     }
 
@@ -54,13 +49,13 @@ public class FollowersController {
         box.getChildren().clear();
 
         //if there are more than k insertions enable next button
-        if (listFollowers.size() - scrollPage > k) {
+        if (listFollowers.size() == scrollPage-1) {
             next.setDisable(false);
             next.setVisible(true);
         }
         System.out.println("(show) INDEX: " + scrollPage);
 
-        for (int i = 0; i < k && i < listFollowers.size(); i++)
+        for (int i = 0; i < nPage && i < listFollowers.size(); i++)
             addUser();
 
         bp.setCenter(box);
@@ -74,7 +69,8 @@ public class FollowersController {
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage(listFollowers.get(scrollPage).getString("image_url"), 150);
+        ImageView image = Utility.getGoodImage("./img/" + listFollowers.get(scrollPage).getString("img_profile"), 150, type_img);
+
         Label username = new Label("Username: " + listFollowers.get(scrollPage).getString("username"));
         Label city = new Label("City: " + listFollowers.get(scrollPage).getString("city"));
 
@@ -116,7 +112,12 @@ public class FollowersController {
 
         System.out.println("(prev) INDEX: " + scrollPage);
         box.getChildren().clear();
-        scrollPage = Utility.prevPage(scrollPage, k, prev);
+        scrollPage = Utility.prevPage(scrollPage, nPage, prev);
+        if(scrollPage < listFollowers.size())
+        {
+            next.setDisable(false);
+            next.setVisible(true);
+        }
         showFollowers();
 
     }
@@ -125,7 +126,7 @@ public class FollowersController {
 
         box.getChildren().clear();
         System.out.println("(next) INDEX: " + scrollPage);
-        Utility.nextPage(scrollPage + k, listFollowers, next, prev);
+        Utility.nextPage(scrollPage + nPage, listFollowers, next, prev);
         showFollowers();
 
     }
