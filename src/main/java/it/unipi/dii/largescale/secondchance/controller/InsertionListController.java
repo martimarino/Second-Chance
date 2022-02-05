@@ -104,6 +104,10 @@ public class InsertionListController {
             if(Utility.confirmDeletion()) {
                 Insertion i = ConnectionMongoDB.connMongo.findInsertion(id);
 
+                if(i == null) {
+                    Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
+                    return;
+                }
                 if(!ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
                 {
                     Utility.printTerminal("Error deleting insertion MongoDB");

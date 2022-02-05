@@ -112,9 +112,9 @@ public class ConnectionMongoDB{
                 .append("password", u.getPassword())
                 .append("suspended", u.getSuspended())
                 .append("username", u.getUsername())
-                .append("reviews", null)
-                .append("sold", null)
-                .append("purchased", null);
+                .append("reviews", new ArrayList<Document>())
+                .append("sold", new ArrayList<Document>())
+                .append("purchased",new ArrayList<Document>());
 
         userColl.insertOne(user);
 
@@ -298,6 +298,8 @@ public class ConnectionMongoDB{
         Insertion insertion = new Insertion();
         Document insertion_found = insertionColl.find(eq("_id", new ObjectId(insertion_id))).first();
 
+        if(insertion_found == null)
+            return null;
         insertion.setId(insertion_found.get("_id").toString());
         insertion.setBrand(insertion_found.getString("brand"));
         insertion.setCountry(insertion_found.getString("country"));
@@ -409,6 +411,15 @@ public class ConnectionMongoDB{
             } catch (Exception e) {
                 System.err.println("Unable to insert due to an error: " + e);
             }
+
+            ArrayList<Document> purc = null;
+
+            if(Session.getLogUser().getPurchased() != null)
+                purc = Session.getLogUser().getPurchased();
+            else
+                purc = new ArrayList<Document>();
+            purc.add(purchased);
+            Session.getLogUser().setPurchased(purc);
 
             insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));
             return "OK";
@@ -906,15 +917,20 @@ public class ConnectionMongoDB{
 
     public void setInsertionReviewed(String timestamp, Document up) {
 
-        List<Bson> filters = new ArrayList<>();
+        /*List<Bson> filters = new ArrayList<>();
         //find user
         filters.add(Filters.eq("username", Session.getLogUser().getUsername()));
         //loop purchased to find timestamp
         filters.add(Filters.eq("purchased.timestamp", timestamp));
-        userColl.findOneAndReplace(Filters.and(filters), up);
 
-        //BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("reviewed", true));
-        //userColl.findOneAndUpdate(query, set);
+        userColl.findOneAndReplace(Filters.and(filters), up);
+*/
+        BasicDBObject query = new BasicDBObject();
+        query.put("username",Session.getLogUser().getUsername());
+        query.put("purchased.timestamp", timestamp);
+        BasicDBObject update = new BasicDBObject("$set", new BasicDBObject("purchased.$.reviewed", true));
+        userColl.findOneAndUpdate(query, update);
+        //userColl.findOneAndUpdate(query, set);*/
     }
 
     /* ********** BALANCE SECTION ********** */

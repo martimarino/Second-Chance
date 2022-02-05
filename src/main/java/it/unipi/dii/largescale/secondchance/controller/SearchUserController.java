@@ -319,7 +319,7 @@ public class SearchUserController extends MainController{
         VBox vb = new VBox(10);
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
-
+            System.out.println(suggList.get(indexSugg).getString("username"));
             Image image = new Image(imageStream);
             ImageView im = new ImageView(image);
             Label username = new Label(suggList.get(indexSugg).getString("username"));

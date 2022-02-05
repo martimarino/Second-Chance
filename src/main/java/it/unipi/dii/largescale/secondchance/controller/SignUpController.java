@@ -12,6 +12,7 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.CryptWithMD5;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SignUpController {
 
@@ -43,8 +44,8 @@ public class SignUpController {
             User u = new User(em.getText(), us.getText(),
                     encrypted, nm.getText(), co.getValue(),
                     ci.getText(), ad.getText(), false,
-                    Double.NaN, 0.0, img, null,
-                    null, null);
+                    Double.NaN, 0.0, img, new ArrayList<>(),
+                    new ArrayList<>(), new ArrayList<>());
 
             if(us.getText().equals("admin")) {
                 Utility.infoBox("You can not register as admin", "Error", "Please, insert a different username-");

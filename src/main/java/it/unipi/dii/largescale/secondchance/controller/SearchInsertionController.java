@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
@@ -56,6 +57,13 @@ public class SearchInsertionController extends MainController{
 
     public static void showInsertionPage(String uniq_id) throws IOException {
 
+        Insertion insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+        if(insertion == null) {
+            Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
+            insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+            return;
+        }
+
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
 
             Image image = new Image(imageStream);
@@ -66,7 +74,7 @@ public class SearchInsertionController extends MainController{
             stage.setTitle("Insertion details");
             stage.setScene(new Scene(loader.load()));
             InsertionController controller = loader.getController();
-            controller.initialize(uniq_id);
+            controller.initialize(insertion);
             stage.show();
 
         }

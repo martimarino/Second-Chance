@@ -6,6 +6,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
@@ -45,16 +47,17 @@ public class InsertionController {
     User user;
     String type_img;
 
-    public void initialize(String uniq_id) {
+    public void initialize(Insertion ins) {
 
+        insertion = ins;
         insertionTitle = new Label();
         infoContainer.setVisible(true);
         descriptionContainer.setEditable(false);
         
         Session session = Session.getInstance();
         user = session.getLoggedUser();
-        System.out.println("uniq_id controller: " + uniq_id);
-        insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+        //System.out.println("uniq_id controller: " + uniq_id);
+
         System.out.println("INSERTION insertionController: " + insertion);
         type_img = "insertion";
         
@@ -107,7 +110,7 @@ public class InsertionController {
                 ConnectionMongoDB.connMongo.deleteBuyInsertion(user.getUsername(), insertion);
                 return;
             }
-            //add new purchase to the local array
+     /*       //add new purchase to the local array
             Document purchased = new Document()
                     .append("_id", new ObjectId())
                     .append("timestamp", timestamp.getText())
@@ -118,10 +121,8 @@ public class InsertionController {
                             append("size", insertion.getSize()).
                             append("status", insertion.getStatus()).
                             append("category", insertion.getCategory()));
+       */
 
-            ArrayList<Document> purc = Session.getLogUser().getPurchased();
-            purc.add(purchased);
-            Session.getLogUser().setPurchased(purc);
 
             Utility.infoBox("Product bought correctly! ", "User Advise", "Purchase done");
 

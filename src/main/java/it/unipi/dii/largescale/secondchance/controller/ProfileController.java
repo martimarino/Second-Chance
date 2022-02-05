@@ -67,8 +67,9 @@ public class ProfileController extends MainController {
 
         user  = Session.getLogUser();
         balanceValue.setText(String.format("%.2f",user.getBalance()) + "€");
-        setProfile();
         type_img = "user";
+        setProfile();
+
         System.out.println("USERNAME init: " + user.getUsername());
     }
 
