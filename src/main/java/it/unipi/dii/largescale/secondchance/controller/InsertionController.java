@@ -13,8 +13,11 @@ import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class InsertionController {
 
@@ -102,6 +105,22 @@ public class InsertionController {
                 ConnectionMongoDB.connMongo.deleteBuyInsertion(user.getUsername(), insertion);
                 return;
             }
+            //add new purchase to the local array
+            Document purchased = new Document()
+                    .append("_id", new ObjectId())
+                    .append("timestamp", timestamp.getText())
+                    .append("seller", insertion.getSeller())
+                    .append("reviewed", false)
+                    .append("insertion", new Document("image", insertion.getImage_url()).
+                            append("price", insertion.getPrice()).
+                            append("size", insertion.getSize()).
+                            append("status", insertion.getStatus()).
+                            append("category", insertion.getCategory()));
+
+            ArrayList<Document> purc = Session.getLogUser().getPurchased();
+            purc.add(purchased);
+            Session.getLogUser().setPurchased(purc);
+
             Utility.infoBox("Product bought correctly! ", "User Advise", "Purchase done");
 
             buy.setText("Already purchased!");

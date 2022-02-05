@@ -98,33 +98,19 @@ public class User implements GeneralUser {
         return us;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+    public void setCountry(String country) { this.country = country; }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+    public void setCity(String city) { this.city = city; }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    public void setAddress(String address) { this.address = address; }
 
     public void setSuspended(boolean suspended) { this.suspended = suspended; }
 
@@ -140,33 +126,19 @@ public class User implements GeneralUser {
 
     public void setReviews(ArrayList<Document> reviews) { this.reviews = reviews; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() { return username; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public String getCountry() {
-        return country;
-    }
+    public String getCountry() { return country; }
 
-    public String getCity() {
-        return city;
-    }
+    public String getCity() { return city; }
 
-    public String getAddress() {
-        return address;
-    }
+    public String getAddress() { return address; }
 
     public boolean getSuspended() { return suspended; }
 

@@ -42,7 +42,7 @@ public class ConnectionMongoDB{
     public void openConnection() {
 
         // LOCAL DATABASE WITHOUT REPLICAS
-/*
+
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
         db = mongoClient.getDatabase("local");
@@ -50,11 +50,10 @@ public class ConnectionMongoDB{
         userColl = db.getCollection("user");
         insertionColl = db.getCollection("insertion");
         codeColl = db.getCollection("code");
-        */
-
 
         // CONNECTION TO VMS
 
+        /*
         mongoClient = MongoClients.create(
                 "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
                         "?retryWrites=true&w=majority&wtimeout=10000");
@@ -86,7 +85,7 @@ public class ConnectionMongoDB{
 
         // 2 - Find the first document
         userColl.find().limit(1).forEach(printDocuments());
-
+*/
     }
 
     public void closeConnection() {
@@ -144,6 +143,13 @@ public class ConnectionMongoDB{
         return cursor.hasNext();
     }
 
+    public boolean checkCredentials(String username, String encrypted) {
+
+        cursor = userColl.find(and(eq("username", username), eq("password", encrypted))).iterator();
+
+        return cursor.hasNext();
+    }
+
     public User findUserDetails(String username) {
 
         User logUser = new User();
@@ -160,7 +166,7 @@ public class ConnectionMongoDB{
         logUser.setRating(user.getDouble("rating"));
         logUser.setReviews((ArrayList<Document>) user.get("reviews"));
         logUser.setSold((ArrayList<Document>) user.get("sold"));
-        logUser.setSold((ArrayList<Document>) user.get("purchased"));
+        logUser.setPurchased((ArrayList<Document>) user.get("purchased"));
 
         return logUser;
     }
@@ -319,26 +325,6 @@ public class ConnectionMongoDB{
         String timestamp = date.format(new Date());
 
         TransactionBody<String> txnFunc = () -> {
-/*
-            Document bal = db.getCollection("balance").find(eq("username", username)).first();
-            double balanceBuyer = balance.getDouble("credit") - insertion.getPrice();
-
-            Bson filter = and(eq("username", username), gte("credit", insertion.getPrice()));
-            Bson update = set("credit", balanceBuyer);
-
-            //update buyer balance
-            Document ret = db.getCollection("balance").findOneAndUpdate(filter, update);
-
-            if (ret == null) {
-                Utility.infoBox("Cannot purchase, not enough balance", "Error", "Error purchase");
-                return "Buyer has not enough balance";
-            }
-
-            //update seller balance
-            Bson filter2 = eq("username", insertion.getSeller());
-            Bson update2 = inc("credit", insertion.getPrice());
-
-*/
 
             Document balance = db.getCollection("user").find(eq("username", username)).first();
             double balanceBuyer = balance.getDouble("balance") - insertion.getPrice();
@@ -368,7 +354,7 @@ public class ConnectionMongoDB{
             Document purchased = new Document()
                     .append("_id", new ObjectId())
                     .append("timestamp", timestamp)
-                    .append("user", insertion.getSeller())
+                    .append("seller", insertion.getSeller())
                     .append("reviewed", false)
                     .append("insertion", new Document("image", insertion.getImage_url()).
                             append("price", insertion.getPrice()).
@@ -380,14 +366,13 @@ public class ConnectionMongoDB{
             Document sold = new Document()
                     .append("_id", new ObjectId())
                     .append("timestamp", timestamp)
-                    .append("user", username)
+                    .append("buyer", username)
                     .append("reviewed", false)
                     .append("insertion", new Document("image", insertion.getImage_url()).
                             append("price", insertion.getPrice()).
                             append("size", insertion.getSize()).
                             append("status", insertion.getStatus()).
                             append("category", insertion.getCategory()));
-
 
             Bson filter_purchased = eq("username", username);
             BasicDBObject update_purchased = new BasicDBObject("$push", new BasicDBObject("purchased", purchased));
@@ -753,7 +738,7 @@ public class ConnectionMongoDB{
 
         System.out.println("REVIEW: " + review);
         BasicDBObject query = new BasicDBObject();
-        query.put("username",rev.getSeller());
+        query.put("username", rev.getSeller());
 
         BasicDBObject push_data = new BasicDBObject("$push", new BasicDBObject("reviews", review));
 

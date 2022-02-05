@@ -50,7 +50,6 @@ public class MyOrderController{
 
     }
 
-
     public void showOrders() {
 
         String type = comboBox.getValue();
@@ -61,19 +60,17 @@ public class MyOrderController{
         if(type.equals("Items purchased"))
         {
             if(ordersList != null && ordersList.size() != 0) {
-                ordersList.clear();
                 panel.getChildren().clear();
                 indexPage = 1;
             }
+            System.out.println("Purchased: " + Session.getLogUser().getPurchased());
             ordersList = Session.getLogUser().getPurchased();
-            System.out.println("ORDER: " + ordersList);
             kind = true;
             showAllOrders(true);
         }
         else if(type.equals("Items sold"))
         {
             if(ordersList != null && ordersList.size() != 0) {
-                ordersList.clear();
                 panel.getChildren().clear();
                 indexPage = 1;
             }
@@ -113,11 +110,11 @@ public class MyOrderController{
         Button review = new Button();
         Document ins = (Document) ordersList.get(indexPage-1).get("insertion");
 
-        String sellerUser = ins.getString("seller");
+        String sel = ordersList.get(indexPage-1).getString("seller");
         String orderTimestamp = ordersList.get(indexPage-1).getString("timestamp");
         Label buyer = new Label("Buyer: " + ordersList.get(indexPage-1).getString("buyer"));
         Label timestamp = new Label("Date Order: " + ordersList.get(indexPage-1).getString("timestamp"));
-        Label seller = new Label("Seller: " + ins.getString("seller"));
+        Label seller = new Label("Seller: " + sel);
         Label price = new Label("Price: " + ins.getDouble("price"));
         Label size = new Label("Size: " + ins.getString("size"));
         Label status = new Label("Status: " + ins.getString("status"));
@@ -150,7 +147,7 @@ public class MyOrderController{
         panel.getChildren().add(hbox);
 
         review.setOnMouseClicked(event-> {
-                    addReview(sellerUser, orderTimestamp, review);
+                    addReview(sel, orderTimestamp, review);
                 }
         );
     }
@@ -184,7 +181,7 @@ public class MyOrderController{
         prev.setVisible(true);
     }
 
-    private void addReview(String seller, String timestampOrder, Button revButton) {
+    private void addReview(String seller, String timestampOrder, Button revButton) {        //panel builder
 
         StackPane secondaryLayout = new StackPane();
         TextArea txtArea = new TextArea();
@@ -245,11 +242,12 @@ public class MyOrderController{
 
     public void sendReview(TextArea txtArea, TextField txtTitle, Button sendReview, Button revButton, int rating, String seller, String timestampOrder){
 
-        SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        SimpleDateFormat date = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
         String timestamp = date.format(new Date());
         System.out.println("timestamp: " + timestamp);
 
         Review rev = new Review( user.getUsername(), seller, txtArea.getText(), timestamp, txtTitle.getText(), rating);
+        Utility.printTerminal("REV: " + rev);
 
         ConnectionMongoDB.connMongo.addReview(rev);
         ConnectionMongoDB.connMongo.updateSellerRating(rev.getSeller());

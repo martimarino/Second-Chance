@@ -63,10 +63,10 @@ public class SignInController {
                 System.out.println("USER: " + user);
                 session = Session.getInstance();
                 session.setLogUser(user, isAdmin);
-                if(ConnectionMongoDB.connMongo.userAlreadyPresent(username))
+                if(ConnectionMongoDB.connMongo.checkCredentials(username, encrypted))
                     ShowAdminPanel();
             }else {
-                boolean logged = ConnectionMongoDB.connMongo.userAlreadyPresent(username);
+                boolean logged = ConnectionMongoDB.connMongo.checkCredentials(username, encrypted);
                 if (!logged) {
                     Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
                     //clear TextField
