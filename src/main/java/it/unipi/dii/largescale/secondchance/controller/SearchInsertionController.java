@@ -217,38 +217,23 @@ public class SearchInsertionController extends MainController{
     public void PrevFilteredInsertion() {
 
         box.getChildren().clear();
-
-        if((index%k) == 0)
-            index -= k;
-        else
-            index -= (index%k);
-        index -= k;
-
-        if (index == 0) {
-            prev.setDisable(true);
-            prev.setVisible(false);
+        index = Utility.prevPage(index, k, prev);
+        if(index < insertionFilter.size())
+        {
+            next.setDisable(false);
+            next.setVisible(true);
         }
-
         showFilteredInsertions();
-
         insertionFind.setCenter(box);
     }
 
     public void NextFilteredInsertion() {
 
         box.getChildren().clear();
-
         System.out.println("(next) INDEX: " + index);
-
+        Utility.nextPage(index, insertionFilter, next, prev);
         showFilteredInsertions();
 
-        if (index == insertionFilter.size()) {
-            next.setDisable(true);
-            next.setVisible(false);
-        }
-
-        prev.setVisible(true);
-        prev.setDisable(false);
 
     }
 }

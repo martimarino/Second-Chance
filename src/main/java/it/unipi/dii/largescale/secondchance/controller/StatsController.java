@@ -185,7 +185,7 @@ public class StatsController {
 
         for (int i = 0; i < array.size(); i++) {
 
-            String str = array.get(i).getString("seller") + ":    " + array.get(i).getInteger("count").toString();
+            String str = array.get(i).getString("username") + ":    " + array.get(i).getInteger("count").toString();
             items.add(str);
         }
 

@@ -84,7 +84,6 @@ public class FollowingController {
         Label username = new Label("Username: " + listFollowing.get(scrollPage).getString("username"));
         Label city = new Label("City: " + listFollowing.get(scrollPage).getString("city"));
 
-
         det.getChildren().add(username);
         det.getChildren().add(city);
         hb.getChildren().add(image);

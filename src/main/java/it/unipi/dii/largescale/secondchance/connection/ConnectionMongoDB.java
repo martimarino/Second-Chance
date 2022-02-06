@@ -43,7 +43,7 @@ public class ConnectionMongoDB{
     public void openConnection() {
 
         // LOCAL DATABASE WITHOUT REPLICAS
-
+/*
         ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
         mongoClient = MongoClients.create(uri);
         db = mongoClient.getDatabase("local");
@@ -51,10 +51,10 @@ public class ConnectionMongoDB{
         userColl = db.getCollection("user");
         insertionColl = db.getCollection("insertion");
         codeColl = db.getCollection("code");
-
+*/
         // CONNECTION TO VMS
 
-        /*
+
         mongoClient = MongoClients.create(
                 "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
                         "?retryWrites=true&w=majority&wtimeout=10000");
@@ -86,7 +86,7 @@ public class ConnectionMongoDB{
 
         // 2 - Find the first document
         userColl.find().limit(1).forEach(printDocuments());
-*/
+
     }
 
     public void closeConnection() {
@@ -164,10 +164,14 @@ public class ConnectionMongoDB{
         logUser.setSuspended(user.getBoolean("suspended"));
         logUser.setBalance(user.getDouble("balance"));
         logUser.setImage(user.getString("img_profile"));
-        logUser.setRating(user.getDouble("rating"));
-        logUser.setReviews((ArrayList<Document>) user.get("reviews"));
-        logUser.setSold((ArrayList<Document>) user.get("sold"));
-        logUser.setPurchased((ArrayList<Document>) user.get("purchased"));
+        if((ArrayList<Document>) user.get("reviews") != null){
+            logUser.setReviews((ArrayList<Document>) user.get("reviews"));
+            logUser.setRating(user.getDouble("rating"));
+        }
+        if((ArrayList<Document>) user.get("sold") != null)
+            logUser.setSold((ArrayList<Document>) user.get("sold"));
+        if((ArrayList<Document>) user.get("purchased")!= null)
+            logUser.setPurchased((ArrayList<Document>) user.get("purchased"));
 
         return logUser;
     }
@@ -578,34 +582,35 @@ public class ConnectionMongoDB{
 
     }
 
-    private ArrayList<Document> getNumOfOrdersByUserPurchased() {
+    private ArrayList<Document> getNumOfOrders(int k) {
 
+
+        //}
         ArrayList<Document> array = new ArrayList<>();
         ArrayList<Document> user = new ArrayList<>();
 
 
-        cursor = userColl.find().iterator();
+        //cursor = userColl.find().iterator();
 
-        while(cursor.hasNext())
-            user.add(cursor.next());
+        //while(cursor.hasNext())
+        //user.add(cursor.next());
 
-        for (int i = 0; i < user.size(); i++) {
+        //for (int i = 0; i < user.size(); i++) {
 
-            Bson match = match(eq("username", user.get(i).getString("username")));
-            Bson match1 = match(exists("purchased"));
-            Bson projection = new Document("$size", "$purchased");
-            Bson project = Aggregates.project(new Document("count", projection).append("username","$username"));
-            AggregateIterable<Document> aggr = userColl.aggregate(
-                    Arrays.asList(
-                           match, match1, project
-                    )
-            );
-            System.out.println("USER: " + aggr.first());
+        //Bson match = match(eq("username", user.get(i).getString("username")));
+        Bson match1 = match(exists("purchased.0"));
+        Bson projection = new Document("$size", "$purchased");
+        Bson project = Aggregates.project(new Document("count", projection).append("username","$username"));
+        Bson sort = sort(descending("count"));
+        Bson limit = limit(k);
+        AggregateIterable<Document> aggr = userColl.aggregate(
+                Arrays.asList(
+                        match1, project, sort, limit
+                )
+        );
 
-            if(aggr.first() != null)
-                array.add(aggr.first());
-        }
-
+        for(Document d : aggr)
+            System.out.println("USER: " + d.getString("username") + " " + d.getInteger("count"));
 
         /*
         DBObject exists = new BasicDBObject("$exists", "$sold");
@@ -645,62 +650,41 @@ public class ConnectionMongoDB{
     }
 
     public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
-        // true = select the top k most active users
-        // false = select the top k most active sellers
+        // true = select the top k users with more purchased orders
+        // false = select the top k with more purchased orders
 
-        ArrayList<Document> array = new ArrayList<>();
-        array = getNumOfOrdersByUserSold();
-        System.out.println(array.get(0));
+        ArrayList<Document> orders = new ArrayList<>();
+        AggregateIterable<Document> aggr;
+        if(choice) {
 
-        /*
-
-        MongoCollection<Document> myColl;
-
-        if (choice)
-            myColl = insertionColl;
+            Bson match = match(exists("purchased.0"));
+            Bson projection = new Document("$size", "$purchased");
+            Bson project = Aggregates.project(new Document("count", projection).append("username", "$username"));
+            Bson sort = sort(descending("count"));
+            Bson limit = limit(k);
+            aggr = userColl.aggregate(
+                    Arrays.asList(
+                            match, project, sort, limit
+                    )
+            );
+        }
         else
-            myColl = orderColl;
-
-        Bson limit = limit(k);
-
-        if (!choice) { //most sold orders
-            System.out.println("Sezione orders");
-            Bson project = project(fields(excludeId(), include("count"), computed("seller", "$_id")));
-
-            AggregateIterable<Document> aggr = myColl.aggregate(
+        {
+            Bson match = match(exists("sold.0"));
+            Bson projection = new Document("$size", "$sold");
+            Bson project = Aggregates.project(new Document("count", projection).append("username", "$username"));
+            Bson sort = sort(descending("count"));
+            Bson limit = limit(k);
+            aggr = userColl.aggregate(
                     Arrays.asList(
-                            Aggregates.group("$insertion.seller",
-                                    Accumulators.sum("count", 1)),
-                            project,
-                            Aggregates.sort(descending("count")),
-                            limit
-                    )
-
-            );
-
-            for (Document document : aggr) {
-                System.out.println("DOCUMENT:" + document);
-                array.add(document);
-            }
-        } else { //most insertions published
-            System.out.println("Sezione insertions");
-            Bson project = project(fields(excludeId(), include("count"), computed("seller", "$_id")));
-            AggregateIterable<Document> aggr = myColl.aggregate(
-                    Arrays.asList(
-                            Aggregates.group("$seller",
-                                    Accumulators.sum("count", 1)),
-                            project,
-                            Aggregates.sort(descending("count")),
-                            limit
+                            match, project, sort, limit
                     )
             );
+        }
+        for (Document d : aggr)
+            orders.add(d);
 
-            for (Document document : aggr) {
-                System.out.println(document);
-                array.add(document);
-            }
-        }*/
-        return array;
+        return orders;
     }
 
     public ArrayList<Document> findTopKRatedUser(int k, String country) {
