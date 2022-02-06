@@ -208,6 +208,7 @@ public class SearchUserController extends MainController{
     private void addSearchResults() throws IOException {
 
         VBox vb = new VBox(10);
+        Label rating;
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             Image image = new Image(imageStream);
@@ -215,8 +216,10 @@ public class SearchUserController extends MainController{
             Label username = new Label(searchedList.get(indexSearch).getString("username"));
             Label country = new Label(searchedList.get(indexSearch).getString("country"));
             Label city = new Label(searchedList.get(indexSearch).getString("city"));
-            Label rating = new Label(String.format("%.1f", searchedList.get(indexSearch).getDouble("rating")));
-
+            if(searchedList.get(indexSearch).getDouble("rating") != null)
+                rating = new Label(String.format("%.1f", searchedList.get(indexSearch).getDouble("rating")));
+            else
+                rating = new Label("No reviews");
             vb.getChildren().add(im);
             vb.getChildren().add(username);
             vb.getChildren().add(country);
@@ -317,6 +320,7 @@ public class SearchUserController extends MainController{
     public void addSuggestedUsers() throws IOException {
 
         VBox vb = new VBox(10);
+        Label rating;
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             System.out.println(suggList.get(indexSugg).getString("username"));
@@ -325,7 +329,10 @@ public class SearchUserController extends MainController{
             Label username = new Label(suggList.get(indexSugg).getString("username"));
             Label country = new Label(suggList.get(indexSugg).getString("country"));
             Label city = new Label(suggList.get(indexSugg).getString("city"));
-            Label rating = new Label(String.format("%.1f", suggList.get(indexSugg).getDouble("rating")));
+            if(suggList.get(indexSugg).getDouble("rating") != null)
+                rating = new Label(String.format("%.1f", suggList.get(indexSugg).getDouble("rating")));
+            else
+                rating = new Label("No reviews");
             followUnfollow = new Button();
             setFollowUnfollowButton(followUnfollow, suggList.get(indexSugg).getString("username"));
 
