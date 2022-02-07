@@ -197,8 +197,8 @@ public class ProfileController extends MainController {
             imageProfile = Utility.getGoodImage(user.getImage(), 100, type_img);
         }
 
-        label.setTranslateX(10);
-        label.setTranslateY(45);
+        label.setTranslateX(0);
+        label.setTranslateY(25);
         label.setTextFill(Color.RED);
         profileImage.getChildren().add(imageProfile);
         profileImage.getChildren().add(label);
@@ -285,13 +285,6 @@ public class ProfileController extends MainController {
         showReviews();
     }
 
-    public void getReviews() {
-
-        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
-
-        System.out.println(listReviews.get(0));
-    }
-
     /* ********** FOLLOWERS/ING STATS SECTION ********** */
 
     public void showUserFollowers() {
@@ -300,12 +293,12 @@ public class ProfileController extends MainController {
 
             Image image = new Image(imageStream);
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(FollowersController.class.getResource("/FXML/FollowersPage.fxml"));
+            loader.setLocation(FollowController.class.getResource("/FXML/FollowPage.fxml"));
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.getIcons().add(image);
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Your insertions");
-            FollowersController controller = loader.getController();
+            FollowController controller = loader.getController();
             if (follower.size() == 0) {
                 Utility.infoBox("You have not followers.", "Information", "No followers!");
                 return;
@@ -323,12 +316,12 @@ public class ProfileController extends MainController {
 
             Image image = new Image(imageStream);
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(FollowingController.class.getResource("/FXML/FollowingPage.fxml"));
+            loader.setLocation(FollowController.class.getResource("/FXML/FollowPage.fxml"));
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.getIcons().add(image);
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Your insertions");
-            FollowingController controller = loader.getController();
+            FollowController controller = loader.getController();
             if (following.size() == 0) {
                 Utility.infoBox("You have not following.", "Information", "No following!");
                 return;
