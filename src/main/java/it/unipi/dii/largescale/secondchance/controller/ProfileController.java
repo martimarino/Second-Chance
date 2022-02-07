@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Balance;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
@@ -57,6 +58,7 @@ public class ProfileController extends MainController {
 
     private User user;
     private Session session;
+    private double bal;
 
     int scrollPage;
     int scrollPage2;
@@ -65,8 +67,9 @@ public class ProfileController extends MainController {
 
     public void initialize(){
 
-        user  = Session.getLogUser();
-        balanceValue.setText(String.format("%.2f",user.getBalance()) + "€");
+        user  = Session.getLoggedUser();
+        bal = Balance.balance.getCredit();
+        balanceValue.setText(String.format("%.2f",bal) + "€");
         type_img = "user";
         setProfile();
 
@@ -75,7 +78,7 @@ public class ProfileController extends MainController {
 
     public void initialize(String us) {
 
-        user = Session.getLogUser();
+        user = Session.getLoggedUser();
 
         scrollPage = 0;
         scrollPage2 = 0;
@@ -221,77 +224,6 @@ public class ProfileController extends MainController {
         });
     }
 
-    public void setProfile(String us){
-
-        prevReviews.setDisable(true);
-        prevReviews.setVisible(false);
-
-        reviewsBox = new HBox();
-        reviewsBox.setSpacing(100);
-        review.setCenter(reviewsBox);
-
-        scrollPage = 0;
-        scrollPage2 = 0;
-
-        userInfo.getChildren().clear();
-
-        String rate = (Double.isNaN(user.getRating()))? "No reviews" : Double.toString(user.getRating());
-
-        Label username = new Label(user.getUsername());
-        Label name = new Label(user.getName());
-        Label email = new Label(user.getEmail());
-        Label country = new Label(user.getCountry());
-        Label city = new Label(user.getCity());
-        Label address = new Label(user.getAddress());
-        Label rating = new Label(rate);
-        Label usernameText = new Label("Username:");
-        Label nameText = new Label("Name:");
-        Label emailText = new Label("Email:");
-        Label countryText = new Label("Country:");
-        Label cityText = new Label("City:");
-        Label addressText = new Label("Address:");
-        Label ratingText = new Label("Rating:");
-
-        System.out.println(username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address);
-
-        userInfo.add(usernameText, 0, 0);
-        userInfo.add(nameText, 0, 1);
-        userInfo.add(emailText, 0, 2);
-        userInfo.add(countryText, 0, 3);
-        userInfo.add(cityText, 0, 4);
-        userInfo.add(addressText, 0, 5);
-        userInfo.add(ratingText, 0, 6);
-
-        userInfo.add(username, 1,0);
-        userInfo.add(name, 1, 1);
-        userInfo.add(email, 1, 2);
-        userInfo.add(country, 1, 3);
-        userInfo.add(city, 1, 4);
-        userInfo.add(address, 1, 5);
-        userInfo.add(rating, 1, 6);
-
-        updateUserBalance();
-
-        following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(us);
-        follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(us);
-        System.out.println("Abdelhakam: " + user.getUsername());
-        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
-
-        if (listReviews.size() < 3) {
-            System.out.println("Reviews nulle, disattivo i bottoni");
-            nextReviews.setDisable(true);
-            nextReviews.setVisible(false);
-        }
-        showReviews();
-    }
-
-    public void getReviews() {
-
-        listReviews = ConnectionMongoDB.connMongo.getReviewsByUser(user.getUsername());
-
-        System.out.println(listReviews.get(0));
-    }
-
     /* ********** FOLLOWERS/ING STATS SECTION ********** */
 
     public void showUserFollowers() {
@@ -366,9 +298,10 @@ public class ProfileController extends MainController {
 
     public void updateUserBalance() {
 
-        double new_balance = ConnectionMongoDB.connMongo.updateBalance(user.getUsername());
+        double new_balance = Balance.balance.getCredit();
         System.out.println("NEW BALANCE HERE: " + String.format("%.2f",new_balance));
         balanceValue.setText(String.format("%.2f",new_balance) + "€");
+
     }
 
     public void addFundsShow() throws IOException {

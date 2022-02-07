@@ -63,7 +63,7 @@ public class HomeController {
         prevFeedButton.setVisible(false);
 
         followedFromNeo = new ArrayList<>();
-        followedFromNeo = ConnectionNeo4jDB.connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
+        followedFromNeo = ConnectionNeo4jDB.connNeo.getFollowedInsertions(Session.getLoggedUser().getUsername(), k);
         feedList = ConnectionMongoDB.connMongo.followedUserInsertions(followedFromNeo);
 
         if (followedFromNeo.size() < k) {

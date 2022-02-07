@@ -330,10 +330,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 }
                 return followers;
             });
-            System.out.println("*************** NEO4j ***************");
             if(!follow.isEmpty())
-                System.out.println(follow.get(0));
-            System.out.println("*************************************");
+                Utility.printTerminal(follow.get(0));
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -361,10 +359,8 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 }
                 return following;
             });
-            System.out.println("*************** NEO4j ***************");
             if(!follow.isEmpty())
-                System.out.println(follow.get(0));
-            System.out.println("*************************************");
+                Utility.printTerminal(follow.get(0));
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -392,10 +388,9 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 }
                 return followed_ins;
             });
-            System.out.println("*************** NEO4j FOLLOWED INSERTIONS ***************");
             if(!followed_ins.isEmpty())
-                System.out.println(followed_ins.get(0));
-            System.out.println("*************************************");
+                Utility.printTerminal("*************** NEO4j FOLLOWED INSERTIONS ***************\n"
+                                        + followed_ins.get(0));
             this.close();
         } catch (Exception e) {
             e.printStackTrace();

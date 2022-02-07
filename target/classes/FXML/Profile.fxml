@@ -54,16 +54,16 @@
                         <Separator layoutX="261.0" layoutY="394.0" prefWidth="200.0" />
                         <Pane layoutX="446.0" layoutY="65.0" prefHeight="44.0" prefWidth="200.0">
                             <children>
-                                <Text fx:id="balanceValue" layoutX="84.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="32.0">
+                                <Text fx:id="balanceValue" layoutX="70.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="100.0">
                                     <font>
                                         <Font name="System Bold" size="12.0" />
                                     </font></Text>
-                                <Label fx:id="balanceText" layoutX="14.0" layoutY="14.0" text="Balance: " textFill="WHITE">
+                                <Label fx:id="balanceText" layoutX="0.0" layoutY="14.0" text="Balance: " textFill="WHITE">
                                     <font>
                                         <Font size="15.0" />
                                     </font>
                                 </Label>
-                                <Button fx:id="refreshBtn" layoutX="153.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#updateUserBalance" style="-fx-background-color: rgb(220,220,220); -fx-background-radius: 30;">
+                                <Button fx:id="refreshBtn" layoutX="170.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#updateUserBalance" style="-fx-background-color: rgb(220,220,220); -fx-background-radius: 30;">
                                     <graphic>
                                         <ImageView fitHeight="16.0" fitWidth="16.0">
                                             <image>

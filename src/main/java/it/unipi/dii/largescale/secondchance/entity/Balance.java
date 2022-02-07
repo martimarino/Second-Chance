@@ -2,6 +2,7 @@ package main.java.it.unipi.dii.largescale.secondchance.entity;
 
 public class Balance {
 
+    public static Balance balance;
     String username;
     Double credit;
 

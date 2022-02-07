@@ -44,7 +44,7 @@ public class SignUpController {
             User u = new User(em.getText(), us.getText(),
                     encrypted, nm.getText(), co.getValue(),
                     ci.getText(), ad.getText(), false,
-                    Double.NaN, 0.0, img, null,
+                    Double.NaN, img, null,
                     null, null);
 
             if(us.getText().equals("admin")) {
