@@ -118,7 +118,11 @@ public class InsertionListController {
                 {
                     Utility.printTerminal("Error deleting insertion Neo4j");
                     Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
-                    ConnectionMongoDB.connMongo.addInsertion(i);
+                    try {
+                        ConnectionMongoDB.connMongo.addInsertion(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     return;
                 }
                 initialize(Session.getLogUser().getUsername());

@@ -15,7 +15,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import javax.print.Doc;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -545,7 +544,7 @@ public class ConnectionMongoDB{
         }
 
 
-        /*
+/*
         DBObject exists = new BasicDBObject("$exists", "$sold");
 
         //Document query = new Document("sold", new BasicDBObject("$exists", true));
@@ -840,17 +839,10 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
-    public boolean findByInsertionId (String id) {
-
-        cursor = insertionColl.find(eq("_id", new ObjectId(id))).iterator();
-        return cursor.hasNext();
-    }
-
-    public boolean addInsertion(Insertion i) {
+    public void addInsertion(Insertion i) throws Exception {
 
         Document ins = Insertion.toDocument(i);
         insertionColl.insertOne(ins);
-        return true;
 
     }
 

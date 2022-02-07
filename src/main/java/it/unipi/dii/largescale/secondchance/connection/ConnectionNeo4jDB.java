@@ -66,9 +66,9 @@ public class ConnectionNeo4jDB implements AutoCloseable
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+            Utility.printTerminal("Cannot create new insertion node");
+            return false;
         }
-        Utility.printTerminal("Cannot create new insertion node");
-        return false;
     }
 
     public void followUser(String follower, String followed) {

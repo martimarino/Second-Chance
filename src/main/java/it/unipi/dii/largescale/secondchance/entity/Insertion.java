@@ -176,7 +176,7 @@ public class Insertion {
     public static Document toDocument(Insertion insertion) {
 
         Document ins = new Document()
-                .append("id", new ObjectId(insertion.getId())).
+                .append("_id", new ObjectId(insertion.getId())).
                 append("category", insertion.getCategory()).
                 append("description", insertion.getDescription()).
                 append("gender", insertion.getGender())

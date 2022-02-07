@@ -51,8 +51,8 @@ public class HomeController {
         viralInsertions.setCenter(viralHBox);
         scrollViralPage = 0;
         Utility.printTerminal("Size of viral: " + viralList.size());
-        showViralInsertions();
         type_img = "insertion";
+        showViralInsertions();
 
         // feed
         feedBox = new HBox();
