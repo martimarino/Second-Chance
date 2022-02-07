@@ -4,27 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="New insertion with ObjectId">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_02_2022_15_11__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_02_2022_15_11__Changes_.xml" afterDir="false" />
+    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Read and write concern set.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddFundsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddFundsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/NewInsertionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/NewInsertionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignInController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignInController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignUpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignUpController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/Balance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/Balance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchInsertionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchInsertionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/Profile.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/Profile.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/Profile.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/Profile.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Utility.java" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,7 +38,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="codeWithMe.voiceChat.enabledByDefault" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/target/classes" />
+    <property name="last_opened_file_path" value="$USER_HOME$/OneDrive - University of Pisa/AIDE/1 anno/Large-Scale and Multi-Structured Databases/Projects/pokeMongo-main" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -151,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644228305719</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Changes regarding new collection balance.">
+      <created>1644255846996</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1644255846996</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -177,6 +169,8 @@
     <MESSAGE value="upadte commit" />
     <MESSAGE value="fix most active user into admin, fix searchinsertion arrows" />
     <MESSAGE value="New insertion with ObjectId" />
-    <option name="LAST_COMMIT_MESSAGE" value="New insertion with ObjectId" />
+    <MESSAGE value="Changes regarding new collection balance." />
+    <MESSAGE value="Read and write concern set." />
+    <option name="LAST_COMMIT_MESSAGE" value="Read and write concern set." />
   </component>
 </project>

@@ -29,6 +29,9 @@ import static com.mongodb.client.model.Updates.set;
 
 public class ConnectionMongoDB{
 
+    private final String clusterAddress = "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
+            "?retryWrites=true&w=majority&wtimeout=10000";
+
     public static ConnectionMongoDB connMongo;
     private MongoClient mongoClient;
     private MongoDatabase db;
@@ -42,13 +45,13 @@ public class ConnectionMongoDB{
     /* ********* CONNECTION SECTION ********* */
 
     public void connectToVms(){
-        mongoClient = MongoClients.create(
-                "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
-                        "?retryWrites=true&w=majority&wtimeout=10000");
+        mongoClient = MongoClients.create(clusterAddress);
 
         // Read Preferences at DB level
+        // Write concern at DB level
         db = mongoClient.getDatabase("lsmdb")
-                .withReadPreference(ReadPreference.secondary());
+                .withReadPreference(ReadPreference.secondary())
+                .withWriteConcern(WriteConcern.W1);
 
         // Read Preferences at collection level
         userColl = db.getCollection("user")
@@ -60,9 +63,9 @@ public class ConnectionMongoDB{
         codeColl = db.getCollection("code")
                 .withReadPreference(ReadPreference.secondary());
 
-        // Write concern at DB level
-        db = mongoClient.getDatabase("lsmdb")
-                .withWriteConcern(WriteConcern.W1);
+        balanceColl = db.getCollection("balance")
+                .withReadPreference(ReadPreference.primary())
+                .withWriteConcern(WriteConcern.W3);
 
     }
 
@@ -408,6 +411,7 @@ public class ConnectionMongoDB{
                 Utility.infoBox("Cannot buy product", "Error", "Error purchase");
                 return "Cannot increment seller balance";
             }
+
             //order purchased
             Document purchased = new Document()
                     .append("_id", new ObjectId())
@@ -870,10 +874,10 @@ public class ConnectionMongoDB{
         return new_balance;
     }
 
-    public void updateBalance(String username) {
+    public void updateBalance(String username, double credit) {
 
         Bson query = eq("username", username);
-        Bson update = set("credit", Balance.balance.getCredit());
+        Bson update = set("credit", credit);
 
         //update buyer balance
         db.getCollection("balance").findOneAndUpdate(query, update);
