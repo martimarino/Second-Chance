@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="fix most active user into admin, fix searchinsertion arrows">
+    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowersController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/FollowersPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/FollowPage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/FollowingPage.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/FollowersPage.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/FollowingPage.fxml" beforeDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,6 +90,7 @@
       <workItem from="1644152757678" duration="123000" />
       <workItem from="1644162541952" duration="6928000" />
       <workItem from="1644170803249" duration="461000" />
+      <workItem from="1644253648510" duration="295000" />
     </task>
     <task id="LOCAL-00001" summary="Fix admin function, fix other problems">
       <created>1643993961652</created>
@@ -138,7 +134,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644170714400</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Merged the two files FollowersController.java and FollowingController.java. &#10;&#10;Merged the two files FollowersPage.fxml and FollowingPage.fxml.">
+      <created>1644251673086</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1644251673086</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,7 +152,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="fix" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -163,7 +178,8 @@
     <MESSAGE value="Fix do orders and update and put review, error message on clicking insertion after purchase, fix sign up" />
     <MESSAGE value="upadte commit" />
     <MESSAGE value="fix most active user into admin, fix searchinsertion arrows" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix most active user into admin, fix searchinsertion arrows" />
+    <MESSAGE value="Merged the two files FollowersController.java and FollowingController.java. &#10;&#10;Merged the two files FollowersPage.fxml and FollowingPage.fxml." />
+    <option name="LAST_COMMIT_MESSAGE" value="Merged the two files FollowersController.java and FollowingController.java. &#10;&#10;Merged the two files FollowersPage.fxml and FollowingPage.fxml." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

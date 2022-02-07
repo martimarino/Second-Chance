@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class FollowController {
 
-    public ArrayList<Document> list;
+    public ArrayList<String> list;
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
@@ -28,7 +28,7 @@ public class FollowController {
 
         //System.out.println("User 0: " + followingUsers.get(0));
         type_img = "user";
-        list = new ArrayList<Document>();
+        list = users;
         scrollPage = 0;
         box = new VBox(20);
 
@@ -40,11 +40,12 @@ public class FollowController {
             Utility.infoBox("This profile has not following", "Information", "No following!");
             return;
         }
-
+        /*
         for (int i = 0; i < users.size(); i++) {
             Document user = ConnectionMongoDB.connMongo.findUserByUsername(users.get(i));
             list.add(user);
         }
+        */
 
         show();
     }
@@ -69,17 +70,17 @@ public class FollowController {
 
     private void addUser() {
 
-        String user = list.get(scrollPage).getString("username");
+        String user = list.get(scrollPage);
 
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage("./img/" + list.get(scrollPage).getString("image_url"), 150, type_img);
-        Label username = new Label("Username: " + list.get(scrollPage).getString("username"));
-        Label city = new Label("City: " + list.get(scrollPage).getString("city"));
+        ImageView image = Utility.getGoodImage("./img/user.png", 150, type_img);
+        Label username = new Label("Username: " + list.get(scrollPage));
+        //Label city = new Label("City: " + list.get(scrollPage).getString("city"));
 
         det.getChildren().add(username);
-        det.getChildren().add(city);
+        //det.getChildren().add(city);
         hb.getChildren().add(image);
         hb.getChildren().add(det);
         box.getChildren().add(hb);
@@ -95,7 +96,7 @@ public class FollowController {
 
         GridPane.setHalignment(image, HPos.LEFT);
         GridPane.setHalignment(username, HPos.LEFT);
-        GridPane.setHalignment(city, HPos.LEFT);
+        //GridPane.setHalignment(city, HPos.LEFT);
 
         det.setStyle("-fx-padding: 0 100 0 50;");
         hb.setStyle(
@@ -130,7 +131,10 @@ public class FollowController {
 
         box.getChildren().clear();
         System.out.println("(next) INDEX: " + scrollPage);
-        Utility.nextPage(scrollPage + nPage, list, next, prev);
+        if (scrollPage == list.size()) {
+            next.setDisable(true);
+            next.setVisible(false);
+        }
         show();
 
     }

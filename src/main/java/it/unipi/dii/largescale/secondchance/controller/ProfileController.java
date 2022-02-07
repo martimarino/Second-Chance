@@ -197,7 +197,7 @@ public class ProfileController extends MainController {
             imageProfile = Utility.getGoodImage(user.getImage(), 100, type_img);
         }
 
-        label.setTranslateX(0);
+        label.setTranslateX(-5);
         label.setTranslateY(25);
         label.setTextFill(Color.RED);
         profileImage.getChildren().add(imageProfile);
