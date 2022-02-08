@@ -134,10 +134,7 @@ public class ConnectionMongoDB{
                 .append("name", u.getName())
                 .append("password", u.getPassword())
                 .append("suspended", u.getSuspended())
-                .append("username", u.getUsername())
-                .append("reviews", new ArrayList<Document>())
-                .append("sold", new ArrayList<Document>())
-                .append("purchased",new ArrayList<Document>());
+                .append("username", u.getUsername());
 
         userColl.insertOne(user);
 
@@ -392,9 +389,10 @@ public class ConnectionMongoDB{
 
         TransactionBody<String> txnFunc = () -> {
 
-            double balanceBuyer = Balance.balance.getCredit() - insertion.getPrice();
+            double currentBalance = ConnectionMongoDB.connMongo.getBalance();
+            double checkBalance = currentBalance - insertion.getPrice();
 
-            if (balanceBuyer < 0.0) {
+            if (checkBalance < 0.0) {
                 Utility.infoBox("Cannot purchase, not enough balance", "Error", "Error purchase");
                 return "Buyer has not enough balance";
             }
@@ -852,7 +850,7 @@ public class ConnectionMongoDB{
         }
 
         double creditToAdd = code.getInteger("credit");
-        new_balance = Balance.balance.getCredit() + creditToAdd;
+        new_balance = ConnectionMongoDB.connMongo.getBalance() + creditToAdd;
 
         try {
             updateBalance(Session.getLoggedUser().getUsername(), creditToAdd, '+');
@@ -905,6 +903,18 @@ public class ConnectionMongoDB{
             System.err.println("Unable to get balance from db: " + me);
         }
         return cursor.first().getDouble("credit");
+    }
+
+    public boolean insertBalance(Balance b) {
+
+        try {
+            balanceColl.insertOne(b.toDocument());
+            return true;
+        } catch (MongoException me) {
+            System.err.println("Unable to add new document in balance collection: " + me);
+            return false;
+        }
+
     }
 
     /* ************************* CODE SECTION ************************* */

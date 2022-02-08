@@ -1,6 +1,8 @@
 package main.java.it.unipi.dii.largescale.secondchance.entity;
 
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
+import org.bson.Document;
 
 public class Balance {
 
@@ -26,7 +28,14 @@ public class Balance {
     }
 
     public Double getCredit() {
-        this. credit = ConnectionMongoDB.connMongo.getBalance();
-        return credit;
+        return this.credit;
     }
+
+    public Document toDocument() {
+        Document doc = new Document().append("username", this.getUsername())
+                .append("credit", this.getCredit());
+
+        return doc;
+    }
+
 }

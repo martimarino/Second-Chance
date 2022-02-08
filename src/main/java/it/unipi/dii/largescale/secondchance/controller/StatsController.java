@@ -212,9 +212,6 @@ public class StatsController {
 
     }
 
-
-
-
     public void showTopKRatedUser(ConnectionMongoDB conn, int k) throws IOException {
 
         ArrayList<Document> array;

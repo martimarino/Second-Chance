@@ -58,7 +58,7 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <ComboBox fx:id="co" layoutX="69.0" layoutY="260.0" prefHeight="22.0" prefWidth="149.0" promptText="Select your country">
+            <ComboBox fx:id="co" layoutX="69.0" layoutY="260.0" prefHeight="22.0" prefWidth="149.0" value="Select your country">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="Italy" />

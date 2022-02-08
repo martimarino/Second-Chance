@@ -7,6 +7,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Balance;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.CryptWithMD5;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
@@ -31,9 +32,15 @@ public class SignUpController {
 
         String img;
 
+        System.out.println("US: " + us.getText());
+        System.out.println("CO: " + co.getValue());
+
         if (!us.getText().isEmpty()
-                && !pw.getText().isEmpty() && !em.getText().isEmpty()
-                && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getValue().isEmpty()
+                && !pw.getText().isEmpty()
+                && !em.getText().isEmpty()
+                && !nm.getText().isEmpty()
+                && !ci.getText().isEmpty()
+                && !co.getValue().equals("Select your country")
                 && !ad.getText().isEmpty()) {
 
             if(image.getText().equals(""))
@@ -66,13 +73,15 @@ public class SignUpController {
                 ad.setText("");
                 image.setText("");
 
-                if(!ConnectionNeo4jDB.connNeo.addUser(u))
+                Balance bal = new Balance(u.getUsername(), 0.0);
+                if(!ConnectionNeo4jDB.connNeo.addUser(u) || !ConnectionMongoDB.connMongo.insertBalance(bal))
                 {
                     Utility.printTerminal("Error registration user");
                     Utility.infoBox("Error adding new user" , "Error", "Error adding new user");
                     ConnectionMongoDB.connMongo.deleteUserMongo(u.getUsername());
                     return;
                 }
+
                 ShowSignIn();
                 Utility.infoBox("Now you can login!", "Confirmed", "Registration completed with success!");
 
