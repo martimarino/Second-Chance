@@ -43,7 +43,6 @@ public class Session{
 
     public void getLogoutUser() {
 
-        ConnectionMongoDB.connMongo.updateBalance(Session.getLoggedUser().getUsername(), Balance.balance.getCredit());
         ConnectionMongoDB.connMongo.updateLoggedUser();
         logUser = null;
         session = null; // [1]

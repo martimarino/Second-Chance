@@ -399,17 +399,19 @@ public class ConnectionMongoDB{
                 return "Buyer has not enough balance";
             }
 
-            Balance.balance.setCredit(balanceBuyer);
-
-            //update seller balance
-            Bson filter2 = eq("username", insertion.getSeller());
-            Bson update2 = inc("credit", insertion.getPrice());
-
-            Document ret3 = db.getCollection("balance").findOneAndUpdate(filter2, update2);
-
-            if (ret3 == null) {
+            boolean upBuyer, upSeller;
+            upBuyer = updateBalance(Session.getLoggedUser().getUsername(), insertion.getPrice(), '-');
+            if(!upBuyer)
+            {
                 Utility.infoBox("Cannot buy product", "Error", "Error purchase");
-                return "Cannot increment seller balance";
+                return "Cannot update buyer balance";
+            } else {
+                upSeller = updateBalance(insertion.getSeller(), insertion.getPrice(), '+');
+                if(!upSeller) {
+                    updateBalance(Session.getLoggedUser().getUsername(), insertion.getPrice(), '+');
+                    Utility.infoBox("Cannot buy product", "Error", "Error purchase");
+                    return "Cannot update seller balance";
+                }
             }
 
             //order purchased
@@ -436,21 +438,14 @@ public class ConnectionMongoDB{
                             append("status", insertion.getStatus()).
                             append("category", insertion.getCategory()));
 
-            /*
-            Bson filter_purchased = eq("username", username);
-            BasicDBObject update_purchased = new BasicDBObject("$push", new BasicDBObject("purchased", purchased));
-            */
-
             Bson filter_sold = eq("username", insertion.getSeller());
             BasicDBObject update_sold = new BasicDBObject("$push", new BasicDBObject("sold", sold));
 
             //insert new document into user collection
             try {
-                //userColl.findOneAndUpdate(filter_purchased, update_purchased);
                 userColl.findOneAndUpdate(filter_sold, update_sold);
-
-            } catch (Exception e) {
-                System.err.println("Unable to insert due to an error: " + e);
+            } catch (MongoException e) {
+                System.err.println("Unable to insert item in sold array: " + e);
             }
 
             //update local purchased array
@@ -462,8 +457,13 @@ public class ConnectionMongoDB{
             purc.add(purchased);
             Session.getLoggedUser().setPurchased(purc);
 
-            insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));
-            return "OK";
+            try {
+                insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));
+                return "OK";
+            } catch (MongoException e) {
+                System.err.println("Unable to delete insertion: " + e);
+            }
+            return null;
         };
         return executeTransaction(clientSession, txnFunc);
     }
@@ -852,20 +852,10 @@ public class ConnectionMongoDB{
         }
 
         double creditToAdd = code.getInteger("credit");
-        Document queryUser = new Document().append("username",  username);
-        Document currentBalance = balanceColl.find(eq("username", username)).first();
-        new_balance = currentBalance.getDouble("credit") + creditToAdd;
-
-        Bson updatesBalance = Updates.combine(
-                Updates.set("credit", new_balance)
-        );
-
-        UpdateOptions options = new UpdateOptions().upsert(true);
+        new_balance = Balance.balance.getCredit() + creditToAdd;
 
         try {
-            UpdateResult resultBalance = balanceColl.updateOne(queryUser, updatesBalance, options);
-            System.out.println("Modified document count: " + resultBalance.getModifiedCount());
-            System.out.println("Upserted id: " + resultBalance.getUpsertedId()); // only contains a value when an upsert is performed
+            updateBalance(Session.getLoggedUser().getUsername(), creditToAdd, '+');
             Utility.infoBox("Deposit of " + code.getInteger("credit") + "€ euros successfully executed", "Success", "Deposit done!");
             deleteCode(code.getString("_id"));
         } catch (MongoException me) {
@@ -874,21 +864,47 @@ public class ConnectionMongoDB{
         return new_balance;
     }
 
-    public void updateBalance(String username, double credit) {
+    public boolean updateBalance(String username, double credit, char c) {
 
+        double updated;
         Bson query = eq("username", username);
-        Bson update = set("credit", credit);
+        Bson update = null;
 
-        //update buyer balance
-        db.getCollection("balance").findOneAndUpdate(query, update);
+        switch(c) {
+            case '+':
+                update = inc("credit", credit);
+                break;
+            case '-':
+                update = inc("credit", -credit);
+                break;
+            default:
+                Utility.printTerminal("Operation not allowed.");
+                break;
+        }
 
+        //update balance
+        try {
+            Document d = balanceColl.findOneAndUpdate(query, update);
+            updated = d.getDouble("credit");
+            Balance.balance.setCredit(updated);
+            return true;
+        } catch (MongoException me) {
+            System.err.println("Unable to update " + username + "'s balance: " + me);
+            return false;
+        }
     }
 
-    public static double getBalance() {
+    public double getBalance() {
 
-        Document bal = balanceColl.find(eq("username", Session.getLoggedUser().getUsername())).first();
-        return bal.getDouble("credit");
-
+        FindIterable<Document> cursor = null;
+        try {
+            Bson filter = Filters.eq("username", Session.getLoggedUser().getUsername());
+            Bson projection = fields(include("credit"), excludeId());
+            cursor = balanceColl.find(filter).projection(projection);
+        } catch (MongoException me) {
+            System.err.println("Unable to get balance from db: " + me);
+        }
+        return cursor.first().getDouble("credit");
     }
 
     /* ************************* CODE SECTION ************************* */

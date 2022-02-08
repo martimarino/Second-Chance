@@ -35,7 +35,7 @@ public class AddFundsController {
         });
     }
 
-    public void deposit() throws IOException {
+    public void deposit() {
 
         String code = txtFieldCode.getText();
 
@@ -43,7 +43,6 @@ public class AddFundsController {
         Utility.printTerminal("CREDIT (before): " + Balance.balance.getCredit());
         Balance.balance.setCredit(newCredit);
         Utility.printTerminal("CREDIT (after): " + Balance.balance.getCredit());
-
 
         txtFieldCode.setText("");
 

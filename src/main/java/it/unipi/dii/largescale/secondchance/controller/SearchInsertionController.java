@@ -109,8 +109,6 @@ public class SearchInsertionController extends MainController{
 
     private void showFilteredInsertions() {
 
-        System.out.println("INDEX: " + index);
-        System.out.println("INS LIST: " + insertionFilter.size());
         if (insertionFilter.size() - index > k) {       //more than k to show
             next.setDisable(false);
             next.setVisible(true);
@@ -126,13 +124,10 @@ public class SearchInsertionController extends MainController{
         secondRow.getChildren().clear();
         box.getChildren().clear();
 
-        for (int i = 0; i < k && index < insertionFilter.size(); i++) {
-            System.out.println("i: " + i);
-            System.out.println("index: " + index);
-            System.out.println("insertionFilter.size(): " + insertionFilter.size());
-            addFilteredInsertions(i);
+        for (int i = 0; i < k && index < insertionFilter.size(); i++)
+           addFilteredInsertions(i);
 
-        }
+
         box.getChildren().add(firstRow);
         if(index >= k/2)
             box.getChildren().add(secondRow);
@@ -220,7 +215,6 @@ public class SearchInsertionController extends MainController{
     public void NextFilteredInsertion() {
 
         box.getChildren().clear();
-        System.out.println("(next) INDEX: " + index);
         Utility.nextPage(index, insertionFilter, next, prev);
         showFilteredInsertions();
 
