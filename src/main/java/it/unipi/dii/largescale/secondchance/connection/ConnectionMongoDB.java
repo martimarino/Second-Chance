@@ -93,8 +93,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        connectToLocal();
-        //connectToVms();
+        //connectToLocal();
+        connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");
@@ -899,12 +899,12 @@ public class ConnectionMongoDB{
         FindIterable<Document> cursor = null;
         try {
             Bson filter = Filters.eq("username", Session.getLoggedUser().getUsername());
-            Bson projection = fields(include("credit"), excludeId());
+            Bson projection = fields(include("balance"), excludeId());
             cursor = balanceColl.find(filter).projection(projection);
         } catch (MongoException me) {
             System.err.println("Unable to get balance from db: " + me);
         }
-        return cursor.first().getDouble("credit");
+        return cursor.first().getDouble("balance");
     }
 
     /* ************************* CODE SECTION ************************* */
