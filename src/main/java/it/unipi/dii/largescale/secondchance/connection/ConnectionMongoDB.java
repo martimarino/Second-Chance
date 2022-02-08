@@ -134,10 +134,7 @@ public class ConnectionMongoDB{
                 .append("name", u.getName())
                 .append("password", u.getPassword())
                 .append("suspended", u.getSuspended())
-                .append("username", u.getUsername())
-                .append("reviews", new ArrayList<Document>())
-                .append("sold", new ArrayList<Document>())
-                .append("purchased",new ArrayList<Document>());
+                .append("username", u.getUsername());
 
         userColl.insertOne(user);
 
@@ -392,9 +389,10 @@ public class ConnectionMongoDB{
 
         TransactionBody<String> txnFunc = () -> {
 
-            double balanceBuyer = Balance.balance.getCredit() - insertion.getPrice();
+            double currentBalance = ConnectionMongoDB.connMongo.getBalance();
+            double checkBalance = currentBalance - insertion.getPrice();
 
-            if (balanceBuyer < 0.0) {
+            if (checkBalance < 0.0) {
                 Utility.infoBox("Cannot purchase, not enough balance", "Error", "Error purchase");
                 return "Buyer has not enough balance";
             }
@@ -573,11 +571,10 @@ public class ConnectionMongoDB{
     }
 
     public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
-        // true = select the top k users with more purchased orders
-        // false = select the top k with more purchased orders
 
         ArrayList<Document> orders = new ArrayList<>();
         AggregateIterable<Document> aggr;
+        // true = select the top k users with more purchased orders
         if(choice) {
 
             Bson match = match(exists("purchased.0"));
@@ -591,7 +588,7 @@ public class ConnectionMongoDB{
                     )
             );
         }
-        else
+        else        // false = select the top k with more purchased orders
         {
             Bson match = match(exists("sold.0"));
             Bson projection = new Document("$size", "$sold");
@@ -661,7 +658,7 @@ public class ConnectionMongoDB{
         AggregateIterable<Document> aggr  = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
-                        Aggregates.sort(descending("viewed")),
+                        Aggregates.sort(descending("views")),
                         limit
                 )
         );
@@ -852,7 +849,7 @@ public class ConnectionMongoDB{
         }
 
         double creditToAdd = code.getInteger("credit");
-        new_balance = Balance.balance.getCredit() + creditToAdd;
+        new_balance = ConnectionMongoDB.connMongo.getBalance() + creditToAdd;
 
         try {
             updateBalance(Session.getLoggedUser().getUsername(), creditToAdd, '+');
@@ -905,6 +902,18 @@ public class ConnectionMongoDB{
             System.err.println("Unable to get balance from db: " + me);
         }
         return cursor.first().getDouble("balance");
+    }
+
+    public boolean insertBalance(Balance b) {
+
+        try {
+            balanceColl.insertOne(b.toDocument());
+            return true;
+        } catch (MongoException me) {
+            System.err.println("Unable to add new document in balance collection: " + me);
+            return false;
+        }
+
     }
 
     /* ************************* CODE SECTION ************************* */

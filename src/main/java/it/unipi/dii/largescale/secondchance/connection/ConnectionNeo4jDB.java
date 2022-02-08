@@ -3,6 +3,7 @@ package main.java.it.unipi.dii.largescale.secondchance.connection;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import org.bson.Document;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 
@@ -415,5 +416,98 @@ public class ConnectionNeo4jDB implements AutoCloseable
         }finally{
             this.close();
         }
+    }
+
+    public ArrayList<String> findMostFollowedUsers(int k) {
+
+        this.open();
+        ArrayList<String> followedUsers = new ArrayList<>();
+
+        try (Session session = driver.session()) {
+
+            session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run("match(u:User)-[r:FOLLOWS]->(u1:User) " +
+                                "RETURN u1.username as user, COUNT(r) as counter order by counter DESC limit $k",
+                        parameters("k", k));
+
+                while (result.hasNext()) {
+                    Record r = result.next();
+                    String user = r.get("user").asString();
+                    int count = r.get("counter").asInt();
+                    String us = user + " : " + count;
+                    followedUsers.add(us);
+                }
+
+                return followedUsers;
+
+            });
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return followedUsers;
+    }
+
+    public ArrayList<String> findNumberInterestingForCountry() {
+
+        this.open();
+        ArrayList<String> interesting = new ArrayList<>();
+
+        try (Session session = driver.session()) {
+
+            session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run("match(u:User)-[r:INTERESTED]->(i:Insertion) " +
+                        "RETURN DISTINCT i.category as category, count(r) AS counter" +
+                        " ORDER BY counter DESC");
+
+                while (result.hasNext()) {
+                    Record r = result.next();
+                    String category = r.get("category").asString();
+                    int count = r.get("counter").asInt();
+                    String ins = category + " : " + count;
+                    interesting.add(ins);
+                }
+
+                return interesting;
+
+            });
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return interesting;
+
+    }
+
+
+    public ArrayList<String> findNumberPostedInsertionForCountry() {
+
+        this.open();
+        ArrayList<String> posted = new ArrayList<>();
+
+        try (Session session = driver.session()) {
+
+            session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run("match(u:User)-[r:POSTED]->(i:Insertion) " +
+                        "RETURN DISTINCT u.country as country, count(r) AS counter" +
+                        " ORDER BY counter DESC");
+
+                while (result.hasNext()) {
+                    Record r = result.next();
+                    String country = r.get("country").asString();
+                    int count = r.get("counter").asInt();
+                    String ins = country + " : " + count;
+                    posted.add(ins);
+                }
+
+                return posted;
+
+            });
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return posted;
+
     }
 }

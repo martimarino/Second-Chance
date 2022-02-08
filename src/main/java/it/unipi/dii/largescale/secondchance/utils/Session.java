@@ -36,8 +36,11 @@ public class Session{
 
         if(session == null)
             throw new RuntimeException("Session not already active");
-        else
+        else {
+            //if(session.logUser.getClass().isInstance())
             return (User) session.logUser;
+        }
+
     }
 
 

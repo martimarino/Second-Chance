@@ -39,9 +39,8 @@ public class AddFundsController {
 
         String code = txtFieldCode.getText();
 
-        double newCredit = ConnectionMongoDB.connMongo.addFundsToWallet(user.getUsername(), code);
         Utility.printTerminal("CREDIT (before): " + Balance.balance.getCredit());
-        Balance.balance.setCredit(newCredit);
+        double newCredit = ConnectionMongoDB.connMongo.addFundsToWallet(user.getUsername(), code);
         Utility.printTerminal("CREDIT (after): " + Balance.balance.getCredit());
 
         txtFieldCode.setText("");

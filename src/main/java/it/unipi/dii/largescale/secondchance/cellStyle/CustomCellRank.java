@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 
 public class CustomCellRank extends HBox {
 
-
     private Label username = new Label();
     private Label total = new Label();
     private GridPane grid = new GridPane();
