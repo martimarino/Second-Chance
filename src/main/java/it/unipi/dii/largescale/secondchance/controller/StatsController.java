@@ -5,21 +5,22 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import main.java.it.unipi.dii.largescale.secondchance.cellStyle.CustomCellRank;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 public class StatsController {
 
@@ -59,7 +60,8 @@ public class StatsController {
                txtFieldCountry.setEditable(false);
                txtFieldCountry.setMouseTransparent(true);
 
-               elaboraButton.setDisable(true);
+               if (Objects.equals(txtFieldCategory.getText(), ""))
+                   elaboraButton.setDisable(true);
 
                if (!txtFieldCategory.isEditable()) {
                    txtFieldCategory.setEditable(true);
@@ -67,14 +69,15 @@ public class StatsController {
                }
         });
 
-       rBTopKInterestingIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        rBTopKInterestingIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
            System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
            txtFieldCountry.setText("");
            txtFieldCountry.setEditable(false);
            txtFieldCountry.setMouseTransparent(true);
 
-           elaboraButton.setDisable(true);
+            if (Objects.equals(txtFieldCategory.getText(), ""))
+                elaboraButton.setDisable(true);
 
            if (!txtFieldCategory.isEditable()) {
                txtFieldCategory.setEditable(true);
@@ -180,16 +183,17 @@ public class StatsController {
         ArrayList<Document> array = conn.findMostActiveUsersSellers(k, choice);
         StackPane secondaryLayout = new StackPane();
 
-        ListView<String> list = new ListView<>();
-        ObservableList items = FXCollections.observableArrayList();
+        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
+
+        String type = (choice) ? "Purchased Orders" : "Sold Orders";
 
         for (int i = 0; i < array.size(); i++) {
 
-            String str = array.get(i).getString("username") + ":    " + array.get(i).getInteger("count").toString();
-            items.add(str);
+            items.add(new CustomCellRank(array.get(i).getString("username"), array.get(i).getInteger("count")));
         }
 
-        list.setItems(items);
+        leaderBoard.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
@@ -197,14 +201,19 @@ public class StatsController {
 
             // New window (Stage)
             Stage newWindow = new Stage();
-            newWindow.setTitle("Top " + k);
+            newWindow.setTitle("Top " + k + " " + type);
             newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(list);
+            secondaryLayout.getChildren().add(leaderBoard);
             newWindow.setScene(secondScene);
 
             newWindow.show();
         }
+
+
     }
+
+
+
 
     public void showTopKRatedUser(ConnectionMongoDB conn, int k) throws IOException {
 
@@ -252,80 +261,70 @@ public class StatsController {
 
     public void showTopKInterestingInsertion(ConnectionMongoDB conn, int k) throws IOException {
 
-        ArrayList<Document> array;
         String category = txtFieldCategory.getText();
-
-        if(!Arrays.asList(categories).contains(category)) {
-            Utility.infoBox("Please insert a valid category", "Error", "Category not found!");
-            return;
-        }
-
-        array = conn.findTopKInterestingInsertion(k, category);
-
-        StackPane secondaryLayout = new StackPane();
-
-        ListView<String> list = new ListView<String>();
-        ObservableList items = FXCollections.observableArrayList();
-
-        for (int i=0; i < k; i++) {
-
-            String str = array.get(i).getString("description") + ": " + array.get(i).getInteger("interested").toString();
-            items.add(str);
-        }
-
-        list.setItems(items);
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-            Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
-
-            // New window (Stage)
-            Stage newWindow = new Stage();
-            newWindow.getIcons().add(image);
-            newWindow.setTitle("Top " + k);
-            secondaryLayout.getChildren().add(list);
-            newWindow.setScene(secondScene);
-
-            newWindow.show();
-        }
-    }
-
-    public void showTopKViewedInsertion(ConnectionMongoDB conn, int k) throws IOException {
-
         ArrayList<Document> array;
+        array = conn.findTopKViewedInsertion(k, category);
 
-        String category = txtFieldCategory.getText();
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName(category);
 
         if(!Arrays.asList(categories).contains(category))
             Utility.infoBox("Please insert a valid category", "Error", "Category not found!");
 
-        array = conn.findTopKViewedInsertion(k, category);
-
-        StackPane secondaryLayout = new StackPane();
-
-        ListView<String> list = new ListView<String>();
-        ObservableList items = FXCollections.observableArrayList();
-
         for (int i=0; i < k; i++) {
-
-            String str = array.get(i).getString("description") + ": " + array.get(i).getInteger("views").toString();
-            items.add(str);
+            series1.getData().add(new XYChart.Data(array.get(i).getObjectId("_id").toString(), array.get(i).getInteger("interested")));
         }
 
-        list.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Stage stage = new Stage();
             Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
+            stage.getIcons().add(image);
+            stage.setTitle("Stats");
+            final CategoryAxis xAxis = new CategoryAxis();
+            final NumberAxis yAxis = new NumberAxis();
+            final BarChart<String,Number> bc =
+                    new BarChart<String,Number>(xAxis,yAxis);
+            bc.setTitle("Top K Viewed Insertions");
+            xAxis.setLabel("Insertion ID");
+            yAxis.setLabel("Number of interested users");
+            bc.getData().addAll(series1);
+            Scene scene = new Scene(bc,1200,800);
+            stage.setScene(scene);
+            stage.show();
+        }
 
-            // New window (Stage)
-            Stage newWindow = new Stage();
-            newWindow.getIcons().add(image);
-            newWindow.setTitle("Top " + k);
-            secondaryLayout.getChildren().add(list);
-            newWindow.setScene(secondScene);
 
-            newWindow.show();
+    }
+
+    public void showTopKViewedInsertion(ConnectionMongoDB conn, int k) throws IOException {
+
+        String category = txtFieldCategory.getText();
+        ArrayList<Document> array;
+        array = conn.findTopKViewedInsertion(k, category);
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName(category);
+        for (int i=0; i < k; i++) {
+            series1.getData().add(new XYChart.Data(array.get(i).getObjectId("_id").toString(), array.get(i).getInteger("views")));
+        }
+
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Stage stage = new Stage();
+            Image image = new Image(imageStream);
+            stage.getIcons().add(image);
+            stage.setTitle("Stats");
+            final CategoryAxis xAxis = new CategoryAxis();
+            final NumberAxis yAxis = new NumberAxis();
+            final BarChart<String,Number> bc =
+                    new BarChart<String,Number>(xAxis,yAxis);
+            bc.setTitle("Top K Viewed Insertions");
+            xAxis.setLabel("Insertion ID");
+            yAxis.setLabel("Number of views");
+            Scene scene  = new Scene(bc,1200,800);
+            bc.getData().addAll(series1);
+            stage.setScene(scene);
+            stage.show();
         }
     }
 }

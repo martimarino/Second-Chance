@@ -14,9 +14,9 @@ import org.bson.Document;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FollowingController {
+public class FollowController {
 
-    public ArrayList<Document> listFollowing;
+    public ArrayList<String> list;
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
@@ -24,11 +24,11 @@ public class FollowingController {
     private int scrollPage;
     String type_img;
 
-    public void initialize(ArrayList<String> followingUsers){
+    public void initialize(ArrayList<String> users){
 
         //System.out.println("User 0: " + followingUsers.get(0));
         type_img = "user";
-        listFollowing = new ArrayList<Document>();
+        list = users;
         scrollPage = 0;
         box = new VBox(20);
 
@@ -36,37 +36,32 @@ public class FollowingController {
         prev.setDisable(true);
 
 
-        if (followingUsers.size() == 0) {
+        if (users.size() == 0) {
             Utility.infoBox("This profile has not following", "Information", "No following!");
             return;
         }
+        /*
+        for (int i = 0; i < users.size(); i++) {
+            Document user = ConnectionMongoDB.connMongo.findUserByUsername(users.get(i));
+            list.add(user);
+        }
+        */
 
-        /*if (followingUsers.size() == 1) {
-            Document user = ConnectionMongoDB.connMongo.findUserByUsername(followingUsers.get(0));
-            listFollowing.add(user);
-
-        } else {
-    */
-            for (int i = 0; i < followingUsers.size(); i++) {
-                Document user = ConnectionMongoDB.connMongo.findUserByUsername(followingUsers.get(i));
-                listFollowing.add(user);
-            }
-       // }
-        showFollowing();
+        show();
     }
 
-    public void showFollowing() {
+    public void show() {
 
         box.getChildren().clear();
 
         //if there are more than k insertions enable next button
-        if (listFollowing.size() == scrollPage-1) {
+        if (list.size() == scrollPage - 1) {
             next.setDisable(false);
             next.setVisible(true);
         }
         System.out.println("(show) INDEX: " + scrollPage);
 
-        for (int i = 0; i < nPage && i < listFollowing.size(); i++)
+        for (int i = 0; i < nPage && i < list.size(); i++)
             addUser();
 
         bp.setCenter(box);
@@ -75,17 +70,17 @@ public class FollowingController {
 
     private void addUser() {
 
-        String user = listFollowing.get(scrollPage).getString("username");
+        String user = list.get(scrollPage);
 
         HBox hb = new HBox();
         VBox det = new VBox();
 
-        ImageView image = Utility.getGoodImage("./img/" + listFollowing.get(scrollPage).getString("image_url"), 150, type_img);
-        Label username = new Label("Username: " + listFollowing.get(scrollPage).getString("username"));
-        Label city = new Label("City: " + listFollowing.get(scrollPage).getString("city"));
+        ImageView image = Utility.getGoodImage("./img/user.png", 150, type_img);
+        Label username = new Label("Username: " + list.get(scrollPage));
+        //Label city = new Label("City: " + list.get(scrollPage).getString("city"));
 
         det.getChildren().add(username);
-        det.getChildren().add(city);
+        //det.getChildren().add(city);
         hb.getChildren().add(image);
         hb.getChildren().add(det);
         box.getChildren().add(hb);
@@ -101,7 +96,7 @@ public class FollowingController {
 
         GridPane.setHalignment(image, HPos.LEFT);
         GridPane.setHalignment(username, HPos.LEFT);
-        GridPane.setHalignment(city, HPos.LEFT);
+        //GridPane.setHalignment(city, HPos.LEFT);
 
         det.setStyle("-fx-padding: 0 100 0 50;");
         hb.setStyle(
@@ -123,12 +118,12 @@ public class FollowingController {
         System.out.println("(prev) INDEX: " + scrollPage);
         box.getChildren().clear();
         scrollPage = Utility.prevPage(scrollPage, nPage, prev);
-        if(scrollPage < listFollowing.size())
+        if(scrollPage < list.size())
         {
             next.setDisable(false);
             next.setVisible(true);
         }
-        showFollowing();
+        show();
 
     }
 
@@ -136,8 +131,11 @@ public class FollowingController {
 
         box.getChildren().clear();
         System.out.println("(next) INDEX: " + scrollPage);
-        Utility.nextPage(scrollPage + nPage, listFollowing, next, prev);
-        showFollowing();
+        if (scrollPage == list.size()) {
+            next.setDisable(true);
+            next.setVisible(false);
+        }
+        show();
 
     }
 
