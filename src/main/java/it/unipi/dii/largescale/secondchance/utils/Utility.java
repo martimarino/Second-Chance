@@ -39,7 +39,6 @@ public class Utility {
         alert.showAndWait();
     }
 
-
     public static void showUsers(GridPane list, ArrayList<Document> filter, int item) throws IOException {
 
         list.getChildren().clear();
@@ -66,22 +65,6 @@ public class Utility {
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
 
-    }
-
-    public static String generateRandomString() {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 24;
-        Random random = new Random();
-
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        printTerminal(generatedString);
-        return generatedString;
     }
 
     public static ImageView getGoodImage(String url_image, int dimension, String type_img){

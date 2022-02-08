@@ -82,7 +82,7 @@ public class SearchUserController extends MainController{
         nextSugg.setVisible(false);
 
         //connection to Neo4j
-        suggFromNeo = ConnectionNeo4jDB.connNeo.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);
+        suggFromNeo = ConnectionNeo4jDB.connNeo.getSuggestedUsers(Session.getLoggedUser().getUsername(), Session.getLoggedUser().getCountry(), k);
 
         //if there are less than k suggested, add top k rated to the suggestions
 
@@ -168,7 +168,7 @@ public class SearchUserController extends MainController{
         follow.setPrefHeight(20.0);
         follow.setDisable(false);
         follow.setVisible(true);
-        if(ConnectionNeo4jDB.connNeo.checkIfFollows(Session.getLogUser().getUsername(), user)) {
+        if(ConnectionNeo4jDB.connNeo.checkIfFollows(Session.getLoggedUser().getUsername(), user)) {
             follow.setText("Unfollow");
         } else {
             follow.setText("Follow");
@@ -176,7 +176,7 @@ public class SearchUserController extends MainController{
 
         follow.setOnMouseClicked(event -> {
             String action = follow.getText();
-            ConnectionNeo4jDB.connNeo.followUnfollowButton(action, Session.getLogUser().getUsername(), user);
+            ConnectionNeo4jDB.connNeo.followUnfollowButton(action, Session.getLoggedUser().getUsername(), user);
             if(action.equals("Follow"))
                 follow.setText("Unfollow");
             if(action.equals("Unfollow"))
@@ -242,7 +242,7 @@ public class SearchUserController extends MainController{
             GridPane.setHalignment(city, HPos.CENTER);
 
             //a user can not follow itself
-            if(!(Session.getLogUser().getUsername().equals(searchedList.get(indexSearch).getString("username")))) {
+            if(!(Session.getLoggedUser().getUsername().equals(searchedList.get(indexSearch).getString("username")))) {
                 followUnfollow = new Button();
                 setFollowUnfollowButton(followUnfollow, searchedList.get(indexSearch).getString("username"));
                 vb.getChildren().add(followUnfollow);

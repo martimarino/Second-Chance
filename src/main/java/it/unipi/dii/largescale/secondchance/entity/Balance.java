@@ -1,7 +1,10 @@
 package main.java.it.unipi.dii.largescale.secondchance.entity;
 
+import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+
 public class Balance {
 
+    public static Balance balance;
     String username;
     Double credit;
 
@@ -23,6 +26,7 @@ public class Balance {
     }
 
     public Double getCredit() {
+        ConnectionMongoDB.connMongo.getBalance();
         return credit;
     }
 }

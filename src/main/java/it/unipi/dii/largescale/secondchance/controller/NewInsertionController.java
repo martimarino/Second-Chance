@@ -55,7 +55,7 @@ public class NewInsertionController {
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 
         Insertion i = new Insertion(id.toString(), categ.getValue(), desc.getText(), gender, p, 0, 0, status.getValue(), color.getText(), size.getValue(),
-                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLogUser().getUsername());
+                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLoggedUser().getUsername());
         Utility.printTerminal(i.toString());
 
         //MongoDB failure
@@ -71,7 +71,7 @@ public class NewInsertionController {
             ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
             return;
         }
-        if((!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId()))){
+        if((!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLoggedUser().getUsername(), i.getId()))){
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
             ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
             ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(i.getId());

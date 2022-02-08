@@ -17,7 +17,7 @@ public class AddProfileImageController {
     private User user;
 
     public void initialize() {
-        user  = Session.getLogUser();
+        user  = Session.getLoggedUser();
     }
 
     public void submit() {

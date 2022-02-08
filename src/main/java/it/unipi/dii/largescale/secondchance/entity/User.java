@@ -18,12 +18,11 @@ public class User implements GeneralUser {
     String address;
     boolean suspended;
     double rating;
-    double balance;
     ArrayList<Document> reviews;
     ArrayList<Document> sold;
     ArrayList<Document> purchased;
 
-    public User(String email, String username, String password, String name, String country, String city, String address, boolean suspended, Double rating, double balance, String image, ArrayList<Document> reviews, ArrayList<Document> sold, ArrayList<Document> purchased) {
+    public User(String email, String username, String password, String name, String country, String city, String address, boolean suspended, Double rating, String image, ArrayList<Document> reviews, ArrayList<Document> sold, ArrayList<Document> purchased) {
 
         this.email = email;
         this.username = username;
@@ -38,7 +37,6 @@ public class User implements GeneralUser {
             this.rating = Double.NaN;
         else
             this.rating = rating;
-        this.balance = balance;
         this.reviews = reviews;
         this.sold = sold;
         this.purchased = purchased;
@@ -60,33 +58,12 @@ public class User implements GeneralUser {
         this.purchased = null;
 
     }
-     public User(String username)
-    {
-        User user = ConnectionMongoDB.connMongo.findUserDetails(username);
-        if(user.getSuspended())
-            Utility.infoBox("You can't login because your account has been suspended.", "Error", "Account suspended!");
-        else {
-            this.username = user.getUsername();
-            this.email = user.getEmail();
-            this.country = user.getCountry();
-            this.address = user.getAddress();
-            this.city = user.getCity();
-            this.name = user.getName();
-            this.image = user.getImage();
-            this.suspended = user.getSuspended();
-            this.rating = user.getRating();
-            this.balance = user.getBalance();
-            this.reviews = user.getReviews();
-            this.sold = user.getSold();
-            this.purchased = user.getPurchased();
-        }
-    }
 
     public static User fromDocument(Document user) {
 
         User us = new User(user.getString("email"), user.getString("username"), null,
                 user.getString("name"), user.getString("country"), user.getString("city"), user.getString("address"),
-                user.getBoolean("suspended"), user.getDouble("rating"), user.getDouble("balance"), user.getString("img_profile"),
+                user.getBoolean("suspended"), user.getDouble("rating"), user.getString("img_profile"),
                 (ArrayList<Document>) user.get("reviews"), (ArrayList<Document>) user.get("sold"), (ArrayList<Document>) user.get("purchased"));
         return us;
 
@@ -94,7 +71,7 @@ public class User implements GeneralUser {
 
     public static User fromDocumentAdmin(Document user){
 
-        User us = new User(null, user.getString("username"), null, null, null, null, null, false, Double.NaN, 0.0, null, null, null, null);
+        User us = new User(null, user.getString("username"), null, null, null, null, null, false, Double.NaN, null, null, null, null);
         return us;
     }
 
@@ -115,8 +92,6 @@ public class User implements GeneralUser {
     public void setSuspended(boolean suspended) { this.suspended = suspended; }
 
     public void setRating(Double rating) { this.rating = rating; }
-
-    public void setBalance(Double balance){ this.balance = balance;}
 
     public void setImage(String image) { this.image = image; }
 
@@ -144,8 +119,6 @@ public class User implements GeneralUser {
 
     public Double getRating() { return rating; }
 
-    public Double getBalance() {  return this.balance; }
-
     public String getImage() { return this.image; }
 
     public ArrayList<Document> getReviews() { return reviews; }
@@ -167,7 +140,6 @@ public class User implements GeneralUser {
                 ", address='" + address + '\'' +
                 ", suspended='" + suspended + '\'' +
                 ", rating=" + rating +
-                ", balance=" + balance +
                 ", reviews=" + reviews +
                 ", sold=" + sold +
                 ", purchased=" + purchased +

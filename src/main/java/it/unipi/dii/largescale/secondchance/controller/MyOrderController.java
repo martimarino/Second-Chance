@@ -65,8 +65,8 @@ public class MyOrderController{
                 panel.getChildren().clear();
                 indexPage = 1;
             }
-            System.out.println("Purchased: " + Session.getLogUser().getPurchased());
-            ordersList = Session.getLogUser().getPurchased();
+            System.out.println("Purchased: " + Session.getLoggedUser().getPurchased());
+            ordersList = Session.getLoggedUser().getPurchased();
             kind = true;
             showAllOrders(true);
         }
@@ -76,7 +76,7 @@ public class MyOrderController{
                 panel.getChildren().clear();
                 indexPage = 1;
             }
-            ordersList = Session.getLogUser().getSold();
+            ordersList = Session.getLoggedUser().getSold();
             kind = false;
             showAllOrders(false);
         }
@@ -265,7 +265,7 @@ public class MyOrderController{
 
     private Document setIsertionReviewed(String ts) {
 
-        ArrayList<Document> purc = Session.getLogUser().getPurchased();
+        ArrayList<Document> purc = Session.getLoggedUser().getPurchased();
 
         Document n = null;
         for(Document d : purc)

@@ -85,7 +85,7 @@ public class InsertionListController {
         det.getChildren().add(brand);
         hb.getChildren().add(image);
         hb.getChildren().add(det);
-        if(Session.getLogUser().getUsername().equals(user))
+        if(Session.getLoggedUser().getUsername().equals(user))
             hb.getChildren().add(delete);
         box.getChildren().add(hb);
 
@@ -125,7 +125,7 @@ public class InsertionListController {
                     }
                     return;
                 }
-                initialize(Session.getLogUser().getUsername());
+                initialize(Session.getLoggedUser().getUsername());
             }
         });
 
