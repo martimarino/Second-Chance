@@ -571,11 +571,10 @@ public class ConnectionMongoDB{
     }
 
     public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
-        // true = select the top k users with more purchased orders
-        // false = select the top k with more purchased orders
 
         ArrayList<Document> orders = new ArrayList<>();
         AggregateIterable<Document> aggr;
+        // true = select the top k users with more purchased orders
         if(choice) {
 
             Bson match = match(exists("purchased.0"));
@@ -589,7 +588,7 @@ public class ConnectionMongoDB{
                     )
             );
         }
-        else
+        else        // false = select the top k with more purchased orders
         {
             Bson match = match(exists("sold.0"));
             Bson projection = new Document("$size", "$sold");
