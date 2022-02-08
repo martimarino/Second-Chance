@@ -1,7 +1,5 @@
 package main.java.it.unipi.dii.largescale.secondchance.entity;
 
-import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import org.bson.Document;
 
 public class Balance {
