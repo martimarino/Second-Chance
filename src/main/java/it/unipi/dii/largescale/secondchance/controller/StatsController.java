@@ -176,11 +176,11 @@ public class StatsController {
         int k;
         // Section Most
 
-        if(categoryInsertion.isSelected()) {
+        if (categoryInsertion.isSelected()) {
             showNumberInterestingForCategory();
             return;
         }
-        if(postedCountry.isSelected()) {
+        if (postedCountry.isSelected()) {
             showNumberPostedForCountry();
             return;
         }
@@ -232,7 +232,7 @@ public class StatsController {
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 920, 400);
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
 
             // New window (Stage)
             Stage newWindow = new Stage();
@@ -249,108 +249,106 @@ public class StatsController {
     private void showNumberPostedForCountry() {
 
         ArrayList<String> array = connNeo.findNumberPostedInsertionForCountry();
-
         StackPane secondaryLayout = new StackPane();
 
-        ListView<String> list = new ListView<>();
-        ObservableList items = FXCollections.observableArrayList();
+        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
+
+        String[] parts;
 
         for (int i = 0; i < array.size(); i++) {
 
-            String str = array.get(i);
-            items.add(str);
+            parts = array.get(i).split(":");
+            items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
         }
 
-        list.setItems(items);
+        leaderBoard.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 920, 400);
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
 
             // New window (Stage)
             Stage newWindow = new Stage();
-            newWindow.setTitle("Countries ");
+            newWindow.setTitle("Show Number of Post by Country");
             newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(list);
+            secondaryLayout.getChildren().add(leaderBoard);
             newWindow.setScene(secondScene);
 
             newWindow.show();
-        }catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     private void showNumberInterestingForCategory() {
 
-        ArrayList<String> array = connNeo.findNumberInterestingForCountry();
-
+        ArrayList<String> array = connNeo.findNumberInterestingForCategory();
         StackPane secondaryLayout = new StackPane();
 
-        ListView<String> list = new ListView<>();
-        ObservableList items = FXCollections.observableArrayList();
+        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
+
+        String[] parts;
 
         for (int i = 0; i < array.size(); i++) {
 
-            String str = array.get(i);
-            items.add(str);
+            parts = array.get(i).split(":");
+            items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
         }
 
-        list.setItems(items);
+        leaderBoard.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 920, 400);
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
 
             // New window (Stage)
             Stage newWindow = new Stage();
-            newWindow.setTitle("Categories ");
+            newWindow.setTitle("Show Number of Interesting by Category");
             newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(list);
+            secondaryLayout.getChildren().add(leaderBoard);
             newWindow.setScene(secondScene);
 
             newWindow.show();
-        }catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
-    private void showMostFollowedUsers(int k){
+    private void showMostFollowedUsers(int k) {
 
         ArrayList<String> array = connNeo.findMostFollowedUsers(k);
-        System.out.println("USER: " + array);
         StackPane secondaryLayout = new StackPane();
 
-        ListView<String> list = new ListView<>();
-        ObservableList items = FXCollections.observableArrayList();
+        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
+
+        String[] parts;
 
         for (int i = 0; i < array.size(); i++) {
 
-            String str = array.get(i);
-            items.add(str);
+            parts = array.get(i).split(":");
+            items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
         }
 
-        list.setItems(items);
+        leaderBoard.setItems(items);
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 920, 400);
+            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
 
             // New window (Stage)
             Stage newWindow = new Stage();
-            newWindow.setTitle("Top " + k);
+            newWindow.setTitle("Show Most Followed Users");
             newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(list);
+            secondaryLayout.getChildren().add(leaderBoard);
             newWindow.setScene(secondScene);
 
             newWindow.show();
-        }catch(IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void showTopKRatedUser(int k) {
@@ -403,7 +401,7 @@ public class StatsController {
 
         String category = txtFieldCategory.getText();
         ArrayList<Document> array;
-        array = ConnectionMongoDB.connMongo.findTopKInterestingInsertion(k, category);
+        array = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k, category);
 
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(category);

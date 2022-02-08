@@ -93,8 +93,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        connectToLocal();
-        //connectToVms();
+        //connectToLocal();
+        connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");
@@ -136,7 +136,11 @@ public class ConnectionMongoDB{
                 .append("suspended", u.getSuspended())
                 .append("username", u.getUsername());
 
+        Document balanceUser = new Document("username", u.getUsername())
+                .append("credit", 0);
+
         userColl.insertOne(user);
+        balanceColl.insertOne(balanceUser);
 
         return true;
     }
@@ -848,7 +852,7 @@ public class ConnectionMongoDB{
             return new_balance;
         }
 
-        double creditToAdd = code.getInteger("credit");
+        double creditToAdd = code.getDouble("credit");
         new_balance = ConnectionMongoDB.connMongo.getBalance() + creditToAdd;
 
         try {
@@ -869,10 +873,10 @@ public class ConnectionMongoDB{
 
         switch(c) {
             case '+':
-                update = inc("credit", credit);
+                update = inc("balance", credit);
                 break;
             case '-':
-                update = inc("credit", -credit);
+                update = inc("balance", -credit);
                 break;
             default:
                 Utility.printTerminal("Operation not allowed.");
@@ -882,7 +886,7 @@ public class ConnectionMongoDB{
         //update balance
         try {
             Document d = balanceColl.findOneAndUpdate(query, update);
-            updated = d.getDouble("credit");
+            updated = d.getDouble("balance");
             Balance.balance.setCredit(updated);
             return true;
         } catch (MongoException me) {

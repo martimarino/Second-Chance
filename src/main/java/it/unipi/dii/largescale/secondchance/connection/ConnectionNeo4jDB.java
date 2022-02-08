@@ -434,7 +434,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
                     Record r = result.next();
                     String user = r.get("user").asString();
                     int count = r.get("counter").asInt();
-                    String us = user + " : " + count;
+                    String us = user + ":" + count;
                     followedUsers.add(us);
                 }
 
@@ -448,7 +448,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         return followedUsers;
     }
 
-    public ArrayList<String> findNumberInterestingForCountry() {
+    public ArrayList<String> findNumberInterestingForCategory() {
 
         this.open();
         ArrayList<String> interesting = new ArrayList<>();
@@ -464,7 +464,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
                     Record r = result.next();
                     String category = r.get("category").asString();
                     int count = r.get("counter").asInt();
-                    String ins = category + " : " + count;
+                    String ins = category + ":" + count;
                     interesting.add(ins);
                 }
 
@@ -478,7 +478,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
         return interesting;
 
     }
-
 
     public ArrayList<String> findNumberPostedInsertionForCountry() {
 
@@ -496,7 +495,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
                     Record r = result.next();
                     String country = r.get("country").asString();
                     int count = r.get("counter").asInt();
-                    String ins = country + " : " + count;
+                    String ins = country + ":" + count;
                     posted.add(ins);
                 }
 
