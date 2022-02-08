@@ -661,7 +661,7 @@ public class ConnectionMongoDB{
         AggregateIterable<Document> aggr  = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
-                        Aggregates.sort(descending("viewed")),
+                        Aggregates.sort(descending("views")),
                         limit
                 )
         );

@@ -26,7 +26,7 @@ public class Balance {
     }
 
     public Double getCredit() {
-        ConnectionMongoDB.connMongo.getBalance();
+        this. credit = ConnectionMongoDB.connMongo.getBalance();
         return credit;
     }
 }
