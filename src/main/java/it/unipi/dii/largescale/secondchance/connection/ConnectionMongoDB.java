@@ -136,7 +136,11 @@ public class ConnectionMongoDB{
                 .append("suspended", u.getSuspended())
                 .append("username", u.getUsername());
 
+        Document balanceUser = new Document("username", u.getUsername())
+                .append("credit", 0);
+
         userColl.insertOne(user);
+        balanceColl.insertOne(balanceUser);
 
         return true;
     }
@@ -848,7 +852,7 @@ public class ConnectionMongoDB{
             return new_balance;
         }
 
-        double creditToAdd = code.getInteger("credit");
+        double creditToAdd = code.getDouble("credit");
         new_balance = ConnectionMongoDB.connMongo.getBalance() + creditToAdd;
 
         try {
@@ -869,10 +873,10 @@ public class ConnectionMongoDB{
 
         switch(c) {
             case '+':
-                update = inc("credit", credit);
+                update = inc("balance", credit);
                 break;
             case '-':
-                update = inc("credit", -credit);
+                update = inc("balance", -credit);
                 break;
             default:
                 Utility.printTerminal("Operation not allowed.");
@@ -882,7 +886,7 @@ public class ConnectionMongoDB{
         //update balance
         try {
             Document d = balanceColl.findOneAndUpdate(query, update);
-            updated = d.getDouble("credit");
+            updated = d.getDouble("balance");
             Balance.balance.setCredit(updated);
             return true;
         } catch (MongoException me) {
@@ -896,12 +900,12 @@ public class ConnectionMongoDB{
         FindIterable<Document> cursor = null;
         try {
             Bson filter = Filters.eq("username", Session.getLoggedUser().getUsername());
-            Bson projection = fields(include("balance"), excludeId());
+            Bson projection = fields(include("credit"), excludeId());
             cursor = balanceColl.find(filter).projection(projection);
         } catch (MongoException me) {
             System.err.println("Unable to get balance from db: " + me);
         }
-        return cursor.first().getDouble("balance");
+        return cursor.first().getDouble("credit");
     }
 
     public boolean insertBalance(Balance b) {
