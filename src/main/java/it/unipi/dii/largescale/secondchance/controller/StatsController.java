@@ -363,6 +363,51 @@ public class StatsController {
         }
 
         array = ConnectionMongoDB.connMongo.findTopRatedUsersByCountry(country);
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName(country);
+
+        for (int i=0; i < k; i++) {
+            series1.getData().add(new XYChart.Data(array.get(i).getObjectId("_id").toString(), array.get(i).getDouble("rating")));
+        }
+
+
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Stage stage = new Stage();
+            Image image = new Image(imageStream);
+            stage.getIcons().add(image);
+            stage.setTitle("Stats");
+            final CategoryAxis xAxis = new CategoryAxis();
+            final NumberAxis yAxis = new NumberAxis();
+            final BarChart<String,Number> bc =
+                    new BarChart<String,Number>(xAxis,yAxis);
+            bc.setTitle("Top K Rated Users");
+            xAxis.setLabel("User ID");
+            yAxis.setLabel("Rating");
+            bc.getData().addAll(series1);
+            Scene scene = new Scene(bc,1200,800);
+            stage.setScene(scene);
+            stage.show();
+        }
+
+
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        /*
+
+        ArrayList<Document> array;
+        String country = txtFieldCountry.getText();
+
+        if (!Arrays.asList(countries).contains(country)) {
+            Utility.infoBox("Please insert a valid country", "Error", "Country not found!");
+            txtFieldCountry.setText("");
+            return;
+        }
+
+        array = ConnectionMongoDB.connMongo.findTopRatedUsersByCountry(country);
         int arrayRatings[] = new int[6];
 
         for (int i = 0; i < array.size() - 1; i++) {
@@ -395,6 +440,8 @@ public class StatsController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+         */
     }
 
     public void showTopKInterestingInsertion(int k) {

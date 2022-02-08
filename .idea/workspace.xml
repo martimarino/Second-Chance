@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/FXML/Stats.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/Stats.fxml" afterDir="false" />
     </list>
@@ -146,7 +144,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644228305719</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Update admin function.">
+      <created>1644337179327</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1644337179327</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,7 +190,8 @@
     <MESSAGE value="fix most active user into admin, fix searchinsertion arrows" />
     <MESSAGE value="Merged the two files FollowersController.java and FollowingController.java. &#10;&#10;Merged the two files FollowersPage.fxml and FollowingPage.fxml." />
     <MESSAGE value="Removed search user from MongoDb in showFollows" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed search user from MongoDb in showFollows" />
+    <MESSAGE value="Update admin function." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update admin function." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
