@@ -2,6 +2,7 @@ package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -19,7 +20,9 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -69,6 +72,9 @@ public class SearchUserController extends MainController{
         prevSearch.setVisible(false);
         nextSearch.setVisible(false);
 
+        prevSearch.setOnMouseClicked(event ->  { prevResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind);});
+        nextSearch.setOnMouseClicked(event ->  { nextResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind);});
+
         // Suggested sellers
 
         suggBox = new HBox(20);
@@ -80,6 +86,9 @@ public class SearchUserController extends MainController{
         prevSugg.setVisible(false);
         nextSugg.setDisable(true);
         nextSugg.setVisible(false);
+
+        prevSugg.setOnMouseClicked(event ->  { prevResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg);});
+        nextSugg.setOnMouseClicked(event ->  { nextResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg);});
 
         //connection to Neo4j
         suggFromNeo = ConnectionNeo4jDB.connNeo.getSuggestedUsers(Session.getLoggedUser().getUsername(), Session.getLoggedUser().getCountry(), k);
@@ -104,8 +113,7 @@ public class SearchUserController extends MainController{
         }
 
         Utility.printTerminal("SUGG SIZE: " + suggList.size());
-
-        showSuggestedUsers();
+        showResult(false, suggBox, nextSugg, indexSugg, userSugg, suggList);
     }
 
     public void findUsers() throws IOException {
@@ -139,7 +147,7 @@ public class SearchUserController extends MainController{
                 return;
             }
 
-            showSearchResults();
+            showResult(true, searchBox, nextSearch, indexSearch, userFind, searchedList);
 
             userFind.setCenter(searchBox);
             country.setValue("country");
@@ -152,7 +160,7 @@ public class SearchUserController extends MainController{
             if (searchedList.isEmpty())
                 Utility.infoBox("This user does not exists.", "Advise", "User Advise");
 
-            showSearchResults();
+            showResult(false, suggBox, nextSugg, indexSugg, userSugg, suggList);
 
         }
 
@@ -185,164 +193,54 @@ public class SearchUserController extends MainController{
 
     }
 
-    /*----------------------------- FIND USERS -----------------------------*/
-
-    public void showSearchResults() throws IOException {
-
-        searchBox.getChildren().clear();
+    public void showResult(boolean choice, HBox hb, Pane next, int index, BorderPane bp, ArrayList<Document> list) {
+        hb.getChildren().clear();
 
         //if there are more than k insertions enable next button
-        if (searchedList.size()-indexSearch > k) {
-            nextSearch.setDisable(false);
-            nextSearch.setVisible(true);
+        if (list.size()-index > k) {
+            next.setDisable(false);
+            next.setVisible(true);
         }
-        System.out.println("(show) INDEX: " + indexSearch);
+        System.out.println("(show) INDEX: " + index);
 
-        for (int i = 0; ((i < k) && (indexSearch < m) && (indexSearch < searchedList.size())); i++)
-            addSearchResults();
+        for (int i = 0; ((i < k) && (index < m) && (index < list.size())); i++)
+            addResult(choice, list, index, hb);
 
-        userFind.setCenter(searchBox);
-
+        bp.setCenter(hb);
     }
 
-    private void addSearchResults() throws IOException {
+    public void addResult(boolean choice, ArrayList<Document> list, int index, HBox hb) {
 
         VBox vb = new VBox(10);
+        VBox det = new VBox();
         Label rating;
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
+            System.out.println(list.get(index).getString("username"));
             Image image = new Image(imageStream);
             ImageView im = new ImageView(image);
-            Label username = new Label(searchedList.get(indexSearch).getString("username"));
-            Label country = new Label(searchedList.get(indexSearch).getString("country"));
-            Label city = new Label(searchedList.get(indexSearch).getString("city"));
-            if(searchedList.get(indexSearch).getDouble("rating") != null)
-                rating = new Label(String.format("%.1f", searchedList.get(indexSearch).getDouble("rating")));
-            else
-                rating = new Label("No reviews");
-            vb.getChildren().add(im);
-            vb.getChildren().add(username);
-            vb.getChildren().add(country);
-            vb.getChildren().add(city);
-            vb.getChildren().add(rating);
-
-            vb.setOnMouseClicked(event->{
-                        try {
-                            System.out.println("USERNAME onclick: " + username.getText());
-                            showUserPage(username.getText());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-            );
-
-            GridPane.setHalignment(im, HPos.CENTER);
-            GridPane.setHalignment(username, HPos.CENTER);
-            GridPane.setHalignment(country, HPos.CENTER);
-            GridPane.setHalignment(city, HPos.CENTER);
-
-            //a user can not follow itself
-            if(!(Session.getLoggedUser().getUsername().equals(searchedList.get(indexSearch).getString("username")))) {
-                followUnfollow = new Button();
-                setFollowUnfollowButton(followUnfollow, searchedList.get(indexSearch).getString("username"));
-                vb.getChildren().add(followUnfollow);
-                GridPane.setHalignment(followUnfollow, HPos.CENTER);
-            }
-
-            searchBox.getChildren().add(vb);
-        }
-        searchBox.setStyle(
-                "    -fx-padding: 20;\n" +
-                        "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;");
-        indexSearch++;
-        System.out.println("(add search) INDEX: " + indexSearch);
-
-
-    }
-
-    public void showPrevUser() throws IOException {
-
-        searchBox.getChildren().clear();
-
-        if((indexSearch%k) == 0)
-            indexSearch -= k;
-        else
-            indexSearch -= (indexSearch%k);
-        indexSearch -= k;
-
-        System.out.println("(prev search) INDEX: " + indexSearch);
-
-        if (indexSearch == 0) {
-            prevSearch.setDisable(true);
-            prevSearch.setVisible(false);
-        }
-
-        showSearchResults();
-    }
-
-    public void showNextUser() throws IOException {
-
-        searchBox.getChildren().clear();
-
-        System.out.println("(next search) INDEX: " + indexSearch);
-
-        showSearchResults();
-
-        if ((indexSearch == searchedList.size()) || (indexSearch == m)) {
-            nextSearch.setDisable(true);
-            nextSearch.setVisible(false);
-        }
-
-        prevSearch.setVisible(true);
-        prevSearch.setDisable(false);
-    }
-
-    /*------------------------ SUGGESTED SELLERS FUNCTIONS ------------------------*/
-
-    private void showSuggestedUsers() throws IOException {
-
-        suggBox.getChildren().clear();
-
-        //if there are more than k insertions enable next button
-        if (suggList.size()-indexSugg > k) {
-            nextSugg.setDisable(false);
-            nextSugg.setVisible(true);
-        }
-        System.out.println("(show sugg) LIST SIZE: " + suggList.size());
-        for (int i = 0; ((i < k) && (indexSugg < m) && (indexSugg < suggList.size())); i++)
-            addSuggestedUsers();
-
-        userSugg.setCenter(suggBox);
-        System.out.println("(show sugg) INDEX: " + indexSugg);
-    }
-
-    public void addSuggestedUsers() throws IOException {
-
-        VBox vb = new VBox(10);
-        Label rating;
-
-        try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
-            System.out.println(suggList.get(indexSugg).getString("username"));
-            Image image = new Image(imageStream);
-            ImageView im = new ImageView(image);
-            Label username = new Label(suggList.get(indexSugg).getString("username"));
-            Label country = new Label(suggList.get(indexSugg).getString("country"));
-            Label city = new Label(suggList.get(indexSugg).getString("city"));
-            if(suggList.get(indexSugg).getDouble("rating") != null)
-                rating = new Label(String.format("%.1f", suggList.get(indexSugg).getDouble("rating")));
+            Label username = new Label(list.get(index).getString("username"));
+            Label country = new Label(list.get(index).getString("country"));
+            Label city = new Label(list.get(index).getString("city"));
+            if(list.get(index).getDouble("rating") != null)
+                rating = new Label(String.format("%.1f", list.get(index).getDouble("rating")));
             else
                 rating = new Label("No reviews");
             followUnfollow = new Button();
-            setFollowUnfollowButton(followUnfollow, suggList.get(indexSugg).getString("username"));
+            setFollowUnfollowButton(followUnfollow, list.get(index).getString("username"));
+
+            det.getChildren().add(username);
+            det.getChildren().add(country);
+            det.getChildren().add(city);
+            det.getChildren().add(rating);
+            det.setStyle("-fx-padding: 10px;");
 
             vb.getChildren().add(im);
-            vb.getChildren().add(username);
-            vb.getChildren().add(country);
-            vb.getChildren().add(city);
-            vb.getChildren().add(rating);
+            vb.getChildren().add(det);
             vb.getChildren().add(followUnfollow);
-            suggBox.getChildren().add(vb);
+            vb.setAlignment(Pos.CENTER);
+            vb.setStyle("-fx-min-width: 140px; -fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
+            hb.getChildren().add(vb);
 
             GridPane.setHalignment(im, HPos.CENTER);
             GridPane.setHalignment(username, HPos.CENTER);
@@ -359,14 +257,39 @@ public class SearchUserController extends MainController{
                         }
                     }
             );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        suggBox.setStyle(
+        hb.setStyle(
                 "-fx-padding: 20;\n" +
                         "    -fx-hgap: 10;\n" +
                         "    -fx-vgap: 10;");
 
-        indexSugg++;
-        System.out.println("(add sugg) INDEX: " + indexSugg);
+        if(choice)  //search
+            indexSearch++;
+        else        //sugg
+            indexSugg++;
+        System.out.println("(add sugg) INDEX: " + index);
+
+    }
+
+    public void prevResults(boolean choice, int index, HBox hb, Pane prev, Pane next, ArrayList<Document> list, BorderPane bp) {
+
+        hb.getChildren().clear();
+        if(choice)  //search
+            indexSearch = Utility.prevPage(index, k, prev);
+        else        //sugg
+            indexSugg = Utility.prevPage(index, k, prev);
+        showResult(choice, hb, next, index, bp, list);
+
+    }
+
+    public void nextResults(boolean choice, int index, HBox hb, Pane prev, Pane next, ArrayList<Document> list, BorderPane bp) {
+
+        hb.getChildren().clear();
+        showResult(choice, hb, next, index, bp, list);
+        Utility.nextPage(index+k, list, next, prev);
+
     }
 
     private void showUserPage(String username) {
@@ -384,42 +307,5 @@ public class SearchUserController extends MainController{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void prevSuggestedUsers() throws IOException {
-
-        suggBox.getChildren().clear();
-
-        if((indexSugg%k) == 0)
-            indexSugg -= k;
-        else
-            indexSugg -= (indexSugg%k);
-        indexSugg -= k;
-
-        System.out.println("(prev) INDEX: " + indexSugg);
-
-        if (indexSugg == 0) {
-            prevSugg.setDisable(true);
-            prevSugg.setVisible(false);
-        }
-
-        showSuggestedUsers();
-    }
-
-    public void nextSuggestedUsers() throws IOException {
-
-        suggBox.getChildren().clear();
-
-        System.out.println("(next) INDEX: " + indexSugg);
-
-        showSuggestedUsers();
-
-        if ((indexSugg == suggList.size()) || (indexSugg == m)) {
-            nextSugg.setDisable(true);
-            nextSugg.setVisible(false);
-        }
-
-        prevSugg.setVisible(true);
-        prevSugg.setDisable(false);
     }
 }

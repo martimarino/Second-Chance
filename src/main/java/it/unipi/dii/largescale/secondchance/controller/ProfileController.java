@@ -202,9 +202,10 @@ public class ProfileController extends MainController {
             imageProfile = Utility.getGoodImage(user.getImage(), 100, type_img);
         }
 
-        label.setTranslateX(-5);
-        label.setTranslateY(25);
-        label.setTextFill(Color.RED);
+        label.setTranslateX(0);
+        label.setTranslateY(40);
+        label.setTextFill(Color.BLUEVIOLET);
+        label.setStyle("-fx-background-radius: 20px; -fx-background-color: white;");
         profileImage.getChildren().add(imageProfile);
         profileImage.getChildren().add(label);
 

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -25,6 +26,19 @@ public class SignInController {
 
     @FXML private TextField us;
     @FXML private PasswordField pw;
+
+    public void initialize() {
+        pw.setOnKeyPressed( event -> {
+            if( event.getCode() == KeyCode.ENTER ) {
+                Utility.printTerminal("333333333333333");
+                try {
+                    login();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } );
+    }
 
     public void ShowSignUp() throws IOException {
 

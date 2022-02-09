@@ -118,7 +118,7 @@ public class HomeController {
         System.out.println(viralList.get(scrollViralPage).getString("seller"));
 
         VBox viral = new VBox(user, image, price, status, interested);
-        viral.setStyle("-fx-background-color: white; -fx-padding: 8");
+        viral.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
         viral.setSpacing(10);
 
         viralHBox.getChildren().add(viral);
@@ -198,7 +198,7 @@ public class HomeController {
         Label interested = new Label("Interested: " + feedList.get(scrollFeedPage).getInteger("interested"));
 
         VBox feed = new VBox(user, image, price, status, interested);
-        feed.setStyle("-fx-background-color: white; -fx-padding: 8");
+        feed.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
         feed.setSpacing(10);
 
         feedBox.getChildren().add(feed);

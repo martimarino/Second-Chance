@@ -111,7 +111,7 @@ public class FollowController {
         box.getChildren().clear();
         scrollPage = Utility.prevPage(scrollPage, nPage, prev);
 
-        if(scrollPage  < list.size())
+        if(scrollPage < list.size())
         {
             next.setDisable(false);
             next.setVisible(true);

@@ -166,6 +166,8 @@ public class SearchInsertionController extends MainController{
             secondRow.getChildren().add(vb);
         }
 
+        vb.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
+
         seller.setOnMouseClicked(event->{
                     try {
                         showInsertionPage(uniq_id);
