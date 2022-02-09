@@ -9,9 +9,6 @@ import main.java.it.unipi.dii.largescale.secondchance.entity.Balance;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
-import sun.java2d.cmm.Profile;
-
-import java.io.IOException;
 import java.util.Objects;
 
 public class AddFundsController {
@@ -40,7 +37,7 @@ public class AddFundsController {
         String code = txtFieldCode.getText();
 
         Utility.printTerminal("CREDIT (before): " + Balance.balance.getCredit());
-        double newCredit = ConnectionMongoDB.connMongo.addFundsToWallet(user.getUsername(), code);
+        ConnectionMongoDB.connMongo.addFundsToWallet(user.getUsername(), code);
         Utility.printTerminal("CREDIT (after): " + Balance.balance.getCredit());
 
         txtFieldCode.setText("");

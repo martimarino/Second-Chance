@@ -93,8 +93,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        connectToLocal();
-        //connectToVms();
+        //connectToLocal();
+        connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");
@@ -839,7 +839,7 @@ public class ConnectionMongoDB{
 
     /* ************************* BALANCE SECTION ************************* */
 
-    public double addFundsToWallet(String username, String id_code) {
+    public void addFundsToWallet(String username, String id_code) {
 
         Document code;
         double new_balance = 0.0;
@@ -847,7 +847,7 @@ public class ConnectionMongoDB{
         code = codeColl.find(eq("code", id_code)).first();
         if (code == null) {
             Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
-            return new_balance;
+            return;
         }
 
         double creditToAdd = code.getInteger("credit");
@@ -860,7 +860,6 @@ public class ConnectionMongoDB{
         } catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
         }
-        return new_balance;
     }
 
     public boolean updateBalance(String username, double credit, char c) {
