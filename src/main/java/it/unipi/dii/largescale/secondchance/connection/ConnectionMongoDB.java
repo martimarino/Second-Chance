@@ -93,8 +93,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        //connectToLocal();
-        connectToVms();
+        connectToLocal();
+        //connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");
@@ -476,21 +476,19 @@ public class ConnectionMongoDB{
 
         TransactionBody<String> txnFunc = () -> {
 
-            Bson filter = and(eq("username", username), gte("balance", insertion.getPrice()));
-            Bson update = inc("balance", insertion.getPrice());
+            try {
+                //update buyer balance
+                updateBalance(username, insertion.getPrice(), '+');
+                //update seller balance
+                updateBalance(insertion.getSeller(), insertion.getPrice(), '-');
+                //re-add insertion
+                insertionColl.insertOne(Insertion.toDocument(insertion));
 
-            //update buyer balance
-            Document ret = userColl.findOneAndUpdate(filter, update);
-
-            //update seller balance
-            Bson filter2 = eq("username", insertion.getSeller());
-            Bson update2 = inc("balance", -(insertion.getPrice()));
-
-            Document ret3 = userColl.findOneAndUpdate(filter2, update2);
-
-            insertionColl.insertOne(Insertion.toDocument(insertion));
-
-            return "OK";
+                return "OK";
+            } catch (MongoException me) {
+                System.err.println("Unable to delete insertion: " + me);
+                return null;
+            }
 
         };
         return executeTransaction(clientSession, txnFunc);
@@ -852,7 +850,7 @@ public class ConnectionMongoDB{
             return new_balance;
         }
 
-        double creditToAdd = code.getDouble("credit");
+        double creditToAdd = code.getInteger("credit");
         new_balance = ConnectionMongoDB.connMongo.getBalance() + creditToAdd;
 
         try {
@@ -873,10 +871,10 @@ public class ConnectionMongoDB{
 
         switch(c) {
             case '+':
-                update = inc("balance", credit);
+                update = inc("credit", credit);
                 break;
             case '-':
-                update = inc("balance", -credit);
+                update = inc("credit", -credit);
                 break;
             default:
                 Utility.printTerminal("Operation not allowed.");
@@ -886,7 +884,7 @@ public class ConnectionMongoDB{
         //update balance
         try {
             Document d = balanceColl.findOneAndUpdate(query, update);
-            updated = d.getDouble("balance");
+            updated = d.getDouble("credit");
             Balance.balance.setCredit(updated);
             return true;
         } catch (MongoException me) {

@@ -36,17 +36,16 @@ public class Session{
 
         if(session == null)
             throw new RuntimeException("Session not already active");
-        else {
-            //if(session.logUser.getClass().isInstance())
+        else
             return (User) session.logUser;
-        }
 
     }
 
 
     public void getLogoutUser() {
 
-        ConnectionMongoDB.connMongo.updateLoggedUser();
+        if(!(session.logUser instanceof Admin))
+            ConnectionMongoDB.connMongo.updateLoggedUser();
         logUser = null;
         session = null; // [1]
         Balance.balance = null;

@@ -223,9 +223,9 @@ public class SearchInsertionController extends MainController{
     public static void showInsertionPage(String uniq_id) throws IOException {       //open a page with insertion details
 
         Insertion insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+
         if(insertion == null) {
             Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
-            insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);                   //?
             return;
         }
 
