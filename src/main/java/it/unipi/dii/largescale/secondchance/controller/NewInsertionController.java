@@ -1,6 +1,5 @@
 package main.java.it.unipi.dii.largescale.secondchance.controller;
 
-import com.mongodb.MongoException;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
@@ -12,7 +11,6 @@ import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 
 public class NewInsertionController {
 
@@ -26,7 +24,6 @@ public class NewInsertionController {
     @FXML private ComboBox<String> country;
     @FXML private TextArea desc;
     @FXML private TextField link;
-    int upperbound = 9999999;
 
     public void AddNewInsertion() {
         if((categ.getValue().equals("-")) || (status.getValue().equals("-"))

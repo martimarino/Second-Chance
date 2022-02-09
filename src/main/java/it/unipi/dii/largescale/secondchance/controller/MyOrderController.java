@@ -59,8 +59,7 @@ public class MyOrderController{
         Session session = Session.getInstance();
         user = session.getLoggedUser();
 
-        if(type.equals("Items purchased"))
-        {
+        if (type.equals("Items purchased")) {
             if(ordersList != null && ordersList.size() != 0) {
                 panel.getChildren().clear();
                 indexPage = 1;

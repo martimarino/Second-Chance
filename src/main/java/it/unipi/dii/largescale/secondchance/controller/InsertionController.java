@@ -1,13 +1,14 @@
 package main.java.it.unipi.dii.largescale.secondchance.controller;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+
+
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
@@ -15,37 +16,36 @@ import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+
 
 public class InsertionController {
 
-    public Label insertionTitle;
-    public TextField descriptionContainer;
+    @FXML private Label insertionTitle;
+    @FXML private TextField descriptionContainer;
 
-    public Button buy;
-    public Button favourite;
+    @FXML private Button buy;
+    @FXML private Button favourite;
 
-    public Pane infoContainer;
-    public Pane imgContainer;
-    public Text view;
-    public Text interested;
-    public Text timestamp;
-    public Text color;
-    public Text gender;
-    public Text size;
-    public Text status;
-    public Text category;
-    public Text brand;
-    public Text country;
-    public Text seller;
-    public Text price;
-    Insertion insertion;
-    User user;
-    String type_img;
+    @FXML private Pane infoContainer;
+    @FXML private Pane imgContainer;
+    @FXML private Text view;
+    @FXML private Text interested;
+    @FXML private Text timestamp;
+    @FXML private Text color;
+    @FXML private Text gender;
+    @FXML private Text size;
+    @FXML private Text status;
+    @FXML private Text category;
+    @FXML private Text brand;
+    @FXML private Text country;
+    @FXML private Text price;
+    @FXML private Text seller;
+
+    private Insertion insertion;
+    private User user;
+    private String type_img;
 
     public void initialize(Insertion ins) {
 
@@ -68,6 +68,7 @@ public class InsertionController {
         }
 
         String favouriteText;
+
         if(!ConnectionNeo4jDB.connNeo.showIfInterested(user.getUsername(), insertion.getId()))
             favouriteText = "Add to favourite";
         else

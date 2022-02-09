@@ -237,7 +237,9 @@ public class ProfileController extends MainController {
             loader.setLocation(FollowController.class.getResource("/FXML/FollowPage.fxml"));
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.getIcons().add(image);
-            stage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/CSS/FollowStyle.css").toExternalForm());
+            stage.setScene(scene);
             stage.setTitle("Your insertions");
             FollowController controller = loader.getController();
             if(choice) //followers page
@@ -310,7 +312,9 @@ public class ProfileController extends MainController {
             loader.setLocation(InsertionListController.class.getResource("/FXML/InsertionList.fxml"));
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.getIcons().add(image);
-            stage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/CSS/InsertionListStyle.css").toExternalForm());
+            stage.setScene(scene);
             stage.setTitle("Your insertions");
             InsertionListController controller = loader.getController();
             controller.initialize(user.getUsername());
@@ -328,7 +332,9 @@ public class ProfileController extends MainController {
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.getIcons().add(image);
             stage.setTitle("Insertions you are interested in");
-            stage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(getClass().getResource("/CSS/InsertionListLikedStyle.css").toExternalForm());
+            stage.setScene(scene);
 
             InsertionListLikedController controller = loader.getController();
             controller.initialize(user.getUsername());
@@ -354,6 +360,7 @@ public class ProfileController extends MainController {
 
     public void showReviews() {
         System.out.println("SCROLL OUT REVIEWS: " + scrollPage);
+
         for (int i = 0; i < nPage && scrollPage < listReviews.size(); i++) {
             System.out.println("SCROLL IN REVIEWS: " + scrollPage + "i: " + i);
             addReviews();
@@ -418,7 +425,7 @@ public class ProfileController extends MainController {
         showReviews();
     }
 
-    public void showAddImgProfile() throws FileNotFoundException {
+    public void showAddImgProfile() {
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png")) {
 

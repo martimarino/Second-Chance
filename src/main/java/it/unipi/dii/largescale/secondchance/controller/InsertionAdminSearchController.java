@@ -85,7 +85,8 @@ public class InsertionAdminSearchController {
                         SearchInsertionController sic = new SearchInsertionController();
                         System.out.println(uniq_id);
                         sic.showInsertionPage(uniq_id);
-                        HomeController.updateInsertionview(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
+                        //HomeController.updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -83,9 +83,9 @@ public class HomeController {
     public void showInsertionPage(String uniq_id) throws IOException {
 
         Insertion insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+
         if(insertion == null) {
             Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
-            insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
             return;
         }
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
@@ -127,7 +127,8 @@ public class HomeController {
                     try {
                         System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
-                        updateInsertionview(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
+                        //updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -135,13 +136,6 @@ public class HomeController {
         );
         scrollViralPage++;
         Utility.printTerminal("SCROLL VIRAL PAGE: " + scrollViralPage);
-    }
-
-
-    public static void updateInsertionview(String uniq_id) {
-
-        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
-
     }
 
     private void showViralInsertions() {
@@ -213,7 +207,8 @@ public class HomeController {
                     try {
                         System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
-                        updateInsertionview(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
+                        //updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -91,7 +91,7 @@
                           <Font size="16.0" />
                        </font>
                    </Text>
-                   <Separator fx:id="hsep" translateX="0.0" translateY="10.0" maxWidth="400.0" style="-fx-border-width: 3px;"/>
+                   <Separator fx:id="hsep" translateX="0.0" translateY="10.0" maxWidth="400.0"/>
                    <Button translateX="100.0" translateY="40.0" mnemonicParsing="false" onMouseClicked="#generateCodes" style="-fx-background-color: rgb(206, 153, 255); -fx-background-radius: 30;" text="Generate New Codes!" textFill="WHITE" />
                </VBox>
            </VBox>

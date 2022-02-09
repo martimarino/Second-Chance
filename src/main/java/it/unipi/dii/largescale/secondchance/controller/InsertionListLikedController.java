@@ -62,18 +62,18 @@ public class InsertionListLikedController {
         String uniq_id = insertions.get(index).getId();
 
         HBox hb = new HBox();
-        VBox det = new VBox();
+        VBox info = new VBox();
 
         ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150, type_img);
         Label category = new Label("Category: " + insertions.get(index).getCategory());
         Label price = new Label(insertions.get(index).getPrice() + "€");
         Label views = new Label("Views: " + insertions.get(index).getViews());
 
-        det.getChildren().add(category);
-        det.getChildren().add(price);
-        det.getChildren().add(views);
+        info.getChildren().add(category);
+        info.getChildren().add(price);
+        info.getChildren().add(views);
         hb.getChildren().add(image);
-        hb.getChildren().add(det);
+        hb.getChildren().add(info);
         box.getChildren().add(hb);
 
         image.setOnMouseClicked(event->{
@@ -81,7 +81,8 @@ public class InsertionListLikedController {
                         SearchInsertionController sic = new SearchInsertionController();
                         System.out.println(uniq_id);
                         sic.showInsertionPage(uniq_id);
-                        HomeController.updateInsertionview(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
+                        //HomeController.updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -94,16 +95,10 @@ public class InsertionListLikedController {
         GridPane.setHalignment(price, HPos.LEFT);
         GridPane.setHalignment(views, HPos.LEFT);
 
-        det.setStyle("-fx-padding: 0 0 0 50;");
-        hb.setStyle(
-                "-fx-padding: 20;" +
-                        " -fx-background-color: rgb(230, 230, 255);");
-        box.setStyle(
-                " -fx-hgap: 10;" +
-                        " -fx-vgap: 10;" +
-                        " -fx-max-height: 180;" +
-                        " -fx-min-width: 530;" +
-                        " -fx-max-width: 600;");
+        info.getStyleClass().add("vbox-info");
+        hb.getStyleClass().add("hbox-insertion");
+        box.getStyleClass().add("vbox-insertion");
+
 
         index++;
         System.out.println("(add) INDEX: " + index);

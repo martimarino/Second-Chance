@@ -65,7 +65,7 @@ public class InsertionListController {
         String id = list.get(index).get("_id").toString();
 
         HBox hb = new HBox();
-        VBox det = new VBox();
+        VBox info = new VBox();
 
         ImageView image = Utility.getGoodImage(list.get(index).getString("image_url"), 150, type_img);
         Label status = new Label("Status: " + list.get(index).getString("status"));
@@ -73,27 +73,23 @@ public class InsertionListController {
         Label brand = new Label("Brand: " + list.get(index).getString("brand"));
         Button delete = new Button("Delete");
 
-        String cssLayout =
-                        "-fx-background-color:  rgb(238, 204, 255)rgb(238, 204, 255);\n" +
-                        "-fx-background-radius: 30;\n" +
-                "-fx-text-fill: rgb(255,255,255)";
-
-        delete.setStyle(cssLayout);
-
-        det.getChildren().add(status);
-        det.getChildren().add(price);
-        det.getChildren().add(brand);
+        info.getChildren().add(status);
+        info.getChildren().add(price);
+        info.getChildren().add(brand);
         hb.getChildren().add(image);
-        hb.getChildren().add(det);
+        hb.getChildren().add(info);
+
         if(Session.getLoggedUser().getUsername().equals(user))
             hb.getChildren().add(delete);
+
         box.getChildren().add(hb);
 
         image.setOnMouseClicked(event->{
                     try {
                         SearchInsertionController sic = new SearchInsertionController();
                         sic.showInsertionPage(id);
-                        HomeController.updateInsertionview(id);
+                        ConnectionMongoDB.connMongo.updateNumView(id);
+                        //HomeController.updateInsertionview(id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -135,16 +131,10 @@ public class InsertionListController {
         GridPane.setHalignment(brand, HPos.LEFT);
         GridPane.setHalignment(delete, HPos.RIGHT);
 
-        det.setStyle("-fx-padding: 0 100 0 50;");
-        hb.setStyle(
-                "-fx-padding: 20;" +
-                " -fx-background-color: rgb(230, 230, 255);");
-        box.setStyle(
-                "-fx-hgap: 10;" +
-                " -fx-vgap: 10;" +
-                " -fx-max-height: 180;" +
-                " -fx-min-width: 530;" +
-                " -fx-max-width: 600;");
+        delete.getStyleClass().add("button-delete");
+        info.getStyleClass().add("vbox-info");
+        hb.getStyleClass().add("hbox-insertion");
+        box.getStyleClass().add("vbox-insertion");
 
         index++;
         System.out.println("(add) INDEX: " + index);
@@ -177,7 +167,7 @@ public class InsertionListController {
 
         box.getChildren().clear();
 
-System.out.println("(next) INDEX: " + index);
+        System.out.println("(next) INDEX: " + index);
 
         showInsertionList();
 
