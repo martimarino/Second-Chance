@@ -78,9 +78,8 @@ public class InsertionListLikedController {
 
         image.setOnMouseClicked(event->{
                     try {
-                        SearchInsertionController sic = new SearchInsertionController();
                         System.out.println(uniq_id);
-                        sic.showInsertionPage(uniq_id);
+                        SearchInsertionController.showInsertionPage(uniq_id);
                         ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                         //HomeController.updateInsertionview(uniq_id);
                     } catch (Exception e) {

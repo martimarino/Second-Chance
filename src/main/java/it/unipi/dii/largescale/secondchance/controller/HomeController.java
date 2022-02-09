@@ -69,8 +69,8 @@ public class HomeController {
         if (followedFromNeo.size() < k) {
             ArrayList<Document> topK = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k - followedFromNeo.size(), "clothing");
 
-            for (int i = 0; i < topK.size(); i++) {
-                feedList.add(topK.get(i));
+            for (Document document : topK) {
+                feedList.add(document);
                 System.out.println("TOPK: " + feedList);
             }
         }

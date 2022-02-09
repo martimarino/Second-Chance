@@ -32,8 +32,6 @@ public class SearchUserAdminController {
 
     private String username;
 
-    private Session session;
-
     public void initialize(){
 
         btnSuspendUsr.setDisable(true);
@@ -126,7 +124,7 @@ public class SearchUserAdminController {
 
     public void logout() throws IOException {
 
-        session = Session.getInstance();
+        Session session = Session.getInstance();
         session.getLogoutUser();
 
         // Closing current window
@@ -141,7 +139,7 @@ public class SearchUserAdminController {
 
     public void generateCodes() throws IOException {
 
-        Process p = Runtime.getRuntime().exec("python randomCodesGenerator.py");
+        Runtime.getRuntime().exec("python randomCodesGenerator.py");
 
         txtResult.setText("  Codes generated successfully! ");
 

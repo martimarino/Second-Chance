@@ -3,25 +3,20 @@ package main.java.it.unipi.dii.largescale.secondchance.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import main.java.it.unipi.dii.largescale.secondchance.cellStyle.CustomCellRank;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
-import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class StatsController {
@@ -62,38 +57,6 @@ public class StatsController {
         txtFieldCountry.setTooltip(countries);
         txtFieldCategory.setTooltip(categories);
 
-        rBTopKViewedIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
-               System.out.println("radio button changed from " + oldValue + " to " + newValue);
-
-               txtFieldCountry.setText("");
-               txtFieldCountry.setEditable(false);
-               txtFieldCountry.setMouseTransparent(true);
-
-               if (Objects.equals(txtFieldCategory.getText(), ""))
-                   elaboraButton.setDisable(true);
-
-               if (!txtFieldCategory.isEditable()) {
-                   txtFieldCategory.setEditable(true);
-                   txtFieldCategory.setMouseTransparent(false);
-               }
-        });
-
-        rBTopKInterestingIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
-           System.out.println("radio button changed from " + oldValue + " to " + newValue);
-
-           txtFieldCountry.setText("");
-           txtFieldCountry.setEditable(false);
-           txtFieldCountry.setMouseTransparent(true);
-
-            if (Objects.equals(txtFieldCategory.getText(), ""))
-                elaboraButton.setDisable(true);
-
-           if (!txtFieldCategory.isEditable()) {
-               txtFieldCategory.setEditable(true);
-               txtFieldCategory.setMouseTransparent(false);
-           }
-       });
-
         rBTopKUsers.selectedProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
@@ -113,6 +76,52 @@ public class StatsController {
 
         });
 
+        listenerTopKViewInterested(rBTopKViewedIns);
+
+        listenerTopKViewInterested(rBTopKInterestingIns);
+
+        listenerUserSeller(rBSellers);
+
+        listenerUserSeller(rBUsers);
+
+        followedUsers.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
+
+        categoryInsertion.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
+
+        postedCountry.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
+
+        txtFieldCategory.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("text changed from " + oldValue + " to " + newValue);
+
+            elaboraButton.setDisable(Objects.equals(newValue, ""));
+        });
+
+        txtFieldCountry.textProperty().addListener((observable, oldValue, newValue) -> {
+            Utility.printTerminal("text changed from " + oldValue + " to " + newValue);
+
+            elaboraButton.setDisable(Objects.equals(newValue, ""));
+        });
+    }
+
+    private void listenerTopKViewInterested(RadioButton rBTopKViewedIns) {
+        rBTopKViewedIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
+               System.out.println("radio button changed from " + oldValue + " to " + newValue);
+
+               txtFieldCountry.setText("");
+               txtFieldCountry.setEditable(false);
+               txtFieldCountry.setMouseTransparent(true);
+
+               if (Objects.equals(txtFieldCategory.getText(), ""))
+                   elaboraButton.setDisable(true);
+
+               if (!txtFieldCategory.isEditable()) {
+                   txtFieldCategory.setEditable(true);
+                   txtFieldCategory.setMouseTransparent(false);
+               }
+        });
+    }
+
+    private void listenerUserSeller(RadioButton rBSellers) {
         rBSellers.selectedProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
@@ -126,48 +135,6 @@ public class StatsController {
             txtFieldCategory.setMouseTransparent(true);
 
             elaboraButton.setDisable(false);
-        });
-
-        rBUsers.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("radio button changed from " + oldValue + " to " + newValue);
-
-            txtFieldCountry.setText("");
-            txtFieldCategory.setText("");
-
-            txtFieldCountry.setEditable(false);
-            txtFieldCountry.setMouseTransparent(true);
-
-            txtFieldCategory.setEditable(false);
-            txtFieldCategory.setMouseTransparent(true);
-
-            elaboraButton.setDisable(false);
-        });
-
-        followedUsers.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                    elaboraButton.setDisable(false);
-
-        });
-
-        categoryInsertion.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                elaboraButton.setDisable(false);
-
-        });
-
-        postedCountry.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            elaboraButton.setDisable(false);
-
-        });
-
-        txtFieldCategory.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("text changed from " + oldValue + " to " + newValue);
-
-            elaboraButton.setDisable(Objects.equals(newValue, ""));
-        });
-
-        txtFieldCountry.textProperty().addListener((observable, oldValue, newValue) -> {
-            Utility.printTerminal("text changed from " + oldValue + " to " + newValue);
-
-            elaboraButton.setDisable(Objects.equals(newValue, ""));
         });
     }
 
@@ -218,15 +185,14 @@ public class StatsController {
         ArrayList<Document> array = ConnectionMongoDB.connMongo.findMostActiveUsersSellers(k, choice);
         StackPane secondaryLayout = new StackPane();
 
-        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ListView<CustomCellRank> leaderBoard = new ListView<>();
         ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
 
         String type = (choice) ? "Purchased Orders" : "Sold Orders";
 
-        for (int i = 0; i < array.size(); i++) {
+        for (Document document : array)
+            items.add(new CustomCellRank(document.getString("username"), document.getInteger("count")));
 
-            items.add(new CustomCellRank(array.get(i).getString("username"), array.get(i).getInteger("count")));
-        }
 
         leaderBoard.setItems(items);
 
@@ -251,14 +217,14 @@ public class StatsController {
         ArrayList<String> array = connNeo.findNumberPostedInsertionForCountry();
         StackPane secondaryLayout = new StackPane();
 
-        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ListView<CustomCellRank> leaderBoard = new ListView<>();
         ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
 
         String[] parts;
 
-        for (int i = 0; i < array.size(); i++) {
+        for (String s : array) {
 
-            parts = array.get(i).split(":");
+            parts = s.split(":");
             items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
         }
 
@@ -286,14 +252,14 @@ public class StatsController {
         ArrayList<String> array = connNeo.findNumberInterestingForCategory();
         StackPane secondaryLayout = new StackPane();
 
-        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ListView<CustomCellRank> leaderBoard = new ListView<>();
         ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
 
         String[] parts;
 
-        for (int i = 0; i < array.size(); i++) {
+        for (String s : array) {
 
-            parts = array.get(i).split(":");
+            parts = s.split(":");
             items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
         }
 
@@ -321,14 +287,14 @@ public class StatsController {
         ArrayList<String> array = connNeo.findMostFollowedUsers(k);
         StackPane secondaryLayout = new StackPane();
 
-        ListView<CustomCellRank> leaderBoard = new ListView<CustomCellRank>();
+        ListView<CustomCellRank> leaderBoard = new ListView<>();
         ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
 
         String[] parts;
 
-        for (int i = 0; i < array.size(); i++) {
+        for (String s : array) {
 
-            parts = array.get(i).split(":");
+            parts = s.split(":");
             items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
         }
 
@@ -380,7 +346,7 @@ public class StatsController {
             final CategoryAxis xAxis = new CategoryAxis();
             final NumberAxis yAxis = new NumberAxis();
             final BarChart<String,Number> bc =
-                    new BarChart<String,Number>(xAxis,yAxis);
+                    new BarChart<>(xAxis,yAxis);
             bc.setTitle("Top K Rated Users");
             xAxis.setLabel("User ID");
             yAxis.setLabel("Rating");
@@ -469,7 +435,7 @@ public class StatsController {
             final CategoryAxis xAxis = new CategoryAxis();
             final NumberAxis yAxis = new NumberAxis();
             final BarChart<String,Number> bc =
-                    new BarChart<String,Number>(xAxis,yAxis);
+                    new BarChart<>(xAxis,yAxis);
             bc.setTitle("Top K Viewed Insertions");
             xAxis.setLabel("Insertion ID");
             yAxis.setLabel("Number of interested users");
@@ -511,7 +477,7 @@ public class StatsController {
             final CategoryAxis xAxis = new CategoryAxis();
             final NumberAxis yAxis = new NumberAxis();
             final BarChart<String,Number> bc =
-                    new BarChart<String,Number>(xAxis,yAxis);
+                    new BarChart<>(xAxis,yAxis);
             bc.setTitle("Top K Viewed Insertions");
             xAxis.setLabel("Insertion ID");
             yAxis.setLabel("Number of views");
@@ -519,10 +485,8 @@ public class StatsController {
             bc.getData().addAll(series1);
             stage.setScene(scene);
             stage.show();
-        } catch (FileNotFoundException fileNotFoundException) {
+        } catch (IOException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
     }
 }

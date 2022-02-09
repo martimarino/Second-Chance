@@ -56,8 +56,7 @@ public class MyOrderController{
 
         String type = comboBox.getValue();
 
-        Session session = Session.getInstance();
-        user = session.getLoggedUser();
+        user = Session.getLoggedUser();
 
         if (type.equals("Items purchased")) {
             if(ordersList != null && ordersList.size() != 0) {
@@ -144,9 +143,7 @@ public class MyOrderController{
 
         panel.getChildren().add(hbox);
 
-        review.setOnMouseClicked(event-> {
-                    addReview(sel, orderTimestamp, review);
-                }
+        review.setOnMouseClicked(event-> addReview(sel, orderTimestamp, review)
         );
     }
 

@@ -20,7 +20,7 @@ public class InsertionListController {
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
-    private int k = 3;
+    private final int k = 3;
     private int index;
 
     String user;
@@ -86,8 +86,7 @@ public class InsertionListController {
 
         image.setOnMouseClicked(event->{
                     try {
-                        SearchInsertionController sic = new SearchInsertionController();
-                        sic.showInsertionPage(id);
+                        SearchInsertionController.showInsertionPage(id);
                         ConnectionMongoDB.connMongo.updateNumView(id);
                         //HomeController.updateInsertionview(id);
                     } catch (Exception e) {

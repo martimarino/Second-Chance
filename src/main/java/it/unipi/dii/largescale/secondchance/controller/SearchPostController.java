@@ -32,8 +32,6 @@ public class SearchPostController {
     @FXML private Text price;
     @FXML private Text views;
 
-    private String idPost;
-    private String sellerIdPost;
     private Document found;
 
     public void initialize(){
@@ -42,8 +40,8 @@ public class SearchPostController {
 
     public void searchPost() throws IOException {
 
-        idPost = postIdField.getText();
-        sellerIdPost = sellerIdField.getText();
+        String idPost = postIdField.getText();
+        String sellerIdPost = sellerIdField.getText();
 
         if (idPost != null && !idPost.trim().isEmpty())
             found = ConnectionMongoDB.connMongo.verifyInsertionInDB(idPost, true);

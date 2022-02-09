@@ -22,7 +22,7 @@ public class FollowController {
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
-    private int nPage = 8;
+    private final int nPage = 8;
     private int scrollPage;
     String type_img;
     User userLogged;
@@ -66,7 +66,7 @@ public class FollowController {
         Button follow = new Button();
 
         final Pane spacer = new Pane();
-        hb.setHgrow(spacer, Priority.ALWAYS);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
         spacer.setMinSize(10, 1);
 
         username.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);

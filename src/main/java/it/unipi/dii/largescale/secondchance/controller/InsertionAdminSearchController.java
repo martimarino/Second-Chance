@@ -18,7 +18,6 @@ public class InsertionAdminSearchController {
     public VBox box;
     public Pane prev, next;
     private final int k = 3;
-    private int contReviews = 0;
     private int index;
     String type_img;
 
@@ -82,9 +81,7 @@ public class InsertionAdminSearchController {
 
         image.setOnMouseClicked(event->{
                     try {
-                        SearchInsertionController sic = new SearchInsertionController();
-                        System.out.println(uniq_id);
-                        sic.showInsertionPage(uniq_id);
+                        SearchInsertionController.showInsertionPage(uniq_id);
                         ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                         //HomeController.updateInsertionview(uniq_id);
                     } catch (Exception e) {
