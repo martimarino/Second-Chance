@@ -56,6 +56,8 @@ public class SearchUserAdminController {
 
     public void searchUser(){
 
+        alertText.setText("");
+
         Document found;
 
         username = usernameField.getText();
