@@ -29,7 +29,7 @@ public class MyOrderController{
     User user;
 
     int indexPage;
-    int k = 6;
+    int k = 6; // number of orders show into current page
     boolean kind;
     String type_img;
 
