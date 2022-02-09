@@ -64,6 +64,7 @@ public class ProfileController extends MainController {
     int scrollPage2;
     int nPage = 2;
     String type_img;
+    boolean choice;
 
     public void initialize(){
 
@@ -71,6 +72,9 @@ public class ProfileController extends MainController {
         bal = Balance.balance.getCredit();
         balanceValue.setText(String.format("%.2f",bal) + "€");
         type_img = "user";
+        followersButton.setOnMouseClicked(event ->  {choice = true; showUsersList(choice);});
+        followingButton.setOnMouseClicked(event ->  {choice = false; showUsersList(choice);});
+
         setProfile();
 
         System.out.println("USERNAME init: " + user.getUsername());
@@ -95,7 +99,7 @@ public class ProfileController extends MainController {
             balanceText.setVisible(false);
             interestedInsertionsButton.setDisable(true);
             interestedInsertionsButton.setVisible(false);
-            insertionButton.setLayoutY(250);
+            insertionButton.setLayoutY(240);
             insertionButton.setText("View insertion published");
             titleProfile.setText("Profile of " + us);
             titleProfile.setLayoutX(270);
@@ -163,8 +167,6 @@ public class ProfileController extends MainController {
         userInfo.add(rating, 1, 6);
 
         updateUserBalance();
-        following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
-        follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
         listReviews = user.getReviews();
 
         if (listReviews == null) {
@@ -226,7 +228,7 @@ public class ProfileController extends MainController {
 
     /* ********** FOLLOWERS/ING STATS SECTION ********** */
 
-    public void showUserFollowers() {
+    public void showUsersList(boolean choice) {
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
 
@@ -238,34 +240,25 @@ public class ProfileController extends MainController {
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Your insertions");
             FollowController controller = loader.getController();
-            if (follower.size() == 0) {
-                Utility.infoBox("You have not followers.", "Information", "No followers!");
-                return;
+            if(choice) //followers page
+            {
+                follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
+
+                if (follower.size() == 0) {
+                    Utility.infoBox("You have not followers.", "Information", "No followers!");
+                    return;
+                }
+                controller.initialize(follower);
             }
-            controller.initialize(follower);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+            else {
+                following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
 
-    public void showUserFollowing() {
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-
-            Image image = new Image(imageStream);
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(FollowController.class.getResource("/FXML/FollowPage.fxml"));
-            Stage stage = new Stage(StageStyle.DECORATED);
-            stage.getIcons().add(image);
-            stage.setScene(new Scene(loader.load()));
-            stage.setTitle("Your insertions");
-            FollowController controller = loader.getController();
-            if (following.size() == 0) {
-                Utility.infoBox("You have not following.", "Information", "No following!");
-                return;
+                if (following.size() == 0) {
+                    Utility.infoBox("You have not following.", "Information", "No following!");
+                    return;
+                }
+                controller.initialize(following);
             }
-            controller.initialize(following);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
