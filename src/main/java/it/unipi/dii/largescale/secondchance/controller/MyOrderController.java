@@ -107,7 +107,6 @@ public class MyOrderController{
     private void addOrder(boolean choice) {
 
         HBox hbox;
-        HBox revbox;
         VBox vbox;
         Button review = new Button();
         Document ins = (Document) ordersList.get(indexPage-1).get("insertion");
@@ -132,9 +131,7 @@ public class MyOrderController{
 
         if(choice) {
             vbox = new VBox(seller, timestamp, price, category, size, status);
-            revbox = new HBox(vbox, review);
-            hbox = new HBox(image, vbox, revbox);
-            revbox.setSpacing(1000);
+            hbox = new HBox(image, vbox, review);
         }
         else {
             vbox = new VBox(buyer, timestamp, price, category, size, status);
@@ -142,8 +139,8 @@ public class MyOrderController{
         }
 
         panel.setSpacing(12);
-        hbox.setSpacing(80);
-        hbox.setStyle("-fx-padding: 5px; -fx-background-color: white;");
+        hbox.setSpacing(40);
+        hbox.setStyle("-fx-padding: 15px; -fx-background-color: white; ; -fx-background-radius: 20px;");
         vbox.setStyle("-fx-padding: 5px; -fx-font-size: 14px");
 
         panel.getChildren().add(hbox);
