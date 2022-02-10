@@ -13,7 +13,6 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.CryptWithMD5;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class SignUpController {
 

@@ -22,8 +22,10 @@ public class FollowController {
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
-    private int nPage = 8;
+
+    private final int nPage = 8;
     private int scrollPage;
+
     String type_img;
     User userLogged;
 
@@ -44,7 +46,8 @@ public class FollowController {
     public void show() {
 
         box.getChildren().clear();
-        //if there are more than k insertions enable next button
+
+        // If there are more than k insertions enable next button
         if (list.size() < nPage) {
             next.setDisable(true);
             next.setVisible(false);
@@ -55,7 +58,6 @@ public class FollowController {
             addUser();
 
         bp.setCenter(box);
-
     }
 
     private void addUser() {
@@ -66,7 +68,7 @@ public class FollowController {
         Button follow = new Button();
 
         final Pane spacer = new Pane();
-        hb.setHgrow(spacer, Priority.ALWAYS);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
         spacer.setMinSize(10, 1);
 
         username.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);

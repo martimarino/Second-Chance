@@ -1,6 +1,5 @@
 package main.java.it.unipi.dii.largescale.secondchance.controller;
 
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -28,12 +27,12 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ProfileController extends MainController {
 
     public GridPane userInfo;
-    public GridPane reviews;
 
     public BorderPane review;
     public Pane profileImage;
@@ -57,8 +56,6 @@ public class ProfileController extends MainController {
     public Button interestedInsertionsButton, insertionButton;
 
     private User user;
-    private Session session;
-    private double bal;
 
     int scrollPage;
     int scrollPage2;
@@ -69,11 +66,11 @@ public class ProfileController extends MainController {
     public void initialize(){
 
         user  = Session.getLoggedUser();
-        bal = Balance.balance.getCredit();
-        balanceValue.setText(String.format("%.2f",bal) + "€");
+        double bal = Balance.balance.getCredit();
+        balanceValue.setText(String.format("%.2f", bal) + "€");
         type_img = "user";
-        followersButton.setOnMouseClicked(event ->  {choice = true; showUsersList(choice);});
-        followingButton.setOnMouseClicked(event ->  {choice = false; showUsersList(choice);});
+        followersButton.setOnMouseClicked(event ->  {choice = true; showUsersList(true);});
+        followingButton.setOnMouseClicked(event ->  {choice = false; showUsersList(false);});
 
         setProfile();
 
@@ -218,13 +215,7 @@ public class ProfileController extends MainController {
                 }
         );
 
-        profileImage.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            if (newValue) {
-                label.setVisible(true);
-            } else {
-                label.setVisible(false);
-            }
-        });
+        profileImage.hoverProperty().addListener((observable, oldValue, newValue) -> label.setVisible(newValue));
     }
 
     /* ********** FOLLOWERS/ING STATS SECTION ********** */
@@ -239,7 +230,7 @@ public class ProfileController extends MainController {
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.getIcons().add(image);
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/CSS/FollowStyle.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/FollowStyle.css")).toExternalForm());
             stage.setScene(scene);
             stage.setTitle("Your insertions");
             FollowController controller = loader.getController();
@@ -268,28 +259,6 @@ public class ProfileController extends MainController {
         }
     }
 
-    public void showInterestedInsertions() {
-
-        ArrayList<String> followed_post = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
-        StackPane secondaryLayout = new StackPane();
-
-        for (int i = 0; i < 10; i++) {
-
-            Label x = new Label(followed_post.get(i));
-            x.setTranslateX(10);
-            x.setTranslateY(-100 + i*50);
-            secondaryLayout.getChildren().add(x);
-        }
-
-        Scene secondScene = new Scene(secondaryLayout, 920, 400);
-
-        // New window (Stage)
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Followed post");
-        newWindow.setScene(secondScene);
-        newWindow.show();
-    }
-
     /* ********** BALANCE SECTION ********** */
 
     public void updateUserBalance() {
@@ -314,7 +283,7 @@ public class ProfileController extends MainController {
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.getIcons().add(image);
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/CSS/InsertionListStyle.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/InsertionListStyle.css")).toExternalForm());
             stage.setScene(scene);
             stage.setTitle("Your insertions");
             InsertionListController controller = loader.getController();
@@ -334,7 +303,7 @@ public class ProfileController extends MainController {
             stage.getIcons().add(image);
             stage.setTitle("Insertions you are interested in");
             Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(getClass().getResource("/CSS/InsertionListLikedStyle.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/InsertionListLikedStyle.css")).toExternalForm());
             stage.setScene(scene);
 
             InsertionListLikedController controller = loader.getController();
@@ -346,7 +315,7 @@ public class ProfileController extends MainController {
 
     public void logout() throws IOException {
 
-        session = Session.getInstance();
+        Session session = Session.getInstance();
         session.getLogoutUser();
 
         // Closing current window

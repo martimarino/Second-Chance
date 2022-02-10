@@ -23,54 +23,67 @@ public class HomeController {
     public AnchorPane anchorRoot;
 
     public BorderPane viralInsertions;
-    public Pane nextViralButton, prevViralButton;
-    HBox viralHBox;
-    ArrayList<Document> viralList;
-    int scrollViralPage;
-
     public BorderPane feed;
+
+    public Pane nextViralButton, prevViralButton;
     public Pane prevFeedButton, nextFeedButton;
-    HBox feedBox;
-    ArrayList<Document> feedList;
+
+    public HBox viralHBox;
+    public HBox feedBox;
+
+    public ArrayList<Document> viralList;
+    public ArrayList<Document> feedList;
     public ArrayList<String> followedFromNeo;
+
+    int scrollViralPage;
     int scrollFeedPage;
 
-    //general paramenters
-    int k = 12;                     //how many to show
-    int nPage = 3;                  //how many per page
+    //general parameters
+    int numInsertions = 12;         // How many to show
+    int nPage = 3;                  // How many per page
     String type_img;
 
     public void initialize() {
 
         // viral
-        viralList = ConnectionMongoDB.connMongo.findViralInsertions(k);
+        scrollViralPage = 0;
+
+        viralList = ConnectionMongoDB.connMongo.findViralInsertions(numInsertions);
+
         prevViralButton.setDisable(true);
         prevViralButton.setVisible(false);
+
         viralHBox = new HBox();
         viralHBox.setSpacing(10);
+
         viralInsertions.setCenter(viralHBox);
-        scrollViralPage = 0;
+
         Utility.printTerminal("Size of viral: " + viralList.size());
         type_img = "insertion";
+
         showViralInsertions();
 
         // feed
+        scrollFeedPage = 0;
+
         feedBox = new HBox();
         feedBox.setSpacing(10);
+
         feed.setCenter(feedBox);
-        scrollFeedPage = 0;
+
         prevFeedButton.setDisable(true);
         prevFeedButton.setVisible(false);
 
         followedFromNeo = new ArrayList<>();
-        followedFromNeo = ConnectionNeo4jDB.connNeo.getFollowedInsertions(Session.getLoggedUser().getUsername(), k);
+        followedFromNeo = ConnectionNeo4jDB.connNeo.getFollowedInsertions(Session.getLoggedUser().getUsername(), numInsertions);
+
         feedList = ConnectionMongoDB.connMongo.followedUserInsertions(followedFromNeo);
 
-        if (followedFromNeo.size() < k) {
-            ArrayList<Document> topK = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k - followedFromNeo.size(), "clothing");
+        if (followedFromNeo.size() < numInsertions) {
+            ArrayList<Document> topK = ConnectionMongoDB.connMongo.findTopKViewedInsertion(numInsertions - followedFromNeo.size(), "clothing");
 
-            for (int i = 0; i < topK.size(); i++) {
-                feedList.add(topK.get(i));
+            for (Document document : topK) {
+                feedList.add(document);
                 System.out.println("TOPK: " + feedList);
             }
         }
@@ -84,10 +97,11 @@ public class HomeController {
 
         Insertion insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
 
-        if(insertion == null) {
+        if (insertion == null) {
             Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
             return;
         }
+
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
             FXMLLoader loader = new FXMLLoader();
@@ -128,7 +142,6 @@ public class HomeController {
                         System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
                         ConnectionMongoDB.connMongo.updateNumView(uniq_id);
-                        //updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -162,6 +175,7 @@ public class HomeController {
     /* ********* FEED SECTION ********* */
 
     public void showFeed() {
+
         System.out.println("SCROLL OUT: " + scrollFeedPage);
         for (int i = 0; i < nPage && i < feedList.size(); i++) {
             System.out.println("SCROLL IN: " + scrollFeedPage + "i: " + i);
@@ -208,7 +222,6 @@ public class HomeController {
                         System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
                         ConnectionMongoDB.connMongo.updateNumView(uniq_id);
-                        //updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

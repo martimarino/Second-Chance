@@ -1,7 +1,6 @@
 package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
@@ -35,7 +34,6 @@ public class SearchUserAdminController {
 
     private Session session;
 
-
     public void initialize(){
 
         btnSuspendUsr.setDisable(true);
@@ -54,7 +52,6 @@ public class SearchUserAdminController {
             if (!Objects.equals(newValue, ""))
                 nameField.setText("");
         });
-
     }
 
     public void searchUser(){
