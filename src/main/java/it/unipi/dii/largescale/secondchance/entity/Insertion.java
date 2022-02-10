@@ -6,20 +6,20 @@ import org.bson.types.ObjectId;
 public class Insertion {
 
     String id;
+    String brand;
     String category;
+    String color;
+    String country;
     String description;
     String gender;
-    double price;
-    int interested;
-    int views;
-    String status;
-    String color;
-    String size;
-    String brand;
-    String country;
     String image_url;
-    String timestamp;
+    int interested;
+    double price;
     String seller;
+    String size;
+    String status;
+    String timestamp;
+    int views;
 
     public Insertion(){}
 

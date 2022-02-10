@@ -23,9 +23,10 @@ public class StatsController {
 
     private final String[] countries = new String[]{"Italy", "Canada", "Spain", "Austria", "Germany", "France", "Brazil", "Netherlands", "Poland", "Ireland", "United Kingdom (Great Britain)"};
     private final String[] categories = new String[]{"clothing","accessories", "bags","beauty", "house", "jewelry", "kids", "shoes"};
-    public RadioButton followedUsers;
-    public RadioButton categoryInsertion;
-    public RadioButton postedCountry;
+
+    @FXML private TextField boxKNumber;
+    @FXML private TextField txtFieldCountry;
+    @FXML private TextField txtFieldCategory;
 
     @FXML private RadioButton rBUsers;
     @FXML private RadioButton rBSellers;
@@ -33,9 +34,9 @@ public class StatsController {
     @FXML private RadioButton rBTopKInterestingIns;
     @FXML private RadioButton rBTopKViewedIns;
 
-    @FXML private TextField boxKNumber;
-    @FXML private TextField txtFieldCountry;
-    @FXML private TextField txtFieldCategory;
+    @FXML public RadioButton followedUsers;
+    @FXML public RadioButton categoryInsertion;
+    @FXML public RadioButton postedCountry;
 
     @FXML private Button elaboraButton;
 
@@ -46,7 +47,7 @@ public class StatsController {
         connNeo = new ConnectionNeo4jDB();
 
         Tooltip countries = new Tooltip("Italy, Canada, Spain, Austria, Germany, France, Brazil, Netherlands, Poland, Ireland, United Kingdom");
-        Tooltip categories = new Tooltip("clothing,accessories, bags, beauty, house, jewelry, kids, shoes");
+        Tooltip categories = new Tooltip("clothing, accessories, bags, beauty, house, jewelry, kids, shoes");
 
         elaboraButton.setDisable(true);
         txtFieldCountry.setEditable(false);
