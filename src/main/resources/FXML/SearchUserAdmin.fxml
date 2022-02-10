@@ -17,9 +17,10 @@
 <?import javafx.scene.layout.VBox?>
 <AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.SearchUserAdminController">
    <children>
-       <Label layoutX="321.0" layoutY="16.0" text="Search User Section ">
+       <Label layoutX="321.0" layoutY="16.0" text="Search User Section " textAlignment="CENTER" textFill="#b936e4">
+
           <font>
-             <Font size="18.0" />
+              <Font size="24.0" />
           </font>
        </Label>
        <Button fx:id="btnLogout" layoutX="712.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#logout" style="-fx-background-color: rgb(242, 242, 242)rgb(242, 242, 242); -fx-background-radius: 50; -fx-border-color: rgb(0,0,0); -fx-border-radius: 50;" text="Logout" />
