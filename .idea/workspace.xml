@@ -4,23 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Stats fixed (Mongo and Neo divided).">
+    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="add new functions admin page">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/CSS/InsertionAdminSearchStyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/NewInsertionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/NewInsertionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddFundsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddFundsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionAdminSearchController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionAdminSearchController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchPostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchPostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignInController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignInController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/SearchPost.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/SearchPost.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/Stats.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/Stats.fxml" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
-    <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre">
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" afterDir="false" />
-    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,24 +36,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java">
-      <ranges>
-        <range start1="26" end1="28" start2="26" end2="27" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="95" end1="97" start2="94" end2="96" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="254" end1="255" start2="253" end2="254" changelist="f8a9d233-fa3d-4ae6-a843-659fe708a601" />
-        <range start1="268" end1="268" start2="267" end2="268" changelist="f8a9d233-fa3d-4ae6-a843-659fe708a601" />
-        <range start1="270" end1="270" start2="270" end2="271" changelist="f8a9d233-fa3d-4ae6-a843-659fe708a601" />
-        <range start1="385" end1="385" start2="386" end2="415" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="412" end1="413" start2="442" end2="443" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="449" end1="450" start2="479" end2="481" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="465" end1="466" start2="496" end2="498" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="467" end1="468" start2="499" end2="499" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="471" end1="496" start2="502" end2="502" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-        <range start1="561" end1="573" start2="567" end2="567" changelist="78096fe8-9952-45af-bf90-4f98cdf0dd02" />
-      </ranges>
-    </file>
   </component>
   <component name="ProjectId" id="24cGP07hMuydzouSsyqELUKrZS4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -128,9 +105,6 @@
       <workItem from="1644310037703" duration="6467000" />
       <workItem from="1644347340303" duration="8090000" />
       <workItem from="1644395849334" duration="7625000" />
-      <workItem from="1644412445342" duration="10394000" />
-      <workItem from="1644434862051" duration="1408000" />
-      <workItem from="1644486154786" duration="17442000" />
     </task>
     <task id="LOCAL-00001" summary="Fix admin function, fix other problems">
       <created>1643993961652</created>
@@ -202,28 +176,7 @@
       <option name="project" value="LOCAL" />
       <updated>1644334461819</updated>
     </task>
-    <task id="LOCAL-00011" summary="Admin panel fxml fixed.">
-      <created>1644404728460</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1644404728460</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Style changed and SearchUser functions unified.">
-      <created>1644424273926</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1644424273926</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Stats fixed (Mongo and Neo divided).">
-      <created>1644493370894</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1644493370894</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,17 +215,14 @@
     <MESSAGE value="fix most active user into admin, fix searchinsertion arrows" />
     <MESSAGE value="Merged the two files FollowersController.java and FollowingController.java. &#10;&#10;Merged the two files FollowersPage.fxml and FollowingPage.fxml." />
     <MESSAGE value="add new functions admin page" />
-    <MESSAGE value="Admin panel fxml fixed." />
-    <MESSAGE value="Style changed and SearchUser functions unified." />
-    <MESSAGE value="Stats fixed (Mongo and Neo divided)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Stats fixed (Mongo and Neo divided)." />
+    <option name="LAST_COMMIT_MESSAGE" value="add new functions admin page" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java</url>
-          <line>181</line>
+          <line>182</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

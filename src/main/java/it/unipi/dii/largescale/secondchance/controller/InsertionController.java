@@ -53,9 +53,8 @@ public class InsertionController {
         insertionTitle = new Label();
         infoContainer.setVisible(true);
         descriptionContainer.setEditable(false);
-        
-        Session session = Session.getInstance();
-        user = session.getLoggedUser();
+
+        user = Session.getLoggedUser();
         //System.out.println("uniq_id controller: " + uniq_id);
 
         System.out.println("INSERTION insertionController: " + insertion);

@@ -98,8 +98,7 @@ public class SearchUserController extends MainController{
         if(suggFromNeo.size() < k)
         {
             Utility.printTerminal("Not enough suggestions");
-            Session session = Session.getInstance();
-            User user = session.getLoggedUser();
+            User user = Session.getLoggedUser();
             ArrayList<Document> temp = ConnectionMongoDB.connMongo.findTopKRatedUser((m-suggFromNeo.size()), user.getCountry());
             for(Document d : temp) {
                 suggFromNeo.add(d.getString("username"));

@@ -9,7 +9,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
-import main.java.it.unipi.dii.largescale.secondchance.entity.Balance;
 import main.java.it.unipi.dii.largescale.secondchance.utils.CryptWithMD5;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
@@ -67,7 +66,7 @@ public class SignInController {
         String encrypted = CryptWithMD5.cryptWithMD5(password);
         Utility.printTerminal("PASSWORD: " + password + "\nENCRYPTED: " + encrypted);
         Session session;
-        Boolean isAdmin = false;
+        boolean isAdmin = false;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
             Utility.printTerminal("Value: " + us.getText() + "\nValue: " + pw.getText());
