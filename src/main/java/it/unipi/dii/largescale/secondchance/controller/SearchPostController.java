@@ -17,6 +17,7 @@ import org.bson.Document;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class SearchPostController {
@@ -75,7 +76,9 @@ public class SearchPostController {
                     Stage stage = new Stage(StageStyle.DECORATED);
                     stage.getIcons().add(image);
                     stage.setTitle("Insertions you searched");
-                    stage.setScene(new Scene(loader.load()));
+                    Scene scene = new Scene(loader.load());
+                    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/InsertionAdminSearchStyle.css")).toExternalForm());
+                    stage.setScene(scene);
 
                     InsertionAdminSearchController controller = loader.getController();
                     controller.initialize(found.getString("seller"));
