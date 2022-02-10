@@ -108,7 +108,7 @@ public class InsertionController {
             {
                 Utility.infoBox("Buying product", "Error", "Cannot buy product");
                 System.out.println("Error deleting insertion Neo4j");
-                ConnectionMongoDB.connMongo.deleteBuyInsertion(user.getUsername(), insertion);
+                ConnectionMongoDB.connMongo.rollBackInsertion(0, Session.getLoggedUser().getUsername(), insertion);
                 return;
             }
             Utility.infoBox("Product bought correctly! ", "User Advise", "Purchase done");

@@ -70,8 +70,8 @@ public class NewInsertionController {
         }
         if((!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLoggedUser().getUsername(), i.getId()))){
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
-            ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
             ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(i.getId());
+            ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
             return;
         }
 

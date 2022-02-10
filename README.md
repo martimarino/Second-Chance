@@ -55,9 +55,9 @@ Every user can add his or her products on the profile or buy some clothes that a
 
 - View top k rated user for current user country
 
-- View top k most interesting insertions per category
+- View top k interesting insertions per category
 
-- View top k most viewed insertions per category
+- View top k viewed insertions per category
 
 - View the best/worst rated reviews of a user
 

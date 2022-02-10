@@ -24,8 +24,7 @@ import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Sorts.descending;
-import static com.mongodb.client.model.Updates.inc;
-import static com.mongodb.client.model.Updates.set;
+import static com.mongodb.client.model.Updates.*;
 
 public class ConnectionMongoDB{
 
@@ -93,8 +92,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        //connectToLocal();
-        connectToVms();
+        connectToLocal();
+        //connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");
@@ -384,6 +383,35 @@ public class ConnectionMongoDB{
 
     }
 
+    public void rollBackInsertion(int i, String username, Insertion insertion) {
+
+        for(; i < 4; i++) {
+            switch (i) {
+                case 0: //insert insertion again
+                    insertionColl.insertOne(Insertion.toDocument(insertion));
+                    System.out.println("CASE 0");
+                    continue;
+                case 1: //remove item from sold array in user
+                    Bson filter_sold = eq("username", insertion.getSeller());
+                    Bson update = Updates.popLast("sold");
+                    userColl.findOneAndUpdate(filter_sold, update);
+                    System.out.println("CASE 1");
+                    continue;
+                case 2: //decrement seller balance
+                    updateBalance(insertion.getSeller(), insertion.getPrice(), '-');
+                    System.out.println("CASE 2");
+                    continue;
+                case 3: //increment buyer balance
+                    updateBalance(username, insertion.getPrice(), '+');
+                    System.out.println("CASE 3");
+                    continue;
+                default:
+                    break;
+            }
+        }
+
+    }
+
     public boolean buyCurrentInsertion(String username, Insertion insertion){
 
         ClientSession clientSession = mongoClient.startSession();
@@ -410,7 +438,7 @@ public class ConnectionMongoDB{
             } else {
                 upSeller = updateBalance(insertion.getSeller(), insertion.getPrice(), '+');
                 if(!upSeller) {
-                    updateBalance(Session.getLoggedUser().getUsername(), insertion.getPrice(), '+');
+                    rollBackInsertion(3, Session.getLoggedUser().getUsername(), insertion);
                     Utility.infoBox("Cannot buy product", "Error", "Error purchase");
                     return "Cannot update seller balance";
                 }
@@ -447,7 +475,8 @@ public class ConnectionMongoDB{
             try {
                 userColl.findOneAndUpdate(filter_sold, update_sold);
             } catch (MongoException e) {
-                System.err.println("Unable to insert item in sold array: " + e);
+                rollBackInsertion(2, Session.getLoggedUser().getUsername(), insertion);
+                return ("Unable to insert item in sold array: " + e);
             }
 
             //update local purchased array
@@ -463,36 +492,11 @@ public class ConnectionMongoDB{
                 insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));
                 return "OK";
             } catch (MongoException e) {
-                System.err.println("Unable to delete insertion: " + e);
+                rollBackInsertion(1, Session.getLoggedUser().getUsername(), insertion);
+                return ("Unable to delete insertion: " + e);
             }
-            return null;
         };
         return executeTransaction(clientSession, txnFunc);
-    }
-
-    public boolean deleteBuyInsertion(String username, Insertion insertion) {
-
-        ClientSession clientSession = mongoClient.startSession();
-
-        TransactionBody<String> txnFunc = () -> {
-
-            try {
-                //update buyer balance
-                updateBalance(username, insertion.getPrice(), '+');
-                //update seller balance
-                updateBalance(insertion.getSeller(), insertion.getPrice(), '-');
-                //re-add insertion
-                insertionColl.insertOne(Insertion.toDocument(insertion));
-
-                return "OK";
-            } catch (MongoException me) {
-                System.err.println("Unable to delete insertion: " + me);
-                return null;
-            }
-
-        };
-        return executeTransaction(clientSession, txnFunc);
-
     }
 
     private boolean executeTransaction(ClientSession clientSession, TransactionBody<String> txnFunc) {

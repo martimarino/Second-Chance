@@ -51,15 +51,15 @@
                      <ToggleGroup fx:id="TopK" />
                   </toggleGroup>
                </RadioButton>
-               <RadioButton fx:id="rBTopKInterestingIns" mnemonicParsing="false" text="Top K Most Interesting Insertions (by category) " toggleGroup="$TopK" />
-               <RadioButton fx:id="rBTopKViewedIns" mnemonicParsing="false" text="Top K Most Viewed Insertions (by category) " toggleGroup="$TopK" />
-               <RadioButton fx:id="rBUsers" mnemonicParsing="false" prefHeight="17.0" text="Users with more purchases" toggleGroup="$TopK" />
-               <RadioButton fx:id="rBSellers" mnemonicParsing="false" prefHeight="21.0" text="Users with more sold" toggleGroup="$TopK" />
+               <RadioButton fx:id="rBTopKInterestingIns" mnemonicParsing="false" text="Top K interesting insertions (by category) " toggleGroup="$TopK" />
+               <RadioButton fx:id="rBTopKViewedIns" mnemonicParsing="false" text="Top K viewed insertions (by category) " toggleGroup="$TopK" />
+               <RadioButton fx:id="rBUsers" mnemonicParsing="false" prefHeight="17.0" text="Top k users with more purchased items" toggleGroup="$TopK" />
+               <RadioButton fx:id="rBSellers" mnemonicParsing="false" prefHeight="21.0" text="Top k users with more sold items" toggleGroup="$TopK" />
             </VBox>
             <VBox spacing="10.0">   <!-- Neo4j stats -->
-               <RadioButton fx:id="followedUsers" mnemonicParsing="false" prefHeight="17.0" text="Most followed users" toggleGroup="$TopK"/>
-               <RadioButton fx:id="categoryInsertion" mnemonicParsing="false" prefHeight="21.0" text="Interesting for category" toggleGroup="$TopK" />
-               <RadioButton fx:id="postedCountry" mnemonicParsing="false" prefHeight="21.0" text="Number of posted insertion for country" toggleGroup="$TopK" />
+               <RadioButton fx:id="followedUsers" mnemonicParsing="false" prefHeight="17.0" text="K most followed users" toggleGroup="$TopK"/>
+               <RadioButton fx:id="categoryInsertion" mnemonicParsing="false" prefHeight="21.0" text="Number of likes per category" toggleGroup="$TopK" />
+               <RadioButton fx:id="postedCountry" mnemonicParsing="false" prefHeight="21.0" text="Number of posted insertion per country" toggleGroup="$TopK" />
             </VBox>
          </HBox>
          <!-- Process stats button -->
