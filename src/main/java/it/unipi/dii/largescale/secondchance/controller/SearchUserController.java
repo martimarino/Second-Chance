@@ -20,9 +20,7 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
-import javax.print.Doc;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -72,8 +70,8 @@ public class SearchUserController extends MainController{
         prevSearch.setVisible(false);
         nextSearch.setVisible(false);
 
-        prevSearch.setOnMouseClicked(event ->  { prevResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind);});
-        nextSearch.setOnMouseClicked(event ->  { nextResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind);});
+        prevSearch.setOnMouseClicked(event -> prevResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind));
+        nextSearch.setOnMouseClicked(event -> nextResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind));
 
         // Suggested sellers
 
@@ -87,8 +85,8 @@ public class SearchUserController extends MainController{
         nextSugg.setDisable(true);
         nextSugg.setVisible(false);
 
-        prevSugg.setOnMouseClicked(event ->  { prevResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg);});
-        nextSugg.setOnMouseClicked(event ->  { nextResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg);});
+        prevSugg.setOnMouseClicked(event -> prevResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg));
+        nextSugg.setOnMouseClicked(event -> nextResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg));
 
         //connection to Neo4j
         suggFromNeo = ConnectionNeo4jDB.connNeo.getSuggestedUsers(Session.getLoggedUser().getUsername(), Session.getLoggedUser().getCountry(), k);
@@ -115,7 +113,7 @@ public class SearchUserController extends MainController{
         showResult(false, suggBox, nextSugg, indexSugg, userSugg, suggList);
     }
 
-    public void findUsers() throws IOException {
+    public void findUsers() {
 
         searchedList.removeAll(searchedList);
         indexSearch = 0;
@@ -159,7 +157,7 @@ public class SearchUserController extends MainController{
             if (searchedList.isEmpty())
                 Utility.infoBox("This user does not exists.", "Advise", "User Advise");
 
-            showResult(false, suggBox, nextSugg, indexSugg, userSugg, suggList);
+            showResult(true, searchBox, nextSearch, indexSearch, userFind, searchedList);
 
         }
 
@@ -203,16 +201,22 @@ public class SearchUserController extends MainController{
         System.out.println("(show) INDEX: " + index);
 
         for (int i = 0; ((i < k) && (index < m) && (index < list.size())); i++)
-            addResult(choice, list, index, hb);
+            addResult(choice, list, hb);
 
         bp.setCenter(hb);
     }
 
-    public void addResult(boolean choice, ArrayList<Document> list, int index, HBox hb) {
+    public void addResult(boolean choice, ArrayList<Document> list, HBox hb) {
 
         VBox vb = new VBox(10);
         VBox det = new VBox();
         Label rating;
+        int index;
+
+        if(choice)
+            index = indexSearch;
+        else
+            index = indexSugg;
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             System.out.println(list.get(index).getString("username"));
@@ -256,19 +260,25 @@ public class SearchUserController extends MainController{
                         }
                     }
             );
+
+            hb.setStyle(
+                    "-fx-padding: 20;\n" +
+                            "    -fx-hgap: 10;\n" +
+                            "    -fx-vgap: 10;");
+
+            if(choice)  //search
+                indexSearch++;
+            else        //sugg
+                indexSugg++;
+
+            System.out.println("(add sugg) INDEX: " + indexSugg);
+            System.out.println("(add search) INDEX: " + indexSearch);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        hb.setStyle(
-                "-fx-padding: 20;\n" +
-                        "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;");
 
-        if(choice)  //search
-            indexSearch++;
-        else        //sugg
-            indexSugg++;
-        System.out.println("(add sugg) INDEX: " + index);
 
     }
 

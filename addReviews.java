@@ -22,17 +22,12 @@ public class Main {
         int i = 0;
         for (Document d : users) {      //for every user
 
-    System.out.println("USERNAME: " + d.getString("username"));
             //list takes all the embedded reviews
             List<Document> list = null;
             list = d.getList("reviews", Document.class);
 
-    System.out.println("LIST: " + list);
-
             if(list == null)    //if no reviews go to next user
                 continue;
-
-    System.out.println("SIZE: " + list.size());
 
             //calculate avg rating of this user
             Double avg = 0.0;

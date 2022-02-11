@@ -28,15 +28,12 @@ public class StatsController {
     @FXML private TextField txtFieldCountry;
     @FXML private TextField txtFieldCategory;
 
-    @FXML private RadioButton rBUsers;
-    @FXML private RadioButton rBSellers;
-    @FXML private RadioButton rBTopKUsers;
+    @FXML private RadioButton rBTopKRated;
+    @FXML private RadioButton rBPurch;
+    @FXML private RadioButton rBSold;
     @FXML private RadioButton rBTopKInterestingIns;
     @FXML private RadioButton rBTopKViewedIns;
-
-    @FXML public RadioButton followedUsers;
-    @FXML public RadioButton categoryInsertion;
-    @FXML public RadioButton postedCountry;
+    @FXML public RadioButton rBLikesPerCategory;
 
     @FXML private Button elaboraButton;
 
@@ -50,6 +47,8 @@ public class StatsController {
         Tooltip categories = new Tooltip("clothing, accessories, bags, beauty, house, jewelry, kids, shoes");
 
         elaboraButton.setDisable(true);
+        boxKNumber.setEditable(false);
+        boxKNumber.setMouseTransparent(true);
         txtFieldCountry.setEditable(false);
         txtFieldCountry.setMouseTransparent(true);
         txtFieldCategory.setEditable(false);
@@ -58,7 +57,7 @@ public class StatsController {
         txtFieldCountry.setTooltip(countries);
         txtFieldCategory.setTooltip(categories);
 
-        rBTopKUsers.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        rBTopKRated.selectedProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
             txtFieldCategory.setText("");
@@ -77,19 +76,17 @@ public class StatsController {
 
         });
 
-        listenerTopKViewInterested(rBTopKViewedIns);
+        listenerTopKViewInterested();
 
-        listenerTopKViewInterested(rBTopKInterestingIns);
+        listenerTopKViewInterested();
 
-        listenerUserSeller(rBSellers);
+        listenerUserItems();
 
-        listenerUserSeller(rBUsers);
+        listenerUserItems();
 
-        followedUsers.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
+        listenerNumberOfLikes();
 
-        categoryInsertion.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
-
-        postedCountry.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
+        rBLikesPerCategory.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
 
         txtFieldCategory.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("text changed from " + oldValue + " to " + newValue);
@@ -104,7 +101,7 @@ public class StatsController {
         });
     }
 
-    private void listenerTopKViewInterested(RadioButton rBTopKViewedIns) {
+    private void listenerTopKViewInterested() {
         rBTopKViewedIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
                System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
@@ -122,12 +119,34 @@ public class StatsController {
         });
     }
 
-    private void listenerUserSeller(RadioButton rBSellers) {
-        rBSellers.selectedProperty().addListener((observable, oldValue, newValue) -> {
+    private void listenerUserItems() {
+
+        rBSold.selectedProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("radio button changed from " + oldValue + " to " + newValue);
 
             txtFieldCountry.setText("");
             txtFieldCategory.setText("");
+
+            txtFieldCountry.setEditable(false);
+            txtFieldCountry.setMouseTransparent(true);
+
+            txtFieldCategory.setEditable(false);
+            txtFieldCategory.setMouseTransparent(true);
+
+            elaboraButton.setDisable(false);
+        });
+    }
+
+    private void listenerNumberOfLikes() {
+
+        rBLikesPerCategory.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("radio button changed from " + oldValue + " to " + newValue);
+
+            txtFieldCountry.setText("");
+            txtFieldCategory.setText("");
+
+            boxKNumber.setEditable(false);
+            boxKNumber.setMouseTransparent(true);
 
             txtFieldCountry.setEditable(false);
             txtFieldCountry.setMouseTransparent(true);
@@ -144,34 +163,29 @@ public class StatsController {
         int k;
         // Section Most
 
-        if (categoryInsertion.isSelected()) {
+        if (rBLikesPerCategory.isSelected()) {
             showNumberInterestingForCategory();
             return;
         }
-        if (postedCountry.isSelected()) {
-            showNumberPostedForCountry();
-            return;
-        }
 
-        if (Objects.equals(boxKNumber.getText(), "")) {
+        if (boxKNumber.getText().equals("") ||
+                Integer.parseInt(boxKNumber.getText()) <= 0)
+        {
             Utility.infoBox("Please insert a valid K number", "Error", "Empty box!");
             return;
         }
 
         k = Integer.parseInt(boxKNumber.getText());
 
-        if (rBSellers.isSelected())
-            showMostActiveUsersSellers(false, k);
+        if (rBSold.isSelected())
+            showMostActiveUsers(false, k);
 
-        if (rBUsers.isSelected())
-            showMostActiveUsersSellers(true, k);
-
-        if(followedUsers.isSelected())
-            showMostFollowedUsers(k);
+        if (rBPurch.isSelected())
+            showMostActiveUsers(true, k);
 
         // Section K
 
-        if (rBTopKUsers.isSelected())
+        if (rBTopKRated.isSelected())
             showTopKRatedUser(k);
 
         if (rBTopKInterestingIns.isSelected())
@@ -182,9 +196,9 @@ public class StatsController {
 
     }
 
-    public void showMostActiveUsersSellers(boolean choice, int k) throws IOException{
+    public void showMostActiveUsers(boolean choice, int k) throws IOException{
 
-        ArrayList<Document> array = ConnectionMongoDB.connMongo.findMostActiveUsersSellers(k, choice);
+        ArrayList<Document> array = ConnectionMongoDB.connMongo.findMostActiveUsers(k, choice);
         StackPane secondaryLayout = new StackPane();
 
         ListView<CustomCellRank> leaderBoard = new ListView<>();
@@ -200,7 +214,7 @@ public class StatsController {
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
+            Scene secondScene = new Scene(secondaryLayout, 800, 600);
 
             // New window (Stage)
             Stage newWindow = new Stage();
@@ -212,41 +226,6 @@ public class StatsController {
             newWindow.show();
         }
 
-    }
-
-    private void showNumberPostedForCountry() {
-
-        ArrayList<String> array = connNeo.findNumberPostedInsertionForCountry();
-        StackPane secondaryLayout = new StackPane();
-
-        ListView<CustomCellRank> leaderBoard = new ListView<>();
-        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
-
-        String[] parts;
-
-        for (String s : array) {
-
-            parts = s.split(":");
-            items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
-        }
-
-        leaderBoard.setItems(items);
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-            Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
-
-            // New window (Stage)
-            Stage newWindow = new Stage();
-            newWindow.setTitle("Show Number of Post by Country");
-            newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(leaderBoard);
-            newWindow.setScene(secondScene);
-
-            newWindow.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showNumberInterestingForCategory() {
@@ -269,46 +248,11 @@ public class StatsController {
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
+            Scene secondScene = new Scene(secondaryLayout, 800, 600);
 
             // New window (Stage)
             Stage newWindow = new Stage();
             newWindow.setTitle("Show Number of Interesting by Category");
-            newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(leaderBoard);
-            newWindow.setScene(secondScene);
-
-            newWindow.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showMostFollowedUsers(int k) {
-
-        ArrayList<String> array = connNeo.findMostFollowedUsers(k);
-        StackPane secondaryLayout = new StackPane();
-
-        ListView<CustomCellRank> leaderBoard = new ListView<>();
-        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
-
-        String[] parts;
-
-        for (String s : array) {
-
-            parts = s.split(":");
-            items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
-        }
-
-        leaderBoard.setItems(items);
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-            Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
-
-            // New window (Stage)
-            Stage newWindow = new Stage();
-            newWindow.setTitle("Show Most Followed Users");
             newWindow.getIcons().add(image);
             secondaryLayout.getChildren().add(leaderBoard);
             newWindow.setScene(secondScene);
@@ -325,7 +269,7 @@ public class StatsController {
         String country = txtFieldCountry.getText();
 
         if (!Arrays.asList(countries).contains(country)) {
-            Utility.infoBox("Please insert a valid country", "Error", "Country not found!");
+            Utility.infoBox("There are no users of this country!", "Error", "Country not found!");
             txtFieldCountry.setText("");
             return;
         }
@@ -363,53 +307,6 @@ public class StatsController {
         {
             e.printStackTrace();
         }
-
-        /*
-
-        ArrayList<Document> array;
-        String country = txtFieldCountry.getText();
-
-        if (!Arrays.asList(countries).contains(country)) {
-            Utility.infoBox("Please insert a valid country", "Error", "Country not found!");
-            txtFieldCountry.setText("");
-            return;
-        }
-
-        array = ConnectionMongoDB.connMongo.findTopRatedUsersByCountry(country);
-        int arrayRatings[] = new int[6];
-
-        for (int i = 0; i < array.size() - 1; i++) {
-
-            int rating = array.get(i).getDouble("rating").intValue();
-            arrayRatings[rating]++;
-        }
-
-        ObservableList<PieChart.Data> pieChartData =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("Rating 5", arrayRatings[5]),
-                        new PieChart.Data("Rating 4", arrayRatings[4]),
-                        new PieChart.Data("Rating 3", arrayRatings[3]),
-                        new PieChart.Data("Rating 2", arrayRatings[2]),
-                        new PieChart.Data("Rating 1", arrayRatings[1]));
-
-        final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Top K Rated User in " + country);
-
-        try (FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png")) {
-            Image image = new Image(imageStream);
-            Scene scene = new Scene(new Group());
-            // New window (Stage)
-            ((Group) scene.getRoot()).getChildren().add(chart);
-            Stage newWindow = new Stage();
-            newWindow.getIcons().add(image);
-            newWindow.setTitle("Top " + k);
-            newWindow.setScene(scene);
-            newWindow.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-         */
     }
 
     public void showTopKInterestingInsertion(int k) {
@@ -421,8 +318,10 @@ public class StatsController {
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(category);
 
-        if(!Arrays.asList(categories).contains(category))
+        if(!Arrays.asList(categories).contains(category)) {
             Utility.infoBox("Please insert a valid category", "Error", "Category not found!");
+            return;
+        }
 
         for (int i=0; i < k; i++) {
             series1.getData().add(new XYChart.Data(array.get(i).getObjectId("_id").toString(), array.get(i).getInteger("interested")));
@@ -460,8 +359,10 @@ public class StatsController {
 
         String category = txtFieldCategory.getText();
 
-        if(!Arrays.asList(categories).contains(category))
+        if(!Arrays.asList(categories).contains(category)) {
             Utility.infoBox("Please insert a valid category", "Error", "Category not found!");
+            return;
+        }
 
         array = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k, category);
 

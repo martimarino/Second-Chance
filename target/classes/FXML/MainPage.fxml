@@ -7,7 +7,7 @@
    <children>
       <TabPane fx:id ="tabpane" prefHeight="800.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: white; ">
         <tabs>
-            <Tab text="Feed">
+            <Tab text="Home">
                 <content>
                   <fx:include fx:id="home" source="Home.fxml" />
                 </content>
