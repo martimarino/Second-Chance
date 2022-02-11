@@ -27,6 +27,7 @@ public class NewInsertionController {
 
     public void AddNewInsertion() {
         if((categ.getValue().equals("-")) || (status.getValue().equals("-"))
+                ||(color.getText().isEmpty()) || (brand.getText().isEmpty())
             || (size.getValue().equals("-")) || country.getValue().equals("-")
             || (price.getText().isEmpty()) || link.getText().isEmpty()) {
 

@@ -12,6 +12,7 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 
 public class InsertionListController {
@@ -26,14 +27,13 @@ public class InsertionListController {
     String user;
     String type_img;
 
-    public void initialize(String username) {
+    public void initialize(ArrayList<Document> insertions, String username) {
 
-        type_img = "user";
+        type_img = "insertion";
         user = username;
-        list = ConnectionMongoDB.connMongo.findInsertionBySeller(username);
         box = new VBox(20);
         index = 0;
-
+        list = insertions;
         prev.setDisable(true);
         next.setDisable(true);
         prev.setVisible(false);
@@ -120,7 +120,8 @@ public class InsertionListController {
                     }
                     return;
                 }
-                initialize(Session.getLoggedUser().getUsername());
+                list.remove(Insertion.toDocument(i));
+                initialize(list, Session.getLoggedUser().getUsername());
             }
         });
 

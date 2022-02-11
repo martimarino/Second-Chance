@@ -157,7 +157,7 @@ public class SearchUserController extends MainController{
             if (searchedList.isEmpty())
                 Utility.infoBox("This user does not exists.", "Advise", "User Advise");
 
-            showResult(false, suggBox, nextSugg, indexSugg, userSugg, suggList);
+            showResult(true, searchBox, nextSearch, indexSearch, userFind, searchedList);
 
         }
 
@@ -201,16 +201,22 @@ public class SearchUserController extends MainController{
         System.out.println("(show) INDEX: " + index);
 
         for (int i = 0; ((i < k) && (index < m) && (index < list.size())); i++)
-            addResult(choice, list, index, hb);
+            addResult(choice, list, hb);
 
         bp.setCenter(hb);
     }
 
-    public void addResult(boolean choice, ArrayList<Document> list, int index, HBox hb) {
+    public void addResult(boolean choice, ArrayList<Document> list, HBox hb) {
 
         VBox vb = new VBox(10);
         VBox det = new VBox();
         Label rating;
+        int index;
+
+        if(choice)
+            index = indexSearch;
+        else
+            index = indexSugg;
 
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             System.out.println(list.get(index).getString("username"));
@@ -254,19 +260,25 @@ public class SearchUserController extends MainController{
                         }
                     }
             );
+
+            hb.setStyle(
+                    "-fx-padding: 20;\n" +
+                            "    -fx-hgap: 10;\n" +
+                            "    -fx-vgap: 10;");
+
+            if(choice)  //search
+                indexSearch++;
+            else        //sugg
+                indexSugg++;
+
+            System.out.println("(add sugg) INDEX: " + indexSugg);
+            System.out.println("(add search) INDEX: " + indexSearch);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        hb.setStyle(
-                "-fx-padding: 20;\n" +
-                        "    -fx-hgap: 10;\n" +
-                        "    -fx-vgap: 10;");
 
-        if(choice)  //search
-            indexSearch++;
-        else        //sugg
-            indexSugg++;
-        System.out.println("(add sugg) INDEX: " + index);
 
     }
 

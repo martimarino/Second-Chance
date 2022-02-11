@@ -36,6 +36,7 @@ public class ProfileController extends MainController {
 
     public BorderPane review;
     public Pane profileImage;
+    public AnchorPane anchorPane;
     HBox reviewsBox;
 
     @FXML public Pane nextReviews, prevReviews;
@@ -72,6 +73,9 @@ public class ProfileController extends MainController {
         followersButton.setOnMouseClicked(event ->  {choice = true; showUsersList(true);});
         followingButton.setOnMouseClicked(event ->  {choice = false; showUsersList(false);});
 
+        insertionButton.setOnMouseClicked(event -> {showInsertions("insertionList", user.getUsername());});
+        interestedInsertionsButton.setOnMouseClicked(event -> {showInsertions("insertionListLiked", user.getUsername());});
+
         setProfile();
 
         System.out.println("USERNAME init: " + user.getUsername());
@@ -83,6 +87,9 @@ public class ProfileController extends MainController {
 
         scrollPage = 0;
         scrollPage2 = 0;
+
+        insertionButton.setOnMouseClicked(event -> {showInsertions("insertionList", us);});
+        interestedInsertionsButton.setOnMouseClicked(event -> {showInsertions("insertionListLiked", us);});
 
         if(!us.equals(user.getUsername())) {
 
@@ -103,7 +110,13 @@ public class ProfileController extends MainController {
             titleProfile.setLayoutY(70);
             profileImage.setLayoutY(20);
             profileImage.setLayoutX(70);
-
+            Button commonLikes = new Button();
+            commonLikes.setText("Common Likes");
+            commonLikes.setOnMouseClicked(event -> {showInsertions("insertionListCommon", us); });
+            commonLikes.setLayoutY(280);
+            commonLikes.setLayoutX(400);
+            commonLikes.setStyle("-fx-background-color: rgb(197, 197, 237)rgb(197, 197, 237); -fx-background-radius: 20; -fx-pref-height: 25; -fx-pref-width: 270; -fx-text-fill: #65626b");
+            anchorPane.getChildren().add(commonLikes);
             Document userSearched = ConnectionMongoDB.connMongo.findUserByUsername(us);
             user = User.fromDocument(userSearched);
 
@@ -274,7 +287,9 @@ public class ProfileController extends MainController {
         Utility.changePage(stage, "AddFunds");
     }
 
-    public void showInsertions() throws IOException {
+    public void showInsertions(String typePage, String username){
+
+        ArrayList<Document> list = new ArrayList<>();
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
@@ -287,29 +302,36 @@ public class ProfileController extends MainController {
             stage.setScene(scene);
             stage.setTitle("Your insertions");
             InsertionListController controller = loader.getController();
-            controller.initialize(user.getUsername());
 
+            switch(typePage){
+                case "insertionList":   //insertion published by user
+                    System.out.println("insertionList");
+                    list = ConnectionMongoDB.connMongo.findInsertionBySeller(username);
+                    break;
+                case "insertionListLiked":  //insertion user likes
+                    System.out.println("insertionListLiked");
+                    ArrayList<String> followed_ins = ConnectionNeo4jDB.connNeo.retrieveFollowedInsertionByUser(username);
+                    list = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(followed_ins);
+                    break;
+                case "insertionListCommon":  //insertion in common between logged user and current user
+                    System.out.println("insertionListCommon");
+                    ArrayList<String> listCommon = ConnectionNeo4jDB.connNeo.findCommonLikes(Session.getLoggedUser().getUsername(), username);
+                    list = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(listCommon);
+                    break;
+                default:
+                    return;
+            }
+
+            if(list.size() == 0)
+            {
+                Utility.infoBox("There are no insertions", "Advise", "No insertions");
+                return;
+            }
+            controller.initialize(list, username);
             stage.show();
-        }
-    }
 
-    public void showInsertionsLiked() throws IOException {
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-            Image image = new Image(imageStream);
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(InsertionListLikedController.class.getResource("/FXML/InsertionListLiked.fxml"));
-            Stage stage = new Stage(StageStyle.DECORATED);
-            stage.getIcons().add(image);
-            stage.setTitle("Insertions you are interested in");
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/InsertionListLikedStyle.css")).toExternalForm());
-            stage.setScene(scene);
-
-            InsertionListLikedController controller = loader.getController();
-            controller.initialize(user.getUsername());
-
-            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

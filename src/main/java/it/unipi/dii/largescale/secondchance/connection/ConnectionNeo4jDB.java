@@ -10,30 +10,25 @@ import java.util.List;
 
 import static org.neo4j.driver.Values.parameters;
 
-public class ConnectionNeo4jDB implements AutoCloseable
-{
+public class ConnectionNeo4jDB implements AutoCloseable {
     private Driver driver;
     String uri = "neo4j://127.0.0.1:7687";
     String user = "neo4j";
     String password = "2nd-chance";
     public static ConnectionNeo4jDB connNeo;
 
-    public void open()
-    {
-        driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
+    public void open() {
+        driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
         driver.close();
     }
 
-    public boolean addUser(final User u)
-    {
+    public boolean addUser(final User u) {
         this.open();
-        try ( Session session = driver.session() )
-        {
+        try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run("MERGE (u:User {username: $username, country: $country})",
                         parameters("username", u.getUsername(),
@@ -44,21 +39,18 @@ public class ConnectionNeo4jDB implements AutoCloseable
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }finally{
+        } finally {
             this.close();
         }
     }
 
-    public boolean addInsertion(final Insertion i)
-    {
+    public boolean addInsertion(final Insertion i) {
         this.open();
-        try ( Session session = driver.session() )
-        {
+        try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
+                tx.run("MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
                                 "gender: $gender})",
-                        parameters( "uniq_id", i.getId(), "category", i.getCategory(),
-                                "gender", i.getGender()));
+                        parameters("uniq_id", i.getId(), "category", i.getCategory()));
                 return null;
             });
             this.close();
@@ -73,13 +65,12 @@ public class ConnectionNeo4jDB implements AutoCloseable
     public void followUser(String follower, String followed) {
         this.open();
         System.out.println("USER_FOLLOWER: " + follower + "USER_FOLLOWED : " + followed);
-        try ( Session session = driver.session() )
-        {
+        try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH (u:User),(v) " +
+                tx.run("MATCH (u:User),(v) " +
                                 "WHERE u.username = $username1 AND v.username = $username2 " +
                                 "CREATE (u)-[:FOLLOWS]->(v)",
-                        parameters( "username1", follower, "username2", followed));
+                        parameters("username1", follower, "username2", followed));
                 return null;
             });
             this.close();
@@ -90,13 +81,12 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
     public void unfollowUser(String unfollower, String unfollowed) {
         this.open();
-        try ( Session session = driver.session() )
-        {
+        try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run( "MATCH (u:User)-[rel:FOLLOWS]->(v)  " +
+                tx.run("MATCH (u:User)-[rel:FOLLOWS]->(v)  " +
                                 "WHERE u.username = $username1 AND v.username = $username2 " +
                                 "DELETE rel",
-                        parameters( "username1", unfollower, "username2", unfollowed));
+                        parameters("username1", unfollower, "username2", unfollowed));
                 return null;
             });
             this.close();
@@ -112,7 +102,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
             List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
 
-                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:FOLLOWS]->(others) " +
+                Result result = tx.run("MATCH (u:User)-[:FOLLOWS]->(m)-[:FOLLOWS]->(others) " +
 
                                 "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
                                 "AND NOT (u)-[:FOLLOWS]->(others) " +
@@ -144,7 +134,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
             List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
 
-                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]->(i:Insertion) " +
+                Result result = tx.run("MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]->(i:Insertion) " +
                                 "WHERE u.username = $username " +
                                 "RETURN i.uniq_id as SuggIns " +
                                 "LIMIT $k",
@@ -183,7 +173,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }finally{
+        } finally {
             this.close();
         }
     }
@@ -204,7 +194,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }finally {
+        } finally {
             this.close();
         }
     }
@@ -238,10 +228,9 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 return null;
             });
             return true;
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             return false;
-        }finally{
+        } finally {
             this.close();
         }
     }
@@ -251,12 +240,12 @@ public class ConnectionNeo4jDB implements AutoCloseable
         this.open();
         Boolean check;
 
-        try(Session session = driver.session()) {
+        try (Session session = driver.session()) {
             check = session.readTransaction((TransactionWork<Boolean>) tx -> {
                 Result result = tx.run(
                         "MATCH (a:User {username: $username1})-[r:FOLLOWS]->(b:User {username: $username2}) " +
                                 "RETURN r",
-                        parameters( "username1", us1,
+                        parameters("username1", us1,
                                 "username2", us2));
 
                 return result.hasNext();
@@ -286,13 +275,13 @@ public class ConnectionNeo4jDB implements AutoCloseable
     public boolean createPostedRelationship(String node1, String node2) {
 
         this.open();
-        try(Session session = driver.session()) {
-                session.writeTransaction((TransactionWork<Void>) tx -> {
+        try (Session session = driver.session()) {
+            session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run(
                         "MATCH (u:User),(i:Insertion) " +
                                 "WHERE u.username = $username AND i.uniq_id = $id " +
                                 "CREATE (u)-[:POSTED]->(i)",
-                        parameters( "username", node1,
+                        parameters("username", node1,
                                 "id", node2));
                 return null;
             });
@@ -316,19 +305,18 @@ public class ConnectionNeo4jDB implements AutoCloseable
         try (Session session = driver.session()) {
 
             List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run( "MATCH (u:User) <- [r:FOLLOWS] - (u1:User) " +
+                Result result = tx.run("MATCH (u:User) <- [r:FOLLOWS] - (u1:User) " +
                                 "WHERE u.username = $username " +
                                 "RETURN u1.username as name ",
-                        parameters( "username", user));
+                        parameters("username", user));
 
-                while(result.hasNext())
-                {
+                while (result.hasNext()) {
                     Record r = result.next();
                     followers.add(r.get("name").asString());
                 }
                 return followers;
             });
-            if(!follow.isEmpty())
+            if (!follow.isEmpty())
                 Utility.printTerminal(follow.get(0));
             this.close();
         } catch (Exception e) {
@@ -345,19 +333,18 @@ public class ConnectionNeo4jDB implements AutoCloseable
         try (Session session = driver.session()) {
 
             List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run( "MATCH (u:User) - [r:FOLLOWS] -> (u1:User) " +
+                Result result = tx.run("MATCH (u:User) - [r:FOLLOWS] -> (u1:User) " +
                                 "WHERE u.username = $username " +
                                 "RETURN u1.username as name ",
-                        parameters( "username", user));
+                        parameters("username", user));
 
-                while(result.hasNext())
-                {
+                while (result.hasNext()) {
                     Record r = result.next();
                     following.add(r.get("name").asString());
                 }
                 return following;
             });
-            if(!follow.isEmpty())
+            if (!follow.isEmpty())
                 Utility.printTerminal(follow.get(0));
             this.close();
         } catch (Exception e) {
@@ -374,21 +361,20 @@ public class ConnectionNeo4jDB implements AutoCloseable
         try (Session session = driver.session()) {
 
             List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
-                Result result = tx.run( "MATCH (u:User) - [r:INTERESTED] -> (i:Insertion)" +
+                Result result = tx.run("MATCH (u:User) - [r:INTERESTED] -> (i:Insertion)" +
                                 "WHERE u.username = $username " +
                                 "RETURN i.uniq_id as uniq_id",
-                        parameters( "username", user));
+                        parameters("username", user));
 
-                while(result.hasNext())
-                {
+                while (result.hasNext()) {
                     Record r = result.next();
                     followed_ins.add(r.get("uniq_id").asString());
                 }
                 return followed_ins;
             });
-            if(!followed_ins.isEmpty())
+            if (!followed_ins.isEmpty())
                 Utility.printTerminal("*************** NEO4j FOLLOWED INSERTIONS ***************\n"
-                                        + followed_ins.get(0));
+                        + followed_ins.get(0));
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -410,7 +396,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }finally{
+        } finally {
             this.close();
         }
     }
@@ -438,8 +424,7 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 return followedUsers;
 
             });
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return followedUsers;
@@ -496,11 +481,38 @@ public class ConnectionNeo4jDB implements AutoCloseable
                 return posted;
 
             });
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return posted;
 
+    }
+
+    public ArrayList<String> findCommonLikes(String currentUser, String otherUser) {
+
+        this.open();
+        ArrayList<String> commonLikes = new ArrayList<>();
+
+        try (Session session = driver.session()) {
+
+            session.readTransaction((TransactionWork<List<String>>) tx -> {
+                Result result = tx.run(
+                        "match(U:User{username: $currentUser})-[:INTERESTED]->(i:Insertion)<-[:INTERESTED]-(u1:User{username: $otherUser}) " +
+                                "return i.uniq_id as id;",
+                        parameters("currentUser", currentUser,
+                                "otherUser", otherUser));
+
+                while (result.hasNext()) {
+                    Record r = result.next();
+                    commonLikes.add(r.get("id").asString());
+                }
+
+                return commonLikes;
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return commonLikes;
     }
 }
