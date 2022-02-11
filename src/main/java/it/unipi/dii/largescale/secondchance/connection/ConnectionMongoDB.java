@@ -656,6 +656,31 @@ public class ConnectionMongoDB{
         return array;
     }
 
+    public ArrayList<Insertion> findInsertionsByCountryAndCategory(String country, String category) {
+
+        ArrayList<Insertion> insertions = new ArrayList<>();
+        List<Bson> filters = new ArrayList<>();
+
+        filters.add(Filters.eq("category", category));
+        filters.add(Filters.eq("country", country));
+
+        cursor = insertionColl.find(Filters.and(filters)).iterator();
+
+        while(cursor.hasNext()) {
+            Document doc = cursor.next();
+            Insertion ins = new Insertion();
+            ins.setCategory(doc.getString("category"));
+            ins.setPrice(doc.getDouble("price"));
+            ins.setViews(doc.getInteger("views"));
+            ins.setId(doc.get("_id").toString());
+            ins.setImage_url(doc.getString("image_url"));
+            insertions.add(ins);
+        }
+
+        return insertions;
+
+    }
+
     public ArrayList<Document> findTopKViewedInsertion(int k, String category) {
 
         ArrayList<Document> array = new ArrayList<>();
