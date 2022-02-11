@@ -20,9 +20,7 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
-import javax.print.Doc;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -72,8 +70,8 @@ public class SearchUserController extends MainController{
         prevSearch.setVisible(false);
         nextSearch.setVisible(false);
 
-        prevSearch.setOnMouseClicked(event ->  { prevResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind);});
-        nextSearch.setOnMouseClicked(event ->  { nextResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind);});
+        prevSearch.setOnMouseClicked(event -> prevResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind));
+        nextSearch.setOnMouseClicked(event -> nextResults(true, indexSearch, searchBox, prevSearch, nextSearch, searchedList, userFind));
 
         // Suggested sellers
 
@@ -87,8 +85,8 @@ public class SearchUserController extends MainController{
         nextSugg.setDisable(true);
         nextSugg.setVisible(false);
 
-        prevSugg.setOnMouseClicked(event ->  { prevResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg);});
-        nextSugg.setOnMouseClicked(event ->  { nextResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg);});
+        prevSugg.setOnMouseClicked(event -> prevResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg));
+        nextSugg.setOnMouseClicked(event -> nextResults(false, indexSugg, suggBox, prevSugg, nextSugg, suggList, userSugg));
 
         //connection to Neo4j
         suggFromNeo = ConnectionNeo4jDB.connNeo.getSuggestedUsers(Session.getLoggedUser().getUsername(), Session.getLoggedUser().getCountry(), k);
@@ -115,7 +113,7 @@ public class SearchUserController extends MainController{
         showResult(false, suggBox, nextSugg, indexSugg, userSugg, suggList);
     }
 
-    public void findUsers() throws IOException {
+    public void findUsers() {
 
         searchedList.removeAll(searchedList);
         indexSearch = 0;

@@ -4,25 +4,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Balance;
-import main.java.it.unipi.dii.largescale.secondchance.entity.User;
-import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.util.Objects;
 
 public class AddFundsController {
 
-    private User user;
-
     @FXML private Button btnDeposit;
     @FXML private TextField txtFieldCode;
 
     public void initialize(){
 
-        user  = Session.getLoggedUser();
         btnDeposit.setDisable(true);
 
         txtFieldCode.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -37,7 +31,7 @@ public class AddFundsController {
         String code = txtFieldCode.getText();
 
         Utility.printTerminal("CREDIT (before): " + Balance.balance.getCredit());
-        ConnectionMongoDB.connMongo.addFundsToWallet(user.getUsername(), code);
+        ConnectionMongoDB.connMongo.addFundsToWallet(code);
         Utility.printTerminal("CREDIT (after): " + Balance.balance.getCredit());
 
         txtFieldCode.setText("");

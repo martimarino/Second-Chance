@@ -121,7 +121,8 @@ public class ConnectionMongoDB{
     public boolean registerUser(User u) {
 
         if (userAlreadyPresent(u.getUsername())) {
-            Utility.infoBox("Please, choose another username and try again.", "Error", "Username already used!");
+            Utility.infoBox("Please, choose another username and try again.",
+                            "Error", "Username already used!");
             return false;
         }
 
@@ -251,7 +252,7 @@ public class ConnectionMongoDB{
         }
     }
 
-    public void submitNewProfileImg(String url, String user) {
+    public int submitNewProfileImg(String url, String user) {
 
         Document queryUser = new Document().append("username",  user);
 
@@ -265,8 +266,10 @@ public class ConnectionMongoDB{
             UpdateResult resultUser = userColl.updateOne(queryUser, updatesUser, options);
             System.out.println("Modified document count: " + resultUser.getModifiedCount());
             System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
+            return (int) resultUser.getModifiedCount();
         } catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
+            return 0;
         }
     }
 
@@ -286,7 +289,7 @@ public class ConnectionMongoDB{
     public ArrayList<Document> findViralInsertions(int k) {
 
         ArrayList<Document> insertions = new ArrayList<>();
-        Bson sort = sort(descending("interested"));
+        Bson sort = sort(descending("interested", "views"));
         Bson limit = limit(k);
 
         AggregateIterable<Document> r = insertionColl.aggregate(Arrays.asList(sort ,limit));
@@ -576,7 +579,7 @@ public class ConnectionMongoDB{
         return insertion;
     }
 
-    public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
+    public ArrayList<Document> findMostActiveUsers(int k, boolean choice) {
 
         ArrayList<Document> orders = new ArrayList<>();
         AggregateIterable<Document> aggr;
@@ -628,12 +631,9 @@ public class ConnectionMongoDB{
                 )
         );
 
-        for (Document document : aggr) {
-
-            //document.append("name", document.getString("name"));
-            //document.append("rating", document.getDouble("rating"));
+        for (Document document : aggr)
             array.add(document);
-        }
+
         return array;
     }
 
@@ -794,31 +794,24 @@ public class ConnectionMongoDB{
     public void updateSellerRating(String seller) {
 
         Document d = userColl.find(eq("username", seller)).first();
-        List<Document> list;
-        list = d.getList("reviews", Document.class);
+        List<Document> list = d.getList("reviews", Document.class);
 
         Double avg;
         int sum = 0;
 
-        for (Document document : list) {
+        for (Document document : list)
             sum += document.getInteger("rating");
-        }
 
         avg = (double) sum / (double) list.size();
 
-        BasicDBObject newDocument = new BasicDBObject();
-        newDocument.put("rating", avg);
         // {$set: {"rating": avg}}
-        BasicDBObject updateObject = new BasicDBObject();
-        updateObject.put("$set", newDocument);
-        // condition (where field "reviews" exists)
-        BasicDBObject query = new BasicDBObject();
-        query.put("username", d.getString("username"));
+        Bson filter = eq("username", d.getString("username"));
+        Bson update = set("rating", avg);;
 
-        userColl.updateOne(query, updateObject);
+        userColl.findOneAndUpdate(filter, update);
     }
 
-    public void setInsertionReviewed(String timestamp, Document up) {
+    public void setInsertionReviewed(String timestamp) {
 
         BasicDBObject query = new BasicDBObject();
         query.put("username",Session.getLoggedUser().getUsername());
@@ -843,10 +836,9 @@ public class ConnectionMongoDB{
 
     /* ************************* BALANCE SECTION ************************* */
 
-    public void addFundsToWallet(String username, String id_code) {
+    public void addFundsToWallet(String id_code) {
 
         Document code;
-        double new_balance = 0.0;
 
         code = codeColl.find(eq("code", id_code)).first();
         if (code == null) {
@@ -855,7 +847,6 @@ public class ConnectionMongoDB{
         }
 
         double creditToAdd = code.getInteger("credit");
-        new_balance = ConnectionMongoDB.connMongo.getBalance() + creditToAdd;
 
         try {
             updateBalance(Session.getLoggedUser().getUsername(), creditToAdd, '+');

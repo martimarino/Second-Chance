@@ -17,8 +17,7 @@ import java.util.Date;
 
 public class MyOrderController{
 
-
-    private static final int MAX_LENGTH = 50;
+    private static final int MAX_LENGTH = 150;
     public BorderPane ordersContainer;
     public ComboBox<String> comboBox;
     public Pane prev;
@@ -29,7 +28,7 @@ public class MyOrderController{
     User user;
 
     int indexPage;
-    int k = 6; // number of orders show into current page
+    int k = 4; // number of orders to show into current page
     boolean kind;
     String type_img;
 
@@ -57,6 +56,9 @@ public class MyOrderController{
         String type = comboBox.getValue();
 
         user = Session.getLoggedUser();
+
+        prev.setDisable(true);
+        prev.setVisible(false);
 
         if (type.equals("Items purchased")) {
             if(ordersList != null && ordersList.size() != 0) {
@@ -136,10 +138,10 @@ public class MyOrderController{
             hbox = new HBox(image, vbox);
         }
 
-        panel.setSpacing(12);
+        panel.setSpacing(10);
         hbox.setSpacing(40);
         hbox.setStyle("-fx-padding: 15px; -fx-background-color: white; ; -fx-background-radius: 20px;");
-        vbox.setStyle("-fx-padding: 5px; -fx-font-size: 14px");
+        vbox.setStyle("-fx-font-size: 14px");
 
         panel.getChildren().add(hbox);
 
@@ -247,7 +249,7 @@ public class MyOrderController{
         ConnectionMongoDB.connMongo.addReview(rev);
         ConnectionMongoDB.connMongo.updateSellerRating(rev.getSeller());
         Document updated = setIsertionReviewed(timestampOrder);     //update local array
-        ConnectionMongoDB.connMongo.setInsertionReviewed(timestampOrder, updated);  //update remote array
+        ConnectionMongoDB.connMongo.setInsertionReviewed(timestampOrder);  //update remote array
         sendReview.setDisable(true);
         revButton.setText("Already reviewed!");
         revButton.setDisable(true);

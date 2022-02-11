@@ -3,9 +3,7 @@ package main.java.it.unipi.dii.largescale.secondchance.connection;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
-import org.bson.Document;
 import org.neo4j.driver.*;
-import org.neo4j.driver.Record;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +153,6 @@ public class ConnectionNeo4jDB implements AutoCloseable
 
                 while (result.hasNext()) {
                     Record r = result.next();
-                    System.out.println("SUGGINS: " + r.get("SuggIns").asString());
                     followed.add(r.get("SuggIns").asString());
                 }
                 return followed;
@@ -467,12 +464,9 @@ public class ConnectionNeo4jDB implements AutoCloseable
                     String ins = category + ":" + count;
                     interesting.add(ins);
                 }
-
                 return interesting;
-
             });
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return interesting;
