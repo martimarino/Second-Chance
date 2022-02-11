@@ -165,6 +165,7 @@ public class StatsController {
 
         if (rBUsers.isSelected())
             showMostActiveUsersSellers(true, k);
+
         if(followedUsers.isSelected())
             showMostFollowedUsers(k);
 

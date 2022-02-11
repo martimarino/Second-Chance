@@ -10,6 +10,7 @@ import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class InsertionAdminSearchController {
 
@@ -21,9 +22,13 @@ public class InsertionAdminSearchController {
     private int index;
     String type_img;
 
-    public void initialize(String seller) {
+    public void initialize(String seller, String category, String country) {
 
-        insertions = ConnectionMongoDB.connMongo.findMultipleInsertionDetails(seller);
+        if (Objects.equals(country, "") && Objects.equals(category, ""))
+            insertions = ConnectionMongoDB.connMongo.findMultipleInsertionDetails(seller);
+        else
+            insertions = ConnectionMongoDB.connMongo.findInsertionsByCountryAndCategory(country, category);
+
         System.out.println("Insertions: " + insertions.get(0));
         type_img = "insertion";
 
