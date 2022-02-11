@@ -6,20 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Fixes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddFundsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddFundsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/InsertionSearchedByAdmin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/InsertionSearchedByAdmin.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/MainPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/MainPage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/MyOrders.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/MyOrders.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/SearchPost.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/SearchPost.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/MainPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/MainPage.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/SearchPost.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/SearchPost.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/Stats.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/Stats.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/SignUp.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/SignUp.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/FXML/InsertionSearchedByAdmin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/InsertionSearchedByAdmin.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/FXML/MyOrders.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/MyOrders.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/FXML/SignUp.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/SignUp.fxml" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
@@ -113,7 +103,7 @@
       <workItem from="1644310037703" duration="6467000" />
       <workItem from="1644347340303" duration="8090000" />
       <workItem from="1644395849334" duration="7625000" />
-      <workItem from="1644572069243" duration="11852000" />
+      <workItem from="1644572069243" duration="16090000" />
     </task>
     <task id="LOCAL-00001" summary="Fix admin function, fix other problems">
       <created>1643993961652</created>
@@ -185,7 +175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644334461819</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Fixes.">
+      <created>1644590382776</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1644590382776</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,6 +221,7 @@
     <MESSAGE value="fix most active user into admin, fix searchinsertion arrows" />
     <MESSAGE value="Merged the two files FollowersController.java and FollowingController.java. &#10;&#10;Merged the two files FollowersPage.fxml and FollowingPage.fxml." />
     <MESSAGE value="add new functions admin page" />
-    <option name="LAST_COMMIT_MESSAGE" value="add new functions admin page" />
+    <MESSAGE value="Fixes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes." />
   </component>
 </project>
