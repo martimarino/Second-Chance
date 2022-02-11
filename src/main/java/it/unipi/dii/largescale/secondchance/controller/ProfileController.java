@@ -373,7 +373,7 @@ public class ProfileController extends MainController {
         rating.setTextFill(Color.WHITE);
         text.setWrapText(true);
 
-        VBox feed = new VBox(user, text, title, rating);
+        VBox feed = new VBox(user, title, text, rating);
         feed.setStyle("-fx-background-color: white; -fx-padding: 8");
         feed.setSpacing(10);
         feed.setPadding(new Insets(5, 5, 5, 5));

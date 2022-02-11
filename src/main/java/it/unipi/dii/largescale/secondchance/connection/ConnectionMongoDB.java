@@ -92,8 +92,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        //connectToLocal();
-        connectToVms();
+        connectToLocal();
+        //connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");

@@ -29,7 +29,6 @@ public class SignInController {
     public void initialize() {
         pw.setOnKeyPressed( event -> {
             if( event.getCode() == KeyCode.ENTER ) {
-                Utility.printTerminal("333333333333333");
                 try {
                     login();
                 } catch (IOException e) {
