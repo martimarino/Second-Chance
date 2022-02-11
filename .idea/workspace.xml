@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Fixes.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/SignUp.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/SignUp.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/InsertionSearchedByAdmin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/InsertionSearchedByAdmin.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/MyOrders.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/MyOrders.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FXML/SignUp.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/SignUp.fxml" afterDir="false" />
-    </list>
+    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="fix search in SearchUserController, add function for see insertion in common between users, unify pages of all insertionList pages into one, fix controls new insertion" />
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
-    <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
+    <list id="6bb4f2c0-83c9-4d43-b728-c7f57c05ff7b" name="Changes by marti" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +27,14 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="24cGP07hMuydzouSsyqELUKrZS4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -103,7 +105,7 @@
       <workItem from="1644310037703" duration="6467000" />
       <workItem from="1644347340303" duration="8090000" />
       <workItem from="1644395849334" duration="7625000" />
-      <workItem from="1644572069243" duration="16090000" />
+      <workItem from="1644572069243" duration="11852000" />
     </task>
     <task id="LOCAL-00001" summary="Fix admin function, fix other problems">
       <created>1643993961652</created>
@@ -175,12 +177,12 @@
       <option name="project" value="LOCAL" />
       <updated>1644334461819</updated>
     </task>
-    <task id="LOCAL-00011" summary="Fixes.">
-      <created>1644590382776</created>
+    <task id="LOCAL-00011" summary="fix search in SearchUserController, add function for see insertion in common between users, unify pages of all insertionList pages into one, fix controls new insertion">
+      <created>1644591555246</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1644590382776</updated>
+      <updated>1644591555246</updated>
     </task>
     <option name="localTasksCounter" value="12" />
     <servers />
@@ -221,7 +223,7 @@
     <MESSAGE value="fix most active user into admin, fix searchinsertion arrows" />
     <MESSAGE value="Merged the two files FollowersController.java and FollowingController.java. &#10;&#10;Merged the two files FollowersPage.fxml and FollowingPage.fxml." />
     <MESSAGE value="add new functions admin page" />
-    <MESSAGE value="Fixes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes." />
+    <MESSAGE value="fix search in SearchUserController, add function for see insertion in common between users, unify pages of all insertionList pages into one, fix controls new insertion" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix search in SearchUserController, add function for see insertion in common between users, unify pages of all insertionList pages into one, fix controls new insertion" />
   </component>
 </project>

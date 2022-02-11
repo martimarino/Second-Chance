@@ -228,41 +228,6 @@ public class StatsController {
 
     }
 
-    private void showNumberPostedForCountry() {
-
-        ArrayList<String> array = connNeo.findNumberPostedInsertionForCountry();
-        StackPane secondaryLayout = new StackPane();
-
-        ListView<CustomCellRank> leaderBoard = new ListView<>();
-        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
-
-        String[] parts;
-
-        for (String s : array) {
-
-            parts = s.split(":");
-            items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
-        }
-
-        leaderBoard.setItems(items);
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-            Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
-
-            // New window (Stage)
-            Stage newWindow = new Stage();
-            newWindow.setTitle("Show Number of Post by Country");
-            newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(leaderBoard);
-            newWindow.setScene(secondScene);
-
-            newWindow.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void showNumberInterestingForCategory() {
 
         ArrayList<String> array = connNeo.findNumberInterestingForCategory();
@@ -288,41 +253,6 @@ public class StatsController {
             // New window (Stage)
             Stage newWindow = new Stage();
             newWindow.setTitle("Show Number of Interesting by Category");
-            newWindow.getIcons().add(image);
-            secondaryLayout.getChildren().add(leaderBoard);
-            newWindow.setScene(secondScene);
-
-            newWindow.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showMostFollowedUsers(int k) {
-
-        ArrayList<String> array = connNeo.findMostFollowedUsers(k);
-        StackPane secondaryLayout = new StackPane();
-
-        ListView<CustomCellRank> leaderBoard = new ListView<>();
-        ObservableList<CustomCellRank> items = FXCollections.observableArrayList();
-
-        String[] parts;
-
-        for (String s : array) {
-
-            parts = s.split(":");
-            items.add(new CustomCellRank(parts[0], Integer.parseInt(parts[1])));
-        }
-
-        leaderBoard.setItems(items);
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-            Image image = new Image(imageStream);
-            Scene secondScene = new Scene(secondaryLayout, 1200, 800);
-
-            // New window (Stage)
-            Stage newWindow = new Stage();
-            newWindow.setTitle("Show Most Followed Users");
             newWindow.getIcons().add(image);
             secondaryLayout.getChildren().add(leaderBoard);
             newWindow.setScene(secondScene);

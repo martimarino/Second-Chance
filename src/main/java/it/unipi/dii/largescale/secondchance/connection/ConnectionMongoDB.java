@@ -92,8 +92,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        connectToLocal();
-        //connectToVms();
+        //connectToLocal();
+        connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");
@@ -745,14 +745,14 @@ public class ConnectionMongoDB{
         return array;
     }
 
-    public ArrayList<Insertion> findInsertionDetailsNeo4J(ArrayList<String> followed_ins)  {
+    public ArrayList<Document> findInsertionDetailsNeo4J(ArrayList<String> followed_ins)  {
 
-        Insertion ins;
-        ArrayList<Insertion> insertions = new ArrayList<Insertion>();
+        //Insertion ins;
+        ArrayList<Document> insertions = new ArrayList<>();
 
         for (String followed_in : followed_ins) {
             Document insertion = insertionColl.find(eq("_id", new ObjectId(followed_in))).first();
-
+            /*
             ins = new Insertion();
             ins.setCategory(insertion.getString("category"));
             ins.setPrice(insertion.getDouble("price"));
@@ -760,8 +760,8 @@ public class ConnectionMongoDB{
             ins.setViews(insertion.getInteger("views"));
             ins.setSeller(insertion.getString("seller"));
             ins.setId(insertion.get("_id").toString());
-
-            insertions.add(ins);
+            */
+            insertions.add(insertion);
         }
         return insertions;
     }

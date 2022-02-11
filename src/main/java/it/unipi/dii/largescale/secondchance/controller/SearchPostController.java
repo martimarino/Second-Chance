@@ -72,7 +72,7 @@ public class SearchPostController {
                 try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
                     Image image = new Image(imageStream);
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(InsertionListLikedController.class.getResource("/FXML/InsertionSearchedByAdmin.fxml"));
+                    loader.setLocation(InsertionListController.class.getResource("/FXML/InsertionSearchedByAdmin.fxml"));
                     Stage stage = new Stage(StageStyle.DECORATED);
                     stage.getIcons().add(image);
                     stage.setTitle("Insertions you searched");
