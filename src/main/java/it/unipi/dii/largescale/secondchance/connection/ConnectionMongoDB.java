@@ -348,13 +348,21 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
-    public ArrayList<Document> findInsertionByBrand(String brand) {
+    public ArrayList<Document> findInsertionBySearch(String s) {
 
         ArrayList<Document> insertions = new ArrayList<>();
+        AggregateIterable<Document> aggr;
 
-        cursor = insertionColl.find(eq("brand", brand)).iterator();
-        while (cursor.hasNext())
-            insertions.add(cursor.next());
+        Bson match = match(or(eq("brand", s), (eq("seller", s))));
+        Bson sort = sort(descending("timestamp"));
+        aggr = insertionColl.aggregate(
+                        Arrays.asList(
+                                match, sort
+                        )
+                );
+
+        for (Document d : aggr)
+            insertions.add(d);
 
         return insertions;
     }

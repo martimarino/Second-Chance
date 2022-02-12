@@ -81,11 +81,8 @@ public class SearchInsertionController extends MainController{
             if(ins.getText().equals("admin"))
                 return;
 
-            //search insertion by seller
-            insertionFilter = ConnectionMongoDB.connMongo.findInsertionBySeller(ins.getText());
-
-            if (insertionFilter.isEmpty())  //if no article is found try to search for brands
-                insertionFilter = ConnectionMongoDB.connMongo.findInsertionByBrand(ins.getText());
+            //search insertion
+            insertionFilter = ConnectionMongoDB.connMongo.findInsertionBySearch(ins.getText());
 
             if(insertionFilter.isEmpty()) {
                 Utility.infoBox("No results", "Advise", "User Advise");
