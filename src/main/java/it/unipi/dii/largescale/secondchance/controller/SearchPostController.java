@@ -30,10 +30,6 @@ public class SearchPostController {
     @FXML private TextField sellerField;
     @FXML private TextField categoryField;
 
-    @FXML private Text category;
-    @FXML private Text price;
-    @FXML private Text views;
-
     private Document found;
 
     private final String[] countries = new String[]{"Italy", "Canada", "Spain", "Austria", "Germany", "France", "Brazil", "Netherlands", "Poland", "Ireland", "United Kingdom (Great Britain)"};
