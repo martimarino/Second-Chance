@@ -22,24 +22,34 @@ import java.util.*;
 public class StatsController {
 
     private final String[] countries = new String[]{"Italy", "Canada", "Spain", "Austria", "Germany", "France", "Brazil", "Netherlands", "Poland", "Ireland", "United Kingdom (Great Britain)"};
-    private final String[] categories = new String[]{"clothing","accessories", "bags","beauty", "house", "jewelry", "kids", "shoes"};
+    private final String[] categories = new String[]{"clothing", "accessories", "bags", "beauty", "house", "jewelry", "kids", "shoes"};
 
-    @FXML private TextField boxKNumber;
-    @FXML private TextField txtFieldCountry;
-    @FXML private TextField txtFieldCategory;
+    @FXML
+    private TextField boxKNumber;
+    @FXML
+    private TextField txtFieldCountry;
+    @FXML
+    private TextField txtFieldCategory;
 
-    @FXML private RadioButton rBTopKRated;
-    @FXML private RadioButton rBPurch;
-    @FXML private RadioButton rBSold;
-    @FXML private RadioButton rBTopKInterestingIns;
-    @FXML private RadioButton rBTopKViewedIns;
-    @FXML public RadioButton rBLikesPerCategory;
+    @FXML
+    private RadioButton rBTopKRated;
+    @FXML
+    private RadioButton rBPurch;
+    @FXML
+    private RadioButton rBSold;
+    @FXML
+    private RadioButton rBTopKInterestingIns;
+    @FXML
+    private RadioButton rBTopKViewedIns;
+    @FXML
+    public RadioButton rBLikesPerCategory;
 
-    @FXML private Button elaboraButton;
+    @FXML
+    private Button elaboraButton;
 
     ConnectionNeo4jDB connNeo;
 
-    public void initialize(){
+    public void initialize() {
 
         connNeo = new ConnectionNeo4jDB();
 
@@ -57,72 +67,44 @@ public class StatsController {
         txtFieldCountry.setTooltip(countries);
         txtFieldCategory.setTooltip(categories);
 
-        rBTopKRated.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("radio button changed from " + oldValue + " to " + newValue);
+        listenerTopKRated();
 
-            txtFieldCategory.setText("");
-            txtFieldCategory.setEditable(false);
-            txtFieldCategory.setMouseTransparent(true);
+        listenerUserPurch();
 
-            elaboraButton.setDisable(true);
+        listenerUserSold();
 
-            if (txtFieldCategory.isEditable()) {
-                txtFieldCategory.setEditable(false);
-                txtFieldCategory.setMouseTransparent(true);
-            }
+        listenerTopKViewed();
 
-            txtFieldCountry.setEditable(true);
-            txtFieldCountry.setMouseTransparent(false);
-
-        });
-
-        listenerTopKViewInterested();
-
-        listenerTopKViewInterested();
-
-        listenerUserItems();
-
-        listenerUserItems();
+        listenerTopKInterested();
 
         listenerNumberOfLikes();
 
-        rBLikesPerCategory.selectedProperty().addListener((observable, oldValue, newValue) -> elaboraButton.setDisable(false));
-
-        txtFieldCategory.textProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("text changed from " + oldValue + " to " + newValue);
-
-            elaboraButton.setDisable(Objects.equals(newValue, ""));
-        });
-
-        txtFieldCountry.textProperty().addListener((observable, oldValue, newValue) -> {
-            Utility.printTerminal("text changed from " + oldValue + " to " + newValue);
-
-            elaboraButton.setDisable(Objects.equals(newValue, ""));
-        });
     }
 
-    private void listenerTopKViewInterested() {
-        rBTopKViewedIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
-               System.out.println("radio button changed from " + oldValue + " to " + newValue);
+    private void listenerTopKRated() {
 
-               txtFieldCountry.setText("");
-               txtFieldCountry.setEditable(false);
-               txtFieldCountry.setMouseTransparent(true);
-
-               if (Objects.equals(txtFieldCategory.getText(), ""))
-                   elaboraButton.setDisable(true);
-
-               if (!txtFieldCategory.isEditable()) {
-                   txtFieldCategory.setEditable(true);
-                   txtFieldCategory.setMouseTransparent(false);
-               }
-        });
-    }
-
-    private void listenerUserItems() {
-
-        rBSold.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        rBTopKRated.selectedProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("radio button changed from " + oldValue + " to " + newValue);
+
+            boxKNumber.setEditable(true);
+            boxKNumber.setMouseTransparent(false);
+            txtFieldCountry.setText("");
+            txtFieldCountry.setEditable(true);
+            txtFieldCountry.setMouseTransparent(true);
+
+            elaboraButton.setDisable(true);
+
+        });
+
+    }
+
+    private void listenerUserPurch() {
+
+        rBPurch.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("radio button changed from " + oldValue + " to " + newValue);
+
+            boxKNumber.setEditable(true);
+            boxKNumber.setMouseTransparent(false);
 
             txtFieldCountry.setText("");
             txtFieldCategory.setText("");
@@ -133,7 +115,72 @@ public class StatsController {
             txtFieldCategory.setEditable(false);
             txtFieldCategory.setMouseTransparent(true);
 
-            elaboraButton.setDisable(false);
+            elaboraButton.setDisable(true);
+        });
+    }
+
+    private void listenerUserSold(){
+        rBSold.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("radio button changed from " + oldValue + " to " + newValue);
+
+            boxKNumber.setEditable(true);
+            boxKNumber.setMouseTransparent(false);
+
+            txtFieldCountry.setText("");
+            txtFieldCategory.setText("");
+
+            txtFieldCountry.setEditable(false);
+            txtFieldCountry.setMouseTransparent(true);
+
+            txtFieldCategory.setEditable(false);
+            txtFieldCategory.setMouseTransparent(true);
+
+            elaboraButton.setDisable(true);
+
+        });
+
+    }
+
+    private void listenerTopKViewed(){
+        rBTopKViewedIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("radio button changed from " + oldValue + " to " + newValue);
+
+            boxKNumber.setEditable(true);
+            boxKNumber.setMouseTransparent(false);
+
+            txtFieldCountry.setText("");
+            txtFieldCategory.setText("");
+
+            txtFieldCountry.setEditable(false);
+            txtFieldCountry.setMouseTransparent(true);
+
+            txtFieldCategory.setEditable(true);
+            txtFieldCategory.setMouseTransparent(false);
+
+            elaboraButton.setDisable(true);
+
+        });
+
+    }
+
+    private void listenerTopKInterested() {
+        rBTopKInterestingIns.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("radio button changed from " + oldValue + " to " + newValue);
+
+            boxKNumber.setEditable(true);
+            boxKNumber.setMouseTransparent(false);
+
+            txtFieldCountry.setText("");
+            txtFieldCategory.setText("");
+
+            txtFieldCountry.setEditable(false);
+            txtFieldCountry.setMouseTransparent(true);
+
+            txtFieldCategory.setEditable(false);
+            txtFieldCategory.setMouseTransparent(true);
+
+            elaboraButton.setDisable(true);
+
         });
     }
 
@@ -155,6 +202,7 @@ public class StatsController {
             txtFieldCategory.setMouseTransparent(true);
 
             elaboraButton.setDisable(false);
+
         });
     }
 
