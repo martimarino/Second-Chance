@@ -29,7 +29,7 @@ import static com.mongodb.client.model.Updates.*;
 public class ConnectionMongoDB{
 
     private final String clusterAddress = "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
-            "?retryWrites=true&w=majority&wtimeout=10000";
+            "?retryWrites=true&w=1&readPreferences=nearest&wtimeout=10000";
 
     public static ConnectionMongoDB connMongo;
     private MongoClient mongoClient;
@@ -46,24 +46,16 @@ public class ConnectionMongoDB{
     public void connectToVms(){
         mongoClient = MongoClients.create(clusterAddress);
 
-        // Read Preferences at DB level
         // Write concern at DB level
         db = mongoClient.getDatabase("lsmdb")
-                .withReadPreference(ReadPreference.secondary())
                 .withWriteConcern(WriteConcern.W1);
 
-        // Read Preferences at collection level
-        userColl = db.getCollection("user")
-                .withReadPreference(ReadPreference.secondary());
-
-        insertionColl = db.getCollection("insertion")
-                .withReadPreference(ReadPreference.secondary());
-
-        codeColl = db.getCollection("code")
-                .withReadPreference(ReadPreference.secondary());
+        // Write Preferences at collection level
+        userColl = db.getCollection("user");
+        insertionColl = db.getCollection("insertion");
+        codeColl = db.getCollection("code");
 
         balanceColl = db.getCollection("balance")
-                .withReadPreference(ReadPreference.primary())
                 .withWriteConcern(WriteConcern.W3);
 
     }
@@ -103,7 +95,7 @@ public class ConnectionMongoDB{
         System.out.println("**************** CODE ******************");
         System.out.println(codeColl.countDocuments());
 
-        // 2 - Find the first document
+        // Print the first document
         userColl.find().limit(1).forEach(printDocuments());
 
     }
