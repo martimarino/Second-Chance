@@ -85,9 +85,11 @@ Suggestions are based on different infomations like similar purchases, location,
 
 ## Link
 
-[Dataset1] [Dataset2] containing items.
+[Dataset1] [Dataset2] [Dataset3] containing items.
 
-[Dataset3] containing reviews.
+[Dataset4] containing reviews.
+
+[Site] for genersting rasndom users.
 
 ## Actors
 
@@ -118,27 +120,27 @@ Balance | username, credit
 
 #### USER
 
-Field | Type
-------------- | -------------
-ID | Varchar
-ADDRESS | String
-CITY | String
-COUNTRY | String
-EMAIL | String
-NAME | String
-PASSWORD | String
-SUSPENDED | Boolean
-USERNAME | String
-REVIEWS | Array
-RATING | Double
-SOLD | Array
-PURCHASED | Array
+Field | Values | Type
+------------- | ------------- | -------------
+ID | 61fd8cc3edf5f2f4bd1366b9 | Varchar
+ADDRESS | 913-2627 Donec St. | String
+CITY | Vienna | String
+COUNTRY | {Italy, Canada, Spain, Austria, Germany, France, Brazil, Netherlands, Poland, Ireland, United Kingdom (Great Britain)} | String
+EMAIL | sem.ut@aol.edu | String
+NAME | Ruben Torphy | String
+PASSWORD | 45a0af6e6952e0a7e2a0a25f951a271 | String
+SUSPENDED | false | Boolean
+USERNAME | Añes | String
+REVIEWS | [] | Array
+RATING | 4.5 | Double
+SOLD | [] | Array
+PURCHASED | [] |Array
 
 #### INSERTION
 
 Field | Values | Type
 ------------- | ------------- | -------------
-ID | 8552148 | Varchar
+ID | 61fd8cc3edf5f2f4bd1366b8 | Varchar
 CATEGORY | {clothing,accessories, bags, beauty, house, jewelry, kids, shoes} | String
 DESCRIPTION | text | String
 GENDER | {M, F, U} | String
@@ -194,11 +196,13 @@ MIT
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-   [Dataset1]: <https://www.kaggle.com/agrigorev/clothing-dataset-full>
+   [Dataset1]: <https://data.world/wordlift/shopping-demo/workspace/file?filename=amazon-fashion.csv>
       
    [Dataset2]: <https://data.world/jfreex/products-catalog-from-newchiccom>
    
-   [Dataset3]: <https://www.kaggle.com/asmaoueslati/womensclothingecommerce>
-
+   [Dataset3]: <https://data.world/promptcloud/amazon-australia-product-listing/workspace/project-summary?agentid=promptcloud&datasetid=amazon-australia-product-listing>
    
+   [Dataset4]: <https://www.kaggle.com/asmaoueslati/womensclothingecommerce>
+   
+   [Site]: <https://generatedata.com/generator>
  
