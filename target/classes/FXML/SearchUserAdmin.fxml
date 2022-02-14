@@ -13,86 +13,89 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <AnchorPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.SearchUserAdminController">
    <children>
-      <Label layoutX="321.0" layoutY="16.0" text="Search User Section ">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <SplitPane dividerPositions="0.29797979797979796" layoutY="49.0" prefHeight="397.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="200.0">
-               <children>
-                  <TextField fx:id="usernameField" layoutX="45.0" layoutY="110.0" promptText="Username" />
-                  <Label layoutX="82.0" layoutY="77.0" text="Insert username" />
-                  <Button layoutX="97.0" layoutY="249.0" mnemonicParsing="false" onMouseClicked="#searchUser" style="-fx-background-color: rgb(206, 153, 255)rgb(206, 153, 255); -fx-background-radius: 50;" text="Search" textFill="WHITE" />
-                  <Label layoutX="74.0" layoutY="157.0" text="or search by name:" />
-                  <TextField fx:id="nameField" layoutX="46.0" layoutY="187.0" promptText="Name" />
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="543.0">
-               <children>
-                  <Pane layoutX="324.0" layoutY="73.0" prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="btnSuspendUsr" layoutX="54.0" layoutY="38.0" mnemonicParsing="false" onMouseClicked="#suspendUser" style="-fx-background-color: rgb(206, 153, 255)rgb(206, 153, 255); -fx-background-radius: 50;" text="Suspend user" textFill="WHITE" />
-                        <Button fx:id="btnUnsuspendUsr" layoutX="47.0" layoutY="113.0" mnemonicParsing="false" onMouseClicked="#unsuspendUser" style="-fx-background-color: rgb(206, 153, 255)rgb(206, 153, 255); -fx-background-radius: 50;" text="Unsuspend user" textFill="WHITE" />
-                     </children>
-                  </Pane>
-                  <GridPane layoutX="53.0" layoutY="101.0" prefHeight="162.0" prefWidth="241.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="15.5" prefHeight="30.0" />
-                        <RowConstraints minHeight="15.5" prefHeight="30.0" />
-                        <RowConstraints minHeight="15.5" prefHeight="30.0" />
-                        <RowConstraints minHeight="15.5" prefHeight="30.0" />
-                    </rowConstraints>
-                      <children>
-                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" translateX="15.0" underline="true">
-                              <font>
-                                  <Font size="14.0" />
-                              </font>
-                          </Text>
-                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Country:" translateX="15.0" underline="true" GridPane.rowIndex="1">
-                              <font>
-                                  <Font size="14.0" />
-                              </font>
-                          </Text>
-                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="City:" translateX="15.0" underline="true" GridPane.rowIndex="2">
-                              <font>
-                                  <Font size="14.0" />
-                              </font>
-                          </Text>
-                          <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" translateX="15.0" underline="true" GridPane.rowIndex="3">
-                              <font>
-                                  <Font size="14.0" />
-                              </font>
-                          </Text>
-                        <Text fx:id="email" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" />
-                        <Text fx:id="country" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="1" />
-                        <Text fx:id="city" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="2" />
-                        <Text fx:id="address" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="3" />
-                      </children>
-                  </GridPane>
-                  <Text fx:id="alertText" fill="#f50606" layoutX="206.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-                  <Button layoutX="210.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#generateCodes" style="-fx-background-color: rgb(206, 153, 255); -fx-background-radius: 30;" text="Generate New Codes!" textFill="WHITE" />
-                  <Separator layoutX="179.0" layoutY="301.0" prefWidth="200.0" />
-                  <Text fx:id="txtResult" layoutX="163.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Here you can generate new codes!">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-      <Button fx:id="btnLogout" layoutX="712.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#logout" style="-fx-background-color: rgb(242, 242, 242)rgb(242, 242, 242); -fx-background-radius: 50; -fx-border-color: rgb(0,0,0); -fx-border-radius: 50;" text="Logout" />
+       <Label layoutX="321.0" layoutY="16.0" text="Search User Section " textAlignment="CENTER" textFill="#b936e4">
+
+          <font>
+              <Font size="24.0" />
+          </font>
+       </Label>
+       <Button fx:id="btnLogout" layoutX="712.0" layoutY="15.0" mnemonicParsing="false" onMouseClicked="#logout" style="-fx-background-color: rgb(242, 242, 242)rgb(242, 242, 242); -fx-background-radius: 50; -fx-border-color: rgb(0,0,0); -fx-border-radius: 50;" text="Logout" />
+
+       <HBox layoutY="50.0" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: rgb(230, 230, 255) rgb(230, 230, 255);">
+           <!-- left panel -->
+           <VBox translateX="80.0" translateY="50.0" prefHeight="400.0" prefWidth="200.0">
+               <Label text="Insert username" />
+               <TextField fx:id="usernameField" translateY="20.0" promptText="Username" />
+               <Label translateY="40.0" text="or search by name:" />
+               <TextField fx:id="nameField" translateY="60.0" promptText="Name" />
+               <Button translateY="80.0" mnemonicParsing="false" onMouseClicked="#searchUser" style="-fx-background-color: rgb(206, 153, 255)rgb(206, 153, 255); -fx-background-radius: 50;" text="Search" textFill="WHITE" />
+           </VBox>
+           <Separator fx:id="vsep" orientation="VERTICAL" translateX="80.0" translateY="20.0" prefWidth="200.0" maxHeight="330.0" />
+           <!-- right panel -->
+           <VBox translateX="50.0" translateY="50.0" prefHeight="398.0" prefWidth="543.0">
+               <HBox>
+                   <GridPane prefHeight="162.0" prefWidth="241.0">
+                       <columnConstraints>
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                           <RowConstraints minHeight="15.5" prefHeight="30.0" />
+                           <RowConstraints minHeight="15.5" prefHeight="30.0" />
+                           <RowConstraints minHeight="15.5" prefHeight="30.0" />
+                           <RowConstraints minHeight="15.5" prefHeight="30.0" />
+                       </rowConstraints>
+                        <children>
+                            <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" translateX="15.0" underline="true">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </Text>
+                            <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Country:" translateX="15.0" underline="true" GridPane.rowIndex="1">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </Text>
+                            <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="City:" translateX="15.0" underline="true" GridPane.rowIndex="2">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </Text>
+                            <Text fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" text="Address:" translateX="15.0" underline="true" GridPane.rowIndex="3">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </Text>
+                            <Text fx:id="email" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" />
+                            <Text fx:id="country" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="1" />
+                            <Text fx:id="city" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="2" />
+                            <Text fx:id="address" fill="#2582bf" strokeType="OUTSIDE" strokeWidth="0.0" translateX="80.0" GridPane.rowIndex="3" />
+                        </children>
+                   </GridPane>
+                   <VBox translateX="30.0">
+                       <Button fx:id="btnSuspendUsr"  mnemonicParsing="false" onMouseClicked="#suspendUser" style="-fx-background-color: rgb(206, 153, 255)rgb(206, 153, 255); -fx-background-radius: 50;" text="Suspend user" textFill="WHITE" />
+                       <Button fx:id="btnUnsuspendUsr" translateY="20.0" mnemonicParsing="false" onMouseClicked="#unsuspendUser" style="-fx-background-color: rgb(206, 153, 255)rgb(206, 153, 255); -fx-background-radius: 50;" text="Unsuspend user" textFill="WHITE" />
+                   </VBox>
+               </HBox>
+               <Text fx:id="alertText" fill="#f50606" translateX="100.0" translateY="-20.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                   <font>
+                       <Font size="20.0" />
+                   </font>
+               </Text>
+               <VBox>   <!-- codes -->
+                   <Text fx:id="txtResult" translateX="70.0" translateY="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Here you can generate new codes!">
+                       <font>
+                          <Font size="16.0" />
+                       </font>
+                   </Text>
+                   <Separator fx:id="hsep" translateX="0.0" translateY="10.0" maxWidth="400.0"/>
+                   <Button translateX="100.0" translateY="40.0" mnemonicParsing="false" onMouseClicked="#generateCodes" style="-fx-background-color: rgb(206, 153, 255); -fx-background-radius: 30;" text="Generate New Codes!" textFill="WHITE" />
+               </VBox>
+           </VBox>
+      </HBox>
    </children>
 </AnchorPane>

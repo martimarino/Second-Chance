@@ -39,7 +39,6 @@ public class Utility {
         alert.showAndWait();
     }
 
-
     public static void showUsers(GridPane list, ArrayList<Document> filter, int item) throws IOException {
 
         list.getChildren().clear();
@@ -68,25 +67,9 @@ public class Utility {
 
     }
 
-    public static String generateRandomString() {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 24;
-        Random random = new Random();
+    public static ImageView getGoodImage(String url_image, int dimension, String type_img){
 
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        printTerminal(generatedString);
-        return generatedString;
-    }
-
-    public static ImageView getGoodImage(String url_image, int dimension){
-
-        ImageView image;
+        ImageView image = null;
 
         try {
             URL url = new URL(url_image);
@@ -106,7 +89,10 @@ public class Utility {
             image.setImage(images);
 
         } catch (IOException e) { //case image not valid any more (link with 404 page)
-            image = localImage("./img/empty.jpg", dimension);
+            if(type_img.equals("insertion"))
+                image = localImage("./img/empty.jpg", dimension);
+            else if(type_img.equals("user"))
+                image = localImage("./img/user.png", dimension);
         }
 
         return image;
@@ -141,10 +127,10 @@ public class Utility {
         int new_index = 0;
 
         if((index%k) == 0)
-            new_index = index - 3;
+            new_index = index - k;
         else
             new_index = index - (index%k);
-        new_index -= 3;
+        new_index -= k;
 
         if (new_index == 0) {
             prev.setDisable(true);

@@ -12,6 +12,7 @@ import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 
 public class InsertionListController {
@@ -20,18 +21,19 @@ public class InsertionListController {
     public BorderPane bp;
     public VBox box;
     public Pane prev, next;
-    private int k = 3;
+    private final int k = 3;
     private int index;
 
     String user;
+    String type_img;
 
-    public void initialize(String username) {
+    public void initialize(ArrayList<Document> insertions, String username) {
 
+        type_img = "insertion";
         user = username;
-        list = ConnectionMongoDB.connMongo.findInsertionBySeller(username);
         box = new VBox(20);
         index = 0;
-
+        list = insertions;
         prev.setDisable(true);
         next.setDisable(true);
         prev.setVisible(false);
@@ -60,38 +62,33 @@ public class InsertionListController {
 
     private void addInsertions() {
 
-        String id = list.get(index).getString("uniq_id");
+        String id = list.get(index).get("_id").toString();
 
         HBox hb = new HBox();
-        VBox det = new VBox();
+        VBox info = new VBox();
 
-        ImageView image = Utility.getGoodImage(list.get(index).getString("image_url"), 150);
+        ImageView image = Utility.getGoodImage(list.get(index).getString("image_url"), 150, type_img);
         Label status = new Label("Status: " + list.get(index).getString("status"));
         Label price = new Label(list.get(index).getDouble("price") + " " + "€");
         Label brand = new Label("Brand: " + list.get(index).getString("brand"));
         Button delete = new Button("Delete");
 
-        String cssLayout =
-                        "-fx-background-color:  rgb(238, 204, 255)rgb(238, 204, 255);\n" +
-                        "-fx-background-radius: 30;\n" +
-                "-fx-text-fill: rgb(255,255,255)";
-
-        delete.setStyle(cssLayout);
-
-        det.getChildren().add(status);
-        det.getChildren().add(price);
-        det.getChildren().add(brand);
+        info.getChildren().add(status);
+        info.getChildren().add(price);
+        info.getChildren().add(brand);
         hb.getChildren().add(image);
-        hb.getChildren().add(det);
-        if(Session.getLogUser().getUsername().equals(user))
+        hb.getChildren().add(info);
+
+        if(Session.getLoggedUser().getUsername().equals(user))
             hb.getChildren().add(delete);
+
         box.getChildren().add(hb);
 
         image.setOnMouseClicked(event->{
                     try {
-                        SearchInsertionController sic = new SearchInsertionController();
-                        sic.showInsertionPage(id);
-                        HomeController.updateInsertionview(id);
+                        SearchInsertionController.showInsertionPage(id);
+                        ConnectionMongoDB.connMongo.updateNumView(id);
+                        //HomeController.updateInsertionview(id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -102,20 +99,29 @@ public class InsertionListController {
             if(Utility.confirmDeletion()) {
                 Insertion i = ConnectionMongoDB.connMongo.findInsertion(id);
 
-                if(ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
+                if(i == null) {
+                    Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
+                    return;
+                }
+                if(!ConnectionMongoDB.connMongo.deleteInsertionMongo(id))
                 {
                     Utility.printTerminal("Error deleting insertion MongoDB");
                     Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
                     return;
                 }
-                if(ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
+                if(!ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(id))
                 {
                     Utility.printTerminal("Error deleting insertion Neo4j");
                     Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
-                    ConnectionMongoDB.connMongo.addInsertion(i);
+                    try {
+                        ConnectionMongoDB.connMongo.addInsertion(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     return;
                 }
-                initialize(Session.getLogUser().getUsername());
+                list.remove(Insertion.toDocument(i));
+                initialize(list, Session.getLoggedUser().getUsername());
             }
         });
 
@@ -125,16 +131,10 @@ public class InsertionListController {
         GridPane.setHalignment(brand, HPos.LEFT);
         GridPane.setHalignment(delete, HPos.RIGHT);
 
-        det.setStyle("-fx-padding: 0 100 0 50;");
-        hb.setStyle(
-                "-fx-padding: 20;" +
-                " -fx-background-color: rgb(230, 230, 255);");
-        box.setStyle(
-                "-fx-hgap: 10;" +
-                " -fx-vgap: 10;" +
-                " -fx-max-height: 180;" +
-                " -fx-min-width: 530;" +
-                " -fx-max-width: 600;");
+        delete.getStyleClass().add("button-delete");
+        info.getStyleClass().add("vbox-info");
+        hb.getStyleClass().add("hbox-insertion");
+        box.getStyleClass().add("vbox-insertion");
 
         index++;
         System.out.println("(add) INDEX: " + index);
@@ -167,7 +167,7 @@ public class InsertionListController {
 
         box.getChildren().clear();
 
-System.out.println("(next) INDEX: " + index);
+        System.out.println("(next) INDEX: " + index);
 
         showInsertionList();
 

@@ -17,8 +17,7 @@ import java.util.Date;
 
 public class MyOrderController{
 
-
-    private static final int MAX_LENGTH = 50;
+    private static final int MAX_LENGTH = 150;
     public BorderPane ordersContainer;
     public ComboBox<String> comboBox;
     public Pane prev;
@@ -29,11 +28,13 @@ public class MyOrderController{
     User user;
 
     int indexPage;
-    int k = 6;
+    int k = 4; // number of orders to show into current page
     boolean kind;
+    String type_img;
 
     public void initialize(){
 
+        type_img = "insertion";
         //set buttons
         prev.setDisable(true);
         next.setDisable(true);
@@ -50,35 +51,37 @@ public class MyOrderController{
 
     }
 
-
     public void showOrders() {
 
         String type = comboBox.getValue();
 
-        Session session = Session.getInstance();
-        user = session.getLoggedUser();
+        user = Session.getLoggedUser();
 
-        if(type.equals("Items purchased"))
-        {
-            ordersList.clear();
-            panel.getChildren().clear();
-            indexPage = 1;
-            ordersList = ConnectionMongoDB.connMongo.findAllOrders(true, user.getUsername());
-            System.out.println("ORDER: " + ordersList);
+        prev.setDisable(true);
+        prev.setVisible(false);
+
+        if (type.equals("Items purchased")) {
+            if(ordersList != null && ordersList.size() != 0) {
+                panel.getChildren().clear();
+                indexPage = 1;
+            }
+            System.out.println("Purchased: " + Session.getLoggedUser().getPurchased());
+            ordersList = Session.getLoggedUser().getPurchased();
             kind = true;
             showAllOrders(true);
         }
         else if(type.equals("Items sold"))
         {
-            ordersList.clear();
-            panel.getChildren().clear();
-            indexPage = 1;
-            ordersList = ConnectionMongoDB.connMongo.findAllOrders(false, user.getUsername());
+            if(ordersList != null && ordersList.size() != 0) {
+                panel.getChildren().clear();
+                indexPage = 1;
+            }
+            ordersList = Session.getLoggedUser().getSold();
             kind = false;
             showAllOrders(false);
         }
 
-        if(ordersList.size() > k)
+        if(ordersList != null && ordersList.size() > k)
         {
             next.setVisible(true);
             next.setDisable(false);
@@ -87,16 +90,16 @@ public class MyOrderController{
 
     private void showAllOrders(boolean choice) {
 
-        for(int i = 0; i < k && indexPage <= ordersList.size(); i++)
-        {
-            addOrder(choice);
-            indexPage++;
-        }
+        if(ordersList != null && ordersList.size() != 0) {
+            for (int i = 0; i < k && indexPage <= ordersList.size(); i++) {
+                addOrder(choice);
+                indexPage++;
+            }
 
-        if(ordersList.size() < indexPage)
-        {
-            next.setDisable(true);
-            next.setVisible(false);
+            if (ordersList.size() < indexPage) {
+                next.setDisable(true);
+                next.setVisible(false);
+            }
         }
 
     }
@@ -104,21 +107,20 @@ public class MyOrderController{
     private void addOrder(boolean choice) {
 
         HBox hbox;
-        HBox revbox;
         VBox vbox;
         Button review = new Button();
         Document ins = (Document) ordersList.get(indexPage-1).get("insertion");
 
-        String sellerUser = ins.getString("seller");
+        String sel = ordersList.get(indexPage-1).getString("seller");
         String orderTimestamp = ordersList.get(indexPage-1).getString("timestamp");
         Label buyer = new Label("Buyer: " + ordersList.get(indexPage-1).getString("buyer"));
         Label timestamp = new Label("Date Order: " + ordersList.get(indexPage-1).getString("timestamp"));
-        Label seller = new Label("Seller: " + ins.getString("seller"));
+        Label seller = new Label("Seller: " + sel);
         Label price = new Label("Price: " + ins.getDouble("price"));
         Label size = new Label("Size: " + ins.getString("size"));
         Label status = new Label("Status: " + ins.getString("status"));
         Label category = new Label("Category: " + ins.getString("category"));
-        ImageView image = Utility.getGoodImage(ins.getString("image"), 110);
+        ImageView image = Utility.getGoodImage(ins.getString("image"), 110, type_img);
 
         if(ordersList.get(indexPage-1).getBoolean("reviewed") && choice) {
             review.setText("Already reviewed!");
@@ -129,25 +131,21 @@ public class MyOrderController{
 
         if(choice) {
             vbox = new VBox(seller, timestamp, price, category, size, status);
-            revbox = new HBox(vbox, review);
-            hbox = new HBox(image, vbox, revbox);
-            revbox.setSpacing(1000);
+            hbox = new HBox(image, vbox, review);
         }
         else {
             vbox = new VBox(buyer, timestamp, price, category, size, status);
             hbox = new HBox(image, vbox);
         }
 
-        panel.setSpacing(12);
-        hbox.setSpacing(80);
-        hbox.setStyle("-fx-padding: 5px; -fx-background-color: white;");
-        vbox.setStyle("-fx-padding: 5px; -fx-font-size: 14px");
+        panel.setSpacing(10);
+        hbox.setSpacing(40);
+        hbox.setStyle("-fx-padding: 15px; -fx-background-color: white; ; -fx-background-radius: 20px;");
+        vbox.setStyle("-fx-font-size: 14px");
 
         panel.getChildren().add(hbox);
 
-        review.setOnMouseClicked(event-> {
-                    addReview(sellerUser, orderTimestamp, review);
-                }
+        review.setOnMouseClicked(event-> addReview(sel, orderTimestamp, review)
         );
     }
 
@@ -180,7 +178,7 @@ public class MyOrderController{
         prev.setVisible(true);
     }
 
-    private void addReview(String seller, String timestampOrder, Button revButton) {
+    private void addReview(String seller, String timestampOrder, Button revButton) {        //panel builder
 
         StackPane secondaryLayout = new StackPane();
         TextArea txtArea = new TextArea();
@@ -241,20 +239,36 @@ public class MyOrderController{
 
     public void sendReview(TextArea txtArea, TextField txtTitle, Button sendReview, Button revButton, int rating, String seller, String timestampOrder){
 
-        SimpleDateFormat date = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        SimpleDateFormat date = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
         String timestamp = date.format(new Date());
         System.out.println("timestamp: " + timestamp);
 
         Review rev = new Review( user.getUsername(), seller, txtArea.getText(), timestamp, txtTitle.getText(), rating);
+        Utility.printTerminal("REV: " + rev);
 
         ConnectionMongoDB.connMongo.addReview(rev);
         ConnectionMongoDB.connMongo.updateSellerRating(rev.getSeller());
-        ConnectionMongoDB.connMongo.updateOrder(timestampOrder);
+        Document updated = setIsertionReviewed(timestampOrder);     //update local array
+        ConnectionMongoDB.connMongo.setInsertionReviewed(timestampOrder);  //update remote array
         sendReview.setDisable(true);
         revButton.setText("Already reviewed!");
         revButton.setDisable(true);
 
         Stage stage = (Stage) sendReview.getScene().getWindow();
         stage.close();
+    }
+
+    private Document setIsertionReviewed(String ts) {
+
+        ArrayList<Document> purc = Session.getLoggedUser().getPurchased();
+
+        Document n = null;
+        for(Document d : purc)
+            if(d.getString("timestamp").equals(ts)) {
+                d.replace("reviewed", true);
+                n = d;
+            }
+
+        return n;
     }
 }

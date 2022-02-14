@@ -7,10 +7,10 @@ import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4j
 import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
+import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 
 public class NewInsertionController {
 
@@ -24,10 +24,10 @@ public class NewInsertionController {
     @FXML private ComboBox<String> country;
     @FXML private TextArea desc;
     @FXML private TextField link;
-    int upperbound = 9999999;
 
     public void AddNewInsertion() {
         if((categ.getValue().equals("-")) || (status.getValue().equals("-"))
+                ||(color.getText().isEmpty()) || (brand.getText().isEmpty())
             || (size.getValue().equals("-")) || country.getValue().equals("-")
             || (price.getText().isEmpty()) || link.getText().isEmpty()) {
 
@@ -44,27 +44,22 @@ public class NewInsertionController {
         p = Double.parseDouble(price.getText());
 
         //generate id;
-        Random rand = new Random(); //instance of random class
-
-        //generate random values from 0-9999999
-        int int_random = rand.nextInt(upperbound);
-        String id = Integer.toString(int_random);
-        while (ConnectionMongoDB.connMongo.findByInsertionId(id))
-            id = Integer.toString(int_random);
-
+        ObjectId id = new ObjectId();
         RadioButton chk = (RadioButton)myToggleGroup.getSelectedToggle(); // Cast object to radio button
         String gender = chk.getText();
 
         //generate timestamp
         Date date = new Date();
-        String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(date);
+        String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 
-        Insertion i = new Insertion(id, categ.getValue(), desc.getText(), gender, p, 0, 0, status.getValue(), color.getText(), size.getValue(),
-                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLogUser().getUsername());
+        Insertion i = new Insertion(id.toString(), categ.getValue(), desc.getText(), gender, p, 0, 0, status.getValue(), color.getText(), size.getValue(),
+                brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLoggedUser().getUsername());
         Utility.printTerminal(i.toString());
 
         //MongoDB failure
-        if(!ConnectionMongoDB.connMongo.addInsertion(i)) {
+        try {
+            ConnectionMongoDB.connMongo.addInsertion(i);
+        } catch (Exception e) {
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on MongoDB");
             return;
         }
@@ -74,10 +69,10 @@ public class NewInsertionController {
             ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
             return;
         }
-        if((!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLogUser().getUsername(), i.getId()))){
+        if((!ConnectionNeo4jDB.connNeo.createPostedRelationship(Session.getLoggedUser().getUsername(), i.getId()))){
             Utility.infoBox("Insertion not published, retry.", "Error", "Something went wrong on Neo4j");
-            ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
             ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(i.getId());
+            ConnectionMongoDB.connMongo.deleteInsertionMongo(i.getId());
             return;
         }
 

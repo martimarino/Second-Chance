@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
@@ -37,14 +38,17 @@ public class SearchInsertionController extends MainController{
     private int index;              //index of insertion to show
     public HBox firstRow, secondRow;
     public VBox box;
+    String type_img;
 
     public void initialize(){
 
+        type_img = "insertion";
         firstRow = new HBox(20);
         secondRow = new HBox(20);
         box = new VBox(20);
         index = 0;
-        //set buttons
+
+        //disable buttons
         prev.setDisable(true);
         next.setDisable(true);
         prev.setVisible(false);
@@ -52,25 +56,13 @@ public class SearchInsertionController extends MainController{
 
     }
 
-    public static void showInsertionPage(String uniq_id) throws IOException {
-
-        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-
-            Image image = new Image(imageStream);
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
-            Stage stage = new Stage(StageStyle.DECORATED);
-            stage.getIcons().add(image);
-            stage.setTitle("Insertion details");
-            stage.setScene(new Scene(loader.load()));
-            InsertionController controller = loader.getController();
-            controller.initialize(uniq_id);
-            stage.show();
-
-        }
-    }
-
     public void findInsertion() {
+
+        //disable buttons
+        prev.setDisable(true);
+        next.setDisable(true);
+        prev.setVisible(false);
+        next.setVisible(false);
 
         if (ins.getText().equals("")) {  //filters case
 
@@ -85,13 +77,12 @@ public class SearchInsertionController extends MainController{
                     Utility.infoBox("There is not an insertion with this characteristics!", "Advise", "User Advise");
             }
         } else {    //search case
+
             if(ins.getText().equals("admin"))
                 return;
-            //search insertion by seller
-            insertionFilter = ConnectionMongoDB.connMongo.findInsertionBySeller(ins.getText());
 
-            if (insertionFilter.isEmpty())  //if no article is found try to search for brands
-                insertionFilter = ConnectionMongoDB.connMongo.findInsertionByBrand(ins.getText());
+            //search insertion
+            insertionFilter = ConnectionMongoDB.connMongo.findInsertionBySearch(ins.getText());
 
             if(insertionFilter.isEmpty()) {
                 Utility.infoBox("No results", "Advise", "User Advise");
@@ -100,6 +91,7 @@ public class SearchInsertionController extends MainController{
 
             ins.setText("");
         }
+
         index = 0;
         showFilteredInsertions();
         insertionFind.setCenter(box);
@@ -114,8 +106,7 @@ public class SearchInsertionController extends MainController{
 
     private void showFilteredInsertions() {
 
-        System.out.println("INDEX: " + index);
-        if (insertionFilter.size() - index > k) {
+        if (insertionFilter.size() - index > k) {       //more than k to show
             next.setDisable(false);
             next.setVisible(true);
         }
@@ -131,7 +122,12 @@ public class SearchInsertionController extends MainController{
         box.getChildren().clear();
 
         for (int i = 0; i < k && index < insertionFilter.size(); i++)
-            addFilteredInsertions(i);
+           addFilteredInsertions(i);
+
+
+        box.getChildren().add(firstRow);
+        if(index >= k/2)
+            box.getChildren().add(secondRow);
 
         insertionFind.setCenter(box);
 
@@ -141,11 +137,11 @@ public class SearchInsertionController extends MainController{
 
         VBox vb = new VBox();
         ImageView image;
-        String uniq_id = insertionFilter.get(index).getString("uniq_id");
+        String uniq_id = insertionFilter.get(index).get("_id").toString();
 
         Label seller = new Label("Seller: " + insertionFilter.get(index).getString("seller"));
 
-        image = Utility.getGoodImage(insertionFilter.get(index).getString("image_url"), 130);
+        image = Utility.getGoodImage(insertionFilter.get(index).getString("image_url"), 130, type_img);
 
         Label status = new Label("Status: " + insertionFilter.get(index).getString("status"));
         Label price = new Label(insertionFilter.get(index).getDouble("price") + " " + "€");
@@ -158,8 +154,6 @@ public class SearchInsertionController extends MainController{
             vb.getChildren().add(price);
             vb.getChildren().add(brand);
             firstRow.getChildren().add(vb);
-            if(i == ((k/2)-1))
-                box.getChildren().add(firstRow);
         } else {
             vb.getChildren().add(seller);
             vb.getChildren().add(image);
@@ -167,9 +161,9 @@ public class SearchInsertionController extends MainController{
             vb.getChildren().add(price);
             vb.getChildren().add(brand);
             secondRow.getChildren().add(vb);
-            if(i == k-1)
-                box.getChildren().add(secondRow);
         }
+
+        vb.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
 
         seller.setOnMouseClicked(event->{
                     try {
@@ -207,38 +201,46 @@ public class SearchInsertionController extends MainController{
     public void PrevFilteredInsertion() {
 
         box.getChildren().clear();
-
-        if((index%k) == 0)
-            index -= k;
-        else
-            index -= (index%k);
-        index -= k;
-
-        if (index == 0) {
-            prev.setDisable(true);
-            prev.setVisible(false);
+        index = Utility.prevPage(index, k, prev);
+        if(index < insertionFilter.size())
+        {
+            next.setDisable(false);
+            next.setVisible(true);
         }
-
         showFilteredInsertions();
-
         insertionFind.setCenter(box);
     }
 
     public void NextFilteredInsertion() {
 
         box.getChildren().clear();
-
-        System.out.println("(next) INDEX: " + index);
-
+        Utility.nextPage(index, insertionFilter, next, prev);
         showFilteredInsertions();
 
-        if (index == insertionFilter.size()) {
-            next.setDisable(true);
-            next.setVisible(false);
+    }
+
+    public static void showInsertionPage(String uniq_id) throws IOException {       //open a page with insertion details
+
+        Insertion insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+
+        if(insertion == null) {
+            Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
+            return;
         }
 
-        prev.setVisible(true);
-        prev.setDisable(false);
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
 
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setTitle("Insertion details");
+            stage.setScene(new Scene(loader.load()));
+            InsertionController controller = loader.getController();
+            controller.initialize(insertion);
+            stage.show();
+
+        }
     }
 }

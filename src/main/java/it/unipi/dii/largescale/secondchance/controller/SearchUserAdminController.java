@@ -56,6 +56,8 @@ public class SearchUserAdminController {
 
     public void searchUser(){
 
+        alertText.setText("");
+
         Document found;
 
         username = usernameField.getText();
@@ -87,7 +89,7 @@ public class SearchUserAdminController {
 
             User usr = ConnectionMongoDB.connMongo.findUserDetails(username);
 
-            if (Objects.equals(usr.getSuspended(), "Y")) {
+            if (Objects.equals(usr.getSuspended(), true)) {
                 btnSuspendUsr.setDisable(true);
                 btnUnsuspendUsr.setDisable(false);
             }else{

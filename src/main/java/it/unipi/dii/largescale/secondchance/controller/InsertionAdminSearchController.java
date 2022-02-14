@@ -10,6 +10,7 @@ import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class InsertionAdminSearchController {
 
@@ -18,13 +19,18 @@ public class InsertionAdminSearchController {
     public VBox box;
     public Pane prev, next;
     private final int k = 3;
-    private int contReviews = 0;
     private int index;
+    String type_img;
 
-    public void initialize(String seller) {
+    public void initialize(String seller, String category, String country) {
 
-        insertions = ConnectionMongoDB.connMongo.findMultipleInsertionDetails(seller);
+        if (Objects.equals(country, "") && Objects.equals(category, ""))
+            insertions = ConnectionMongoDB.connMongo.findMultipleInsertionDetails(seller);
+        else
+            insertions = ConnectionMongoDB.connMongo.findInsertionsByCountryAndCategory(country, category);
+
         System.out.println("Insertions: " + insertions.get(0));
+        type_img = "insertion";
 
         box = new VBox(20);
         index = 0;
@@ -60,30 +66,29 @@ public class InsertionAdminSearchController {
         String uniq_id = insertions.get(index).getId();
 
         HBox hb = new HBox();
-        VBox det = new VBox();
+        VBox info = new VBox();
         Button btnDelete = new Button();
 
         btnDelete.setText("Delete");
 
-        ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150);
+        ImageView image = Utility.getGoodImage(insertions.get(index).getImage_url(), 150, type_img);
         Label category = new Label("Category: " + insertions.get(index).getCategory());
         Label price = new Label(insertions.get(index).getPrice() + "€");
         Label views = new Label("Views: " + insertions.get(index).getViews());
 
-        det.getChildren().add(category);
-        det.getChildren().add(price);
-        det.getChildren().add(views);
+        info.getChildren().add(category);
+        info.getChildren().add(price);
+        info.getChildren().add(views);
         hb.getChildren().add(image);
-        hb.getChildren().add(det);
+        hb.getChildren().add(info);
         hb.getChildren().add(btnDelete);
         box.getChildren().add(hb);
 
         image.setOnMouseClicked(event->{
                     try {
-                        SearchInsertionController sic = new SearchInsertionController();
-                        System.out.println(uniq_id);
-                        sic.showInsertionPage(uniq_id);
-                        HomeController.updateInsertionview(uniq_id);
+                        SearchInsertionController.showInsertionPage(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
+                        //HomeController.updateInsertionview(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -112,23 +117,12 @@ public class InsertionAdminSearchController {
         GridPane.setHalignment(price, HPos.LEFT);
         GridPane.setHalignment(views, HPos.LEFT);
 
-        det.setStyle("-fx-padding: 0 0 0 50;");
-        hb.setStyle(
-                "-fx-padding: 20;" +
-                        " -fx-background-color: rgb(230, 230, 255);");
-        box.setStyle(
-                " -fx-hgap: 10;" +
-                        " -fx-vgap: 10;" +
-                        " -fx-max-height: 180;" +
-                        " -fx-min-width: 530;" +
-                        " -fx-max-width: 600;");
 
-        btnDelete.setStyle(
-                " -fx-padding: 0 20px 0 20px;" +
-                        "-fx-background-color:  rgb(206, 153, 255);" +
-                        "-fx-background-radius: 50;" +
-                        "-fx-text-fill: #ffffff;"
-        );
+        info.getStyleClass().add("vbox-info");
+        hb.getStyleClass().add("hbox-insertion");
+        box.getStyleClass().add("vbox-insertion");
+        btnDelete.getStyleClass().add("button-delete");
+
         btnDelete.setTranslateX(70);
         btnDelete.setTranslateY(50);
 

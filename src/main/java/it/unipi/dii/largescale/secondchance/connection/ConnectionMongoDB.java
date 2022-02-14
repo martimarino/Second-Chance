@@ -1,16 +1,16 @@
 package main.java.it.unipi.dii.largescale.secondchance.connection;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoException;
+import com.mongodb.*;
 import com.mongodb.client.*;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Balance;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.entity.Review;
 import main.java.it.unipi.dii.largescale.secondchance.entity.User;
+import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -24,90 +24,101 @@ import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Sorts.descending;
-import static com.mongodb.client.model.Updates.inc;
-import static com.mongodb.client.model.Updates.set;
+import static com.mongodb.client.model.Updates.*;
 
 public class ConnectionMongoDB{
+
+    private final String clusterAddress = "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
+            "?retryWrites=true&w=1&readPreferences=nearest&wtimeout=10000";
 
     public static ConnectionMongoDB connMongo;
     private MongoClient mongoClient;
     private MongoDatabase db;
     MongoCursor<Document> cursor;
 
-    MongoCollection<Document> userColl;
-    MongoCollection<Document> orderColl;
-    MongoCollection<Document> insertionColl;
-    MongoCollection<Document> adminColl;
+    static MongoCollection<Document> userColl;
+    static MongoCollection<Document> insertionColl;
+    static MongoCollection<Document> codeColl;
+    static MongoCollection<Document> balanceColl;
 
     /* ********* CONNECTION SECTION ********* */
 
-    public void openConnection() {
-
-        // LOCAL DATABASE WITHOUT REPLICAS
-        ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
-        mongoClient = MongoClients.create(uri);
-        db = mongoClient.getDatabase("local");
-
-        userColl = db.getCollection("user");
-        orderColl = db.getCollection("order");
-        insertionColl = db.getCollection("insertion");
-        adminColl = db.getCollection("admin");
-
-/*
-        mongoClient = MongoClients.create(
-                "mongodb://172.16.4.114:27020,172.16.4.115:27020,172.16.4.116:27020/" +
-                        "?retryWrites=true&w=majority&wtimeout=10000");
-
-        // Read Preferences at DB level
-        db = mongoClient.getDatabase("lsmdb")
-                .withReadPreference(ReadPreference.secondary());
-
-        // Read Preferences at collection level
-        userColl = db.getCollection("user")
-                .withReadPreference(ReadPreference.secondary());
-
-        insertionColl = db.getCollection("insertion")
-                .withReadPreference(ReadPreference.secondary());
-
-        orderColl = db.getCollection("order")
-                .withReadPreference(ReadPreference.secondary());
-
-        adminColl = db.getCollection("admin")
-                .withReadPreference(ReadPreference.secondary());
+    public void connectToVms(){
+        mongoClient = MongoClients.create(clusterAddress);
 
         // Write concern at DB level
         db = mongoClient.getDatabase("lsmdb")
                 .withWriteConcern(WriteConcern.W1);
 
+        // Write Preferences at collection level
+        userColl = db.getCollection("user");
+        insertionColl = db.getCollection("insertion");
+        codeColl = db.getCollection("code");
+
+        balanceColl = db.getCollection("balance")
+                .withWriteConcern(WriteConcern.W3);
+
+    }
+
+    public void connectToLocal(){
+        ConnectionString uri = new ConnectionString("mongodb://localhost:27017");
+        mongoClient = MongoClients.create(uri);
+        db = mongoClient.getDatabase("local");
+
+        userColl = db.getCollection("user");
+        insertionColl = db.getCollection("insertion");
+        codeColl = db.getCollection("code");
+        balanceColl = db.getCollection("balance");
+    }
+
+    public void connectToAtlas(){
+        ConnectionString uri = new ConnectionString("mongodb+srv://roots:1234@cluster0.n8fgw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+        mongoClient = MongoClients.create(uri);
+        db = mongoClient.getDatabase("project");
+        userColl = db.getCollection("user");
+        insertionColl = db.getCollection("insertion");
+        codeColl = db.getCollection("code");
+        balanceColl = db.getCollection("balance");
+
+    }
+
+    public void openConnection() {
+
+        connectToLocal();
+        //connectToVms();
+        //connectToAtlas();
+
         System.out.println("**************** USER ******************");
         System.out.println(userColl.countDocuments());
-        System.out.println("**************** ORDER ******************");
-        System.out.println(orderColl.countDocuments());
         System.out.println("**************** INSERTION ******************");
         System.out.println(insertionColl.countDocuments());
-        System.out.println("**************** ADMIN ******************");
-        System.out.println(adminColl.countDocuments());
+        System.out.println("**************** CODE ******************");
+        System.out.println(codeColl.countDocuments());
 
-        // 2 - Find the first document
+        // Print the first document
         userColl.find().limit(1).forEach(printDocuments());
-*/
+
     }
 
     public void closeConnection() {
         mongoClient.close();
     }
 
-    /* ********* USER SECTION ********* */
+    private static Consumer<Document> printDocuments() {
+        return doc -> System.out.println(doc.toJson());
+    }
+
+    /* ************************* USER SECTION ************************* */
 
     public boolean registerUser(User u) {
 
-        if (userAlreadyPresent(u.getUsername(), u.getPassword())) {
-            Utility.infoBox("Please, choose another username and try again.", "Error", "Username already used!");
+        if (userAlreadyPresent(u.getUsername())) {
+            Utility.infoBox("Please, choose another username and try again.",
+                            "Error", "Username already used!");
             return false;
         }
 
         Document user = new Document("address", u.getAddress())
-                .append("balance", u.getBalance())
                 .append("city", u.getCity())
                 .append("country", u.getCountry())
                 .append("email", u.getEmail())
@@ -117,13 +128,13 @@ public class ConnectionMongoDB{
                 .append("suspended", u.getSuspended())
                 .append("username", u.getUsername());
 
+        Document balanceUser = new Document("username", u.getUsername())
+                .append("credit", 0);
+
         userColl.insertOne(user);
+        balanceColl.insertOne(balanceUser);
 
         return true;
-    }
-
-    private static Consumer<Document> printDocuments() {
-        return doc -> System.out.println(doc.toJson());
     }
 
     public Document findUserByUsername(String username) {
@@ -133,10 +144,16 @@ public class ConnectionMongoDB{
         return cursor.next();
     }
 
-    public boolean userAlreadyPresent(String username, String password) {
+    public boolean userAlreadyPresent(String username) {
 
-        cursor = userColl.find(and(eq("username", username),
-                eq("password", password))).iterator();
+        cursor = userColl.find(eq("username", username)).iterator();
+        return cursor.hasNext();
+
+    }
+
+    public boolean checkCredentials(String username, String encrypted) {
+
+        cursor = userColl.find(and(eq("username", username), eq("password", encrypted))).iterator();
 
         return cursor.hasNext();
     }
@@ -151,38 +168,29 @@ public class ConnectionMongoDB{
         logUser.setAddress(user.getString("address"));
         logUser.setCity(user.getString("city"));
         logUser.setCountry(user.getString("country"));
-        logUser.setSuspended(user.getString("suspended"));
-        logUser.setBalance(user.getDouble("balance"));
+        logUser.setSuspended(user.getBoolean("suspended"));
         logUser.setImage(user.getString("img_profile"));
-        logUser.setRating(user.getDouble("rating"));
+        if((ArrayList<Document>) user.get("reviews") != null){
+            logUser.setReviews((ArrayList<Document>) user.get("reviews"));
+            logUser.setRating(user.getDouble("rating"));
+        }
+        if((ArrayList<Document>) user.get("sold") != null)
+            logUser.setSold((ArrayList<Document>) user.get("sold"));
+        if((ArrayList<Document>) user.get("purchased")!= null)
+            logUser.setPurchased((ArrayList<Document>) user.get("purchased"));
 
         return logUser;
     }
 
-    public ArrayList<Document> followedUserInsertions(ArrayList<String> usList) {
+    public ArrayList<Document> followedUserInsertions(ArrayList<String> insList) {
 
         ArrayList<Document> insertions = new ArrayList<>();
 
-        for (String s : usList) {
-            Document d = insertionColl.find(eq("uniq_id", s)).first();
+        for (String s : insList) {
+            Document d = insertionColl.find(eq("_id", new ObjectId(s))).first();
             insertions.add(d);
         }
 
-        return insertions;
-    }
-
-    public ArrayList<Document> findViralInsertions(int k) {
-
-        ArrayList<Document> insertions = new ArrayList<>();
-        Bson sort = sort(descending("interested"));
-        Bson limit = limit(k);
-
-        AggregateIterable<Document> r = insertionColl.aggregate(Arrays.asList(sort ,limit));
-
-        for (Document document : r)
-        {
-            insertions.add(document);
-        }
         return insertions;
     }
 
@@ -205,10 +213,10 @@ public class ConnectionMongoDB{
         }
         else if(!country.equals("country") && rating.equals("rating"))
         {
-             cursor  = userColl.find(eq("country", country)).iterator();
+            cursor  = userColl.find(eq("country", country)).iterator();
         }
         else{
-             cursor  = userColl.find(and(eq("country", country), lte("rating", upperBound), gt("rating", lowerBound))).iterator();
+            cursor  = userColl.find(and(eq("country", country), lte("rating", upperBound), gt("rating", lowerBound))).iterator();
         }
 
         while(cursor.hasNext())
@@ -220,7 +228,64 @@ public class ConnectionMongoDB{
 
     }
 
-        /* ********* INSERTION SECTION ********* */
+    public void deleteUserMongo(String username) {
+
+        Bson query = eq("username", username);
+
+        try {
+            userColl.deleteOne(query);
+        } catch (MongoException me) {
+            System.err.println("Unable to delete due to an error: " + me);
+        }
+    }
+
+    public int submitNewProfileImg(String url, String user) {
+
+        Document queryUser = new Document().append("username",  user);
+
+        Bson updatesUser = Updates.combine(
+                Updates.set("img_profile", url)
+        );
+
+        UpdateOptions options = new UpdateOptions().upsert(true);
+
+        try {
+            UpdateResult resultUser = userColl.updateOne(queryUser, updatesUser, options);
+            System.out.println("Modified document count: " + resultUser.getModifiedCount());
+            System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
+            return (int) resultUser.getModifiedCount();
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+            return 0;
+        }
+    }
+
+    public void updateLoggedUser() {
+
+        Bson filter = eq("username", Session.getLoggedUser().getUsername());
+        Bson update = set("purchased", Session.getLoggedUser().getPurchased());
+        userColl.findOneAndUpdate(filter, update);
+
+        update = set("sold", Session.getLoggedUser().getSold());
+        userColl.findOneAndUpdate(filter, update);
+
+    }
+
+    /* *********************** INSERTION SECTION *********************** */
+
+    public ArrayList<Document> findViralInsertions(int k) {
+
+        ArrayList<Document> insertions = new ArrayList<>();
+        Bson sort = sort(descending("interested", "views"));
+        Bson limit = limit(k);
+
+        AggregateIterable<Document> r = insertionColl.aggregate(Arrays.asList(sort ,limit));
+
+        for (Document document : r)
+            insertions.add(document);
+
+        return insertions;
+    }
 
     public ArrayList<Document> findInsertionByFilters(String size, String price, String gender, String status, String category, String color) {
 
@@ -270,13 +335,21 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
-    public ArrayList<Document> findInsertionByBrand(String brand) {
+    public ArrayList<Document> findInsertionBySearch(String s) {
 
         ArrayList<Document> insertions = new ArrayList<>();
+        AggregateIterable<Document> aggr;
 
-        cursor = insertionColl.find(eq("brand", brand)).iterator();
-        while (cursor.hasNext())
-            insertions.add(cursor.next());
+        Bson match = match(or(eq("brand", s), (eq("seller", s))));
+        Bson sort = sort(descending("timestamp"));
+        aggr = insertionColl.aggregate(
+                        Arrays.asList(
+                                match, sort
+                        )
+                );
+
+        for (Document d : aggr)
+            insertions.add(d);
 
         return insertions;
     }
@@ -284,9 +357,11 @@ public class ConnectionMongoDB{
     public Insertion findInsertion(String insertion_id) {
 
         Insertion insertion = new Insertion();
-        Document insertion_found = insertionColl.find(eq("uniq_id", insertion_id)).first();
+        Document insertion_found = insertionColl.find(eq("_id", new ObjectId(insertion_id))).first();
 
-        insertion.setId(insertion_found.getString("uniq_id"));
+        if(insertion_found == null)
+            return null;
+        insertion.setId(insertion_found.get("_id").toString());
         insertion.setBrand(insertion_found.getString("brand"));
         insertion.setCountry(insertion_found.getString("country"));
         insertion.setCategory(insertion_found.getString("category"));
@@ -306,6 +381,35 @@ public class ConnectionMongoDB{
 
     }
 
+    public void rollBackInsertion(int i, String username, Insertion insertion) {
+
+        for(; i < 4; i++) {
+            switch (i) {
+                case 0: //insert insertion again
+                    insertionColl.insertOne(Insertion.toDocument(insertion));
+                    System.out.println("CASE 0");
+                    continue;
+                case 1: //remove item from sold array in user
+                    Bson filter_sold = eq("username", insertion.getSeller());
+                    Bson update = Updates.popLast("sold");
+                    userColl.findOneAndUpdate(filter_sold, update);
+                    System.out.println("CASE 1");
+                    continue;
+                case 2: //decrement seller balance
+                    updateBalance(insertion.getSeller(), insertion.getPrice(), '-');
+                    System.out.println("CASE 2");
+                    continue;
+                case 3: //increment buyer balance
+                    updateBalance(username, insertion.getPrice(), '+');
+                    System.out.println("CASE 3");
+                    continue;
+                default:
+                    break;
+            }
+        }
+
+    }
+
     public boolean buyCurrentInsertion(String username, Insertion insertion){
 
         ClientSession clientSession = mongoClient.startSession();
@@ -315,82 +419,82 @@ public class ConnectionMongoDB{
 
         TransactionBody<String> txnFunc = () -> {
 
-            Document balance = db.getCollection("user").find(eq("username", username)).first();
-            double balanceBuyer = balance.getDouble("balance") - insertion.getPrice();
+            double currentBalance = ConnectionMongoDB.connMongo.getBalance();
+            double checkBalance = currentBalance - insertion.getPrice();
 
-            Bson filter = and(eq("username", username), gte("balance", insertion.getPrice()));
-            Bson update = set("balance", balanceBuyer);
-
-            //update buyer balance
-            Document ret = db.getCollection("user").findOneAndUpdate(filter, update);
-
-            if (ret == null) {
+            if (checkBalance < 0.0) {
                 Utility.infoBox("Cannot purchase, not enough balance", "Error", "Error purchase");
                 return "Buyer has not enough balance";
             }
 
-            //update seller balance
-            Bson filter2 = eq("username", insertion.getSeller());
-            Bson update2 = inc("balance", insertion.getPrice());
-
-            Document ret3 = db.getCollection("user").findOneAndUpdate(filter2, update2);
-
-            if (ret3 == null) {
+            boolean upBuyer, upSeller;
+            upBuyer = updateBalance(Session.getLoggedUser().getUsername(), insertion.getPrice(), '-');
+            if(!upBuyer)
+            {
                 Utility.infoBox("Cannot buy product", "Error", "Error purchase");
-                return "Cannot increment seller balance";
+                return "Cannot update buyer balance";
+            } else {
+                upSeller = updateBalance(insertion.getSeller(), insertion.getPrice(), '+');
+                if(!upSeller) {
+                    rollBackInsertion(3, Session.getLoggedUser().getUsername(), insertion);
+                    Utility.infoBox("Cannot buy product", "Error", "Error purchase");
+                    return "Cannot update seller balance";
+                }
             }
 
-            Document order = new Document()
+            //order purchased
+            Document purchased = new Document()
                     .append("_id", new ObjectId())
                     .append("timestamp", timestamp)
-                    .append("buyer", username)
+                    .append("seller", insertion.getSeller())
                     .append("reviewed", false)
                     .append("insertion", new Document("image", insertion.getImage_url()).
-                            append("seller", insertion.getSeller()).
                             append("price", insertion.getPrice()).
                             append("size", insertion.getSize()).
                             append("status", insertion.getStatus()).
                             append("category", insertion.getCategory()));
 
-            //insert new document into order collection
-            try {
-                orderColl.insertOne(order);
+            //order sold
+            Document sold = new Document()
+                    .append("_id", new ObjectId())
+                    .append("timestamp", timestamp)
+                    .append("buyer", username)
+                    .append("reviewed", false)
+                    .append("insertion", new Document("image", insertion.getImage_url()).
+                            append("price", insertion.getPrice()).
+                            append("size", insertion.getSize()).
+                            append("status", insertion.getStatus()).
+                            append("category", insertion.getCategory()));
 
-            } catch (MongoException me) {
-                System.err.println("Unable to insert due to an error: " + me);
+            Bson filter_sold = eq("username", insertion.getSeller());
+            BasicDBObject update_sold = new BasicDBObject("$push", new BasicDBObject("sold", sold));
+
+            //insert new document into user collection
+            try {
+                userColl.findOneAndUpdate(filter_sold, update_sold);
+            } catch (MongoException e) {
+                rollBackInsertion(2, Session.getLoggedUser().getUsername(), insertion);
+                return ("Unable to insert item in sold array: " + e);
             }
 
-            db.getCollection("insertion").deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()));
-            return "OK";
+            //update local purchased array
+            ArrayList<Document> purc;
+            if(Session.getLoggedUser().getPurchased() != null)
+                purc = Session.getLoggedUser().getPurchased();
+            else
+                purc = new ArrayList<>();
+            purc.add(purchased);
+            Session.getLoggedUser().setPurchased(purc);
+
+            try {
+                insertionColl.deleteOne(new Document("image_url", insertion.getImage_url()).append("seller", insertion.getSeller()).append("timestamp", insertion.getTimestamp()));
+                return "OK";
+            } catch (MongoException e) {
+                rollBackInsertion(1, Session.getLoggedUser().getUsername(), insertion);
+                return ("Unable to delete insertion: " + e);
+            }
         };
         return executeTransaction(clientSession, txnFunc);
-    }
-
-    public boolean deleteBuyInsertion(String username, Insertion insertion) {
-
-        ClientSession clientSession = mongoClient.startSession();
-
-        TransactionBody<String> txnFunc = () -> {
-
-            Bson filter = and(eq("username", username), gte("balance", insertion.getPrice()));
-            Bson update = inc("balance", insertion.getPrice());
-
-            //update buyer balance
-            Document ret = db.getCollection("user").findOneAndUpdate(filter, update);
-
-            //update seller balance
-            Bson filter2 = eq("username", insertion.getSeller());
-            Bson update2 = inc("balance", -(insertion.getPrice()));
-
-            Document ret3 = db.getCollection("user").findOneAndUpdate(filter2, update2);
-
-            insertionColl.insertOne(Insertion.toDocument(insertion));
-
-            return "OK";
-
-        };
-        return executeTransaction(clientSession, txnFunc);
-
     }
 
     private boolean executeTransaction(ClientSession clientSession, TransactionBody<String> txnFunc) {
@@ -406,7 +510,7 @@ public class ConnectionMongoDB{
 
     public boolean updateNumInterested(String insertion_id, int i) {
 
-        Bson filter = eq("uniq_id", insertion_id);
+        Bson filter = eq("_id", new ObjectId(insertion_id));
         Bson update = inc("interested", i);
         try {
             db.getCollection("insertion").findOneAndUpdate(filter, update);
@@ -418,13 +522,32 @@ public class ConnectionMongoDB{
 
     public void updateNumView(String uniq_id) {
 
-        Bson filter = eq("uniq_id", uniq_id);
+        Bson filter = eq("_id", new ObjectId(uniq_id));
         Bson update = inc("views", 1);
 
         db.getCollection("insertion").findOneAndUpdate(filter, update);
     }
 
-    /* ********* ADMIN SECTION ********* */
+    public ArrayList<Document> findTopRatedUsersByCountry(String country) {
+
+        ArrayList<Document> list = new ArrayList<>();
+
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("country", country);
+
+        try (MongoCursor<Document> cursor = userColl.find(whereQuery).iterator()) {
+            while (cursor.hasNext()) {
+                Document doc = cursor.next();
+                if (doc.get("rating") == null)
+                    continue;
+                list.add(doc);
+            }
+        }
+        return list;
+
+    }
+
+    /* ************************* ADMIN SECTION ************************* */
 
     public Document verifyUserInDB(String username, boolean choice) {
 
@@ -443,63 +566,48 @@ public class ConnectionMongoDB{
         Document insertion;
 
         if (choice)
-            insertion = insertionColl.find(eq("uniq_id", id)).first();
-         else
+            insertion = insertionColl.find(eq("_id", new ObjectId(id))).first();
+        else
             insertion = insertionColl.find(eq("seller", id)).first();
 
         return insertion;
     }
 
-    public ArrayList<Document> findMostActiveUsersSellers(int k, boolean choice) {
-        // true = select the top k most active users
-        // false = select the top k most active sellers
+    public ArrayList<Document> findMostActiveUsers(int k, boolean choice) {
 
-        ArrayList<Document> array = new ArrayList<>();
-        MongoCollection<Document> myColl;
+        ArrayList<Document> orders = new ArrayList<>();
+        AggregateIterable<Document> aggr;
+        // true = select the top k users with more purchased orders
+        if(choice) {
 
-        if (choice)
-            myColl = insertionColl;
-        else
-            myColl = orderColl;
-
-        Bson limit = limit(k);
-
-        if (!choice) { //most sold orders
-            System.out.println("Sezione orders");
-            Bson project = project(fields(excludeId(), include("count"), computed("seller", "$_id")));
-            AggregateIterable<Document> aggr = myColl.aggregate(
+            Bson match = match(exists("purchased.0"));
+            Bson projection = new Document("$size", "$purchased");
+            Bson project = Aggregates.project(new Document("count", projection).append("username", "$username"));
+            Bson sort = sort(descending("count"));
+            Bson limit = limit(k);
+            aggr = userColl.aggregate(
                     Arrays.asList(
-                            Aggregates.group("$insertion.seller",
-                                    Accumulators.sum("count", 1)),
-                            project,
-                            Aggregates.sort(descending("count")),
-                            limit
+                            match, project, sort, limit
                     )
             );
-
-            for (Document document : aggr) {
-                System.out.println("DOCUMENT:" + document);
-                array.add(document);
-            }
-        } else { //most insertions published
-            System.out.println("Sezione insertions");
-            Bson project = project(fields(excludeId(), include("count"), computed("seller", "$_id")));
-            AggregateIterable<Document> aggr = myColl.aggregate(
-                    Arrays.asList(
-                            Aggregates.group("$seller",
-                                    Accumulators.sum("count", 1)),
-                            project,
-                            Aggregates.sort(descending("count")),
-                            limit
-                    )
-            );
-
-            for (Document document : aggr) {
-                System.out.println(document);
-                array.add(document);
-            }
         }
-        return array;
+        else        // false = select the top k with more purchased orders
+        {
+            Bson match = match(exists("sold.0"));
+            Bson projection = new Document("$size", "$sold");
+            Bson project = Aggregates.project(new Document("count", projection).append("username", "$username"));
+            Bson sort = sort(descending("count"));
+            Bson limit = limit(k);
+            aggr = userColl.aggregate(
+                    Arrays.asList(
+                            match, project, sort, limit
+                    )
+            );
+        }
+        for (Document d : aggr)
+            orders.add(d);
+
+        return orders;
     }
 
     public ArrayList<Document> findTopKRatedUser(int k, String country) {
@@ -517,12 +625,9 @@ public class ConnectionMongoDB{
                 )
         );
 
-        for (Document document : aggr) {
-
-            //document.append("name", document.getString("name"));
-            //document.append("rating", document.getDouble("rating"));
+        for (Document document : aggr)
             array.add(document);
-        }
+
         return array;
     }
 
@@ -531,7 +636,7 @@ public class ConnectionMongoDB{
         ArrayList<Document> array = new ArrayList<>();
 
         Bson limit = limit(k);
-        AggregateIterable<Document> aggr  = insertionColl.aggregate(
+        AggregateIterable<Document> aggr = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
                         Aggregates.sort(descending("interested")),
@@ -545,6 +650,31 @@ public class ConnectionMongoDB{
         return array;
     }
 
+    public ArrayList<Insertion> findInsertionsByCountryAndCategory(String country, String category) {
+
+        ArrayList<Insertion> insertions = new ArrayList<>();
+        List<Bson> filters = new ArrayList<>();
+
+        filters.add(Filters.eq("category", category));
+        filters.add(Filters.eq("country", country));
+
+        cursor = insertionColl.find(Filters.and(filters)).iterator();
+
+        while(cursor.hasNext()) {
+            Document doc = cursor.next();
+            Insertion ins = new Insertion();
+            ins.setCategory(doc.getString("category"));
+            ins.setPrice(doc.getDouble("price"));
+            ins.setViews(doc.getInteger("views"));
+            ins.setId(doc.get("_id").toString());
+            ins.setImage_url(doc.getString("image_url"));
+            insertions.add(ins);
+        }
+
+        return insertions;
+
+    }
+
     public ArrayList<Document> findTopKViewedInsertion(int k, String category) {
 
         ArrayList<Document> array = new ArrayList<>();
@@ -553,7 +683,7 @@ public class ConnectionMongoDB{
         AggregateIterable<Document> aggr  = insertionColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("category", category)),
-                        Aggregates.sort(descending("viewed")),
+                        Aggregates.sort(descending("views")),
                         limit
                 )
         );
@@ -568,7 +698,7 @@ public class ConnectionMongoDB{
 
         Document query = new Document().append("username",  username);
         Bson updates = Updates.combine(
-                Updates.set("suspended", "Y"));
+                Updates.set("suspended", true));
                 UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {
@@ -588,7 +718,7 @@ public class ConnectionMongoDB{
         Document query = new Document().append("username",  username);
 
         Bson updates = Updates.combine(
-                Updates.set("suspended", "N"));
+                Updates.set("suspended", false));
                 UpdateOptions options = new UpdateOptions().upsert(true);
 
         try {
@@ -603,7 +733,7 @@ public class ConnectionMongoDB{
     public Insertion findInsertionDetails(String id) {
 
         Insertion ins = new Insertion();
-        Document insertion = insertionColl.find(eq("uniq_id", id)).first();
+        Document insertion = insertionColl.find(eq("_id", new ObjectId(id))).first();
 
         ins.setCategory(insertion.getString("category"));
         ins.setPrice(insertion.getDouble("price"));
@@ -627,77 +757,39 @@ public class ConnectionMongoDB{
             ins.setCategory(document.getString("category"));
             ins.setPrice(document.getDouble("price"));
             ins.setViews(document.getInteger("views"));
-            ins.setId(document.getString("uniq_id"));
+            ins.setId(document.get("_id").toString());
             ins.setImage_url(document.getString("image_url"));
             array.add(ins);
         }
         return array;
     }
 
-    public ArrayList<Insertion> findInsertionDetailsNeo4J(ArrayList<String> followed_ins)  {
+    public ArrayList<Document> findInsertionDetailsNeo4J(ArrayList<String> followed_ins)  {
 
-        Insertion ins;
-        ArrayList<Insertion> insertions = new ArrayList<Insertion>();
+        //Insertion ins;
+        ArrayList<Document> insertions = new ArrayList<>();
 
         for (String followed_in : followed_ins) {
-            Document insertion = insertionColl.find(eq("uniq_id", followed_in)).first();
-
+            Document insertion = insertionColl.find(eq("_id", new ObjectId(followed_in))).first();
+            /*
             ins = new Insertion();
             ins.setCategory(insertion.getString("category"));
             ins.setPrice(insertion.getDouble("price"));
             ins.setImage_url(insertion.getString("image_url"));
             ins.setViews(insertion.getInteger("views"));
             ins.setSeller(insertion.getString("seller"));
-            ins.setId(insertion.getString("uniq_id"));
-
-            insertions.add(ins);
+            ins.setId(insertion.get("_id").toString());
+            */
+            insertions.add(insertion);
         }
         return insertions;
     }
 
-    public boolean findByInsertionId (String id) {
-
-        cursor = insertionColl.find(eq("uniq_id", id)).iterator();
-        return cursor.hasNext();
-    }
-
-    public boolean addInsertion(Insertion i) {
+    public void addInsertion(Insertion i) throws Exception {
 
         Document ins = Insertion.toDocument(i);
         insertionColl.insertOne(ins);
-        return true;
 
-    }
-
-    public ArrayList<Document> findAllOrders(Boolean choice, String username) {
-
-        AggregateIterable<Document> aggr;
-
-        if(choice) {
-             aggr = orderColl.aggregate(
-                    Arrays.asList(
-                            Aggregates.match(Filters.eq("buyer", username)),
-                            Aggregates.sort(Sorts.descending("timestamp"))
-                    )
-            );
-        } //cursor = orderColl.find(eq("buyer", username)).iterator();
-        else
-        {
-            aggr = orderColl.aggregate(
-                    Arrays.asList(
-                            Aggregates.match(Filters.eq("insertion.seller", username)),
-                            Aggregates.sort(Sorts.descending("timestamp"))
-                    )
-            );
-        }//cursor = orderColl.find(eq("insertion.seller", username)).iterator();
-
-        ArrayList<Document> find_orders = new ArrayList<>();
-
-        for (Document document : aggr)
-        {
-            find_orders.add(document);
-        }
-        return find_orders;
     }
 
     public void addReview(Review rev) {
@@ -711,7 +803,7 @@ public class ConnectionMongoDB{
 
         System.out.println("REVIEW: " + review);
         BasicDBObject query = new BasicDBObject();
-        query.put("username",rev.getSeller());
+        query.put("username", rev.getSeller());
 
         BasicDBObject push_data = new BasicDBObject("$push", new BasicDBObject("reviews", review));
 
@@ -721,120 +813,36 @@ public class ConnectionMongoDB{
     public void updateSellerRating(String seller) {
 
         Document d = userColl.find(eq("username", seller)).first();
-        List<Document> list;
-        list = d.getList("reviews", Document.class);
+        List<Document> list = d.getList("reviews", Document.class);
 
         Double avg;
         int sum = 0;
 
-        for (Document document : list) {
+        for (Document document : list)
             sum += document.getInteger("rating");
-        }
 
         avg = (double) sum / (double) list.size();
 
-        BasicDBObject newDocument = new BasicDBObject();
-        newDocument.put("rating", avg);
         // {$set: {"rating": avg}}
-        BasicDBObject updateObject = new BasicDBObject();
-        updateObject.put("$set", newDocument);
-        // condition (where field "reviews" exists)
-        BasicDBObject query = new BasicDBObject();
-        query.put("username", d.getString("username"));
+        Bson filter = eq("username", d.getString("username"));
+        Bson update = set("rating", avg);;
 
-        userColl.updateOne(query, updateObject);
+        userColl.findOneAndUpdate(filter, update);
     }
 
-    public void updateOrder(String timestamp) {
+    public void setInsertionReviewed(String timestamp) {
 
         BasicDBObject query = new BasicDBObject();
-        query.put("timestamp", timestamp);
+        query.put("username",Session.getLoggedUser().getUsername());
+        query.put("purchased.timestamp", timestamp);
+        BasicDBObject update = new BasicDBObject("$set", new BasicDBObject("purchased.$.reviewed", true));
+        userColl.findOneAndUpdate(query, update);
 
-        BasicDBObject set = new BasicDBObject("$set", new BasicDBObject("reviewed", true));
-        orderColl.findOneAndUpdate(query, set);
-    }
-
-    /* ********** BALANCE SECTION ********** */
-
-    public void addFundsToWallet(String username, String id_code) {
-
-        Document code = adminColl.find(eq("code", id_code)).first();
-
-        if (code == null || Objects.equals(code.getString("assigned"), "T")) {
-            Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
-            return;
-        }
-
-        double credit = code.getInteger("credit");
-
-        Document queryUser = new Document().append("username",  username);
-        Document queryAdmin = new Document().append("code",  id_code);
-
-        Document user = userColl.find(eq("username", username)).first();
-
-        double new_balance = user.getDouble("balance") + credit;
-
-        Bson updatesAdmin = Updates.combine(
-                Updates.set("assigned", "T")
-        );
-
-        Bson updatesUser = Updates.combine(
-                Updates.set("balance", new_balance)
-        );
-
-        UpdateOptions options = new UpdateOptions().upsert(true);
-
-        try {
-            UpdateResult resultUser = userColl.updateOne(queryUser, updatesUser, options);
-            UpdateResult resultAdmin = adminColl.updateOne(queryAdmin, updatesAdmin, options);
-            System.out.println("Modified document count: " + resultUser.getModifiedCount());
-            System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
-            System.out.println("Modified document count: " + resultAdmin.getModifiedCount());
-            System.out.println("Upserted id: " + resultAdmin.getUpsertedId()); // only contains a value when an upsert is performed
-        } catch (MongoException me) {
-            System.err.println("Unable to update due to an error: " + me);
-            return;
-        }
-
-        Utility.infoBox("Deposit of " + code.getInteger("credit") + "€ euros successfully executed", "Success", "Deposit done!");
-        deleteCode(code.getString("_id"));
-    }
-
-    public double updateBalance(String username) {
-
-        Document user = userColl.find(eq("username", username)).first();
-
-        double balance = user.getDouble("balance");
-
-        System.out.println("NEW BALANCE: " + String.format("%.2f", balance));
-
-        return balance;
-    }
-
-    public List<Document> getReviewsByUser(String username) {
-
-        List<Document> list = null;
-
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put("username", username);
-
-        try (MongoCursor<Document> cursor = userColl.find(whereQuery).iterator()) {
-            while (cursor.hasNext()) {
-                Document doc = cursor.next();
-                if (doc.get("reviews") == null)
-                    return new ArrayList<>();
-                list = (List<Document>) doc.get("reviews");
-
-                Document d = list.get(0);
-                System.out.println(d.getString("reviewer")); // display specific field
-            }
-        }
-        return list;
     }
 
     public boolean deleteInsertionMongo(String id) {
 
-        Bson query = eq("uniq_id", id);
+        Bson query = eq("_id", new ObjectId(id));
 
         try {
             DeleteResult result = insertionColl.deleteOne(query);
@@ -845,12 +853,92 @@ public class ConnectionMongoDB{
         }
     }
 
+    /* ************************* BALANCE SECTION ************************* */
+
+    public void addFundsToWallet(String id_code) {
+
+        Document code;
+
+        code = codeColl.find(eq("code", id_code)).first();
+        if (code == null) {
+            Utility.infoBox("The code that you have inserted is not valid.", "Error", "Code doesn't exist!");
+            return;
+        }
+
+        double creditToAdd = code.getInteger("credit");
+
+        try {
+            updateBalance(Session.getLoggedUser().getUsername(), creditToAdd, '+');
+            Utility.infoBox("Deposit of " + code.getInteger("credit") + "€ euros successfully executed", "Success", "Deposit done!");
+            deleteCode(code.getString("_id"));
+        } catch (MongoException me) {
+            System.err.println("Unable to update due to an error: " + me);
+        }
+    }
+
+    public boolean updateBalance(String username, double credit, char c) {
+
+        double updated;
+        Bson query = eq("username", username);
+        Bson update = null;
+
+        switch(c) {
+            case '+':
+                update = inc("credit", credit);
+                break;
+            case '-':
+                update = inc("credit", -credit);
+                break;
+            default:
+                Utility.printTerminal("Operation not allowed.");
+                break;
+        }
+
+        //update balance
+        try {
+            Document d = balanceColl.findOneAndUpdate(query, update);
+            updated = d.getDouble("credit");
+            Balance.balance.setCredit(updated);
+            return true;
+        } catch (MongoException me) {
+            System.err.println("Unable to update " + username + "'s balance: " + me);
+            return false;
+        }
+    }
+
+    public double getBalance() {
+
+        FindIterable<Document> cursor = null;
+        try {
+            Bson filter = Filters.eq("username", Session.getLoggedUser().getUsername());
+            Bson projection = fields(include("credit"), excludeId());
+            cursor = balanceColl.find(filter).projection(projection);
+        } catch (MongoException me) {
+            System.err.println("Unable to get balance from db: " + me);
+        }
+        return cursor.first().getDouble("credit");
+    }
+
+    public boolean insertBalance(Balance b) {
+
+        try {
+            balanceColl.insertOne(b.toDocument());
+            return true;
+        } catch (MongoException me) {
+            System.err.println("Unable to add new document in balance collection: " + me);
+            return false;
+        }
+
+    }
+
+    /* ************************* CODE SECTION ************************* */
+
     private void deleteCode(String id) {
 
         Bson query = eq("_id", id);
 
         try {
-            DeleteResult result = adminColl.deleteOne(query);
+            DeleteResult result = codeColl.deleteOne(query);
             System.out.println("Deleted document count: " + result.getDeletedCount());
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
@@ -858,52 +946,4 @@ public class ConnectionMongoDB{
 
     }
 
-    public ArrayList<Document> findTopRatedUsersByCountry(String country) {
-
-        ArrayList<Document> list = new ArrayList<>();
-
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put("country", country);
-
-        try (MongoCursor<Document> cursor = userColl.find(whereQuery).iterator()) {
-            while (cursor.hasNext()) {
-                Document doc = cursor.next();
-                if (doc.get("rating") == null)
-                    continue;
-                list.add(doc);
-            }
-        }
-        return list;
-
-    }
-
-    public void deleteUserMongo(String username) {
-
-        Bson query = eq("username", username);
-
-        try {
-            userColl.deleteOne(query);
-        } catch (MongoException me) {
-            System.err.println("Unable to delete due to an error: " + me);
-        }
-    }
-
-    public void submitNewProfileImg(String url, String user) {
-
-        Document queryUser = new Document().append("username",  user);
-
-        Bson updatesUser = Updates.combine(
-                Updates.set("img_profile", url)
-        );
-
-        UpdateOptions options = new UpdateOptions().upsert(true);
-
-        try {
-            UpdateResult resultUser = userColl.updateOne(queryUser, updatesUser, options);
-            System.out.println("Modified document count: " + resultUser.getModifiedCount());
-            System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
-        } catch (MongoException me) {
-            System.err.println("Unable to update due to an error: " + me);
-        }
-    }
 }

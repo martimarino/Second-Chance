@@ -2,26 +2,25 @@ package main.java.it.unipi.dii.largescale.secondchance.entity;
 
 public class Order {
 
-    String buyer;
+    String user;
     String timestamp;
     Insertion insertion;
     boolean reviewed;
 
-    public Order(String buyer, String timestamp, Insertion insertion){
+    public Order(String user, String timestamp, Insertion insertion){
 
-        this.buyer = buyer;
+        this.user = user;
         this.timestamp = timestamp;
         this.insertion = insertion;
         this.reviewed = false;
     }
 
-
-    public String getBuyer() {
-        return buyer;
+    public String getUser() {
+        return user;
     }
 
-    public void setBuyer(String buyer) {
-        this.buyer = buyer;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getTimestamp() {
@@ -43,7 +42,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                ", buyer='" + buyer + '\'' +
+                ", buyer='" + user + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 ", insertion='" + insertion + '\'' +
                 '}';

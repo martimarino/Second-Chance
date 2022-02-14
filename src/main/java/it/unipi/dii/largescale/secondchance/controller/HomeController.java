@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Session;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
@@ -22,63 +23,84 @@ public class HomeController {
     public AnchorPane anchorRoot;
 
     public BorderPane viralInsertions;
-    public Pane nextViralButton, prevViralButton;
-    HBox viralHBox;
-    ArrayList<Document> viralList;
-    int scrollViralPage;
-
     public BorderPane feed;
+
+    public Pane nextViralButton, prevViralButton;
     public Pane prevFeedButton, nextFeedButton;
-    HBox feedBox;
-    ArrayList<Document> feedList;
+
+    public HBox viralHBox;
+    public HBox feedBox;
+
+    public ArrayList<Document> viralList;
+    public ArrayList<Document> feedList;
     public ArrayList<String> followedFromNeo;
+
+    int scrollViralPage;
     int scrollFeedPage;
 
-    //general paramenters
-    int k = 12;                     //how many to show
-    int nPage = 3;                  //how many per page
+    //general parameters
+    int numInsertions = 12;         // How many to show
+    int nPage = 3;                  // How many per page
+    String type_img;
 
     public void initialize() {
 
         // viral
-        viralList = ConnectionMongoDB.connMongo.findViralInsertions(k);
+        scrollViralPage = 0;
+
+        viralList = ConnectionMongoDB.connMongo.findViralInsertions(numInsertions);
+
         prevViralButton.setDisable(true);
         prevViralButton.setVisible(false);
+
         viralHBox = new HBox();
         viralHBox.setSpacing(10);
+
         viralInsertions.setCenter(viralHBox);
-        scrollViralPage = 0;
+
         Utility.printTerminal("Size of viral: " + viralList.size());
+        type_img = "insertion";
+
         showViralInsertions();
 
         // feed
+        scrollFeedPage = 0;
+
         feedBox = new HBox();
         feedBox.setSpacing(10);
+
         feed.setCenter(feedBox);
-        scrollFeedPage = 0;
+
         prevFeedButton.setDisable(true);
         prevFeedButton.setVisible(false);
 
         followedFromNeo = new ArrayList<>();
-        followedFromNeo = ConnectionNeo4jDB.connNeo.getFollowedInsertions(Session.getLogUser().getUsername(), k);
+        followedFromNeo = ConnectionNeo4jDB.connNeo.getFollowedInsertions(Session.getLoggedUser().getUsername(), numInsertions);
+
         feedList = ConnectionMongoDB.connMongo.followedUserInsertions(followedFromNeo);
 
-        if (followedFromNeo.size() < k) {
-            ArrayList<Document> topK = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k - followedFromNeo.size(), "clothing");
+        if (followedFromNeo.size() < numInsertions) {
+            ArrayList<Document> topK = ConnectionMongoDB.connMongo.findTopKViewedInsertion(numInsertions - followedFromNeo.size(), "clothing");
 
-            for (int i = 0; i < topK.size(); i++) {
-                feedList.add(topK.get(i));
+            for (Document document : topK) {
+                feedList.add(document);
                 System.out.println("TOPK: " + feedList);
             }
         }
         Utility.printTerminal("Size of feed: " + feedList.size());
         showFeed();
-
     }
 
     /* ********* INSERTION DETAILS ********* */
 
     public void showInsertionPage(String uniq_id) throws IOException {
+
+        Insertion insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+
+        if (insertion == null) {
+            Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
+            return;
+        }
 
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Image image = new Image(imageStream);
@@ -89,7 +111,7 @@ public class HomeController {
             stage.setTitle("Insertion details");
             stage.setScene(new Scene(loader.load()));
             InsertionController controller = loader.getController();
-            controller.initialize(uniq_id);
+            controller.initialize(insertion);
 
             stage.show();
         }
@@ -99,18 +121,18 @@ public class HomeController {
 
     private void addInsertionsViral() {
 
-        String uniq_id = viralList.get(scrollViralPage).getString("uniq_id");
+        String uniq_id = viralList.get(scrollViralPage).get("_id").toString();
 
         ImageView image;
         Label user = new Label("User: " + viralList.get(scrollViralPage).getString("seller"));
-        image = Utility.getGoodImage(viralList.get(scrollViralPage).getString("image_url"), 150);
+        image = Utility.getGoodImage(viralList.get(scrollViralPage).getString("image_url"), 150, type_img);
         Label price = new Label(viralList.get(scrollViralPage).getDouble("price") + "€");
         Label status = new Label("Status: " + viralList.get(scrollViralPage).getString("status"));
         Label interested = new Label("Interested: " + viralList.get(scrollViralPage).getInteger("interested"));
         System.out.println(viralList.get(scrollViralPage).getString("seller"));
 
         VBox viral = new VBox(user, image, price, status, interested);
-        viral.setStyle("-fx-background-color: white; -fx-padding: 8");
+        viral.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
         viral.setSpacing(10);
 
         viralHBox.getChildren().add(viral);
@@ -119,7 +141,7 @@ public class HomeController {
                     try {
                         System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
-                        updateInsertionview(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -127,13 +149,6 @@ public class HomeController {
         );
         scrollViralPage++;
         Utility.printTerminal("SCROLL VIRAL PAGE: " + scrollViralPage);
-    }
-
-
-    public static void updateInsertionview(String uniq_id) {
-
-        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
-
     }
 
     private void showViralInsertions() {
@@ -160,6 +175,7 @@ public class HomeController {
     /* ********* FEED SECTION ********* */
 
     public void showFeed() {
+
         System.out.println("SCROLL OUT: " + scrollFeedPage);
         for (int i = 0; i < nPage && i < feedList.size(); i++) {
             System.out.println("SCROLL IN: " + scrollFeedPage + "i: " + i);
@@ -185,18 +201,18 @@ public class HomeController {
     private void addFeedInsertions() {
 
         ImageView image;
-        String uniq_id = feedList.get(scrollFeedPage).getString("uniq_id");
+        String uniq_id = feedList.get(scrollFeedPage).get("_id").toString();
+        Utility.printTerminal("UNIQ ID: " + uniq_id);
 
         Label user = new Label("User: " + feedList.get(scrollFeedPage).getString("seller"));
         Utility.printTerminal(feedList.toString());
-        image = Utility.getGoodImage(feedList.get(scrollFeedPage).getString("image_url"), 150);
-
+        image = Utility.getGoodImage(feedList.get(scrollFeedPage).getString("image_url"), 150, type_img);
         Label price = new Label(feedList.get(scrollFeedPage).getDouble("price") + "€");
         Label status = new Label("Status: " + feedList.get(scrollFeedPage).getString("status"));
         Label interested = new Label("Interested: " + feedList.get(scrollFeedPage).getInteger("interested"));
 
         VBox feed = new VBox(user, image, price, status, interested);
-        feed.setStyle("-fx-background-color: white; -fx-padding: 8");
+        feed.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
         feed.setSpacing(10);
 
         feedBox.getChildren().add(feed);
@@ -205,7 +221,7 @@ public class HomeController {
                     try {
                         System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
-                        updateInsertionview(uniq_id);
+                        ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

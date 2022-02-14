@@ -1,0 +1,18 @@
+.button-follow {
+    -fx-background-color:  rgb(238, 204, 255);
+    -fx-background-radius: 30;
+    -fx-text-fill: rgb(255,255,255);
+}
+
+.hb-follow {
+    -fx-background-color: rgb(230, 230, 255);
+    -fx-padding: 7;
+}
+
+.vbox-follow {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-max-height: 80;
+    -fx-min-width: 330;
+    -fx-max-width: 400;
+}

@@ -17,76 +17,90 @@ import org.bson.Document;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 
 public class SearchPostController {
 
     private String id;
 
-    @FXML private TextField postIdField;
-    @FXML private TextField sellerIdField;
+    @FXML private TextField countryField;
+    @FXML private TextField sellerField;
+    @FXML private TextField categoryField;
 
-    @FXML private Button btnDeletePost;
-
-    @FXML private Text category;
-    @FXML private Text price;
-    @FXML private Text views;
-
-    private String idPost;
-    private String sellerIdPost;
     private Document found;
 
+    private final String[] countries = new String[]{"Italy", "Canada", "Spain", "Austria", "Germany", "France", "Brazil", "Netherlands", "Poland", "Ireland", "United Kingdom (Great Britain)"};
+    private final String[] categories = new String[]{"clothing","accessories", "bags","beauty", "house", "jewelry", "kids", "shoes"};
+
     public void initialize(){
-        btnDeletePost.setDisable(true);
+
+        sellerField.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("text changed from " + oldValue + " to " + newValue);
+
+            if (!Objects.equals(newValue, "")) {
+                countryField.setText("");
+                categoryField.setText("");
+            }
+        });
+
+        countryField.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("text changed from " + oldValue + " to " + newValue);
+
+            if (!Objects.equals(newValue, ""))
+                sellerField.setText("");
+
+        });
+
+        categoryField.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("text changed from " + oldValue + " to " + newValue);
+
+            if (!Objects.equals(newValue, ""))
+                sellerField.setText("");
+
+        });
     }
 
     public void searchPost() throws IOException {
 
-        idPost = postIdField.getText();
-        sellerIdPost = sellerIdField.getText();
+        String country = countryField.getText();
+        String seller = sellerField.getText();
+        String category = categoryField.getText();
 
-        if (idPost != null && !idPost.trim().isEmpty())
-            found = ConnectionMongoDB.connMongo.verifyInsertionInDB(idPost, true);
-        else
-            found = ConnectionMongoDB.connMongo.verifyInsertionInDB(sellerIdPost, false);
+        if (Objects.equals(seller, "")) {
+            if (!Arrays.asList(categories).contains(category)) {
+                Utility.infoBox("Please insert a valid category", "Error", "Category not found!");
+                return;
+            }
 
-        if (found == null || ((idPost == null && idPost.trim().isEmpty()) && (id != null && id.trim().isEmpty()))) {
-            Utility.infoBox("There are not insertion.",
-                            "Error!",
-                            "No insertions found!");
-        } else {
-
-
-            if (idPost != null && !idPost.trim().isEmpty()) {
-                // cerco solo un'inserzione perché è stato inserito solo un codice
-                Insertion ins = ConnectionMongoDB.connMongo.findInsertionDetails(found.getString("uniq_id"));
-                System.out.println("Post: " + ins.getDescription());
-
-                category.setText(ins.getCategory());
-                price.setText(Double.toString(ins.getPrice()));
-                views.setText(Integer.toString(ins.getViews()));
-
-                btnDeletePost.setDisable(false);
-            } else {
-                // cerco un'array di inserzioni perché è stato inserito un seller_id
-
-                try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
-                    Image image = new Image(imageStream);
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(InsertionListLikedController.class.getResource("/FXML/InsertionSearchedByAdmin.fxml"));
-                    Stage stage = new Stage(StageStyle.DECORATED);
-                    stage.getIcons().add(image);
-                    stage.setTitle("Insertions you searched");
-                    stage.setScene(new Scene(loader.load()));
-
-                    InsertionAdminSearchController controller = loader.getController();
-                    controller.initialize(found.getString("seller"));
-
-                    stage.show();
-                }
-
+            if (!Arrays.asList(countries).contains(country)) {
+                Utility.infoBox("Please insert a valid country", "Error", "Country not found!");
+                return;
             }
         }
+
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(InsertionListController.class.getResource("/FXML/InsertionSearchedByAdmin.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setTitle("Insertions you searched");
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/InsertionAdminSearchStyle.css")).toExternalForm());
+            stage.setScene(scene);
+
+            InsertionAdminSearchController controller = loader.getController();
+            if (!Objects.equals(country, "") && !Objects.equals(category, "") && Objects.equals(seller, ""))
+                controller.initialize("",category, country);
+            else
+                controller.initialize(seller,"", "");
+
+            stage.show();
+        }
+
     }
 
     public void deletePost(String id) {
@@ -101,7 +115,11 @@ public class SearchPostController {
         {
             Utility.printTerminal("Error deleting insertion Neo4j");
             Utility.infoBox("Error deleting insertion", "Error", "Error deleting insertion");
-            ConnectionMongoDB.connMongo.addInsertion(Insertion.toInsertion(found));
+            try {
+                ConnectionMongoDB.connMongo.addInsertion(Insertion.toInsertion(found));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         }
 
@@ -110,8 +128,8 @@ public class SearchPostController {
 
     public void deleteOnePost() {
 
-        ConnectionMongoDB.connMongo.deleteInsertionMongo(found.getString("uniq_id"));
-        ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(found.getString("uniq_id"));
+        ConnectionMongoDB.connMongo.deleteInsertionMongo(found.get("_id").toString());
+        ConnectionNeo4jDB.connNeo.deleteInsertionNeo4J(found.get("_id").toString());
 
         System.out.println("Deleted post and relation in MongoDB and Neo4J!");
     }

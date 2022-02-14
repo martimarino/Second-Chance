@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -24,6 +25,18 @@ public class SignInController {
 
     @FXML private TextField us;
     @FXML private PasswordField pw;
+
+    public void initialize() {
+        pw.setOnKeyPressed( event -> {
+            if( event.getCode() == KeyCode.ENTER ) {
+                try {
+                    login();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } );
+    }
 
     public void ShowSignUp() throws IOException {
 
@@ -52,28 +65,27 @@ public class SignInController {
         String encrypted = CryptWithMD5.cryptWithMD5(password);
         Utility.printTerminal("PASSWORD: " + password + "\nENCRYPTED: " + encrypted);
         Session session;
-        Boolean isAdmin = false;
+        boolean isAdmin = false;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
             Utility.printTerminal("Value: " + us.getText() + "\nValue: " + pw.getText());
-
+            boolean logged = ConnectionMongoDB.connMongo.checkCredentials(username, encrypted);
+            if (!logged) {
+                Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
+                //clear TextField
+                us.setText("");
+                pw.setText("");
+                return;
+            }
             if (us.getText().equals("admin")) {
                 isAdmin = true;
                 Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
                 System.out.println("USER: " + user);
                 session = Session.getInstance();
                 session.setLogUser(user, isAdmin);
-                if(ConnectionMongoDB.connMongo.userAlreadyPresent(username, encrypted))
+                if(ConnectionMongoDB.connMongo.checkCredentials(username, encrypted))
                     ShowAdminPanel();
             }else {
-                boolean logged = ConnectionMongoDB.connMongo.userAlreadyPresent(username, encrypted);
-                if (!logged) {
-                    Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
-                    //clear TextField
-                    us.setText("");
-                    pw.setText("");
-                    return;
-                }
                 session = Session.getInstance();
                 Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
                 session.setLogUser(user, isAdmin);

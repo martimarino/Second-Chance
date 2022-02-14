@@ -1,0 +1,21 @@
+.vbox-info {
+    -fx-padding: 0 0 0 50;
+}
+
+.hbox-insertion {
+    -fx-padding: 20;
+    -fx-background-color: rgb(230, 230, 255);
+}
+
+.vbox-insertion {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-max-height: 180;
+    -fx-min-width: 530;
+    -fx-max-width: 600;
+}
+
+.button-delete {
+     -fx-padding: 0 20px 0 20px;
+     -fx-background-color: rgb(206, 153, 255);
+}
