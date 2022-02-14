@@ -1,0 +1,442 @@
+Index: src/main/resources/FXML/Home.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.text.*?>\r\n<?import javafx.scene.control.*?>\r\n<?import javafx.scene.layout.*?>\r\n\r\n<AnchorPane xmlns=\"http://javafx.com/javafx/8\" xmlns:fx=\"http://javafx.com/fxml/1\"\r\n            fx:controller=\"main.java.controller.HomeController\"\r\n            prefHeight=\"400.0\" prefWidth=\"600.0\">\r\n    <children>\r\n        <Text layoutX=\"300.0\" layoutY=\"137.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Username\" />\r\n        <Text layoutX=\"300.0\" layoutY=\"204.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Password\" />\r\n    </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/FXML/Home.fxml b/src/main/resources/FXML/Home.fxml
+--- a/src/main/resources/FXML/Home.fxml	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/src/main/resources/FXML/Home.fxml	(date 1640789454050)
+@@ -4,11 +4,18 @@
+ <?import javafx.scene.control.*?>
+ <?import javafx.scene.layout.*?>
+ 
+-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+-            fx:controller="main.java.controller.HomeController"
+-            prefHeight="400.0" prefWidth="600.0">
++<?import javafx.geometry.Insets?>
++
++<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
++            minWidth="-Infinity" prefHeight="775.0" prefWidth="940.0"
++            style="-fx-background-color: rgb(230, 230, 255); -fx-border-color: blue;" xmlns="http://javafx.com/javafx/8"
++            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.HomeController">
+     <children>
+         <Text layoutX="300.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+         <Text layoutX="300.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
++        <ScrollPane>
++            <Text layoutX="300.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
++            <Text layoutX="300.0" layoutY="404.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
++        </ScrollPane>
+     </children>
+ </AnchorPane>
+Index: src/main/java/controller/SignUpController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.controller;\r\n\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.control.TextField;\r\nimport javafx.scene.input.MouseEvent;\r\nimport javafx.scene.layout.AnchorPane;\r\nimport javafx.scene.text.Text;\r\nimport javafx.stage.Stage;\r\nimport main.java.connection.*;\r\n\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.net.URL;\r\n\r\npublic class SignUpController {\r\n\r\n    public AnchorPane anchorRoot;\r\n    public Text SignIn;\r\n    @FXML private TextField us;\r\n    @FXML private TextField pw;\r\n\r\n\r\n    public void ShowSignIn(MouseEvent mouseEvent) throws IOException {\r\n\r\n        URL url = new File(\"src/main/resources/FXML/SignIn.fxml\").toURI().toURL();\r\n        Parent root = FXMLLoader.load(url);\r\n\r\n        Stage stage = (Stage) SignIn.getScene().getWindow();\r\n        stage.setScene(new Scene(root));\r\n        stage.setResizable(false);\r\n        stage.show();\r\n\r\n    }\r\n\r\n    private void initialize() {\r\n\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/SignUpController.java b/src/main/java/controller/SignUpController.java
+--- a/src/main/java/controller/SignUpController.java	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/src/main/java/controller/SignUpController.java	(date 1640778758371)
+@@ -10,7 +10,9 @@
+ import javafx.scene.layout.AnchorPane;
+ import javafx.scene.text.Text;
+ import javafx.stage.Stage;
++import main.java.GUI.SecondChanceGUI;
+ import main.java.connection.*;
++import main.java.entity.User;
+ 
+ import java.io.File;
+ import java.io.IOException;
+@@ -20,11 +22,9 @@
+ 
+     public AnchorPane anchorRoot;
+     public Text SignIn;
+-    @FXML private TextField us;
+-    @FXML private TextField pw;
++    @FXML private TextField us, pw, em, nm, co, ci, ad;
+ 
+-
+-    public void ShowSignIn(MouseEvent mouseEvent) throws IOException {
++    public void ShowSignIn() throws IOException {
+ 
+         URL url = new File("src/main/resources/FXML/SignIn.fxml").toURI().toURL();
+         Parent root = FXMLLoader.load(url);
+@@ -40,4 +40,34 @@
+ 
+     }
+ 
++
++    public void registration(ActionEvent actionEvent) throws IOException {
++
++        if(!us.getText().isEmpty() && !pw.getText().isEmpty() && !em.getText().isEmpty()
++            && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getText().isEmpty()
++            && !ad.getText().isEmpty()) {
++
++            User u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), 'N');
++            System.out.println(u.toString());
++
++            ConnectionMongoDB conn = new ConnectionMongoDB();
++            if(conn.registerUser(u)) {
++
++                //clear TextField
++                us.setText("");
++                pw.setText("");
++                em.setText("");
++                nm.setText("");
++                ci.setText("");
++                co.setText("");
++                ad.setText("");
++
++                ShowSignIn();
++                SecondChanceGUI.infoBox("Now you can login!", "Confirmed", "Registration completed with success!");
++            }
++        } else {
++            SecondChanceGUI.infoBox("Please, fill all information.", "Error", "Empty fields!");
++        }
++
++    }
+ }
+\ No newline at end of file
+Index: src/main/java/GUI/SecondChanceGUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.GUI;\r\n\r\nimport javafx.application.Application;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.stage.Stage;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.Parent;\r\n\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.net.URL;\r\n\r\npublic class SecondChanceGUI extends Application {\r\n\r\n    public static void main(String[] args) {\r\n        launch(args);\r\n    }\r\n\r\n    @Override\r\n    public void start(Stage primaryStage) throws IOException {\r\n\r\n        URL url = new File(\"src/main/resources/FXML/SignIn.fxml\").toURI().toURL();\r\n        Parent root = FXMLLoader.load(url);\r\n\r\n        primaryStage.setTitle(\"SecondChance\");\r\n        primaryStage.setScene(new Scene(root));\r\n        primaryStage.setResizable(false);\r\n        primaryStage.show();\r\n\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/GUI/SecondChanceGUI.java b/src/main/java/GUI/SecondChanceGUI.java
+--- a/src/main/java/GUI/SecondChanceGUI.java	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/src/main/java/GUI/SecondChanceGUI.java	(date 1640776899120)
+@@ -10,6 +10,10 @@
+ import java.io.IOException;
+ import java.net.URL;
+ 
++import javafx.scene.control.Alert;
++import javafx.scene.control.Alert.AlertType;
++import javafx.application.Platform;
++
+ public class SecondChanceGUI extends Application {
+ 
+     public static void main(String[] args) {
+@@ -29,4 +33,13 @@
+ 
+     }
+ 
++    public static void infoBox(String infoMessage, String titleBar, String headerMessage)
++    {
++        Alert alert = new Alert(AlertType.INFORMATION);
++        alert.setTitle(titleBar);
++        alert.setHeaderText(headerMessage);
++        alert.setContentText(infoMessage);
++        alert.showAndWait();
++    }
++
+ }
+Index: src/main/java/connection/ConnectionMongoDB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.connection;\r\n\r\nimport com.mongodb.client.*;\r\nimport main.java.controller.SignInController;\r\nimport org.bson.Document;\r\nimport static com.mongodb.client.model.Filters.*;\r\n\r\nimport com.mongodb.ConnectionString;\r\n\r\nimport java.io.IOException;\r\n\r\npublic class ConnectionMongoDB{\r\n\r\n    private MongoClient mongoClient;\r\n    private MongoDatabase db;\r\n\r\n    public void openConnection(){\r\n        ConnectionString uri = new ConnectionString(\"mongodb://localhost:27017\");\r\n        mongoClient = MongoClients.create(uri);\r\n        db = mongoClient.getDatabase(\"project\");\r\n    }\r\n\r\n    public void closeConnection() {\r\n        mongoClient.close();\r\n    }\r\n\r\n    public boolean logInUser(String username, String password) throws IOException {\r\n\r\n        this.openConnection();\r\n        MongoCollection<Document> myColl = db.getCollection(\"user\");\r\n        MongoCursor<Document> cursor  = myColl.find(and(eq(\"username\", username),\r\n                eq(\"password\", password))).iterator();\r\n        if(!cursor.hasNext()) {\r\n            System.out.println(\"Username or Password wrong, try again\");\r\n            this.closeConnection();\r\n            return false;\r\n        } else{\r\n            System.out.println(\"FOUND!!!!\");\r\n        }\r\n        this.closeConnection();\r\n        return true;\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/connection/ConnectionMongoDB.java b/src/main/java/connection/ConnectionMongoDB.java
+--- a/src/main/java/connection/ConnectionMongoDB.java	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/src/main/java/connection/ConnectionMongoDB.java	(date 1640787638465)
+@@ -1,7 +1,9 @@
+ package main.java.connection;
+ 
+ import com.mongodb.client.*;
++import main.java.GUI.SecondChanceGUI;
+ import main.java.controller.SignInController;
++import main.java.entity.User;
+ import org.bson.Document;
+ import static com.mongodb.client.model.Filters.*;
+ 
+@@ -23,7 +25,7 @@
+     public void closeConnection() {
+         mongoClient.close();
+     }
+-
++/*
+     public boolean logInUser(String username, String password) throws IOException {
+ 
+         this.openConnection();
+@@ -39,6 +41,52 @@
+         }
+         this.closeConnection();
+         return true;
++    }*/
++
++    public boolean logInUser(String username, String password) throws IOException {
++
++        this.openConnection();
++        if(checkUserAlreadyPresent(username, password)) {
++            System.out.println("Username or Password wrong, try again");
++            this.closeConnection();
++            return false;
++        } else{
++            System.out.println("FOUND!!!!");
++        }
++        this.closeConnection();
++        return true;
++    }
++
++    public boolean registerUser(User u) {
++
++        this.openConnection();
++
++        if(checkUserAlreadyPresent(u.getUsername(), u.getPassword())) {
++            SecondChanceGUI.infoBox("Please, choose another username and try again.", "Error", "Username already used!");
++            return false;
++        }
++
++        MongoCollection<Document> myColl = db.getCollection("user");
++        Document user = new Document("address", u.getAddress())
++                .append("city", u.getCity())
++                .append("country", u.getCountry())
++                .append("email", u.getEmail())
++                .append("name", u.getName())
++                .append("password", u.getPassword())
++                .append("username", u.getUsername())
++                .append("suspended", u.getSuspended());
++        myColl.insertOne(user);
++        this.closeConnection();
++        return true;
++    }
++
++    private boolean checkUserAlreadyPresent(String username, String password) {
++
++        MongoCollection<Document> myColl = db.getCollection("user");
++        MongoCursor<Document> cursor  = myColl.find(and(eq("username", username),
++                eq("password", password))).iterator();
++        if(!cursor.hasNext())
++            return false;
++        return true;
+     }
+-
+ }
+\ No newline at end of file
+Index: src/main/resources/FXML/SignUp.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.paint.*?>\r\n<?import javafx.scene.effect.*?>\r\n<?import java.lang.*?>\r\n<?import java.net.*?>\r\n<?import javafx.geometry.*?>\r\n<?import javafx.scene.control.*?>\r\n<?import javafx.scene.layout.*?>\r\n<?import javafx.scene.text.*?>\r\n\r\n<AnchorPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"775.0\" prefWidth=\"940.0\" style=\"-fx-background-color: rgb(230, 230, 255);\" xmlns=\"http://javafx.com/javafx/8\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"main.java.controller.SignUpController\">\r\n   <children>\r\n      <Text fill=\"#2582bf\" layoutX=\"321.0\" layoutY=\"155.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Signup to join SecondChance!\">\r\n         <font>\r\n            <Font size=\"25.0\" />\r\n         </font>\r\n      </Text>\r\n      <TextField layoutX=\"269.0\" layoutY=\"264.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"307.0\" layoutY=\"238.0\" text=\"Username:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <Label layoutX=\"309.0\" layoutY=\"321.0\" text=\"Password:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"269.0\" layoutY=\"340.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"328.0\" layoutY=\"473.0\" text=\"Email:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"269.0\" layoutY=\"414.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <TextField layoutX=\"270.0\" layoutY=\"492.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"326.0\" layoutY=\"395.0\" text=\"Name:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"573.0\" layoutY=\"264.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"624.0\" layoutY=\"238.0\" text=\"Country:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <Label layoutX=\"636.0\" layoutY=\"320.0\" text=\"City:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"573.0\" layoutY=\"340.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <TextField layoutX=\"573.0\" layoutY=\"414.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"624.0\" layoutY=\"395.0\" text=\"Address:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <Button layoutX=\"410.0\" layoutY=\"574.0\" mnemonicParsing=\"false\" prefHeight=\"25.0\" prefWidth=\"155.0\" style=\"-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);\" text=\"Sign up\" />\r\n      <Text fx:id=\"SignIn\" fill=\"#2582bf\" layoutX=\"364.0\" layoutY=\"649.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"You are already registered?\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Text>\r\n      <Button fx:id=\"signInShower\" layoutX=\"539.0\" layoutY=\"631.0\" mnemonicParsing=\"false\" onMouseClicked=\"#ShowSignIn\" style=\"-fx-background-color: none;\" text=\"Click here\" textFill=\"#2582bf\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/FXML/SignUp.fxml b/src/main/resources/FXML/SignUp.fxml
+--- a/src/main/resources/FXML/SignUp.fxml	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/src/main/resources/FXML/SignUp.fxml	(date 1640717194258)
+@@ -16,49 +16,49 @@
+             <Font size="25.0" />
+          </font>
+       </Text>
+-      <TextField layoutX="269.0" layoutY="264.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="307.0" layoutY="238.0" text="Username:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
++      <TextField fx:id="us" layoutX="269.0" layoutY="264.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="309.0" layoutY="321.0" text="Password:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="269.0" layoutY="340.0" style="-fx-background-radius: 5;" />
++      <TextField fx:id="pw" layoutX="269.0" layoutY="340.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="328.0" layoutY="473.0" text="Email:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="269.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+-      <TextField layoutX="270.0" layoutY="492.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+-      <Label layoutX="326.0" layoutY="395.0" text="Name:">
++      <TextField fx:id="em" layoutX="269.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <Label layoutX="326.0" layoutY="395.0" text="Name and Surname:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="573.0" layoutY="264.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <TextField fx:id="nm" layoutX="270.0" layoutY="492.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="624.0" layoutY="238.0" text="Country:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
++      <TextField fx:id="co" layoutX="573.0" layoutY="264.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="636.0" layoutY="320.0" text="City:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="573.0" layoutY="340.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+-      <TextField layoutX="573.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <TextField fx:id="ci" layoutX="573.0" layoutY="340.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="624.0" layoutY="395.0" text="Address:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <Button layoutX="410.0" layoutY="574.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign up" />
++      <TextField fx:id="ad" layoutX="573.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <Button layoutX="410.0" layoutY="574.0" onAction="#registration" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign up" />
+       <Text fx:id="SignIn" fill="#2582bf" layoutX="364.0" layoutY="649.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are already registered?">
+          <font>
+             <Font size="13.0" />
+Index: src/main/resources/FXML/SignIn.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import java.lang.*?>\r\n<?import javafx.scene.text.*?>\r\n<?import javafx.scene.control.*?>\r\n<?import javafx.scene.layout.*?>\r\n\r\n<AnchorPane fx:id=\"anchorRoot\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"400.0\" prefWidth=\"600.0\" style=\"-fx-background-color: rgb(230, 230, 255);\" xmlns=\"http://javafx.com/javafx/8\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"main.java.controller.SignInController\">\r\n   <children>\r\n      <Text fill=\"#2582bf\" layoutX=\"165.0\" layoutY=\"75.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Welcome to SecondChance \">\r\n         <font>\r\n            <Font size=\"24.0\" />\r\n         </font>\r\n      </Text>\r\n      <Text layoutX=\"287.0\" layoutY=\"137.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Username\" />\r\n      <Text layoutX=\"289.0\" layoutY=\"202.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Password\" />\r\n      <TextField fx:id=\"us\" layoutX=\"239.0\" layoutY=\"147.0\" style=\"-fx-background-radius: 5;\" />\r\n      <TextField fx:id=\"pw\" layoutX=\"239.0\" layoutY=\"209.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Button fx:id=\"SignIn\" layoutX=\"280.0\" layoutY=\"254.0\" mnemonicParsing=\"false\" onAction=\"#login\" prefHeight=\"25.0\" prefWidth=\"68.0\" style=\"-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);\" text=\"Sign in\" />\r\n      <Text fill=\"#2582bf\" layoutX=\"180.0\" layoutY=\"321.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"You are not already registered?\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Text>\r\n      <Button fx:id=\"SignUp\" layoutX=\"365.0\" layoutY=\"303.0\" mnemonicParsing=\"false\" onMouseClicked=\"#ShowSignUp\" style=\"-fx-background-color: none;\" text=\"Click here\" textFill=\"#2582bf\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/FXML/SignIn.fxml b/src/main/resources/FXML/SignIn.fxml
+--- a/src/main/resources/FXML/SignIn.fxml	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/src/main/resources/FXML/SignIn.fxml	(date 1640776720701)
+@@ -24,4 +24,4 @@
+       </Text>
+       <Button fx:id="SignUp" layoutX="365.0" layoutY="303.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
+    </children>
+-</AnchorPane>
++</AnchorPane>
+\ No newline at end of file
+Index: src/main/java/controller/SignInController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.controller;\r\n\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.scene.control.Button;\r\nimport javafx.scene.control.TextField;\r\nimport javafx.scene.input.MouseEvent;\r\nimport javafx.scene.layout.AnchorPane;\r\nimport javafx.stage.Stage;\r\nimport main.java.connection.ConnectionMongoDB;\r\nimport main.java.utils.Session;\r\n\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.net.URL;\r\n\r\npublic class SignInController {\r\n\r\n    public AnchorPane anchorRoot;\r\n    public Button SignUp;\r\n    public Button SignIn;\r\n    @FXML private TextField us;\r\n    @FXML private TextField pw;\r\n\r\n    public void ShowSignUp(MouseEvent mouseEvent) throws IOException {\r\n\r\n        URL url = new File(\"src/main/resources/FXML/SignUp.fxml\").toURI().toURL();\r\n        Parent root = FXMLLoader.load(url);\r\n\r\n        Stage stage = (Stage) SignUp.getScene().getWindow();\r\n        stage.setScene(new Scene(root));\r\n        stage.setResizable(false);\r\n        stage.show();\r\n\r\n    }\r\n\r\n    private void initialize() {\r\n\r\n    }\r\n\r\n    public void ShowAdminPanel() throws IOException {\r\n\r\n        URL url = new File(\"src/main/resources/FXML/AdminPanel.fxml\").toURI().toURL();\r\n        Parent root = FXMLLoader.load(url);\r\n\r\n        Stage stage = (Stage) SignIn.getScene().getWindow();\r\n        stage.setScene(new Scene(root));\r\n        stage.setResizable(false);\r\n        stage.show();\r\n\r\n    }\r\n\r\n    public void ShowHome() throws IOException {\r\n\r\n        URL url = new File(\"src/main/resources/FXML/Home.fxml\").toURI().toURL();\r\n        Parent root = FXMLLoader.load(url);\r\n\r\n        Stage stage = (Stage) SignIn.getScene().getWindow();\r\n        stage.setScene(new Scene(root));\r\n        stage.setResizable(false);\r\n        stage.show();\r\n\r\n    }\r\n\r\n    public void login(ActionEvent actionEvent) throws IOException {\r\n\r\n        String username = us.getText();\r\n        String password = pw.getText();\r\n        Session session;\r\n\r\n        if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {\r\n            System.out.println(\"Value: \" + us.getText());\r\n            System.out.println((\"Value: \" + pw.getText()));\r\n\r\n            ConnectionMongoDB conn = new ConnectionMongoDB();\r\n            session = Session.getInstance();\r\n\r\n            if(us.getText().equals(\"admin\") && pw.getText().equals(\"admin\")) {\r\n                session.setLogUser(username);\r\n                ShowAdminPanel();\r\n            } else {\r\n                boolean logged = conn.logInUser(us.getText(), pw.getText());\r\n                if (logged) {\r\n                    session.setLogUser(username);\r\n                    ShowHome();\r\n                    }\r\n                }\r\n            //clear TextField\r\n            us.setText(\"\");\r\n            pw.setText(\"\");\r\n        }\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/SignInController.java b/src/main/java/controller/SignInController.java
+--- a/src/main/java/controller/SignInController.java	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/src/main/java/controller/SignInController.java	(date 1640787660428)
+@@ -10,6 +10,7 @@
+ import javafx.scene.input.MouseEvent;
+ import javafx.scene.layout.AnchorPane;
+ import javafx.stage.Stage;
++import main.java.GUI.SecondChanceGUI;
+ import main.java.connection.ConnectionMongoDB;
+ import main.java.utils.Session;
+ 
+@@ -72,6 +73,7 @@
+         Session session;
+ 
+         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
++
+             System.out.println("Value: " + us.getText());
+             System.out.println(("Value: " + pw.getText()));
+ 
+@@ -84,14 +86,17 @@
+             } else {
+                 boolean logged = conn.logInUser(us.getText(), pw.getText());
+                 if (logged) {
+-                    session.setLogUser(username);
++                    //session.setLogUser(username);
+                     ShowHome();
+-                    }
+-                }
+-            //clear TextField
++                }
++            }
++            //clear TextFields
+             us.setText("");
+             pw.setText("");
++        } else {
++            SecondChanceGUI.infoBox("Please, insert username and password.", "Error", "Empty fields!");
+         }
+ 
+     }
++
+ }
+\ No newline at end of file
+Index: target/classes/FXML/SignUp.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.scene.paint.*?>\r\n<?import javafx.scene.effect.*?>\r\n<?import java.lang.*?>\r\n<?import java.net.*?>\r\n<?import javafx.geometry.*?>\r\n<?import javafx.scene.control.*?>\r\n<?import javafx.scene.layout.*?>\r\n<?import javafx.scene.text.*?>\r\n\r\n<AnchorPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"775.0\" prefWidth=\"940.0\" style=\"-fx-background-color: rgb(230, 230, 255);\" xmlns=\"http://javafx.com/javafx/8\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"main.java.controller.SignUpController\">\r\n   <children>\r\n      <Text fill=\"#2582bf\" layoutX=\"321.0\" layoutY=\"155.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Signup to join SecondChance!\">\r\n         <font>\r\n            <Font size=\"25.0\" />\r\n         </font>\r\n      </Text>\r\n      <TextField layoutX=\"269.0\" layoutY=\"264.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"307.0\" layoutY=\"238.0\" text=\"Username:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <Label layoutX=\"309.0\" layoutY=\"321.0\" text=\"Password:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"269.0\" layoutY=\"340.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"328.0\" layoutY=\"473.0\" text=\"Email:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"269.0\" layoutY=\"414.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <TextField layoutX=\"270.0\" layoutY=\"492.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"326.0\" layoutY=\"395.0\" text=\"Name:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"573.0\" layoutY=\"264.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"624.0\" layoutY=\"238.0\" text=\"Country:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <Label layoutX=\"636.0\" layoutY=\"320.0\" text=\"City:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <TextField layoutX=\"573.0\" layoutY=\"340.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <TextField layoutX=\"573.0\" layoutY=\"414.0\" prefHeight=\"17.0\" prefWidth=\"149.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Label layoutX=\"624.0\" layoutY=\"395.0\" text=\"Address:\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Label>\r\n      <Button layoutX=\"410.0\" layoutY=\"574.0\" mnemonicParsing=\"false\" prefHeight=\"25.0\" prefWidth=\"155.0\" style=\"-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);\" text=\"Sign up\" />\r\n      <Text fx:id=\"SignIn\" fill=\"#2582bf\" layoutX=\"364.0\" layoutY=\"649.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"You are already registered?\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Text>\r\n      <Button fx:id=\"signInShower\" layoutX=\"539.0\" layoutY=\"631.0\" mnemonicParsing=\"false\" onMouseClicked=\"#ShowSignIn\" style=\"-fx-background-color: none;\" text=\"Click here\" textFill=\"#2582bf\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/target/classes/FXML/SignUp.fxml b/target/classes/FXML/SignUp.fxml
+--- a/target/classes/FXML/SignUp.fxml	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/target/classes/FXML/SignUp.fxml	(date 1640717194258)
+@@ -16,49 +16,49 @@
+             <Font size="25.0" />
+          </font>
+       </Text>
+-      <TextField layoutX="269.0" layoutY="264.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="307.0" layoutY="238.0" text="Username:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
++      <TextField fx:id="us" layoutX="269.0" layoutY="264.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="309.0" layoutY="321.0" text="Password:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="269.0" layoutY="340.0" style="-fx-background-radius: 5;" />
++      <TextField fx:id="pw" layoutX="269.0" layoutY="340.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="328.0" layoutY="473.0" text="Email:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="269.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+-      <TextField layoutX="270.0" layoutY="492.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+-      <Label layoutX="326.0" layoutY="395.0" text="Name:">
++      <TextField fx:id="em" layoutX="269.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <Label layoutX="326.0" layoutY="395.0" text="Name and Surname:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="573.0" layoutY="264.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <TextField fx:id="nm" layoutX="270.0" layoutY="492.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="624.0" layoutY="238.0" text="Country:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
++      <TextField fx:id="co" layoutX="573.0" layoutY="264.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="636.0" layoutY="320.0" text="City:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <TextField layoutX="573.0" layoutY="340.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+-      <TextField layoutX="573.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <TextField fx:id="ci" layoutX="573.0" layoutY="340.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
+       <Label layoutX="624.0" layoutY="395.0" text="Address:">
+          <font>
+             <Font size="13.0" />
+          </font>
+       </Label>
+-      <Button layoutX="410.0" layoutY="574.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign up" />
++      <TextField fx:id="ad" layoutX="573.0" layoutY="414.0" prefHeight="17.0" prefWidth="149.0" style="-fx-background-radius: 5;" />
++      <Button layoutX="410.0" layoutY="574.0" onAction="#registration" mnemonicParsing="false" prefHeight="25.0" prefWidth="155.0" style="-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);" text="Sign up" />
+       <Text fx:id="SignIn" fill="#2582bf" layoutX="364.0" layoutY="649.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are already registered?">
+          <font>
+             <Font size="13.0" />
+Index: target/classes/FXML/SignIn.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import java.lang.*?>\r\n<?import javafx.scene.text.*?>\r\n<?import javafx.scene.control.*?>\r\n<?import javafx.scene.layout.*?>\r\n\r\n<AnchorPane fx:id=\"anchorRoot\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"400.0\" prefWidth=\"600.0\" style=\"-fx-background-color: rgb(230, 230, 255);\" xmlns=\"http://javafx.com/javafx/8\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"main.java.controller.SignInController\">\r\n   <children>\r\n      <Text fill=\"#2582bf\" layoutX=\"165.0\" layoutY=\"75.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Welcome to SecondChance \">\r\n         <font>\r\n            <Font size=\"24.0\" />\r\n         </font>\r\n      </Text>\r\n      <Text layoutX=\"287.0\" layoutY=\"137.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Username\" />\r\n      <Text layoutX=\"289.0\" layoutY=\"202.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"Password\" />\r\n      <TextField fx:id=\"us\" layoutX=\"239.0\" layoutY=\"147.0\" style=\"-fx-background-radius: 5;\" />\r\n      <TextField fx:id=\"pw\" layoutX=\"239.0\" layoutY=\"209.0\" style=\"-fx-background-radius: 5;\" />\r\n      <Button fx:id=\"SignIn\" layoutX=\"280.0\" layoutY=\"254.0\" mnemonicParsing=\"false\" onAction=\"#login\" prefHeight=\"25.0\" prefWidth=\"68.0\" style=\"-fx-background-radius: 5; -fx-background-color: rgb(220,220,220);\" text=\"Sign in\" />\r\n      <Text fill=\"#2582bf\" layoutX=\"180.0\" layoutY=\"321.0\" strokeType=\"OUTSIDE\" strokeWidth=\"0.0\" text=\"You are not already registered?\">\r\n         <font>\r\n            <Font size=\"13.0\" />\r\n         </font>\r\n      </Text>\r\n      <Button fx:id=\"SignUp\" layoutX=\"365.0\" layoutY=\"303.0\" mnemonicParsing=\"false\" onMouseClicked=\"#ShowSignUp\" style=\"-fx-background-color: none;\" text=\"Click here\" textFill=\"#2582bf\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/target/classes/FXML/SignIn.fxml b/target/classes/FXML/SignIn.fxml
+--- a/target/classes/FXML/SignIn.fxml	(revision f69a6c581de725b8e1fa2c735ce6030a76fa5397)
++++ b/target/classes/FXML/SignIn.fxml	(date 1640776720701)
+@@ -24,4 +24,4 @@
+       </Text>
+       <Button fx:id="SignUp" layoutX="365.0" layoutY="303.0" mnemonicParsing="false" onMouseClicked="#ShowSignUp" style="-fx-background-color: none;" text="Click here" textFill="#2582bf" />
+    </children>
+-</AnchorPane>
++</AnchorPane>
+\ No newline at end of file

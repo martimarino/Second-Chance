@@ -1,0 +1,9 @@
+<changelist name="Uncommitted_changes_before_Update_at_29_12_2021_16_06_[Changes]" date="1640790402620" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_12_2021_16_06_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 29/12/2021 16:06 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="src/main/java/utils/Session" />
+    <option name="AFTER_PATH" value="src/main/java/utils/Session.java" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_29_12_2021_16_06_[Changes]/Session.java" />
+  </binary>
+</changelist>

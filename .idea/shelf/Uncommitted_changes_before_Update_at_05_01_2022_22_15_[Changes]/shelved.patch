@@ -1,0 +1,6 @@
+diff --git a/src/main/resources/FXML/UserFilter.fxml b/src/main/resources/FXML/SearchUser.fxml
+rename from src/main/resources/FXML/UserFilter.fxml
+rename to src/main/resources/FXML/SearchUser.fxml
+diff --git a/src/main/resources/FXML/InsertionFilter.fxml b/src/main/resources/FXML/SearchInsertion.fxml
+rename from src/main/resources/FXML/InsertionFilter.fxml
+rename to src/main/resources/FXML/SearchInsertion.fxml

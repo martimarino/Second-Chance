@@ -1,0 +1,304 @@
+Index: src/main/java/controller/SignUpController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.controller;\r\n\r\nimport javafx.event.*;\r\nimport javafx.fxml.*;\r\nimport javafx.scene.*;\r\nimport javafx.scene.control.*;\r\nimport javafx.scene.layout.*;\r\nimport javafx.scene.text.*;\r\nimport javafx.stage.*;\r\nimport main.java.connection.*;\r\nimport main.java.entity.*;\r\nimport main.java.utils.*;\r\nimport java.io.*;\r\nimport java.net.*;\r\n\r\npublic class SignUpController {\r\n\r\n    public AnchorPane anchorRoot;\r\n    public Text SignIn;\r\n    @FXML private TextField us, pw, em, nm, co, ci, ad;\r\n\r\n\r\n    public void ShowSignIn() throws IOException {\r\n\r\n        URL url = new File(\"src/main/resources/FXML/SignIn.fxml\").toURI().toURL();\r\n        Parent root = FXMLLoader.load(url);\r\n\r\n        Stage stage = (Stage) SignIn.getScene().getWindow();\r\n        stage.setScene(new Scene(root));\r\n        stage.setResizable(false);\r\n        stage.show();\r\n\r\n    }\r\n\r\n    private void initialize() {\r\n\r\n    }\r\n\r\n    public void registration(ActionEvent actionEvent) throws IOException {\r\n\r\n        if(!us.getText().isEmpty() && !pw.getText().isEmpty() && !em.getText().isEmpty()\r\n                && !nm.getText().isEmpty() && !ci.getText().isEmpty() && !co.getText().isEmpty()\r\n                && !ad.getText().isEmpty()) {\r\n\r\n            User u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), \"N\");\r\n            System.out.println(u.toString());\r\n\r\n            ConnectionMongoDB conn = new ConnectionMongoDB();\r\n            if(conn.registerUser(u)) {\r\n\r\n                //clear TextField\r\n                us.setText(\"\");\r\n                pw.setText(\"\");\r\n                em.setText(\"\");\r\n                nm.setText(\"\");\r\n                ci.setText(\"\");\r\n                co.setText(\"\");\r\n                ad.setText(\"\");\r\n\r\n                ShowSignIn();\r\n                Utility.infoBox(\"Now you can login!\", \"Confirmed\", \"Registration completed with success!\");\r\n            }\r\n        } else {\r\n            Utility.infoBox(\"Please, fill all information.\", \"Error\", \"Empty fields!\");\r\n        }\r\n\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/SignUpController.java b/src/main/java/controller/SignUpController.java
+--- a/src/main/java/controller/SignUpController.java	(revision e6f7fe63a3de7cf62d821e452f5a8f2ae7f1153b)
++++ b/src/main/java/controller/SignUpController.java	(date 1641831205628)
+@@ -45,8 +45,8 @@
+             User u = new User(em.getText(),us.getText(), pw.getText(), nm.getText(), co.getText(), ci.getText(), ad.getText(), "N");
+             System.out.println(u.toString());
+ 
+-            ConnectionMongoDB conn = new ConnectionMongoDB();
+-            if(conn.registerUser(u)) {
++            ConnectionMongoDB connMongo = new ConnectionMongoDB();
++            if(connMongo.registerUser(u)) {
+ 
+                 //clear TextField
+                 us.setText("");
+@@ -57,6 +57,9 @@
+                 co.setText("");
+                 ad.setText("");
+ 
++                ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
++                connNeo.addUser(u);
++
+                 ShowSignIn();
+                 Utility.infoBox("Now you can login!", "Confirmed", "Registration completed with success!");
+             }
+Index: src/main/java/connection/ConnectionMongoDB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.connection;\r\n\r\nimport com.mongodb.client.*;\r\nimport main.java.entity.*;\r\nimport main.java.utils.*;\r\nimport org.bson.Document;\r\n\r\nimport static com.mongodb.client.model.Aggregates.*;\r\nimport static com.mongodb.client.model.Filters.*;\r\nimport static com.mongodb.client.model.Projections.*;\r\nimport static com.mongodb.client.model.Projections.include;\r\nimport static com.mongodb.client.model.Sorts.descending;\r\n\r\nimport com.mongodb.ConnectionString;\r\nimport org.bson.conversions.Bson;\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.function.Consumer;\r\n\r\npublic class ConnectionMongoDB{\r\n\r\n    private MongoClient mongoClient;\r\n    private MongoDatabase db;\r\n    MongoCursor<Document> cursor;\r\n\r\n    public void openConnection(){\r\n        ConnectionString uri = new ConnectionString(\"mongodb://localhost:27017\");\r\n        mongoClient = MongoClients.create(uri);\r\n        db = mongoClient.getDatabase(\"local\");\r\n    }\r\n\r\n    public void closeConnection() {\r\n        mongoClient.close();\r\n    }\r\n\r\n    public boolean logInUser(String username, String password) throws IOException {\r\n\r\n        this.openConnection();\r\n        if(!userAlreadyPresent(username, password)) {\r\n            System.out.println(\"Username or Password wrong, try again\");\r\n            this.closeConnection();\r\n            return false;\r\n        } else{\r\n            System.out.println(\"FOUND!!!!\");\r\n        }\r\n        this.closeConnection();\r\n        return true;\r\n    }\r\n\r\n    public boolean registerUser(User u) {\r\n\r\n        this.openConnection();\r\n\r\n        if(userAlreadyPresent(u.getUsername(), u.getPassword())) {\r\n            Utility.infoBox(\"Please, choose another username and try again.\", \"Error\", \"Username already used!\");\r\n            return false;\r\n        }\r\n\r\n        MongoCollection<Document> myColl = db.getCollection(\"user\");\r\n        Document user = new Document(\"address\", u.getAddress())\r\n                .append(\"city\", u.getCity())\r\n                .append(\"country\", u.getCountry())\r\n                .append(\"email\", u.getEmail())\r\n                .append(\"name\", u.getName())\r\n                .append(\"password\", u.getPassword())\r\n                .append(\"username\", u.getUsername())\r\n                .append(\"suspended\", u.getSuspended());\r\n        myColl.insertOne(user);\r\n        this.closeConnection();\r\n        return true;\r\n    }\r\n\r\n    private static Consumer<Document> printDocuments() {\r\n        return doc -> System.out.println(doc.toJson());\r\n    }\r\n\r\n    public Document findUserByUsername(String username) {\r\n\r\n        this.openConnection();\r\n        ArrayList<Document> users = new ArrayList<>();\r\n        MongoCollection<Document> myColl = db.getCollection(\"user\");\r\n        cursor  = myColl.find(eq(\"username\", username)).iterator();\r\n        if(!cursor.hasNext()) {\r\n            this.closeConnection();\r\n            Utility.infoBox(\"There is no user with this username.\", \"Error\", \"Username not found!\");\r\n            return null;\r\n        }\r\n\r\n        if (cursor.hasNext())\r\n        {\r\n            this.closeConnection();\r\n            return cursor.next();\r\n        }\r\n\r\n        return null;\r\n    }\r\n\r\n    private boolean userAlreadyPresent(String username, String password) {\r\n\r\n        MongoCollection<Document> myColl = db.getCollection(\"user\");\r\n        cursor = myColl.find(and(eq(\"username\", username),\r\n                eq(\"password\", password))).iterator();\r\n        if(!cursor.hasNext())\r\n            return false;\r\n        return true;\r\n    }\r\n\r\n    public User findUserDetails(String username)\r\n    {\r\n        this.openConnection();\r\n        User logUser = new User();\r\n        MongoCollection<Document> myColl = db.getCollection(\"user\");\r\n        Document user = myColl.find(eq(\"username\", username)).first();\r\n        logUser.setUsername(user.getString(\"username\"));\r\n        logUser.setName(user.getString(\"name\"));\r\n        logUser.setEmail(user.getString(\"email\"));\r\n        logUser.setAddress(user.getString(\"address\"));\r\n        logUser.setCity(user.getString(\"city\"));\r\n        logUser.setCountry(user.getString(\"country\"));\r\n        logUser.setSuspended(user.getString(\"suspended\"));\r\n        this.closeConnection();\r\n        return logUser;\r\n    }\r\n\r\n    public ArrayList<Document> followedUserInsertions(ArrayList<String> usList, int k) {\r\n\r\n        this.openConnection();\r\n        ArrayList<Document> insertions = new ArrayList<>();\r\n        MongoCollection<Document> myColl = db.getCollection(\"insertion\");\r\n\r\n        for(int i = 0; i < usList.size(); i++) {\r\n            Document d = myColl.find(eq(\"uniq_id\", usList.get(i))).first();\r\n            insertions.add(d);\r\n        }\r\n\r\n        this.closeConnection();\r\n        return insertions;\r\n    }\r\n\r\n    public ArrayList<Document> findViralInsertions(int k) {\r\n\r\n        this.openConnection();\r\n        ArrayList<Document> insertions = new ArrayList<>();\r\n        MongoCollection<Document> myColl = db.getCollection(\"insertion\");\r\n        Bson match = match(eq(\"sold\", \"N\"));\r\n        Bson sort = sort(descending(\"interested\"));\r\n        Bson project = project(fields(excludeId(), include(\"seller\"), include(\"image_url\"), include(\"status\"), include(\"interested\"), include(\"price\"), include(\"currency\")));\r\n        Bson limit = limit(k);\r\n        myColl.aggregate(Arrays.asList(sort,project ,limit));\r\n        AggregateIterable<Document> r = myColl.aggregate(Arrays.asList(match, sort,project ,limit));\r\n\r\n        for (Document document : r) {\r\n            insertions.add(document);\r\n        }\r\n        this.closeConnection();\r\n        return insertions;\r\n    }\r\n\r\n    public ArrayList<Document> findUserByFilters(String country,String rating) {\r\n\r\n        this.openConnection();\r\n        MongoCollection<Document> myColl = db.getCollection(\"user\");\r\n        ArrayList<Document> users = new ArrayList<>();\r\n\r\n        if(country.equals(\"country\") && !rating.equals(\"rating\"))\r\n        {\r\n             cursor  = myColl.find(eq(\"rating\", rating)).iterator();\r\n        }\r\n        else if(!country.equals(\"country\") && rating.equals(\"rating\"))\r\n        {\r\n             cursor  = myColl.find(eq(\"country\", country)).iterator();\r\n        }\r\n        else{\r\n             cursor  = myColl.find(and(eq(\"country\", country),\r\n                    eq(\"rating\", rating))).iterator();\r\n        }\r\n\r\n        while(cursor.hasNext())\r\n        {\r\n            users.add(cursor.next());\r\n        }\r\n\r\n        this.closeConnection();\r\n        return users;\r\n\r\n    }\r\n\r\n    private ArrayList<Document> partialSearch(int index, MongoCollection<Document> myColl, ArrayList<Document> insertions, String size, String price, String gender, String status, String category, String color) {\r\n\r\n        switch (index) {\r\n            case 0:\r\n                cursor  = myColl.find(eq(\"size\", size)).iterator();\r\n                break;\r\n            case 1:\r\n                String[] split = price.split(\"-\");\r\n                System.out.println(\"FASCIA: \" + split[0]);\r\n                if(split.length == 1) {\r\n                    cursor  = myColl.find(gte(\"price\", Double.parseDouble(split[0]))).iterator();\r\n                } else {\r\n                    System.out.println(\"FASCIA: \" + split[1]);\r\n                    cursor  = myColl.find(and(gte(\"price\", Double.parseDouble(split[0])),\r\n                            lte(\"price\", Double.parseDouble(split[1])))).iterator();\r\n                }\r\n                break;\r\n            case 2:\r\n                cursor  = myColl.find(eq(\"gender\", gender)).iterator();\r\n                break;\r\n            case 3:\r\n                cursor  = myColl.find(eq(\"status\", status)).iterator();\r\n                break;\r\n            case 4:\r\n                cursor  = myColl.find(eq(\"category\", category)).iterator();\r\n                break;\r\n            case 5:\r\n                cursor  = myColl.find(eq(\"color\", color)).iterator();\r\n                break;\r\n            default:\r\n                break;\r\n        }\r\n        while(cursor.hasNext())\r\n            insertions.add(cursor.next());\r\n\r\n        return insertions;\r\n    }\r\n\r\n    public ArrayList<Document> findInsertionByFilters(String size, String price, String gender, String status, String category, String color) {\r\n\r\n        this.openConnection();\r\n        ArrayList<Document> insertions = new ArrayList<>();\r\n        MongoCollection<Document> myColl = db.getCollection(\"insertion\");\r\n\r\n        //the following variables are 1 if the relative filter is applied\r\n        int sizeFilterOn, priceFilterOn, genderFilterOn, statusFilterOn, categoryFilterOn, colorFilterOn;\r\n        sizeFilterOn = (size.equals(\"size\")) ? 0 : 1;\r\n        priceFilterOn = (price.equals(\"price\")) ? 0 : 1;\r\n        genderFilterOn = (gender.equals(\"gender\")) ? 0 : 1;\r\n        statusFilterOn = (status.equals(\"status\")) ? 0 : 1;\r\n        categoryFilterOn = (category.equals(\"category\")) ? 0 : 1;\r\n        colorFilterOn = (color.equals(\"color\")) ? 0 : 1;\r\n\r\n        int[] filter = {sizeFilterOn, priceFilterOn, genderFilterOn,\r\n                statusFilterOn,categoryFilterOn, colorFilterOn};\r\n\r\n        for(int i = 0; i < 6; i++) {\r\n            if(filter[i] == 1)\r\n            partialSearch(i, myColl, insertions, size, price, gender, status, category, color);\r\n        }\r\n\r\n        this.closeConnection();\r\n        return insertions;\r\n    }\r\n\r\n\r\n    public ArrayList<Document> findInsertionBySeller(String seller) {\r\n\r\n        this.openConnection();\r\n        ArrayList<Document> insertions = new ArrayList<>();\r\n        MongoCollection<Document> myColl = db.getCollection(\"insertion\");\r\n\r\n        cursor = myColl.find(eq(\"seller\", seller)).iterator();\r\n        while (cursor.hasNext())\r\n            insertions.add(cursor.next());\r\n\r\n        this.closeConnection();\r\n        return insertions;\r\n\r\n    }\r\n\r\n    public ArrayList<Document> findInsertionByBrand(String brand) {\r\n\r\n        this.openConnection();\r\n        ArrayList<Document> insertions = new ArrayList<>();\r\n        MongoCollection<Document> myColl = db.getCollection(\"insertion\");\r\n\r\n        cursor = myColl.find(eq(\"brand\", brand)).iterator();\r\n        while (cursor.hasNext())\r\n            insertions.add(cursor.next());\r\n\r\n        this.closeConnection();\r\n        return insertions;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/connection/ConnectionMongoDB.java b/src/main/java/connection/ConnectionMongoDB.java
+--- a/src/main/java/connection/ConnectionMongoDB.java	(revision e6f7fe63a3de7cf62d821e452f5a8f2ae7f1153b)
++++ b/src/main/java/connection/ConnectionMongoDB.java	(date 1641830313765)
+@@ -191,30 +191,30 @@
+ 
+         switch (index) {
+             case 0:
+-                cursor  = myColl.find(eq("size", size)).iterator();
++                cursor  = myColl.find(and(eq("size", size), eq("sold", "N"))).iterator();
+                 break;
+             case 1:
+                 String[] split = price.split("-");
+                 System.out.println("FASCIA: " + split[0]);
+                 if(split.length == 1) {
+-                    cursor  = myColl.find(gte("price", Double.parseDouble(split[0]))).iterator();
++                    cursor  = myColl.find(and(gte("price", Double.parseDouble(split[0])), eq("sold", "N"))).iterator();
+                 } else {
+                     System.out.println("FASCIA: " + split[1]);
+                     cursor  = myColl.find(and(gte("price", Double.parseDouble(split[0])),
+-                            lte("price", Double.parseDouble(split[1])))).iterator();
++                            lte("price", Double.parseDouble(split[1])), eq("sold", "N"))).iterator();
+                 }
+                 break;
+             case 2:
+-                cursor  = myColl.find(eq("gender", gender)).iterator();
++                cursor  = myColl.find(and(eq("gender", gender), eq("sold", "N"))).iterator();
+                 break;
+             case 3:
+-                cursor  = myColl.find(eq("status", status)).iterator();
++                cursor  = myColl.find(and(eq("status", status), eq("sold", "N"))).iterator();
+                 break;
+             case 4:
+-                cursor  = myColl.find(eq("category", category)).iterator();
++                cursor  = myColl.find(and(eq("category", category), eq("sold", "N"))).iterator();
+                 break;
+             case 5:
+-                cursor  = myColl.find(eq("color", color)).iterator();
++                cursor  = myColl.find(and(eq("color", color), eq("sold", "N"))).iterator();
+                 break;
+             default:
+                 break;
+@@ -259,7 +259,7 @@
+         ArrayList<Document> insertions = new ArrayList<>();
+         MongoCollection<Document> myColl = db.getCollection("insertion");
+ 
+-        cursor = myColl.find(eq("seller", seller)).iterator();
++        cursor = myColl.find(and(eq("seller", seller), eq("sold", "N"))).iterator();
+         while (cursor.hasNext())
+             insertions.add(cursor.next());
+ 
+@@ -274,7 +274,7 @@
+         ArrayList<Document> insertions = new ArrayList<>();
+         MongoCollection<Document> myColl = db.getCollection("insertion");
+ 
+-        cursor = myColl.find(eq("brand", brand)).iterator();
++        cursor = myColl.find(and(eq("brand", brand), eq("sold", "N"))).iterator();
+         while (cursor.hasNext())
+             insertions.add(cursor.next());
+ 
+Index: src/main/java/connection/ConnectionNeo4jDB.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.connection;\r\n\r\nimport main.java.entity.*;\r\nimport org.neo4j.driver.*;\r\nimport org.neo4j.driver.types.Node;\r\nimport org.neo4j.driver.types.Path;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport static org.neo4j.driver.Values.parameters;\r\n\r\npublic class ConnectionNeo4jDB implements AutoCloseable\r\n{\r\n    private Driver driver;\r\n    String uri = \"neo4j://127.0.0.1:7687\";\r\n    String user = \"neo4j\";\r\n    String password = \"2nd-chance\";\r\n\r\n    public void open()\r\n    {\r\n        driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );\r\n    }\r\n\r\n    @Override\r\n    public void close() throws Exception\r\n    {\r\n        driver.close();\r\n    }\r\n\r\n    public void addUser(final User u)\r\n    {\r\n        try ( Session session = driver.session() )\r\n        {\r\n            session.writeTransaction((TransactionWork<Void>) tx -> {\r\n                tx.run( \"MERGE (u:User {username: $username, country: $country})\",\r\n                        parameters( \"username\", u.getUsername(),\r\n                                \"country\", u.getCountry()));\r\n                return null;\r\n            });\r\n        }\r\n    }\r\n\r\n    public void addInsertion(final Insertion i)\r\n    {\r\n        try ( Session session = driver.session() )\r\n        {\r\n            session.writeTransaction((TransactionWork<Void>) tx -> {\r\n                tx.run( \"MERGE (i:Insertion {uniq_id: $uniq_id, category: $category,\" +\r\n                                \"gender: $gender})\",\r\n                        parameters( \"uniq_id\", i.getId(), \"category\", i.getCategory(),\r\n                                \"gender\", i.getGender()));\r\n                return null;\r\n            });\r\n        }\r\n    }\r\n\r\n    public void followUser(User follower, User followed) {\r\n\r\n    }\r\n\r\n    public void unfollowUser(User unfollower, User unfollowed) {\r\n\r\n    }\r\n\r\n    public void likeAnInsertion(User u, Insertion i) {\r\n\r\n    }\r\n\r\n    public void dislikeInsertion(User u, Insertion i) {\r\n\r\n    }\r\n\r\n    public ArrayList<String> getSuggestedUsers(String username, String country, int k) {\r\n        this.open();\r\n        ArrayList<String> suggestions = new ArrayList<>();\r\n        try ( Session session = driver.session() )\r\n        {\r\n\r\n   String u = \"72q0jrBM81n7vySAL\";\r\n   String c = \"Austria\";\r\n\r\n            List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {\r\n                Result result = tx.run( \"MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) \" +\r\n                                \"WHERE u.username = $username AND u.country = $country AND others.country = $country \" +\r\n                                \"AND NOT (u)-[:FOLLOWS]->(others) \" +\r\n                                \"RETURN others.username as SuggUsers \" +\r\n                                \"LIMIT $k\",\r\n                        parameters( \"username\", u,\r\n                                    \"country\", c,\r\n                                    \"k\", k));\r\n/*\r\n                List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {\r\n                    Result result = tx.run( \"MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) \" +\r\n                                \"WHERE u.username = $username AND u.country = $country AND others.country = $country \" +\r\n                                \"AND NOT (u)-[:FOLLOWS]->(others) \" +\r\n                                \"RETURN others.username as SuggUsers \" +\r\n                                \"LIMIT $k\",\r\n                            parameters( \"username\", username,\r\n                                    \"country\", country,\r\n                                    \"k\", k));\r\n*/\r\n                while(result.hasNext())\r\n                {\r\n                    Record r = result.next();\r\n                    suggestions.add(r.get(\"SuggUsers\").asString());\r\n                }\r\n                return suggestions;\r\n            });\r\nSystem.out.println(\"*************** NEO4j ***************\");\r\nSystem.out.println(similar);\r\nSystem.out.println(\"*************************************\");\r\n            this.close();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n        return suggestions;\r\n    }\r\n\r\n\r\n    public ArrayList<String> getFollowedInsertions(String username, int k) {\r\n\r\n        this.open();\r\n        ArrayList<String> followed = new ArrayList<>();\r\n        try ( Session session = driver.session() )\r\n        {\r\n\r\n            String u = \"72q0jrBM81n7vySAL\";\r\n            String c = \"Austria\";\r\n\r\n            List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {\r\n                Result result = tx.run( \"MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]-(i:Insertion) \" +\r\n                                \"WHERE u.username = $username \" +\r\n                                \"RETURN i.uniq_id as SuggIns \" +\r\n                                \"LIMIT $k\",\r\n                        parameters( \"username\", u,\r\n                                \"k\", k));\r\n\r\n                while(result.hasNext())\r\n                {\r\n                    Record r = result.next();\r\n                    followed.add(r.get(\"SuggIns\").asString());\r\n                }\r\n                return followed;\r\n            });\r\n            System.out.println(\"*************** NEO4j ***************\");\r\n            System.out.println(insertions);\r\n            System.out.println(\"*************************************\");\r\n            this.close();\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n        return followed;\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/connection/ConnectionNeo4jDB.java b/src/main/java/connection/ConnectionNeo4jDB.java
+--- a/src/main/java/connection/ConnectionNeo4jDB.java	(revision e6f7fe63a3de7cf62d821e452f5a8f2ae7f1153b)
++++ b/src/main/java/connection/ConnectionNeo4jDB.java	(date 1641894683368)
+@@ -32,12 +32,16 @@
+     {
+         try ( Session session = driver.session() )
+         {
++            this.open();
+             session.writeTransaction((TransactionWork<Void>) tx -> {
+                 tx.run( "MERGE (u:User {username: $username, country: $country})",
+                         parameters( "username", u.getUsername(),
+                                 "country", u.getCountry()));
+                 return null;
+             });
++            this.close();
++        } catch (Exception e) {
++            e.printStackTrace();
+         }
+     }
+ 
+@@ -45,6 +49,7 @@
+     {
+         try ( Session session = driver.session() )
+         {
++            this.open();
+             session.writeTransaction((TransactionWork<Void>) tx -> {
+                 tx.run( "MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
+                                 "gender: $gender})",
+@@ -52,18 +57,47 @@
+                                 "gender", i.getGender()));
+                 return null;
+             });
++            this.close();
++        } catch (Exception e) {
++            e.printStackTrace();
+         }
+     }
+ 
+     public void followUser(User follower, User followed) {
+-
++        try ( Session session = driver.session() )
++        {
++            this.open();
++            session.writeTransaction((TransactionWork<Void>) tx -> {
++                tx.run( "MATCH (u:User),(v) " +
++                            "WHERE u.username = $username1 AND v.username = $username2 " +
++                            "CREATE (u)-[:FOLLOWS]->(v)",
++                        parameters( "username1", follower, "username2", followed));
++                return null;
++            });
++            this.close();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
+     }
+ 
+     public void unfollowUser(User unfollower, User unfollowed) {
+-
++        try ( Session session = driver.session() )
++        {
++            this.open();
++            session.writeTransaction((TransactionWork<Void>) tx -> {
++                tx.run( "MATCH (u:User)-[rel:FOLLOWS]->(v)  " +
++                                "WHERE u.username = $username1 AND v.username = $username2 " +
++                                "DELETE rel",
++                        parameters( "username1", unfollower, "username2", unfollowed));
++                return null;
++            });
++            this.close();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
+     }
+ 
+-    public void likeAnInsertion(User u, Insertion i) {
++    public void likeInsertion(User u, Insertion i) {
+ 
+     }
+ 
+@@ -71,6 +105,30 @@
+ 
+     }
+ 
++    public boolean checkIfFollows(final String us1, final String us2) throws Exception {
++        boolean check = false;
++        try (Session session = driver.session()) {
++            this.open();
++            check = session.readTransaction((TransactionWork<Boolean>) tx -> {
++                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(v) WHERE u.username = $username1 " +
++                                "AND v.username = $username2 " +
++                                "RETURN COUNT(*) AS Follows})",
++                        parameters( "username1", us1,
++                                "username2", us2));
++
++                Record r = result.next();
++                if(r.get("Follows").asInt() == 1)
++                    return true;
++                else
++                    return false;
++            });
++            this.close();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++        return false;
++    }
++
+     public ArrayList<String> getSuggestedUsers(String username, String country, int k) {
+         this.open();
+         ArrayList<String> suggestions = new ArrayList<>();
+@@ -81,7 +139,7 @@
+    String c = "Austria";
+ 
+             List<String> similar = session.readTransaction((TransactionWork<List<String>>) tx -> {
+-                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)<-[:FOLLOWS]-(others) " +
++                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:FOLLOWS]-(others) " +
+                                 "WHERE u.username = $username AND u.country = $country AND others.country = $country " +
+                                 "AND NOT (u)-[:FOLLOWS]->(others) " +
+                                 "RETURN others.username as SuggUsers " +
+@@ -107,9 +165,6 @@
+                 }
+                 return suggestions;
+             });
+-System.out.println("*************** NEO4j ***************");
+-System.out.println(similar);
+-System.out.println("*************************************");
+             this.close();
+         } catch (Exception e) {
+             e.printStackTrace();
+@@ -129,7 +184,7 @@
+             String c = "Austria";
+ 
+             List<String> insertions = session.readTransaction((TransactionWork<List<String>>) tx -> {
+-                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]-(i:Insertion) " +
++                Result result = tx.run( "MATCH (u:User)-[:FOLLOWS]->(m)-[:POSTED]->(i:Insertion) " +
+                                 "WHERE u.username = $username " +
+                                 "RETURN i.uniq_id as SuggIns " +
+                                 "LIMIT $k",
+@@ -143,9 +198,6 @@
+                 }
+                 return followed;
+             });
+-            System.out.println("*************** NEO4j ***************");
+-            System.out.println(insertions);
+-            System.out.println("*************************************");
+             this.close();
+         } catch (Exception e) {
+             e.printStackTrace();
+Index: src/main/java/controller/SearchUserController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package main.java.controller;\r\n\r\nimport javafx.geometry.*;\r\nimport javafx.scene.control.*;\r\nimport javafx.scene.image.*;\r\nimport javafx.scene.input.*;\r\nimport javafx.scene.layout.*;\r\nimport main.java.connection.*;\r\nimport main.java.utils.*;\r\nimport org.bson.*;\r\nimport main.java.utils.Session;\r\n\r\nimport java.util.*;\r\n\r\npublic class SearchUserController extends MainController{\r\n\r\n    public Button findUsers;\r\n    public TextField us;\r\n    public BorderPane userFind;\r\n    public ComboBox<String> country;\r\n    public ComboBox<String> rating;\r\n    public Button prevButton, nextButton;\r\n    public GridPane usersList;\r\n    public ArrayList<Document> userFilter;\r\n\r\n    public int item;\r\n\r\n    public Button prevSugg, nextSugg;\r\n    public BorderPane userSugg;\r\n    public ArrayList<Document> sugg;\r\n    public ArrayList<String> suggFromNeo;\r\n    public GridPane suggList;\r\n    int scrollPage;\r\n    int k = 15;\r\n\r\n    public void initialize(){\r\n\r\n        usersList = new GridPane();\r\n        item = 0;\r\n        us.setText(\"\");\r\n        country.setValue(\"country\");\r\n        rating.setValue(\"rating\");\r\n\r\n        prevButton.setDisable(true);\r\n        nextButton.setDisable(true);\r\n        prevButton.setVisible(false);\r\n        nextButton.setVisible(false);\r\n\r\n        suggList = new GridPane();\r\n        sugg = new ArrayList<>();\r\n        suggFromNeo = new ArrayList<>();\r\n        prevSugg.setDisable(true);\r\n        prevSugg.setVisible(false);\r\n\r\n        //connection to Neo4j\r\n        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();\r\n        suggFromNeo = connNeo.getSuggestedUsers(Session.getLogUser().getUsername(), Session.getLogUser().getCountry(), k);\r\n\r\n        Document d;\r\n        ConnectionMongoDB connMongo = new ConnectionMongoDB();\r\n        for(int i = 0; i < suggFromNeo.size(); i++) {\r\n            d = connMongo.findUserByUsername(suggFromNeo.get(i));\r\n            sugg.add(d);\r\n        }\r\n\r\nSystem.out.println(\"***********************************\");\r\nSystem.out.println(\"SUGG SIZE: \" + sugg.size());\r\n\r\n        showSuggestedUsers();\r\n\r\n    }\r\n\r\n    public void findUsers() {\r\n\r\n        ConnectionMongoDB conn = new ConnectionMongoDB();\r\n\r\n        if(us.getText().equals(\"\"))\r\n        {\r\n            if(country.getValue().equals(\"country\") && rating.getValue().equals(\"rating\")){\r\n                System.out.println(\"country: \" + country + \"rating: \" + rating);\r\n                return;\r\n            }\r\n            item = 0;\r\n            userFilter = conn.findUserByFilters(country.getValue(), rating.getValue());\r\n            if(userFilter.isEmpty())\r\n            {\r\n                Utility.infoBox(\"There is not a user with this characteristics!\", \"Advise\", \"User Advise\");\r\n                country.setValue(\"country\");\r\n                rating.setValue(\"rating\");\r\n                return;\r\n            }\r\n            if(userFilter.size() > 1)\r\n            {\r\n                nextButton.setDisable(false);\r\n                nextButton.setVisible(true);\r\n            }\r\n            showFilteredUsers();\r\n            item++;\r\n            userFind.setCenter(usersList);\r\n\r\n            country.setValue(\"country\");\r\n            rating.setValue(\"rating\");\r\n\r\n        }\r\n        else{\r\n            Document users = conn.findUserByUsername(us.getText());\r\n            if(users == null)\r\n                return;\r\n            showSearchedUser(users);\r\n            userFind.setCenter(usersList);\r\n            us.setText(\"\");\r\n\r\n            prevButton.setDisable(true);\r\n            nextButton.setDisable(true);\r\n            prevButton.setVisible(false);\r\n            nextButton.setVisible(false);\r\n        }\r\n\r\n    }\r\n\r\n    private void showFilteredUsers() {\r\n\r\n        Utility.showUsers(usersList, userFilter, item);\r\n\r\n    }\r\n\r\n    private void showSearchedUser(Document user) {\r\n\r\n        usersList.getChildren().clear();\r\n\r\n        Label username = new Label(user.getString(\"username\"));\r\n        Label country = new Label(user.getString(\"country\"));\r\n        Label city = new Label(user.getString(\"city\"));\r\n\r\n        usersList.add(username, 0, 0);\r\n        usersList.add(country, 0, 1);\r\n        usersList.add(city, 0, 2);\r\n\r\n        GridPane.setHalignment(username, HPos.CENTER);\r\n        GridPane.setHalignment(country, HPos.CENTER);\r\n        GridPane.setHalignment(city, HPos.CENTER);\r\n\r\n        usersList.setStyle(\r\n                \"    -fx-padding: 20;\\n\" +\r\n                        \"    -fx-hgap: 10;\\n\" +\r\n                        \"    -fx-vgap: 10;\");\r\n    }\r\n\r\n    public void showPrevUser() {\r\n\r\n        item-=2;\r\n\r\n        if(item == 0)\r\n        {\r\n            prevButton.setDisable(true);\r\n            prevButton.setVisible(false);\r\n        }\r\n\r\n        showFilteredUsers();\r\n        item++;\r\n\r\n        if(item != userFilter.size()-1)\r\n        {\r\n            nextButton.setDisable(false);\r\n            nextButton.setVisible(true);\r\n        }\r\n    }\r\n\r\n    public void showNextUser() {\r\n\r\n        if(item == userFilter.size()-1) {\r\n            nextButton.setDisable(true);\r\n            nextButton.setVisible(false);\r\n        }else{\r\n            nextButton.setDisable(false);\r\n            nextButton.setVisible(true);\r\n        }\r\n\r\n        if(item >= 1)\r\n        {\r\n            prevButton.setVisible(true);\r\n            prevButton.setDisable(false);\r\n        }\r\n\r\n        showFilteredUsers();\r\n        item++;\r\n    }\r\n\r\n    /*---------------------------------------------------------------*/\r\n\r\n    public void addSuggestedUsers(int index, int i){\r\n\r\n        ImageView image = new ImageView(\"file: /../../resources/img/user.png\");\r\n        Label username = new Label(sugg.get(index).getString(\"username\"));\r\n        Label country = new Label(sugg.get(index).getString(\"country\"));\r\n        Label city = new Label(sugg.get(index).getString(\"city\"));\r\n\r\n        suggList.add(image, i, 0);\r\n        suggList.add(username, i, 1);\r\n        suggList.add(country, i, 2);\r\n        suggList.add(city, i, 3);\r\n\r\n        GridPane.setHalignment(username, HPos.CENTER);\r\n        GridPane.setHalignment(country, HPos.CENTER);\r\n        GridPane.setHalignment(city, HPos.CENTER);\r\n\r\n        suggList.setStyle(\r\n                \"    -fx-padding: 20;\\n\" +\r\n                        \"    -fx-hgap: 10;\\n\" +\r\n                        \"    -fx-vgap: 10;\");\r\n\r\n    }\r\n\r\n    private void showSuggestedUsers() {\r\n\r\n        suggList = new GridPane();\r\n        scrollPage = 0;\r\n\r\n        for (int i = scrollPage; i < scrollPage+3; i++) {\r\n\r\n            addSuggestedUsers(i, i);\r\n            userSugg.setCenter(suggList);\r\n\r\n        }\r\n        scrollPage+=3;\r\n    }\r\n\r\n    public void prevSuggestedUsers(MouseEvent mouseEvent) {\r\n\r\n        suggList.getChildren().clear();\r\n        int row = 0;\r\n\r\n        scrollPage-=6;\r\n\r\n        nextSugg.setDisable(false);\r\n        nextSugg.setVisible(true);\r\n\r\n        if(scrollPage == 0)\r\n        {\r\n            prevSugg.setDisable(true);\r\n            prevSugg.setVisible(false);\r\n        }\r\n\r\n        for(int i = scrollPage; row<3; i++)\r\n        {\r\n            addSuggestedUsers(i, row);\r\n            row++;\r\n        }\r\n        userSugg.setCenter(suggList);\r\n        scrollPage+=3;\r\n\r\n    }\r\n\r\n    public void nextSuggestedUsers(MouseEvent mouseEvent) {\r\n\r\n        suggList.getChildren().clear();\r\n        int row = 0;\r\n\r\n        prevSugg.setDisable(false);\r\n        prevSugg.setVisible(true);\r\n\r\n        for(int i = scrollPage; i < scrollPage+3 && row<3; i++)\r\n        {\r\n            if(i == sugg.size())\r\n            {\r\n                nextButton.setDisable(true);\r\n                nextButton.setVisible(false);\r\n                return;\r\n            }\r\n            addSuggestedUsers(i, row);\r\n            row++;\r\n            userSugg.setCenter(suggList);\r\n        }\r\n\r\n        scrollPage+= 3;\r\n\r\n        if(scrollPage >= sugg.size()-1)\r\n        {\r\n            nextSugg.setDisable(true);\r\n            nextSugg.setVisible(false);\r\n        }\r\n\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/SearchUserController.java b/src/main/java/controller/SearchUserController.java
+--- a/src/main/java/controller/SearchUserController.java	(revision e6f7fe63a3de7cf62d821e452f5a8f2ae7f1153b)
++++ b/src/main/java/controller/SearchUserController.java	(date 1641894001619)
+@@ -70,7 +70,7 @@
+ 
+     }
+ 
+-    public void findUsers() {
++    public void findUsers() throws Exception {
+ 
+         ConnectionMongoDB conn = new ConnectionMongoDB();
+ 
+@@ -124,13 +124,31 @@
+ 
+     }
+ 
+-    private void showSearchedUser(Document user) {
++    private void showSearchedUser(Document user) throws Exception {
+ 
+         usersList.getChildren().clear();
+ 
+         Label username = new Label(user.getString("username"));
+         Label country = new Label(user.getString("country"));
+         Label city = new Label(user.getString("city"));
++        Button follow = new Button();
++
++        //conn to Neo
++        ConnectionNeo4jDB connNeo = new ConnectionNeo4jDB();
++        boolean check = connNeo.checkIfFollows(Session.getLogUser().getUsername(), user.getString("username"));
++        if(check) {
++            follow.setText("FOLLOW");
++
++        }
++        else {
++            follow.setText("UNFOLLOW");
++
++        }
++        //aggiungere event
++
++
++        follow.setVisible(true);
++        follow.setDisable(false);
+ 
+         usersList.add(username, 0, 0);
+         usersList.add(country, 0, 1);

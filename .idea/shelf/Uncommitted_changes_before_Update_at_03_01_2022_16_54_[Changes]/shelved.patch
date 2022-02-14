@@ -1,0 +1,19 @@
+Index: src/main/java/controller/ProfileController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/controller/ProfileController.java b/src/main/java/controller/MyProfileController.java
+rename from src/main/java/controller/ProfileController.java
+rename to src/main/java/controller/MyProfileController.java
+--- a/src/main/java/controller/ProfileController.java	
++++ b/src/main/java/controller/MyProfileController.java	
+@@ -15,7 +15,7 @@
+ import java.io.IOException;
+ import java.net.URL;
+ 
+-public class ProfileController {
++public class MyProfileController {
+     public Button feed;
+     public Button followersButton;
+     public Button followingButton;
