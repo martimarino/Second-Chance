@@ -4,8 +4,8 @@
 ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white)
 
 
-Second Chance is an e-commerce that offers the possibility of selling and buying vinted clothes.
-Every user can add his or her products on the profile or buy some items that are selled by people in the nearby or through direct searches. 
+SecondChance is an e-commerce that offers the possibility of selling and buying vinted items.
+Every user can create insertions and look for articles selled by people in the nearby or through direct searches. 
 
 ## Features
 
@@ -77,11 +77,9 @@ The part regarding users correlation is managed with Neo4j.
 
 A review is done a rating (1-5 stars) and a comment regarding the product and is associated to the user.
 Every user has a personal wallet that can recharge inserting a code in a specific field.
-When a purchase is copmuted the amount is decreased.
+When a purchase is computed the amount is decreased.
 
-Every post has a "sold" field and an ID: when a user purchases an item the ID relative to the post is memorized in an array of the user collection.
-
-Suggestions are based on different infomations like similar purchases, location, search parameters, likes and feed.
+Suggestions are based on location, likes and followed people.
 
 ## Link
 
@@ -104,7 +102,7 @@ Admin | Can delete items, posts and every inappropriate content. \Can suspend a 
 category,name,price,currency,likes_count,status,brand,codCountry,variation_0_color(color),image_url,id,SIZE,SELLER,VIEW,GENDER,
 
 ### Nations considered
-Italy, Canada, Spain, Austria, Germany, France,Brazil, Netherlands,Poland,Ireland,United Kingdom
+Italy, Canada, Spain, Austria, Germany, France,Brazil, Netherlands, Poland, Ireland, United Kingdom (Great Britain)
 
 ## MongoDB
 
@@ -112,8 +110,8 @@ Italy, Canada, Spain, Austria, Germany, France,Brazil, Netherlands,Poland,Irelan
 
 Collection  |  What inside
 ------------- | -------------
-User | personal information, [reviews embedded], suspended (bool)
-Admin | codes, credit
+User | personal information, [reviews embedded], [items sold embedded], [items purchased embedded], suspended (bool)
+Code | codes, credit
 Insertion | details, #interested, #views
 Code | code, credit
 Balance | username, credit
@@ -140,21 +138,21 @@ PURCHASED | [] |Array
 
 Field | Values | Type
 ------------- | ------------- | -------------
-ID | 61fd8cc3edf5f2f4bd1366b8 | Varchar
-CATEGORY | {clothing,accessories, bags, beauty, house, jewelry, kids, shoes} | String
+ID | 61c05c3e13a1030b20ac150a | Varchar
+BRAND | {Micheal Kors} | String
+CATEGORY | {clothing, accessories, bags, beauty, house, jewelry, kids, shoes} | String
+COLOR | {red, orange, yellow} | String
+COUNTRY | {Italy, Canada, Spain, Austria, Germany, France, Brazil, Netherlands, Poland, Ireland, United Kingdom (Great Britain)} | String
 DESCRIPTION | text | String
 GENDER | {M, F, U} | String
-PRICE | 10,56 | Double
-INTERESTED| 10 | Integer
-VIEWS | 10 | Integer
-STATUS | {new, excellent, good, used, very used} | String
-COLOR | {red, orange, yellow} | String
-SIZE | {XS, S, M, L, XL} | String
-BRAND | {Micheal Kors} | String
-COUNTRY | {Italy, Canada, Spain, Austria, Germany, France, Brazil, Netherlands, Poland, Ireland, United Kingdom (Great Britain)} | String
 IMAGE_URL | http://www.something.com | String
-TIMESTAMP | 2020-02-07 05:11:36 | String
+INTERESTED| 10 | Integer
+PRICE | 10,56 | Double
 SELLER | username | String
+SIZE | {XS, S, M, L, XL} | String
+STATUS | {new, excellent, good, used, very used} | String
+TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
+VIEWS | 10 | Integer
 
 ####  CODE
 
@@ -163,13 +161,10 @@ Field | Values | Type
 CODE | 3SSXTPFQTG | Varchar
 CREDIT | 200 | Int32
 
-####  ORDER
+####  BALANCE
 
-Field | Values | Type
-------------- | ------------- | -------------
 USERNAME | username | String
 CREDIT| 10,56 | Double
-
 
 ## Neo4j
 

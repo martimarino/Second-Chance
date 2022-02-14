@@ -142,12 +142,7 @@ public class ConnectionMongoDB{
 
         cursor = userColl.find(eq("username", username)).iterator();
 
-        if (cursor.hasNext())
-            return cursor.next();
-
-        Utility.infoBox("There is no user with this username.", "Error", "Username not found!");
-        return null;
-
+        return cursor.next();
     }
 
     //check if the username is already present
@@ -553,7 +548,6 @@ public class ConnectionMongoDB{
         Bson update = inc("views", 1);
 
         db.getCollection("insertion").findOneAndUpdate(filter, update);
-
     }
 
 
