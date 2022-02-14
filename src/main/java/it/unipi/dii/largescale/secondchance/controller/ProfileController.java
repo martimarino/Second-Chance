@@ -310,7 +310,7 @@ public class ProfileController extends MainController {
                     break;
                 case "insertionListLiked":  //insertion user likes
                     System.out.println("insertionListLiked");
-                    ArrayList<String> followed_ins = ConnectionNeo4jDB.connNeo.retrieveFollowedInsertionByUser(username);
+                    ArrayList<String> followed_ins = ConnectionNeo4jDB.connNeo.retrieveInterestedInsertionByUser(username);
                     list = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(followed_ins);
                     break;
                 case "insertionListCommon":  //insertion in common between logged user and current user

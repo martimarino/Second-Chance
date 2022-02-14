@@ -361,7 +361,7 @@ public class StatsController {
 
         String category = txtFieldCategory.getText();
         ArrayList<Document> array;
-        array = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k, category);
+        array = ConnectionMongoDB.connMongo.findTopKInterestingInsertion(k, category);
 
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(category);

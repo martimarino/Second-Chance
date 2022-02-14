@@ -109,7 +109,7 @@ public class ConnectionMongoDB{
     }
 
     /* ************************* USER SECTION ************************* */
-
+    //registration of the user, if the username is not already used
     public boolean registerUser(User u) {
 
         if (userAlreadyPresent(u.getUsername())) {
@@ -137,6 +137,7 @@ public class ConnectionMongoDB{
         return true;
     }
 
+    //find user by username
     public Document findUserByUsername(String username) {
 
         cursor = userColl.find(eq("username", username)).iterator();
@@ -149,6 +150,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //check if the username is already present
     public boolean userAlreadyPresent(String username) {
 
         cursor = userColl.find(eq("username", username)).iterator();
@@ -156,6 +158,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //check if the credentials are correct
     public boolean checkCredentials(String username, String encrypted) {
 
         cursor = userColl.find(and(eq("username", username), eq("password", encrypted))).iterator();
@@ -163,6 +166,7 @@ public class ConnectionMongoDB{
         return cursor.hasNext();
     }
 
+    //find the user details of the specified user
     public User findUserDetails(String username) {
 
         User logUser = new User();
@@ -187,6 +191,7 @@ public class ConnectionMongoDB{
         return logUser;
     }
 
+    //find the insertions of the followed users
     public ArrayList<Document> followedUserInsertions(ArrayList<String> insList) {
 
         ArrayList<Document> insertions = new ArrayList<>();
@@ -199,6 +204,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
+    //filters the users by country and/or rating if specified
     public ArrayList<Document> findUserByFilters(String country, String rating) {
 
         ArrayList<Document> users = new ArrayList<>();
@@ -233,6 +239,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //delete the specified user
     public void deleteUserMongo(String username) {
 
         Bson query = eq("username", username);
@@ -244,6 +251,7 @@ public class ConnectionMongoDB{
         }
     }
 
+    //updates the image profile of the specified user with the new url
     public int submitNewProfileImg(String url, String user) {
 
         Document queryUser = new Document().append("username",  user);
@@ -265,6 +273,7 @@ public class ConnectionMongoDB{
         }
     }
 
+    //updates the purchased and sold arrays of the logged user
     public void updateLoggedUser() {
 
         Bson filter = eq("username", Session.getLoggedUser().getUsername());
@@ -278,6 +287,7 @@ public class ConnectionMongoDB{
 
     /* *********************** INSERTION SECTION *********************** */
 
+    //find the insertion with most interested and views
     public ArrayList<Document> findViralInsertions(int k) {
 
         ArrayList<Document> insertions = new ArrayList<>();
@@ -292,6 +302,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
+    //fidn the insertions with the specified charateristics
     public ArrayList<Document> findInsertionByFilters(String size, String price, String gender, String status, String category, String color) {
 
         ArrayList<Document> insertions = new ArrayList<>();
@@ -329,6 +340,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
+    //find insertions of the specified user
     public ArrayList<Document> findInsertionBySeller(String seller) {
 
         ArrayList<Document> insertions = new ArrayList<>();
@@ -340,6 +352,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
+    //find all the insertion with the specified brand or user ording by timestamp
     public ArrayList<Document> findInsertionBySearch(String s) {
 
         ArrayList<Document> insertions = new ArrayList<>();
@@ -359,6 +372,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
+    //find the specified insertion
     public Insertion findInsertion(String insertion_id) {
 
         Insertion insertion = new Insertion();
@@ -386,6 +400,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //rollback of operations in case of failures
     public void rollBackInsertion(int i, String username, Insertion insertion) {
 
         for(; i < 4; i++) {
@@ -415,6 +430,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //purchase of insertion
     public boolean buyCurrentInsertion(String username, Insertion insertion){
 
         ClientSession clientSession = mongoClient.startSession();
@@ -427,18 +443,21 @@ public class ConnectionMongoDB{
             double currentBalance = ConnectionMongoDB.connMongo.getBalance();
             double checkBalance = currentBalance - insertion.getPrice();
 
+            //check if enough balance to do the purchase
             if (checkBalance < 0.0) {
                 Utility.infoBox("Cannot purchase, not enough balance", "Error", "Error purchase");
                 return "Buyer has not enough balance";
             }
 
             boolean upBuyer, upSeller;
+            //update of buyer balance
             upBuyer = updateBalance(Session.getLoggedUser().getUsername(), insertion.getPrice(), '-');
             if(!upBuyer)
             {
                 Utility.infoBox("Cannot buy product", "Error", "Error purchase");
                 return "Cannot update buyer balance";
             } else {
+                //update of seller balance
                 upSeller = updateBalance(insertion.getSeller(), insertion.getPrice(), '+');
                 if(!upSeller) {
                     rollBackInsertion(3, Session.getLoggedUser().getUsername(), insertion);
@@ -471,6 +490,7 @@ public class ConnectionMongoDB{
                             append("status", insertion.getStatus()).
                             append("category", insertion.getCategory()));
 
+            //update sold orders seller user
             Bson filter_sold = eq("username", insertion.getSeller());
             BasicDBObject update_sold = new BasicDBObject("$push", new BasicDBObject("sold", sold));
 
@@ -513,6 +533,7 @@ public class ConnectionMongoDB{
         return message.equals("OK");
     }
 
+    //update num interesting for insertion
     public boolean updateNumInterested(String insertion_id, int i) {
 
         Bson filter = eq("_id", new ObjectId(insertion_id));
@@ -525,6 +546,7 @@ public class ConnectionMongoDB{
         }
     }
 
+    //update num views for insertion
     public void updateNumView(String uniq_id) {
 
         Bson filter = eq("_id", new ObjectId(uniq_id));
@@ -534,6 +556,10 @@ public class ConnectionMongoDB{
 
     }
 
+
+    /* ************************* ADMIN SECTION ************************* */
+
+    //find the top rated users of the specified country
     public ArrayList<Document> findTopRatedUsersByCountry(String country) {
 
         ArrayList<Document> list = new ArrayList<>();
@@ -550,11 +576,9 @@ public class ConnectionMongoDB{
             }
         }
         return list;
-
     }
 
-    /* ************************* ADMIN SECTION ************************* */
-
+    //find the user with specified username or name
     public Document verifyUserInDB(String username, boolean choice) {
 
         Document user;
@@ -567,6 +591,7 @@ public class ConnectionMongoDB{
         return user;
     }
 
+    //find the insertion with specified
     public Document verifyInsertionInDB(String id, boolean choice) {
 
         Document insertion;
@@ -579,6 +604,7 @@ public class ConnectionMongoDB{
         return insertion;
     }
 
+    //fidn the users with most purchased or sold orders
     public ArrayList<Document> findMostActiveUsers(int k, boolean choice) {
 
         ArrayList<Document> orders = new ArrayList<>();
@@ -616,6 +642,7 @@ public class ConnectionMongoDB{
         return orders;
     }
 
+    //find the k users with higher rate for a specified country
     public ArrayList<Document> findTopKRatedUser(int k, String country) {
 
         ArrayList<Document> array = new ArrayList<>();
@@ -637,6 +664,7 @@ public class ConnectionMongoDB{
         return array;
     }
 
+    //topk insertions with higher interested for specified category
     public ArrayList<Document> findTopKInterestingInsertion(int k, String category) {
 
         ArrayList<Document> array = new ArrayList<>();
@@ -656,6 +684,7 @@ public class ConnectionMongoDB{
         return array;
     }
 
+    //find the insertions with specified country and category
     public ArrayList<Insertion> findInsertionsByCountryAndCategory(String country, String category) {
 
         ArrayList<Insertion> insertions = new ArrayList<>();
@@ -681,6 +710,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //find top k insertions for the specified category
     public ArrayList<Document> findTopKViewedInsertion(int k, String category) {
 
         ArrayList<Document> array = new ArrayList<>();
@@ -700,6 +730,7 @@ public class ConnectionMongoDB{
         return array;
     }
 
+    //suspends the specified user
     public void suspendUser(String username) {
 
         Document query = new Document().append("username",  username);
@@ -719,6 +750,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //unsuspend the specified user
     public void unsuspendUser(String username) {
 
         Document query = new Document().append("username",  username);
@@ -791,6 +823,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
+    //add insertion
     public void addInsertion(Insertion i) throws Exception {
 
         Document ins = Insertion.toDocument(i);
@@ -798,6 +831,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //add review
     public void addReview(Review rev) {
 
         Document review = new Document()
@@ -816,6 +850,7 @@ public class ConnectionMongoDB{
         userColl.findOneAndUpdate(query, push_data);
     }
 
+    //updates the rating of the seller after a new review insertion
     public void updateSellerRating(String seller) {
 
         Document d = userColl.find(eq("username", seller)).first();
@@ -836,6 +871,7 @@ public class ConnectionMongoDB{
         userColl.findOneAndUpdate(filter, update);
     }
 
+    //insert new review into the review array of the reviewed user
     public void setInsertionReviewed(String timestamp) {
 
         BasicDBObject query = new BasicDBObject();
@@ -846,6 +882,7 @@ public class ConnectionMongoDB{
 
     }
 
+    //delete the insertion
     public boolean deleteInsertionMongo(String id) {
 
         Bson query = eq("_id", new ObjectId(id));
@@ -861,6 +898,7 @@ public class ConnectionMongoDB{
 
     /* ************************* BALANCE SECTION ************************* */
 
+    //add the credit of the specified code into the logged user balance
     public void addFundsToWallet(String id_code) {
 
         Document code;
@@ -882,6 +920,7 @@ public class ConnectionMongoDB{
         }
     }
 
+    //updates the balance of specified user with the credit
     public boolean updateBalance(String username, double credit, char c) {
 
         double updated;
@@ -912,6 +951,7 @@ public class ConnectionMongoDB{
         }
     }
 
+    //get the balance of the logged user
     public double getBalance() {
 
         FindIterable<Document> cursor = null;
@@ -925,6 +965,7 @@ public class ConnectionMongoDB{
         return cursor.first().getDouble("credit");
     }
 
+    //insert the balance document
     public boolean insertBalance(Balance b) {
 
         try {
@@ -939,6 +980,7 @@ public class ConnectionMongoDB{
 
     /* ************************* CODE SECTION ************************* */
 
+    //delete the code specified
     private void deleteCode(String id) {
 
         Bson query = eq("_id", id);
