@@ -1,45 +1,50 @@
 # Large Scale Project
 ## _SecondChance_
 
-![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white) ![LaTeX](https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white)
+![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white) ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Neo4J](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white)
 
 
-VintedUnipi is an e-commerce that offers the possibility of selling and buying vinted clothes.
-Every user can add his or her products on the profile or buy some clothes that are selled by people in the nearby or through direct searches. 
+Second Chance is an e-commerce that offers the possibility of selling and buying vinted clothes.
+Every user can add his or her products on the profile or buy some items that are selled by people in the nearby or through direct searches. 
 
 ## Features
 
 ### Admin
 
-- Register/Login/Logout
+*	Visualize statistics (specifying a k parameter)
+    * View top k rated user per country
+    * View top k interesting insertions per category
+    * View top k viewed insertions per category
+    * View top k users with more purchased items
+    * View top k users with more sold items
+    * Number of likes per category
+*	Suspend a user
+*	Delete an insertion
 
-- Delete insertions or reviews
-
-- Suspend user
-
-- Generate stats
-
-- Generate codes for account balances
 
 ### User
 
-- Register, login and logout
-
-- Browse the feed
-
-- Create, update or delete an insertion
-
-- Like/unlike an insertion
-
-- Find users/insertions/brands
-
-- Follow/unfollow a user
-
-- View suggested sellers and insertions
-
-- Buy an item (order)
-
-- Write a review after a purchase
+*	Sign in in the application
+*	Visualize home
+    * Visualize viral insertions
+    * Visualize feed
+    * Visualize his/her profile
+    * Visualize personal information
+    * Browse his/her insertions
+    * Visualize insertions he/she is interested in
+    * Browse his/her orders
+    * Visualize followers and following users
+    * Add credit to the personal balance account
+*	Create a new insertion
+*	Delete an insertion of your own
+*	Search insertions by seller, brand or using filters
+*	Visualize an insertion
+    * Like an insertion
+    * Buy relative item
+*	Search a user
+*	Follow/unfollow a user
+*	Visualize suggested users
+*	Logout from the application
 
 
 
@@ -47,31 +52,23 @@ Every user can add his or her products on the profile or buy some clothes that a
  
  #### MongoDB
  
-- Search by category/brand
+*	Search insertions by seller, brand or filters
+*	Search user by username or filters
+*	Get viral insertions
+*	Top k rated users by country
+*	Top k users with more purchased items
+*	Top k users with more sold items
+*	Top k interesting insertions by category
+*	Top k viewed insertions by category
 
-- View most active users (n° insertions)
-
-- View most active sellers (n° sold items)
-
-- View top k rated user for current user country
-
-- View top k interesting insertions per category
-
-- View top k viewed insertions per category
-
-- View the best/worst rated reviews of a user
-
- - View most ordered items per category
  
  #### Neo4J
  
-- Suggest new sellers based on similar interested insertions, location and category
+*	Suggest new sellers based on the same country and followers
+*	Suggest new insertions based on similar interested insertions and category
+*	Get the k insertions posted by the followers of a specific user
+*	Show to the admin the amount of like per category
 
-- Suggest new insertions based on similar interested insertions and category
-
-- View most followed users
-
-- View who is interested in an insertion 
 
 ### Details
 
@@ -116,22 +113,26 @@ Collection  |  What inside
 User | personal information, [reviews embedded], suspended (bool)
 Admin | codes, credit
 Insertion | details, #interested, #views
-Order | timestamp, [insertion embedded]
+Code | code, credit
+Balance | username, credit
 
 #### USER
 
 Field | Type
 ------------- | -------------
+ID | Varchar
 ADDRESS | String
-BALANCE | Double
 CITY | String
 COUNTRY | String
 EMAIL | String
 NAME | String
 PASSWORD | String
-RATING | Double
-SUSPENDED | String
+SUSPENDED | Boolean
 USERNAME | String
+REVIEWS | Array
+RATING | Double
+SOLD | Array
+PURCHASED | Array
 
 #### INSERTION
 
@@ -150,45 +151,40 @@ SIZE | {XS, S, M, L, XL} | String
 BRAND | {Micheal Kors} | String
 COUNTRY | {Italy, Canada, Spain, Austria, Germany, France, Brazil, Netherlands, Poland, Ireland, United Kingdom (Great Britain)} | String
 IMAGE_URL | http://www.something.com | String
-TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
+TIMESTAMP | 2020-02-07 05:11:36 | String
 SELLER | username | String
 
-####  REVIEW
+####  CODE
 
 Field | Values | Type
 ------------- | ------------- | -------------
-ID | 8552148 | Varchar
-TEXT | text | String
-TIMESTAMP | 2020-02-07 05:11:36 +0000 | String
-TITLE | Fantastic! | String
-SELLLER | username | String
-REVIEWER | username | String
-RATING | 3,5 | Float
+CODE | 3SSXTPFQTG | Varchar
+CREDIT | 200 | Int32
 
 ####  ORDER
 
 Field | Values | Type
 ------------- | ------------- | -------------
-TIMESTAMP (key) | 2020-02-07 05:11:36 +0000 | String
-IMAGE | url image | String
-BUYER | username | String
-SELLER | username | String
-PRICE| 10,56 | Float
+USERNAME | username | String
+CREDIT| 10,56 | Double
 
 
 ## Neo4j
 
 ### Vertices
 
-- User
+* User
 
-- Insertion
+* Insertion
 
 ### Edges
 
-- User - User: follow
+* (u:User)-[:POSTED]->(i:Insertion)
 
-- User - Insertion: view, intereste, published
+* (u:User)-[:FOLLOWS]->(v:User)
+
+* (u:User)-[:INTERESTED]->(i:Insertion)
+
 
 ## License
 
