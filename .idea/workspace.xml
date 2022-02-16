@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Added addCode() function to ConnectionMongoDB class. &#10;d15ad02&#10;----------------------------------------------------&#10;&#10;It allows the insertion of a new code as soon as a user uses it. The new code will have the field &quot;code&quot; different from the one just used but will have the usual amount in the field &quot;credit&quot; so as to maintain the collection balanced from the point of view of the field &quot;credit&quot;.&#10;&#10;by squarcia">
+    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
@@ -80,6 +78,7 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -257,7 +256,28 @@
       <option name="project" value="LOCAL" />
       <updated>1645028347905</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Fix">
+      <created>1645031664247</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1645031664247</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Fix">
+      <created>1645036947094</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1645036947094</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Fix">
+      <created>1645037681522</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1645037681522</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -304,6 +324,7 @@
     <MESSAGE value="comments and little fixes" />
     <MESSAGE value="Update balance." />
     <MESSAGE value="Added addCode() function to ConnectionMongoDB class. &#10;d15ad02&#10;----------------------------------------------------&#10;&#10;It allows the insertion of a new code as soon as a user uses it. The new code will have the field &quot;code&quot; different from the one just used but will have the usual amount in the field &quot;credit&quot; so as to maintain the collection balanced from the point of view of the field &quot;credit&quot;.&#10;&#10;by squarcia" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added addCode() function to ConnectionMongoDB class. &#10;d15ad02&#10;----------------------------------------------------&#10;&#10;It allows the insertion of a new code as soon as a user uses it. The new code will have the field &quot;code&quot; different from the one just used but will have the usual amount in the field &quot;credit&quot; so as to maintain the collection balanced from the point of view of the field &quot;credit&quot;.&#10;&#10;by squarcia" />
+    <MESSAGE value="Fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix" />
   </component>
 </project>
