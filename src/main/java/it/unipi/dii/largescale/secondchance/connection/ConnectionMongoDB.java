@@ -16,9 +16,11 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.UUID;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
@@ -305,7 +307,7 @@ public class ConnectionMongoDB{
         return insertions;
     }
 
-    //fidn the insertions with the specified charateristics
+    //find the insertions with the specified charateristics
     public ArrayList<Document> findInsertionByFilters(String size, String price, String gender, String status, String category, String color) {
 
         ArrayList<Document> insertions = new ArrayList<>();
@@ -606,7 +608,7 @@ public class ConnectionMongoDB{
         return insertion;
     }
 
-    //fidn the users with most purchased or sold orders
+    //find the users with most purchased or sold orders
     public ArrayList<Document> findMostActiveUsers(int k, boolean choice) {
 
         ArrayList<Document> orders = new ArrayList<>();
@@ -900,7 +902,9 @@ public class ConnectionMongoDB{
         try {
             updateBalance(Session.getLoggedUser().getUsername(), creditToAdd, '+');
             Utility.infoBox("Deposit of " + code.getDouble("credit") + "€ euros successfully executed", "Success", "Deposit done!");
-            deleteCode(code.getString("_id"));
+            deleteCode(code.getString("_id"), creditToAdd);
+
+
         } catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
         }
@@ -986,17 +990,37 @@ public class ConnectionMongoDB{
     /* ************************* CODE SECTION ************************* */
 
     //delete the code specified
-    private void deleteCode(String id) {
+    private void deleteCode(String id, double credit) {
 
         Bson query = eq("_id", id);
 
         try {
             DeleteResult result = codeColl.deleteOne(query);
             System.out.println("Deleted document count: " + result.getDeletedCount());
+            addCode(credit);
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);
         }
 
     }
+
+    //generate a code with the same credit
+    private void addCode(double credit) {
+
+        String randomString = UUID.randomUUID().toString();
+        String new_code = randomString.substring(0, 10);
+
+        while (codeColl.find(eq("code", new_code)).first() != null) {
+            randomString = UUID.randomUUID().toString();
+            new_code = randomString.substring(0, 10);
+        };
+
+        Document codeDoc = new Document()
+                .append("code", new_code)
+                .append("credit", credit);
+
+        codeColl.insertOne(codeDoc);
+    }
+
 
 }

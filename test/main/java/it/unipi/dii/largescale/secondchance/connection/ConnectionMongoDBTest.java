@@ -15,8 +15,8 @@ class ConnectionMongoDBTest {
 
     @BeforeAll
     public static void openConnection() {
-       connMongo = new ConnectionMongoDB();
-       connMongo.openConnection();
+        connMongo = new ConnectionMongoDB();
+        connMongo.openConnection();
     }
 
     @Test
