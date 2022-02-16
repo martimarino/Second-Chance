@@ -483,8 +483,6 @@ public class ConnectionMongoDB{
                             append("status", insertion.getStatus()).
                             append("category", insertion.getCategory()));
 
-Utility.printTerminal("PURCHASED: " + purchased);
-
             //order sold
             Document sold = new Document()
                     .append("_id", new ObjectId())
@@ -515,8 +513,6 @@ Utility.printTerminal("PURCHASED: " + purchased);
                 purc = Session.getLoggedUser().getPurchased();
             else
                 purc = new ArrayList<>();
-Utility.printTerminal("PURC: " + purc);
-
             purc.add(purchased);
             Session.getLoggedUser().setPurchased(purc);
 
@@ -660,6 +656,7 @@ Utility.printTerminal("PURC: " + purc);
         AggregateIterable<Document> aggr  = userColl.aggregate(
                 Arrays.asList(
                         Aggregates.match(Filters.eq("country", country)),
+                        Aggregates.match(exists("rating")),
                         Aggregates.sort(descending("rating")),
                         project,
                         limit
@@ -996,7 +993,7 @@ Utility.printTerminal("PURC: " + purc);
     //delete the code specified
     private void deleteCode(String id, double credit) {
 
-        Bson query = eq("_id", id);
+        Bson query = eq("_id", new ObjectId(id));
 
         try {
             DeleteResult result = codeColl.deleteOne(query);

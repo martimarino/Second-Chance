@@ -372,7 +372,7 @@ public class StatsController {
         }
 
         for (int i=0; i < k; i++) {
-            series1.getData().add(new XYChart.Data(array.get(i).getObjectId("_id").toString(), array.get(i).getInteger("interested")));
+            series1.getData().add(new XYChart.Data(array.get(i).getString("seller"), array.get(i).getInteger("interested")));
         }
 
 
@@ -392,10 +392,7 @@ public class StatsController {
             Scene scene = new Scene(bc,1200,800);
             stage.setScene(scene);
             stage.show();
-        }
-
-
-        catch(IOException e)
+        }catch(IOException e)
         {
             e.printStackTrace();
         }
@@ -417,9 +414,8 @@ public class StatsController {
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(category);
         for (int i=0; i < k; i++) {
-            series1.getData().add(new XYChart.Data(array.get(i).getObjectId("_id").toString(), array.get(i).getInteger("views")));
+            series1.getData().add(new XYChart.Data(array.get(i).getString("seller"), array.get(i).getInteger("views")));
         }
-
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Stage stage = new Stage();
             Image image = new Image(imageStream);
