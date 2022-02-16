@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Read preferences modified.">
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Reset_at_08_02_2022_15_00__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Reset_at_08_02_2022_15_00__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_14_29__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_14_29__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_15_42__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_15_42__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_17_24__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_17_24__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserAdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDBTest.java" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
@@ -44,6 +39,27 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Utility.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Session.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchInsertionController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/SearchUserAdmin.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/Profile.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/SearchInsertion.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchPostController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/SignUp.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignInController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionListController.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="24cGP07hMuydzouSsyqELUKrZS4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">

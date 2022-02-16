@@ -143,13 +143,27 @@ public class SearchUserAdminController {
 
         Process p = Runtime.getRuntime().exec("python randomCodesGenerator.py");
 
-        txtResult.setText("  Codes generated successfully! ");
+        txtResult.setText("Codes generated successfully! ");
 
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
                         txtResult.setText("Here you can generated new codes!");
+                    }
+                },
+                5000
+        );
+
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            Process s = Runtime.getRuntime().exec("mongoimport --db local --collection admin --type csv --headerline --file codes.csv");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 5000
