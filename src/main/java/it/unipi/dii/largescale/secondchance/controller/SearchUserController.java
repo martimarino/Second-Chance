@@ -150,14 +150,14 @@ public class SearchUserController extends MainController{
             country.setValue("country");
             rating.setValue("rating");
 
-        } else {        //search case
+        } else if(!(us.getText().equals(Session.getLoggedUser().getUsername()))) {  //search case
 
-            searchedList.add(ConnectionMongoDB.connMongo.findUserByUsername(us.getText()));
+                searchedList.add(ConnectionMongoDB.connMongo.findUserByUsername(us.getText()));
 
-            if (searchedList.isEmpty())
-                Utility.infoBox("This user does not exists.", "Advise", "User Advise");
+                if (searchedList.isEmpty())
+                    Utility.infoBox("This user does not exists.", "Advise", "User Advise");
 
-            showResult(true, searchBox, nextSearch, indexSearch, userFind, searchedList);
+                showResult(true, searchBox, nextSearch, indexSearch, userFind, searchedList);
 
         }
 
@@ -240,8 +240,7 @@ public class SearchUserController extends MainController{
 
             vb.getChildren().add(im);
             vb.getChildren().add(det);
-            if(list.get(index).getString("username") != Session.getLoggedUser().getUsername())
-                vb.getChildren().add(followUnfollow);
+            vb.getChildren().add(followUnfollow);
             vb.setAlignment(Pos.CENTER);
             vb.setStyle("-fx-min-width: 140px; -fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
             hb.getChildren().add(vb);
