@@ -29,7 +29,6 @@ public class InsertionAdminSearchController {
         else
             insertions = ConnectionMongoDB.connMongo.findInsertionsByCountryAndCategory(country, category);
 
-        System.out.println("Insertions: " + insertions.get(0));
         type_img = "insertion";
 
         box = new VBox(20);

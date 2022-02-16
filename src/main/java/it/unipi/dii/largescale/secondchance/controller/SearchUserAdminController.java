@@ -160,7 +160,8 @@ public class SearchUserAdminController {
                     @Override
                     public void run() {
                         try {
-                            Process s = Runtime.getRuntime().exec("mongoimport --db local --collection admin --type csv --headerline --file codes.csv");
+                            Process s = Runtime.getRuntime().exec("mongoimport --db lsmdb --collection code --type csv --headerline --file codes.csv");
+                            //Process s = Runtime.getRuntime().exec("mongoimport --db local --collection admin --type csv --headerline --file codes.csv");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
