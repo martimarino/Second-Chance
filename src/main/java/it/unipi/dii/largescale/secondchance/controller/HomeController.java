@@ -161,6 +161,10 @@ public class HomeController {
     public void prevViralInsertions() {
 
         viralHBox.getChildren().clear();
+
+        nextViralButton.setDisable(false);
+        nextViralButton.setVisible(true);
+
         scrollViralPage = Utility.prevPage(scrollViralPage, nPage, prevViralButton);
         showViralInsertions();
     }
@@ -176,16 +180,20 @@ public class HomeController {
 
     public void showFeed() {
 
-        System.out.println("SCROLL OUT: " + scrollFeedPage);
-        for (int i = 0; i < nPage && i < feedList.size(); i++) {
-            System.out.println("SCROLL IN: " + scrollFeedPage + "i: " + i);
-            addFeedInsertions();
+        if (feedList.size() < nPage) {
+            nextFeedButton.setDisable(true);
+            nextFeedButton.setVisible(false);
         }
+
+        for (int i = 0; i < nPage && i < feedList.size(); i++)
+            addFeedInsertions();
 
     }
 
     public void prevFeedInsertions() {
 
+        nextFeedButton.setDisable(false);
+        nextFeedButton.setVisible(true);
         feedBox.getChildren().clear();
         scrollFeedPage = Utility.prevPage(scrollFeedPage, nPage, prevFeedButton);
         showFeed();

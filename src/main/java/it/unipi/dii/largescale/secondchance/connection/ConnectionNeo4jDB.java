@@ -48,8 +48,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         this.open();
         try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run("MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
-                                "gender: $gender})",
+                tx.run("MERGE (i:Insertion {uniq_id: $uniq_id, category: $category})",
                         parameters("uniq_id", i.getId(), "category", i.getCategory()));
                 return null;
             });
@@ -149,7 +148,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return followed;
             });
-            Utility.printTerminal("NEO4j\n" + insertions);
             this.close();
         } catch (Exception e) {
             e.printStackTrace();

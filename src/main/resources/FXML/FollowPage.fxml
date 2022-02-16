@@ -13,10 +13,6 @@
 
 <AnchorPane prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: rgb(70,130,180) rgb(70,130,180);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.it.unipi.dii.largescale.secondchance.controller.FollowController">
     <children>
-        <Text fill="WHITE" layoutX="271.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Followers Page">
-         <font>
-            <Font size="16.0" />
-         </font></Text>
         <BorderPane fx:id="bp" layoutX="31.0" layoutY="52.0" prefHeight="297.0" prefWidth="538.0" style="-fx-background-color: rgb(70,130,180) rgb(70,130,180);">
             <left>
                 <Pane fx:id="prev" onMouseClicked="#prevPage" prefHeight="297.0" prefWidth="80.0" BorderPane.alignment="CENTER">

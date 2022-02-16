@@ -52,6 +52,7 @@ public class FollowController {
             next.setDisable(true);
             next.setVisible(false);
         }
+
         System.out.println("(show) INDEX: " + scrollPage);
 
         for (int i = 0; i < nPage && scrollPage < list.size(); i++)

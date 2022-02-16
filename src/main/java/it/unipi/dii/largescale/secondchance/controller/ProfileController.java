@@ -245,10 +245,11 @@ public class ProfileController extends MainController {
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/FollowStyle.css")).toExternalForm());
             stage.setScene(scene);
-            stage.setTitle("Your insertions");
             FollowController controller = loader.getController();
             if(choice) //followers page
             {
+                stage.setTitle("Followers");
+
                 follower = ConnectionNeo4jDB.connNeo.retrieveFollowersByUser(user.getUsername());
 
                 if (follower.size() == 0) {
@@ -258,6 +259,9 @@ public class ProfileController extends MainController {
                 controller.initialize(follower);
             }
             else {
+
+                stage.setTitle("Following");
+
                 following = ConnectionNeo4jDB.connNeo.retrieveFollowingByUser(user.getUsername());
 
                 if (following.size() == 0) {

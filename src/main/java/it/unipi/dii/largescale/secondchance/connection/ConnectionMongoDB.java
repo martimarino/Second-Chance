@@ -84,8 +84,8 @@ public class ConnectionMongoDB{
 
     public void openConnection() {
 
-        connectToLocal();
-        //connectToVms();
+        //connectToLocal();
+        connectToVms();
         //connectToAtlas();
 
         System.out.println("**************** USER ******************");
@@ -739,9 +739,6 @@ public class ConnectionMongoDB{
         }catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
         }
-
-
-
     }
 
     //unsuspend the specified user
@@ -903,11 +900,11 @@ public class ConnectionMongoDB{
             return;
         }
 
-        double creditToAdd = code.getInteger("credit");
+        double creditToAdd = code.getDouble("credit");
 
         try {
             updateBalance(Session.getLoggedUser().getUsername(), creditToAdd, '+');
-            Utility.infoBox("Deposit of " + code.getInteger("credit") + "€ euros successfully executed", "Success", "Deposit done!");
+            Utility.infoBox("Deposit of " + code.getDouble("credit") + "€ euros successfully executed", "Success", "Deposit done!");
             deleteCode(code.getString("_id"));
         } catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
@@ -949,6 +946,7 @@ public class ConnectionMongoDB{
     public double getBalance() {
 
         FindIterable<Document> cursor = null;
+        System.out.println(Session.getLoggedUser().getUsername());
         try {
             Bson filter = Filters.eq("username", Session.getLoggedUser().getUsername());
             Bson projection = fields(include("credit"), excludeId());
@@ -956,6 +954,7 @@ public class ConnectionMongoDB{
         } catch (MongoException me) {
             System.err.println("Unable to get balance from db: " + me);
         }
+        System.out.println("CREDIT: " + cursor.first());
         return cursor.first().getDouble("credit");
     }
 

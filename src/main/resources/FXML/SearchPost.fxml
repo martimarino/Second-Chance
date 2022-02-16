@@ -37,8 +37,8 @@
                                 <Font size="15.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="sellerField" alignment="CENTER" layoutX="133.0" layoutY="87.0" promptText="Seller Id" maxWidth="150.0"/>
-                        <Label layoutX="29.0" layoutY="91.0" text="Insert seller id:" />
+                        <TextField fx:id="sellerField" alignment="CENTER" layoutX="133.0" layoutY="87.0" promptText="Seller" maxWidth="150.0"/>
+                        <Label layoutX="29.0" layoutY="91.0" text="Insert seller:" />
                     </children>
                 </Pane>
             </children>

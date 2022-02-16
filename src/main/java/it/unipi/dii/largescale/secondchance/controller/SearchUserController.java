@@ -93,7 +93,7 @@ public class SearchUserController extends MainController{
 
         //if there are less than k suggested, add top k rated to the suggestions
 
-        if(suggFromNeo.size() < k)
+        if(suggFromNeo.size() < m)
         {
             Utility.printTerminal("Not enough suggestions");
             User user = Session.getLoggedUser();
@@ -217,7 +217,7 @@ public class SearchUserController extends MainController{
             index = indexSearch;
         else
             index = indexSugg;
-
+        System.out.println("INDEX: " + index + "DOC: " + list.get(index));
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             System.out.println(list.get(index).getString("username"));
             Image image = new Image(imageStream);
@@ -286,9 +286,21 @@ public class SearchUserController extends MainController{
 
         hb.getChildren().clear();
         if(choice)  //search
+        {
             indexSearch = Utility.prevPage(index, k, prev);
+            index = indexSearch;
+        }
         else        //sugg
+        {
             indexSugg = Utility.prevPage(index, k, prev);
+            index = indexSugg;
+        }
+
+        if(index < list.size())
+        {
+            next.setDisable(false);
+            next.setVisible(true);
+        }
         showResult(choice, hb, next, index, bp, list);
 
     }
