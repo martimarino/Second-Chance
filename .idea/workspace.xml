@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Update balance.">
+    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Added addCode() function to ConnectionMongoDB class. &#10;d15ad02&#10;----------------------------------------------------&#10;&#10;It allows the insertion of a new code as soon as a user uses it. The new code will have the field &quot;code&quot; different from the one just used but will have the usual amount in the field &quot;credit&quot; so as to maintain the collection balanced from the point of view of the field &quot;credit&quot;.&#10;&#10;by squarcia">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserAdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/entity/User.java" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
@@ -250,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645026768825</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Added addCode() function to ConnectionMongoDB class. &#10;d15ad02&#10;----------------------------------------------------&#10;&#10;It allows the insertion of a new code as soon as a user uses it. The new code will have the field &quot;code&quot; different from the one just used but will have the usual amount in the field &quot;credit&quot; so as to maintain the collection balanced from the point of view of the field &quot;credit&quot;.&#10;&#10;by squarcia">
+      <created>1645028347905</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1645028347905</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,6 +303,7 @@
     <MESSAGE value="Read preferences modified." />
     <MESSAGE value="comments and little fixes" />
     <MESSAGE value="Update balance." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update balance." />
+    <MESSAGE value="Added addCode() function to ConnectionMongoDB class. &#10;d15ad02&#10;----------------------------------------------------&#10;&#10;It allows the insertion of a new code as soon as a user uses it. The new code will have the field &quot;code&quot; different from the one just used but will have the usual amount in the field &quot;credit&quot; so as to maintain the collection balanced from the point of view of the field &quot;credit&quot;.&#10;&#10;by squarcia" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added addCode() function to ConnectionMongoDB class. &#10;d15ad02&#10;----------------------------------------------------&#10;&#10;It allows the insertion of a new code as soon as a user uses it. The new code will have the field &quot;code&quot; different from the one just used but will have the usual amount in the field &quot;credit&quot; so as to maintain the collection balanced from the point of view of the field &quot;credit&quot;.&#10;&#10;by squarcia" />
   </component>
 </project>

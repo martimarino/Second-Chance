@@ -95,7 +95,7 @@ public class User implements GeneralUser {
 
     public void setImage(String image) { this.image = image; }
 
-    public void setPurchased(ArrayList<Document> purchase) { this.purchased = purchased; }
+    public void setPurchased(ArrayList<Document> purchased) { this.purchased = purchased; }
 
     public void setSold(ArrayList<Document> sold) { this.sold = sold; }
 

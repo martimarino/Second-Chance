@@ -58,7 +58,7 @@ public class ConnectionMongoDB{
         codeColl = db.getCollection("code");
 
         balanceColl = db.getCollection("balance")
-                .withWriteConcern(WriteConcern.W3);
+                .withWriteConcern(WriteConcern.W2);        //W3 in the original version but 114 v is in recovering status
 
     }
 
@@ -483,6 +483,8 @@ public class ConnectionMongoDB{
                             append("status", insertion.getStatus()).
                             append("category", insertion.getCategory()));
 
+Utility.printTerminal("PURCHASED: " + purchased);
+
             //order sold
             Document sold = new Document()
                     .append("_id", new ObjectId())
@@ -513,6 +515,8 @@ public class ConnectionMongoDB{
                 purc = Session.getLoggedUser().getPurchased();
             else
                 purc = new ArrayList<>();
+Utility.printTerminal("PURC: " + purc);
+
             purc.add(purchased);
             Session.getLoggedUser().setPurchased(purc);
 
