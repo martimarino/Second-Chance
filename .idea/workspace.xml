@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Read preferences modified.">
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserAdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDBTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/randomCodesGenerator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
@@ -90,6 +91,9 @@
       <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes" />
       <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes\img" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="SecondChanceGUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -107,6 +111,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SecondChanceGUI" />
+        <item itemvalue="Application.SecondChanceGUI" />
         <item itemvalue="Application.SecondChanceGUI" />
       </list>
     </recent_temporary>
