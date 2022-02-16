@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Balance fixes">
+    <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="little fix signin and admin">
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Reset_at_08_02_2022_15_00_[Changes]/shelved.patch" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Reset_at_08_02_2022_15_00__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_14_29_[Changes]/shelved.patch" beforeDir="false" />
@@ -13,12 +13,19 @@
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_15_42__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_17_24_[Changes]/shelved.patch" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_02_2022_17_24__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_02_2022_11_43_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_09_02_2022_11_43__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignUpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignUpController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Utility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Utility.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/AddProfileImageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/FollowController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/FollowPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/FollowPage.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/FXML/FollowPage.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FXML/FollowPage.fxml" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
@@ -38,11 +45,10 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="fix" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -51,6 +57,28 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/ProfileController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchInsertionController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/MyOrderController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Session.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/utils/Utility.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionNeo4jDB.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/connection/ConnectionMongoDB.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/SearchInsertion.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SignInController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionListController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/SignUp.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchPostController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/Profile.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/resources/FXML/SearchUserAdmin.fxml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/Downloads/Telegram Desktop/ConnectionMongoDB.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="24cGP07hMuydzouSsyqELUKrZS4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -65,20 +93,20 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="codeWithMe.voiceChat.enabledByDefault" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/target/classes/FXML" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/target/classes" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes\FXML" />
       <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes" />
+      <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes\FXML" />
       <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes\img" />
     </key>
   </component>
@@ -124,7 +152,9 @@
       <workItem from="1644572069243" duration="11852000" />
       <workItem from="1644688043619" duration="2352000" />
       <workItem from="1644856749694" duration="5000" />
-      <workItem from="1645018474818" duration="6322000" />
+      <workItem from="1644861744216" duration="78000" />
+      <workItem from="1644862521817" duration="319000" />
+      <workItem from="1645018911519" duration="5095000" />
     </task>
     <task id="LOCAL-00001" summary="Fix admin function, fix other problems">
       <created>1643993961652</created>
@@ -231,14 +261,7 @@
       <option name="project" value="LOCAL" />
       <updated>1644760145644</updated>
     </task>
-    <task id="LOCAL-00016" summary="pom file added.">
-      <created>1645005803104</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1645005803104</updated>
-    </task>
-    <option name="localTasksCounter" value="17" />
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,8 +305,7 @@
     <MESSAGE value="Fixes." />
     <MESSAGE value="Insertion shown ordered by timestamp." />
     <MESSAGE value="Read preferences modified." />
-    <MESSAGE value="pom file added." />
-    <MESSAGE value="Balance fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Balance fixes" />
+    <MESSAGE value="comments and little fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="comments and little fixes" />
   </component>
 </project>

@@ -23,7 +23,13 @@ public class AddProfileImageController {
 
     public void submit() {
 
-        String url = btnSubmit.getText();
+        String url = txtFieldURL.getText();
+        System.out.println("URL: " + url);
+        if(url.isEmpty())
+        {
+            Utility.infoBox("Insert non empty image", "Empty string", "Empty field");
+            return;
+        }
         // Update MongoDB document
         ConnectionMongoDB.connMongo.submitNewProfileImg(url, user.getUsername());
         Utility.infoBox("The URL's photo has been uploaded correctly!", "Information", "Update done.");

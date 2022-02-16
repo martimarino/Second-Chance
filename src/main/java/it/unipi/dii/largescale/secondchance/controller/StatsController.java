@@ -90,9 +90,9 @@ public class StatsController {
             boxKNumber.setMouseTransparent(false);
             txtFieldCountry.setText("");
             txtFieldCountry.setEditable(true);
-            txtFieldCountry.setMouseTransparent(true);
+            txtFieldCountry.setMouseTransparent(false);
 
-            elaboraButton.setDisable(true);
+            elaboraButton.setDisable(false);
 
         });
 
@@ -115,7 +115,7 @@ public class StatsController {
             txtFieldCategory.setEditable(false);
             txtFieldCategory.setMouseTransparent(true);
 
-            elaboraButton.setDisable(true);
+            elaboraButton.setDisable(false);
         });
     }
 
@@ -135,7 +135,7 @@ public class StatsController {
             txtFieldCategory.setEditable(false);
             txtFieldCategory.setMouseTransparent(true);
 
-            elaboraButton.setDisable(true);
+            elaboraButton.setDisable(false);
 
         });
 
@@ -157,7 +157,7 @@ public class StatsController {
             txtFieldCategory.setEditable(true);
             txtFieldCategory.setMouseTransparent(false);
 
-            elaboraButton.setDisable(true);
+            elaboraButton.setDisable(false);
 
         });
 
@@ -176,10 +176,10 @@ public class StatsController {
             txtFieldCountry.setEditable(false);
             txtFieldCountry.setMouseTransparent(true);
 
-            txtFieldCategory.setEditable(false);
-            txtFieldCategory.setMouseTransparent(true);
+            txtFieldCategory.setEditable(true);
+            txtFieldCategory.setMouseTransparent(false);
 
-            elaboraButton.setDisable(true);
+            elaboraButton.setDisable(false);
 
         });
     }
@@ -361,7 +361,7 @@ public class StatsController {
 
         String category = txtFieldCategory.getText();
         ArrayList<Document> array;
-        array = ConnectionMongoDB.connMongo.findTopKViewedInsertion(k, category);
+        array = ConnectionMongoDB.connMongo.findTopKInterestingInsertion(k, category);
 
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(category);

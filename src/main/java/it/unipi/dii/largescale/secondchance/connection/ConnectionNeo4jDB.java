@@ -25,7 +25,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
     public void close() {
         driver.close();
     }
-
+    //add new user
     public boolean addUser(final User u) {
         this.open();
         try (Session session = driver.session()) {
@@ -43,13 +43,12 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             this.close();
         }
     }
-
+    //add new insertion
     public boolean addInsertion(final Insertion i) {
         this.open();
         try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
-                tx.run("MERGE (i:Insertion {uniq_id: $uniq_id, category: $category," +
-                                "gender: $gender})",
+                tx.run("MERGE (i:Insertion {uniq_id: $uniq_id, category: $category})",
                         parameters("uniq_id", i.getId(), "category", i.getCategory()));
                 return null;
             });
@@ -61,7 +60,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             return false;
         }
     }
-
+    //put follows link between user with follower username and followed one
     public void followUser(String follower, String followed) {
         this.open();
         System.out.println("USER_FOLLOWER: " + follower + "USER_FOLLOWED : " + followed);
@@ -79,6 +78,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         }
     }
 
+    //delete follows link between the user with unfollower and unfollowed username
     public void unfollowUser(String unfollower, String unfollowed) {
         this.open();
         try (Session session = driver.session()) {
@@ -95,6 +95,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         }
     }
 
+    //get all the users followed by the followers of the specified user
     public ArrayList<String> getSuggestedUsers(String username, String country, int k) {
         this.open();
         ArrayList<String> suggestions = new ArrayList<>();
@@ -125,6 +126,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         return suggestions;
     }
 
+    //get all the insertions of the followers
     public ArrayList<String> getFollowedInsertions(String username, int k) {
 
         this.open();
@@ -146,7 +148,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return followed;
             });
-            Utility.printTerminal("NEO4j\n" + insertions);
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,7 +155,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         return followed;
 
     }
-
+    //put like link to the insertion specified
     public boolean likeInsertion(String username, String insertion_id) {
 
         this.open();
@@ -176,7 +177,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             this.close();
         }
     }
-
+    //dislike the specified insertion
     public boolean dislikeInsertion(String username, String insertion_id) {
 
         this.open();
@@ -198,6 +199,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         }
     }
 
+    //check if there is already a link interested between the user and the insertion specified
     public boolean showIfInterested(String username, String insertion_id) {
 
         this.open();
@@ -216,6 +218,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         }
     }
 
+    //delete the specified insertion
     public boolean deleteInsertion(String uniq_id) {
         this.open();
 
@@ -233,6 +236,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         }
     }
 
+    //check if there is already a follow link between the two users
     public boolean checkIfFollows(String us1, String us2) {
 
         this.open();
@@ -270,7 +274,8 @@ public class ConnectionNeo4jDB implements AutoCloseable {
 
     }
 
-    public boolean createPostedRelationship(String node1, String node2) {
+    //insert posted relashionship between the user and the insertion
+    public boolean createPostedRelationship(String user, String insertion) {
 
         this.open();
         try (Session session = driver.session()) {
@@ -279,8 +284,8 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                         "MATCH (u:User),(i:Insertion) " +
                                 "WHERE u.username = $username AND i.uniq_id = $id " +
                                 "CREATE (u)-[:POSTED]->(i)",
-                        parameters("username", node1,
-                                "id", node2));
+                        parameters("username", user,
+                                "id", insertion));
                 return null;
             });
             this.close();
@@ -295,14 +300,15 @@ public class ConnectionNeo4jDB implements AutoCloseable {
 
     /* ********** USER SOCIAL FUNCTIONALITIES ********** */
 
+
+    //retrieve all the followers of the specified user
     public ArrayList<String> retrieveFollowersByUser(String user) {
 
         this.open();
         ArrayList<String> followers = new ArrayList<>();
 
         try (Session session = driver.session()) {
-
-            List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
+            session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run("MATCH (u:User) <- [r:FOLLOWS] - (u1:User) " +
                                 "WHERE u.username = $username " +
                                 "RETURN u1.username as name ",
@@ -314,8 +320,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return followers;
             });
-            if (!follow.isEmpty())
-                Utility.printTerminal(follow.get(0));
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -323,14 +327,14 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         return followers;
     }
 
+    //retrieve the following users of the specified user
     public ArrayList<String> retrieveFollowingByUser(String user) {
 
         this.open();
         ArrayList<String> following = new ArrayList<>();
 
         try (Session session = driver.session()) {
-
-            List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
+            session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run("MATCH (u:User) - [r:FOLLOWS] -> (u1:User) " +
                                 "WHERE u.username = $username " +
                                 "RETURN u1.username as name ",
@@ -342,8 +346,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return following;
             });
-            if (!follow.isEmpty())
-                Utility.printTerminal(follow.get(0));
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -351,14 +353,14 @@ public class ConnectionNeo4jDB implements AutoCloseable {
         return following;
     }
 
-    public ArrayList<String> retrieveFollowedInsertionByUser(String user) {
+    //retrieve all the insertions of the interested insertions of the specified user
+    public ArrayList<String> retrieveInterestedInsertionByUser(String user) {
 
         this.open();
         ArrayList<String> followed_ins = new ArrayList<>();
 
         try (Session session = driver.session()) {
-
-            List<String> follow = session.readTransaction((TransactionWork<List<String>>) tx -> {
+            session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run("MATCH (u:User) - [r:INTERESTED] -> (i:Insertion)" +
                                 "WHERE u.username = $username " +
                                 "RETURN i.uniq_id as uniq_id",
@@ -370,16 +372,13 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return followed_ins;
             });
-            if (!followed_ins.isEmpty())
-                Utility.printTerminal("*************** NEO4j FOLLOWED INSERTIONS ***************\n"
-                        + followed_ins.get(0));
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return followed_ins;
     }
-
+    //delete the specified insertion
     public boolean deleteInsertionNeo4J(String id) {
         this.open();
 
@@ -398,7 +397,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
             this.close();
         }
     }
-
+    //find the number of interesting putting for the categories
     public ArrayList<String> findNumberInterestingForCategory() {
 
         this.open();
@@ -427,13 +426,13 @@ public class ConnectionNeo4jDB implements AutoCloseable {
 
     }
 
+    //find the insertion in common between the two users
     public ArrayList<String> findCommonLikes(String currentUser, String otherUser) {
 
         this.open();
         ArrayList<String> commonLikes = new ArrayList<>();
 
         try (Session session = driver.session()) {
-
             session.readTransaction((TransactionWork<List<String>>) tx -> {
                 Result result = tx.run(
                         "match(U:User{username: $currentUser})-[:INTERESTED]->(i:Insertion)<-[:INTERESTED]-(u1:User{username: $otherUser}) " +
@@ -445,7 +444,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                     Record r = result.next();
                     commonLikes.add(r.get("id").asString());
                 }
-
                 return commonLikes;
             });
 
