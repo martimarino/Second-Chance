@@ -68,7 +68,7 @@ public class SignInController {
         boolean isAdmin = false;
 
         if(!us.getText().isEmpty() && !pw.getText().isEmpty()) {
-            Utility.printTerminal("Value: " + us.getText() + "\nValue: " + pw.getText());
+
             boolean logged = ConnectionMongoDB.connMongo.checkCredentials(username, encrypted);
             if (!logged) {
                 Utility.infoBox("Username or Password wrong, try again", "Error", "Try again");
@@ -80,7 +80,6 @@ public class SignInController {
             if (us.getText().equals("admin")) {
                 isAdmin = true;
                 Document user  = ConnectionMongoDB.connMongo.findUserByUsername(us.getText());
-                System.out.println("USER: " + user);
                 session = Session.getInstance();
                 session.setLogUser(user, isAdmin);
                 if(ConnectionMongoDB.connMongo.checkCredentials(username, encrypted))

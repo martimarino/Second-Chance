@@ -31,9 +31,6 @@ public class SignUpController {
 
         String img;
 
-        System.out.println("US: " + us.getText());
-        System.out.println("CO: " + co.getValue());
-
         if (!us.getText().isEmpty()
                 && !pw.getText().isEmpty()
                 && !em.getText().isEmpty()
@@ -58,8 +55,6 @@ public class SignUpController {
                 us.setText("");
                 return;
             }
-
-            System.out.println(u);
 
             if(ConnectionMongoDB.connMongo.registerUser(u)) {
                 //clear TextField

@@ -54,7 +54,6 @@ public class NewInsertionController {
 
         Insertion i = new Insertion(id.toString(), categ.getValue(), desc.getText(), gender, p, 0, 0, status.getValue(), color.getText(), size.getValue(),
                 brand.getText(), country.getValue(), link.getText(), formattedDate, Session.getLoggedUser().getUsername());
-        Utility.printTerminal(i.toString());
 
         //MongoDB failure
         try {

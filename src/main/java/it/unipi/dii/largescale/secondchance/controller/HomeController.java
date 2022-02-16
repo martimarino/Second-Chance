@@ -58,7 +58,6 @@ public class HomeController {
 
         viralInsertions.setCenter(viralHBox);
 
-        Utility.printTerminal("Size of viral: " + viralList.size());
         type_img = "insertion";
 
         showViralInsertions();
@@ -82,12 +81,10 @@ public class HomeController {
         if (followedFromNeo.size() < numInsertions) {
             ArrayList<Document> topK = ConnectionMongoDB.connMongo.findTopKViewedInsertion(numInsertions - followedFromNeo.size(), "clothing");
 
-            for (Document document : topK) {
+            for (Document document : topK)
                 feedList.add(document);
-                System.out.println("TOPK: " + feedList);
-            }
+
         }
-        Utility.printTerminal("Size of feed: " + feedList.size());
         showFeed();
     }
 
@@ -129,7 +126,6 @@ public class HomeController {
         Label price = new Label(viralList.get(scrollViralPage).getDouble("price") + "€");
         Label status = new Label("Status: " + viralList.get(scrollViralPage).getString("status"));
         Label interested = new Label("Interested: " + viralList.get(scrollViralPage).getInteger("interested"));
-        System.out.println(viralList.get(scrollViralPage).getString("seller"));
 
         VBox viral = new VBox(user, image, price, status, interested);
         viral.setStyle("-fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
@@ -139,7 +135,6 @@ public class HomeController {
 
         viral.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
                         ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                     } catch (Exception e) {
@@ -148,7 +143,6 @@ public class HomeController {
                 }
         );
         scrollViralPage++;
-        Utility.printTerminal("SCROLL VIRAL PAGE: " + scrollViralPage);
     }
 
     private void showViralInsertions() {
@@ -210,10 +204,8 @@ public class HomeController {
 
         ImageView image;
         String uniq_id = feedList.get(scrollFeedPage).get("_id").toString();
-        Utility.printTerminal("UNIQ ID: " + uniq_id);
 
         Label user = new Label("User: " + feedList.get(scrollFeedPage).getString("seller"));
-        Utility.printTerminal(feedList.toString());
         image = Utility.getGoodImage(feedList.get(scrollFeedPage).getString("image_url"), 150, type_img);
         Label price = new Label(feedList.get(scrollFeedPage).getDouble("price") + "€");
         Label status = new Label("Status: " + feedList.get(scrollFeedPage).getString("status"));
@@ -227,7 +219,6 @@ public class HomeController {
 
         feed.setOnMouseClicked(event -> {
                     try {
-                        System.out.println("unique: " + uniq_id);
                         showInsertionPage(uniq_id);
                         ConnectionMongoDB.connMongo.updateNumView(uniq_id);
                     } catch (Exception e) {

@@ -51,7 +51,6 @@ public class InsertionListController {
             next.setDisable(false);
             next.setVisible(true);
         }
-        System.out.println("(show) INDEX: " + index);
 
         for (int i = 0; i < k && index < list.size(); i++)
             addInsertions();
@@ -137,12 +136,10 @@ public class InsertionListController {
         box.getStyleClass().add("vbox-insertion");
 
         index++;
-        System.out.println("(add) INDEX: " + index);
 
     }
 
     public void prevPage() {
-        System.out.println("(prev) INDEX: " + index);
 
         box.getChildren().clear();
 
@@ -151,8 +148,6 @@ public class InsertionListController {
         else
             index -= (index%k);
         index -= 3;
-
-        System.out.println("(prev) INDEX: " + index);
 
         if (index == 0) {
             prev.setDisable(true);
@@ -166,8 +161,6 @@ public class InsertionListController {
     public void nextPage() {
 
         box.getChildren().clear();
-
-        System.out.println("(next) INDEX: " + index);
 
         showInsertionList();
 

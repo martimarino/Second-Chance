@@ -264,8 +264,6 @@ public class ConnectionMongoDB{
 
         try {
             UpdateResult resultUser = userColl.updateOne(queryUser, updatesUser, options);
-            System.out.println("Modified document count: " + resultUser.getModifiedCount());
-            System.out.println("Upserted id: " + resultUser.getUpsertedId()); // only contains a value when an upsert is performed
             return (int) resultUser.getModifiedCount();
         } catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
@@ -745,8 +743,6 @@ public class ConnectionMongoDB{
 
         try {
             UpdateResult result = userColl.updateOne(query, updates, options);
-            System.out.println("Modified document count: " + result.getModifiedCount());
-            System.out.println("Upserted id: " + result.getUpsertedId()); // only contains a value when an upsert is performed
         }catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
         }
@@ -763,8 +759,6 @@ public class ConnectionMongoDB{
 
         try {
             UpdateResult result = userColl.updateOne(query, updates, options);
-            System.out.println("Modified document count: " + result.getModifiedCount());
-            System.out.println("Upserted id: " + result.getUpsertedId()); // only contains a value when an upsert is performed
         } catch (MongoException me) {
             System.err.println("Unable to update due to an error: " + me);
         }
@@ -822,7 +816,6 @@ public class ConnectionMongoDB{
                 .append("text", rev.getText())
                 .append("rating", rev.getRating());
 
-        System.out.println("REVIEW: " + review);
         Bson query = eq("username", rev.getSeller());
         Bson push_data = push("reviews", review);
 
@@ -950,7 +943,7 @@ public class ConnectionMongoDB{
     public double getBalance() {
 
         FindIterable<Document> cursor = null;
-        System.out.println(Session.getLoggedUser().getUsername());
+
         try {
             Bson filter = Filters.eq("username", Session.getLoggedUser().getUsername());
             Bson projection = fields(include("credit"), excludeId());
@@ -958,7 +951,7 @@ public class ConnectionMongoDB{
         } catch (MongoException me) {
             System.err.println("Unable to get balance from db: " + me);
         }
-        System.out.println("CREDIT: " + cursor.first());
+
         return cursor.first().getDouble("credit");
     }
 
@@ -997,7 +990,6 @@ public class ConnectionMongoDB{
 
         try {
             DeleteResult result = codeColl.deleteOne(query);
-            System.out.println("Deleted document count: " + result.getDeletedCount());
             addCode(credit);
         } catch (MongoException me) {
             System.err.println("Unable to delete due to an error: " + me);

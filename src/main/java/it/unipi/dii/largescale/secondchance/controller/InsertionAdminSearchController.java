@@ -29,7 +29,6 @@ public class InsertionAdminSearchController {
         else
             insertions = ConnectionMongoDB.connMongo.findInsertionsByCountryAndCategory(country, category);
 
-        System.out.println("Insertions: " + insertions.get(0));
         type_img = "insertion";
 
         box = new VBox(20);
@@ -52,7 +51,6 @@ public class InsertionAdminSearchController {
             next.setDisable(false);
             next.setVisible(true);
         }
-        System.out.println("(show) INDEX: " + index);
 
         for (int i = 0; i < k && index < insertions.size(); i++) {
             addInsertions();
@@ -98,7 +96,6 @@ public class InsertionAdminSearchController {
         btnDelete.setOnMouseClicked(event->{
                     try {
                         SearchPostController spc = new SearchPostController();
-                        System.out.println(uniq_id);
                         spc.deletePost(uniq_id);
                         Utility.infoBox("The post is removed correctly!",
                                 "Success!",
@@ -127,11 +124,9 @@ public class InsertionAdminSearchController {
         btnDelete.setTranslateY(50);
 
         index++;
-        System.out.println("(add) INDEX: " + index);
     }
 
     public void prevPage() {
-        System.out.println("(prev) INDEX: " + index);
 
         box.getChildren().clear();
 

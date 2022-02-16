@@ -24,7 +24,7 @@ public class AddProfileImageController {
     public void submit() {
 
         String url = txtFieldURL.getText();
-        System.out.println("URL: " + url);
+
         if(url.isEmpty())
         {
             Utility.infoBox("Insert non empty image", "Empty string", "Empty field");

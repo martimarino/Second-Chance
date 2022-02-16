@@ -141,8 +141,6 @@ public class Utility {
 
     public static void nextPage(int index, ArrayList<Document> list, Pane next, Pane prev) {
 
-        System.out.println("INDEX: " + index + "list: " + list.size());
-
         if (index == list.size()) {
             next.setDisable(true);
             next.setVisible(false);

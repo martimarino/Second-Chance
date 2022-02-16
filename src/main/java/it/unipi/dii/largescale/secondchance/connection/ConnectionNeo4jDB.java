@@ -12,7 +12,7 @@ import static org.neo4j.driver.Values.parameters;
 
 public class ConnectionNeo4jDB implements AutoCloseable {
     private Driver driver;
-    String uri = "bolt://172.16.4.114:7687";
+    String uri = "bolt://172.16.4.115:7687";
     String user = "neo4j";
     String password = "2nd-chance";
     public static ConnectionNeo4jDB connNeo;
@@ -63,7 +63,7 @@ public class ConnectionNeo4jDB implements AutoCloseable {
     //put follows link between user with follower username and followed one
     public void followUser(String follower, String followed) {
         this.open();
-        System.out.println("USER_FOLLOWER: " + follower + "USER_FOLLOWED : " + followed);
+
         try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
                 tx.run("MATCH (u:User),(v) " +
@@ -118,7 +118,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
                 }
                 return suggestions;
             });
-            Utility.printTerminal("NEO4j\n" + similar);
             this.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,7 +158,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
     public boolean likeInsertion(String username, String insertion_id) {
 
         this.open();
-        System.out.println("INSERTION NEO : " + insertion_id);
 
         try (Session session = driver.session()) {
             session.writeTransaction((TransactionWork<Void>) tx -> {
@@ -212,7 +210,6 @@ public class ConnectionNeo4jDB implements AutoCloseable {
 
                 return result.hasNext();
             });
-            System.out.println(relation);
             this.close();
             return relation;
         }

@@ -55,9 +55,7 @@ public class InsertionController {
         descriptionContainer.setEditable(false);
 
         user = Session.getLoggedUser();
-        //System.out.println("uniq_id controller: " + uniq_id);
 
-        System.out.println("INSERTION insertionController: " + insertion);
         type_img = "insertion";
         
         try {
@@ -78,7 +76,6 @@ public class InsertionController {
 
     private void fillInsertionInfo(Insertion insertion) throws FileNotFoundException {
 
-        System.out.println("IMAGE: " + insertion.getImage_url());
         ImageView images = Utility.getGoodImage(insertion.getImage_url(), 300, type_img);
         imgContainer.getChildren().add(images);
 

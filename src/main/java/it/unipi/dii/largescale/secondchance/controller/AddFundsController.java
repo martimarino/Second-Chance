@@ -29,10 +29,7 @@ public class AddFundsController {
     public void deposit() {
 
         String code = txtFieldCode.getText();
-
-        Utility.printTerminal("CREDIT (before): " + Balance.balance.getCredit());
         ConnectionMongoDB.connMongo.addFundsToWallet(code);
-        Utility.printTerminal("CREDIT (after): " + Balance.balance.getCredit());
 
         txtFieldCode.setText("");
 

@@ -109,7 +109,6 @@ public class SearchUserController extends MainController{
             suggList.add(d);
         }
 
-        Utility.printTerminal("SUGG SIZE: " + suggList.size());
         showResult(false, suggBox, nextSugg, indexSugg, userSugg, suggList);
     }
 
@@ -198,7 +197,6 @@ public class SearchUserController extends MainController{
             next.setDisable(false);
             next.setVisible(true);
         }
-        System.out.println("(show) INDEX: " + index);
 
         for (int i = 0; ((i < k) && (index < m) && (index < list.size())); i++)
             addResult(choice, list, hb);
@@ -217,9 +215,8 @@ public class SearchUserController extends MainController{
             index = indexSearch;
         else
             index = indexSugg;
-        System.out.println("INDEX: " + index + "DOC: " + list.get(index));
+        //System.out.println("INDEX: " + index + "DOC: " + list.get(index));
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
-            System.out.println(list.get(index).getString("username"));
             Image image = new Image(imageStream);
             ImageView im = new ImageView(image);
             Label username = new Label(list.get(index).getString("username"));
@@ -253,7 +250,6 @@ public class SearchUserController extends MainController{
 
             vb.setOnMouseClicked(event->{
                         try {
-                            System.out.println("USERNAME onclick: " + username.getText());
                             showUserPage(username.getText());
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -270,10 +266,6 @@ public class SearchUserController extends MainController{
                 indexSearch++;
             else        //sugg
                 indexSugg++;
-
-            System.out.println("(add sugg) INDEX: " + indexSugg);
-            System.out.println("(add search) INDEX: " + indexSearch);
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -315,7 +307,6 @@ public class SearchUserController extends MainController{
 
     private void showUserPage(String username) {
 
-        System.out.println("USERNAME show: " + username);
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(ProfileController.class.getResource("/FXML/Profile.fxml"));

@@ -65,7 +65,7 @@ public class MyOrderController{
                 panel.getChildren().clear();
                 indexPage = 1;
             }
-            System.out.println("Purchased: " + Session.getLoggedUser().getPurchased());
+
             ordersList = Session.getLoggedUser().getPurchased();
             kind = true;
             showAllOrders(true);
@@ -241,10 +241,8 @@ public class MyOrderController{
 
         SimpleDateFormat date = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
         String timestamp = date.format(new Date());
-        System.out.println("timestamp: " + timestamp);
 
         Review rev = new Review( user.getUsername(), seller, txtArea.getText(), timestamp, txtTitle.getText(), rating);
-        Utility.printTerminal("REV: " + rev);
 
         ConnectionMongoDB.connMongo.addReview(rev);
         ConnectionMongoDB.connMongo.updateSellerRating(rev.getSeller());

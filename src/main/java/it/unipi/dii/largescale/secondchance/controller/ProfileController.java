@@ -77,8 +77,6 @@ public class ProfileController extends MainController {
         interestedInsertionsButton.setOnMouseClicked(event -> {showInsertions("insertionListLiked", user.getUsername());});
 
         setProfile();
-
-        System.out.println("USERNAME init: " + user.getUsername());
     }
 
     public void initialize(String us) {
@@ -122,7 +120,6 @@ public class ProfileController extends MainController {
 
             setProfile();
         }
-        System.out.println("USERNAME INIT: " + user.getUsername());
     }
 
     public void setProfile(){
@@ -158,8 +155,6 @@ public class ProfileController extends MainController {
 
         setProfileImage();
 
-        System.out.println("USER:" + username + " " + name +  " " + email +  " " + country +  " " + city +  " " + address + " "+ user.getImage());
-
         userInfo.add(usernameText, 0, 0);
         userInfo.add(nameText, 0, 1);
         userInfo.add(emailText, 0, 2);
@@ -184,7 +179,6 @@ public class ProfileController extends MainController {
             nextReviews.setVisible(false);
         } else {
             if (listReviews.size() < 3) {
-                System.out.println("Reviews nulle, disattivo i bottoni");
                 nextReviews.setDisable(true);
                 nextReviews.setVisible(false);
             }
@@ -281,7 +275,6 @@ public class ProfileController extends MainController {
     public void updateUserBalance() {
 
         double new_balance = Balance.balance.getCredit();
-        System.out.println("NEW BALANCE HERE: " + String.format("%.2f",new_balance));
         balanceValue.setText(String.format("%.2f",new_balance) + "€");
 
     }
@@ -309,16 +302,13 @@ public class ProfileController extends MainController {
 
             switch(typePage){
                 case "insertionList":   //insertion published by user
-                    System.out.println("insertionList");
                     list = ConnectionMongoDB.connMongo.findInsertionBySeller(username);
                     break;
                 case "insertionListLiked":  //insertion user likes
-                    System.out.println("insertionListLiked");
                     ArrayList<String> followed_ins = ConnectionNeo4jDB.connNeo.retrieveInterestedInsertionByUser(username);
                     list = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(followed_ins);
                     break;
                 case "insertionListCommon":  //insertion in common between logged user and current user
-                    System.out.println("insertionListCommon");
                     ArrayList<String> listCommon = ConnectionNeo4jDB.connNeo.findCommonLikes(Session.getLoggedUser().getUsername(), username);
                     list = ConnectionMongoDB.connMongo.findInsertionDetailsNeo4J(listCommon);
                     break;
@@ -355,19 +345,16 @@ public class ProfileController extends MainController {
     }
 
     public void showReviews() {
-        System.out.println("SCROLL OUT REVIEWS: " + scrollPage);
 
-        for (int i = 0; i < nPage && scrollPage < listReviews.size(); i++) {
-            System.out.println("SCROLL IN REVIEWS: " + scrollPage + "i: " + i);
+        for (int i = 0; i < nPage && scrollPage < listReviews.size(); i++)
             addReviews();
-        }
+
     }
 
     private void addReviews() {
 
         Label user = new Label("User: " + listReviews.get(scrollPage).getString("reviewer"));
         user.setTextFill(Color.WHITE);
-        Utility.printTerminal(listReviews.toString());
 
         Label text = new Label(listReviews.get(scrollPage).getString("text"));
         text.setTextFill(Color.WHITE);
