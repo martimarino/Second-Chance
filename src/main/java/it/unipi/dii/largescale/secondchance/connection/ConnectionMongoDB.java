@@ -927,7 +927,11 @@ public class ConnectionMongoDB{
 
         //update balance
         try {
-            Document d = balanceColl.findOneAndUpdate(query, update);
+            FindOneAndUpdateOptions option = new FindOneAndUpdateOptions();
+            option.returnDocument(ReturnDocument.AFTER);
+            option.upsert(true);
+
+            Document d = balanceColl.findOneAndUpdate(query, update, option);
             updated = d.getDouble("credit");
             Balance.balance.setCredit(updated);
             return true;
