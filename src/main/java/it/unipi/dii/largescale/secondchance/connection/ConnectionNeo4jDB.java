@@ -12,7 +12,7 @@ import static org.neo4j.driver.Values.parameters;
 
 public class ConnectionNeo4jDB implements AutoCloseable {
     private Driver driver;
-    String uri = "neo4j://127.0.0.1:7687";
+    String uri = "bolt://127.0.0.1:7687";
     String user = "neo4j";
     String password = "2nd-chance";
     public static ConnectionNeo4jDB connNeo;
