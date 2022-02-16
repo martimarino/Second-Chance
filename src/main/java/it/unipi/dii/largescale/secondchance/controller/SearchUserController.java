@@ -217,7 +217,7 @@ public class SearchUserController extends MainController{
             index = indexSearch;
         else
             index = indexSugg;
-        System.out.println("INDEX: " + index + "DOC: " + list.get(index));
+        //System.out.println("INDEX: " + index + "DOC: " + list.get(index));
         try (FileInputStream imageStream = new FileInputStream("target/classes/img/user.png")) {
             System.out.println(list.get(index).getString("username"));
             Image image = new Image(imageStream);
@@ -240,7 +240,8 @@ public class SearchUserController extends MainController{
 
             vb.getChildren().add(im);
             vb.getChildren().add(det);
-            vb.getChildren().add(followUnfollow);
+            if(list.get(index).getString("username") != Session.getLoggedUser().getUsername())
+                vb.getChildren().add(followUnfollow);
             vb.setAlignment(Pos.CENTER);
             vb.setStyle("-fx-min-width: 140px; -fx-background-color: white; -fx-padding: 8; -fx-background-radius: 20px;");
             hb.getChildren().add(vb);
