@@ -131,10 +131,13 @@ public class ConnectionMongoDB{
         Document balanceUser = new Document("username", u.getUsername())
                 .append("credit", 0);
 
-        userColl.insertOne(user);
-        balanceColl.insertOne(balanceUser);
-
-        return true;
+        try {
+            userColl.insertOne(user);
+            return true;
+        } catch (MongoException me) {
+            Utility.infoBox("Registration not done", "Error", "MongoDB error");
+            return false;
+        }
     }
 
     public Document findUserByUsername(String username) {
@@ -263,11 +266,16 @@ public class ConnectionMongoDB{
     public void updateLoggedUser() {
 
         Bson filter = eq("username", Session.getLoggedUser().getUsername());
-        Bson update = set("purchased", Session.getLoggedUser().getPurchased());
-        userColl.findOneAndUpdate(filter, update);
+        Bson update;
 
-        update = set("sold", Session.getLoggedUser().getSold());
-        userColl.findOneAndUpdate(filter, update);
+        if(Session.getLoggedUser().getPurchased() != null) {
+            update = set("purchased", Session.getLoggedUser().getPurchased());
+            userColl.findOneAndUpdate(filter, update);
+        }
+        if(Session.getLoggedUser().getSold() != null) {
+            update = set("sold", Session.getLoggedUser().getSold());
+            userColl.findOneAndUpdate(filter, update);
+        }
 
     }
 
@@ -730,18 +738,6 @@ public class ConnectionMongoDB{
         }
     }
 
-    public Insertion findInsertionDetails(String id) {
-
-        Insertion ins = new Insertion();
-        Document insertion = insertionColl.find(eq("_id", new ObjectId(id))).first();
-
-        ins.setCategory(insertion.getString("category"));
-        ins.setPrice(insertion.getDouble("price"));
-        ins.setViews(insertion.getInteger("views"));
-
-        return ins;
-    }
-
     public ArrayList<Insertion> findMultipleInsertionDetails(String seller) {
 
         ArrayList<Insertion> array = new ArrayList<>();
@@ -771,15 +767,6 @@ public class ConnectionMongoDB{
 
         for (String followed_in : followed_ins) {
             Document insertion = insertionColl.find(eq("_id", new ObjectId(followed_in))).first();
-            /*
-            ins = new Insertion();
-            ins.setCategory(insertion.getString("category"));
-            ins.setPrice(insertion.getDouble("price"));
-            ins.setImage_url(insertion.getString("image_url"));
-            ins.setViews(insertion.getInteger("views"));
-            ins.setSeller(insertion.getString("seller"));
-            ins.setId(insertion.get("_id").toString());
-            */
             insertions.add(insertion);
         }
         return insertions;
@@ -802,12 +789,15 @@ public class ConnectionMongoDB{
                 .append("rating", rev.getRating());
 
         System.out.println("REVIEW: " + review);
-        BasicDBObject query = new BasicDBObject();
-        query.put("username", rev.getSeller());
+        Bson query = eq("username", rev.getSeller());
+        Bson push_data = push("reviews", review);
 
-        BasicDBObject push_data = new BasicDBObject("$push", new BasicDBObject("reviews", review));
-
-        userColl.findOneAndUpdate(query, push_data);
+        try {
+            userColl.findOneAndUpdate(query, push_data);
+        } catch (MongoException e) {
+            Utility.infoBox("Unable to add review to seller.", "Error", "MongoDB error");
+            Utility.printTerminal("Unable to add review to seller.");
+        }
     }
 
     public void updateSellerRating(String seller) {
@@ -836,7 +826,12 @@ public class ConnectionMongoDB{
         query.put("username",Session.getLoggedUser().getUsername());
         query.put("purchased.timestamp", timestamp);
         BasicDBObject update = new BasicDBObject("$set", new BasicDBObject("purchased.$.reviewed", true));
-        userColl.findOneAndUpdate(query, update);
+        try {
+            userColl.findOneAndUpdate(query, update);
+        } catch (MongoException me) {
+            Utility.printTerminal("Reviewed field not updated");
+            Utility.infoBox("Reviewed field not updated", "Error", "MongoDB error");
+        }
 
     }
 
@@ -926,6 +921,19 @@ public class ConnectionMongoDB{
             return true;
         } catch (MongoException me) {
             System.err.println("Unable to add new document in balance collection: " + me);
+            return false;
+        }
+
+    }
+
+    public boolean deteleBalance(String username) {
+
+        try {
+            Bson query = eq("username", username);
+            balanceColl.deleteOne(query);
+            return true;
+        } catch (MongoException me) {
+            System.err.println("Unable to delete new document in balance collection: " + me);
             return false;
         }
 

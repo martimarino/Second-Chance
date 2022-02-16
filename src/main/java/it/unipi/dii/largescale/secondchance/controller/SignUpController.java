@@ -73,11 +73,17 @@ public class SignUpController {
                 image.setText("");
 
                 Balance bal = new Balance(u.getUsername(), 0.0);
-                if(!ConnectionNeo4jDB.connNeo.addUser(u) || !ConnectionMongoDB.connMongo.insertBalance(bal))
+                if(!ConnectionMongoDB.connMongo.insertBalance(bal)) {
+                    Utility.infoBox("Error adding new balance" , "Error", "MongoDB error");
+                    ConnectionMongoDB.connMongo.deleteUserMongo(u.getUsername());
+                    return;
+                }
+                if(!ConnectionNeo4jDB.connNeo.addUser(u))
                 {
                     Utility.printTerminal("Error registration user");
-                    Utility.infoBox("Error adding new user" , "Error", "Error adding new user");
+                    Utility.infoBox("Error adding new user" , "Error", "Neo4j error");
                     ConnectionMongoDB.connMongo.deleteUserMongo(u.getUsername());
+                    ConnectionMongoDB.connMongo.deteleBalance(u.getUsername());
                     return;
                 }
 
