@@ -33,7 +33,7 @@
          <VBox spacing="20.0">
             <Label text="Insert the Top K number:"/>
             <Label text="Insert the country you want:"/>
-            <Label text="Please insert the country you want:"/>
+            <Label text="Please insert the category you want:"/>
          </VBox>
          <VBox spacing="10.0" translateY="-5.0">
             <TextField fx:id="boxKNumber" alignment="CENTER" prefHeight="26.0" prefWidth="57.0" promptText="K"/>

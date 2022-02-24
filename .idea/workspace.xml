@@ -5,8 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78096fe8-9952-45af-bf90-4f98cdf0dd02" name="Changes" comment="Fix">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2022_12_43_[Changes_by_matre]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2022_12_43__Changes_by_matre_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2022_18_18_[Changes_by_matre]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_02_2022_18_18__Changes_by_matre_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2022_10_24_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2022_10_24__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2022_15_57_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2022_15_57_[Changes_by_marti]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2022_15_57__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_02_2022_15_57__Changes_by_marti_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/codes.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/InsertionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchInsertionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/SearchInsertionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/unipi/dii/largescale/secondchance/controller/StatsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/FXML/Stats.fxml" afterDir="false" />
     </list>
     <list id="03123c90-a928-4e0a-bf69-e1d59086bd15" name="Changes by adelmobrunelli" comment="Changes by adelmobrunelli" />
     <list id="f8a9d233-fa3d-4ae6-a843-659fe708a601" name="Changes by matre" comment="Changes by matre" />
@@ -86,6 +101,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\marti\Documents\GitHub\Large-Scale-Project\target\classes" />
       <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes" />
       <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes\FXML" />
       <recent name="C:\Users\matre\Desktop\Large-Scale-Project\target\classes\img" />
@@ -136,6 +152,9 @@
       <workItem from="1644861744216" duration="78000" />
       <workItem from="1644862521817" duration="319000" />
       <workItem from="1645018911519" duration="5095000" />
+      <workItem from="1645114186465" duration="5000" />
+      <workItem from="1645277641630" duration="6000" />
+      <workItem from="1645553446552" duration="848000" />
     </task>
     <task id="LOCAL-00001" summary="Fix admin function, fix other problems">
       <created>1643993961652</created>

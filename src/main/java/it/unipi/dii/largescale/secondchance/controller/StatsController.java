@@ -2,20 +2,27 @@ package main.java.it.unipi.dii.largescale.secondchance.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import main.java.it.unipi.dii.largescale.secondchance.cellStyle.CustomCellRank;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionMongoDB;
 import main.java.it.unipi.dii.largescale.secondchance.connection.ConnectionNeo4jDB;
+import main.java.it.unipi.dii.largescale.secondchance.entity.Insertion;
 import main.java.it.unipi.dii.largescale.secondchance.utils.Utility;
 import org.bson.Document;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -322,13 +329,13 @@ public class StatsController {
             return;
         }
 
-        array = ConnectionMongoDB.connMongo.findTopRatedUsersByCountry(country);
+        array = ConnectionMongoDB.connMongo.findTopKRatedUser(k, country);
 
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(country);
 
         for (int i=0; i < k; i++) {
-            series1.getData().add(new XYChart.Data(array.get(i).getObjectId("_id").toString(), array.get(i).getDouble("rating")));
+            series1.getData().add(new XYChart.Data(array.get(i).getString("username"), array.get(i).getDouble("rating")));
         }
 
 
@@ -342,18 +349,53 @@ public class StatsController {
             final BarChart<String,Number> bc =
                     new BarChart<>(xAxis,yAxis);
             bc.setTitle("Top K Rated Users");
-            xAxis.setLabel("User ID");
+            xAxis.setLabel("Username");
             yAxis.setLabel("Rating");
             bc.getData().addAll(series1);
             Scene scene = new Scene(bc,1200,800);
             stage.setScene(scene);
             stage.show();
-        }
-
-
-        catch(IOException e)
+        } catch(IOException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    private void showInsertionPage(String uniq_id) {
+        Insertion insertion = ConnectionMongoDB.connMongo.findInsertion(uniq_id);
+
+        if(insertion == null) {
+            Utility.infoBox("Product already purchased", "Purchased", "Already purchased");
+            return;
+        }
+
+        try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
+
+            Image image = new Image(imageStream);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(SearchInsertionController.class.getResource("/FXML/Insertion.fxml"));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.getIcons().add(image);
+            stage.setTitle("Insertion details");
+            stage.setScene(new Scene(loader.load()));
+            InsertionController controller = loader.getController();
+            controller.initialize(insertion, true);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupLinks(XYChart.Series<String, Integer> series, ArrayList<String> ids) {
+        int i = 0;
+        for (final XYChart.Data<String, Integer> dt : series.getData()) {
+            final Node n = dt.getNode();
+            String id = ids.get(i);
+            n.setOnMouseClicked(event ->  {
+                showInsertionPage(id);
+            });
+            i++;
         }
     }
 
@@ -371,8 +413,10 @@ public class StatsController {
             return;
         }
 
+        ArrayList<String> ids = new ArrayList<>();
         for (int i=0; i < k; i++) {
-            series1.getData().add(new XYChart.Data(array.get(i).getString("seller"), array.get(i).getInteger("interested")));
+            series1.getData().add(new XYChart.Data(array.get(i).get("_id").toString(), array.get(i).getInteger("interested")));
+            ids.add(array.get(i).get("_id").toString());
         }
 
 
@@ -389,6 +433,7 @@ public class StatsController {
             xAxis.setLabel("Insertion ID");
             yAxis.setLabel("Number of interested users");
             bc.getData().addAll(series1);
+            setupLinks(series1, ids);
             Scene scene = new Scene(bc,1200,800);
             stage.setScene(scene);
             stage.show();
@@ -414,7 +459,7 @@ public class StatsController {
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(category);
         for (int i=0; i < k; i++) {
-            series1.getData().add(new XYChart.Data(array.get(i).getString("seller"), array.get(i).getInteger("views")));
+            series1.getData().add(new XYChart.Data(array.get(i).get("_id").toString(), array.get(i).getInteger("views")));
         }
         try( FileInputStream imageStream = new FileInputStream("target/classes/img/secondchance.png") ) {
             Stage stage = new Stage();

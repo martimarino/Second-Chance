@@ -108,7 +108,7 @@ public class HomeController {
             stage.setTitle("Insertion details");
             stage.setScene(new Scene(loader.load()));
             InsertionController controller = loader.getController();
-            controller.initialize(insertion);
+            controller.initialize(insertion, false);
 
             stage.show();
         }

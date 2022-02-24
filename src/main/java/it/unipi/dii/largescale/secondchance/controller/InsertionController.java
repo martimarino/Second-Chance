@@ -47,31 +47,36 @@ public class InsertionController {
     private User user;
     private String type_img;
 
-    public void initialize(Insertion ins) {
+    public void initialize(Insertion ins, boolean admin) {
 
         insertion = ins;
         insertionTitle = new Label();
         infoContainer.setVisible(true);
         descriptionContainer.setEditable(false);
 
-        user = Session.getLoggedUser();
+        if(!admin) {
 
-        type_img = "insertion";
-        
-        try {
-            fillInsertionInfo(insertion);
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
+            user = Session.getLoggedUser();
+            type_img = "insertion";
+            String favouriteText;
+
+            if (!ConnectionNeo4jDB.connNeo.showIfInterested(user.getUsername(), insertion.getId()))
+                favouriteText = "Add to favourite";
+            else
+                favouriteText = "Remove from favourite";
+
+            favourite.setText(favouriteText);
+
+        } else {
+            buy.setDisable(true);
+            favourite.setDisable(true);
         }
 
-        String favouriteText;
-
-        if(!ConnectionNeo4jDB.connNeo.showIfInterested(user.getUsername(), insertion.getId()))
-            favouriteText = "Add to favourite";
-        else
-            favouriteText = "Remove from favourite";
-
-        favourite.setText(favouriteText);
+        try {
+            fillInsertionInfo(insertion);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void fillInsertionInfo(Insertion insertion) throws FileNotFoundException {
